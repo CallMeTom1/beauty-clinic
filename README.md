@@ -1,4 +1,4 @@
 # beauty-clinic
 
-initial commit test test
+initial commit test readme
 
