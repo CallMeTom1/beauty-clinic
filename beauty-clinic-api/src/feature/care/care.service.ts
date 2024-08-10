@@ -35,6 +35,7 @@ export class CareService {
                 .sessions(createCarePayload.sessions)
                 .price(createCarePayload.price)
                 .duration(createCarePayload.duration)
+                .time_between(createCarePayload.time_between)
                 .build();
 
             await this.careRepository.save(newCare);
@@ -49,7 +50,7 @@ export class CareService {
     async deleteCare(deleteCarePayload: DeleteCarePayload): Promise<void> {
         const { care_id } = deleteCarePayload;
         try {
-            const care = await this.careRepository.findOne({ where: { care_id } });
+            const care: Care = await this.careRepository.findOne({ where: { care_id } });
             if (!care) {
                 throw new CareNotFoundException();
             }

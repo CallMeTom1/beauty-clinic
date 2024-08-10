@@ -8,8 +8,10 @@ import {SecurityModule} from "@feature/security/security.module";
 import {JwtGuard} from "@feature/security/guard";
 import {CareModule} from "@feature/care/care.module";
 import {AppointmentModule} from "../appointment/appointment.module";
+import {HolidayModule} from "../holiday/holiday.module";
+import {BusinessHoursModule} from "../business-hours/business-hours.module";
 @Module({
-  imports: [TypeOrmModule.forRoot(configManager.getTypeOrmConfig()), SecurityModule, UserModule, CareModule, AppointmentModule],
+  imports: [TypeOrmModule.forRoot(configManager.getTypeOrmConfig()), SecurityModule, UserModule, CareModule, AppointmentModule, HolidayModule, BusinessHoursModule],
   controllers: [],
   providers: [ {
     provide: APP_GUARD, useClass: JwtGuard

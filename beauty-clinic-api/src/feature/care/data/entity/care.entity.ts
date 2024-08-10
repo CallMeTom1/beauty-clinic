@@ -25,4 +25,7 @@ export class Care {
 
     @Column('time', { nullable: false })
     duration: string;
+
+    @Column('time', { nullable: true })
+    time_between: string;
 }

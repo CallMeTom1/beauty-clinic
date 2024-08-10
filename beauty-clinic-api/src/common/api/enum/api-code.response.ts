@@ -208,4 +208,17 @@ export enum ApiCodeResponse {
     APPOINTMENT_CONFLICT = 'api.appointment.conflict',
     APPOINTMENT_DATE_INVALID = 'api.appointment.date.invalid',
 
+    //Holiday
+    HOLIDAY_CREATE_ERROR = 'api.holiday.create.error',
+    HOLIDAY_UPDATE_ERROR = 'api.holiday.update.error',
+    HOLIDAY_DELETE_ERROR = 'api.holiday.delete.error',
+    HOLIDAY_NOT_FOUND = 'api.holiday.not.found',
+
+    //Business Hours
+    BUSINESSHOURS_CREATE_ERROR = 'api.business-hours.create.error',
+    BUSINESSHOURS_UPDATE_ERROR = 'api.business-hours.update.error',
+    BUSINESSHOURS_DELETE_ERROR = 'api.business-hours.delete.error',
+    BUSINESSHOURS_NOT_FOUND = 'api.business-hours.not.found',
+    BUSINESSHOURS_DAY_OF_WEEK_ERROR = 'api.business-hours.wrong_day_of_week'
+
 }

@@ -1,12 +1,16 @@
 import {Column, Entity, PrimaryColumn} from 'typeorm';
+import {DayOfWeekEnum} from "../day-of-week.enum";
 
 @Entity()
 export class BusinessHours {
     @PrimaryColumn('varchar', { length: 50 })
     businessHours_id: string;
 
-    @Column('varchar', { length: 50 })
-    day_of_week: string;  // e.g., 'Monday'
+    @Column({
+        type: 'enum',
+        enum: DayOfWeekEnum,
+    })
+    day_of_week: DayOfWeekEnum;
 
     @Column('time', { nullable: true })
     opening_time: Date;  // e.g., '09:00:00'
