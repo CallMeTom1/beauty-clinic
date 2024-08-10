@@ -1,21 +1,15 @@
+import {ApiOperation, ApiQuery, ApiTags} from "@nestjs/swagger";
+import {Body, Controller, Delete, Get, Param, Post, Put, Query} from "@nestjs/common";
+import {AppointmentService} from "./appointment.service";
+import {Public, Roles, UserReq, UserRequest} from "@common/config/metadata";
+import {Appointment} from "./data/entity";
+import {Role} from "@feature/security/data";
 import {
-    Body,
-    Controller,
-    Get,
-    Param,
-    Post,
-    Put,
-    Delete, Query, ParseUUIDPipe, BadRequestException
-} from '@nestjs/common';
-import {ApiTags, ApiOperation, ApiQuery} from '@nestjs/swagger';
-import { AppointmentService } from './appointment.service';
-import { Appointment } from './data/entity/appointment.entity';
-import { CreateAppointmentPayload } from './data/payload/create-appointment.payload';
-import { UpdateAppointmentStatusPayload } from './data/payload/modify-appointment-status.payload';
-import {Public, Roles, UserReq, UserRequest} from '@common/config/metadata';
-import { Role } from '@feature/security/data';
-import {GetAvailableDaysPayload} from "./data/payload/get-available-days.payload";
-import {getDayOfWeekEnum} from "./appointment.helper";
+    CreateAppointmentPayload,
+    GetAvailableDaysPayload,
+    GetAvailableTimeSlotsPayload,
+    UpdateAppointmentStatusPayload
+} from "./data/payload";
 
 @ApiTags('Appointment')
 @Controller('appointment')
@@ -67,22 +61,10 @@ export class AppointmentController {
         return await this.appointmentService.getAvailableDays(payload);
     }
 
-    @Roles(Role.USER, Role.ADMIN)
-    @Get('available-times')
-    @ApiOperation({ summary: 'Get available time slots for a specific day and care' })
-    @ApiQuery({ name: 'date', description: 'The date for which to fetch available time slots', type: String, example: '2024-10-20' })
-    @ApiQuery({ name: 'careId', description: 'The care ID for which to fetch available time slots', type: String })
-    async getAvailableTimeSlots(
-        @Query('date') dateString: string,
-        @Query('careId', ParseUUIDPipe) careId: string
-    ): Promise<string[]> {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) {
-            throw new BadRequestException('Invalid date format provided.');
-        }
-
-        const dayOfWeek = getDayOfWeekEnum(date.getDay());
-        return await this.appointmentService.getAvailableTimeSlots(dayOfWeek, careId, date);
+    @Get('available-slots')
+    @ApiOperation({ summary: 'Get available time slots for a specific care and date' })
+    async getAvailableTimeSlots(@Query() params: GetAvailableTimeSlotsPayload): Promise<string[]> {
+        return this.appointmentService.getAvailableTimeSlots(params.dayOfWeek, params.careId, new Date(params.date));
     }
 
 

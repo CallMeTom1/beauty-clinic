@@ -16,7 +16,10 @@
       "@feature/security/*": ["./feature/security/*"],
       "@feature/user/*": ["./feature/user/*"],
       "@feature/care/*": ["./feature/care/*"],
-      "@feature/root/*": ["./feature/root/*"]
+      "@feature/root/*": ["./feature/root/*"],
+      //"@feature/holiday/*": ["./feature/holiday/*"],
+      //"@feature/business-hours/*": ["./feature/business-hours/*"]
+
     },
     "incremental": true,
     "skipLibCheck": true,

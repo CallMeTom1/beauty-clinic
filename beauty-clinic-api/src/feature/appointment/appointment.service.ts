@@ -187,7 +187,7 @@ export class AppointmentService {
 
     async getAvailableTimeSlots(dayOfWeek: DayOfWeekEnum, careId: string, date: Date): Promise<string[]> {
         // Fetch the Care object
-        const care = await this.careRepository.findOne({ where: { care_id: careId } });
+        const care: Care = await this.careRepository.findOne({ where: { care_id: careId } });
         if (!care) {
             throw new CareNotFoundException();
         }
@@ -248,7 +248,5 @@ export class AppointmentService {
         await this.appointmentRepository.save(appointment);
         return appointment;
     }
-
-
 
 }

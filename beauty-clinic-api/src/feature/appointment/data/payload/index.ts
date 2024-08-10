@@ -1,0 +1,5 @@
+export  * from './create-appointment.payload'
+export * from './get-available-days.payload'
+export * from './get-appointment-by-id.payload'
+export * from './get-available-time-slots.payload'
+export * from './modify-appointment-status.payload'

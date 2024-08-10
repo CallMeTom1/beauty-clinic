@@ -5,7 +5,7 @@ import {
     Param,
     Post,
     Put,
-    Delete
+    Delete, Query
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { HolidayService } from './holiday.service';
@@ -13,6 +13,8 @@ import { Holiday } from './data/entity/holiday.entity';
 import { CreateHolidayPayload } from './data/payload/create-holiday.payload';
 import {Public, Roles} from '@common/config/metadata';
 import { Role } from '@feature/security/data';
+import {DeleteHolidayPayload} from "./data/payload/delete-holiday.payload";
+import {CreateHolidayIntervalPayload} from "./data/payload/create-holiday-interval.payload";
 
 @ApiTags('Holiday')
 @Controller('holiday')
@@ -26,6 +28,7 @@ export class HolidayController {
         return await this.holidayService.findAll();
     }
 
+    /*
     @Public()
     @Get(':date')
     @ApiOperation({ summary: 'Get holiday by date' })
@@ -33,19 +36,26 @@ export class HolidayController {
         const parsedDate = new Date(date);
         return await this.holidayService.findOneByDate(parsedDate);
     }
+    */
 
     @Roles(Role.ADMIN)
     @Post()
     @ApiOperation({ summary: 'Create a new holiday' })
     async create(@Body() createHolidayPayload: CreateHolidayPayload): Promise<Holiday> {
-        return await this.holidayService.create(createHolidayPayload);
+        return await this.holidayService.createHoliday(createHolidayPayload);
     }
 
     @Roles(Role.ADMIN)
-    @Delete(':date')
+    @Post('interval')
+    @ApiOperation({ summary: 'Create holidays for an interval' })
+    async createInterval(@Body() createHolidayIntervalPayload: CreateHolidayIntervalPayload): Promise<Holiday[]> {
+        return await this.holidayService.createHolidayInterval(createHolidayIntervalPayload);
+    }
+
+    @Roles(Role.ADMIN)
+    @Delete()
     @ApiOperation({ summary: 'Delete holiday by date' })
-    async removeByDate(@Param('date') date: string): Promise<void> {
-        const parsedDate = new Date(date);
-        return await this.holidayService.removeByDate(parsedDate);
+    async removeByDate(@Query() payload: DeleteHolidayPayload): Promise<void> {
+        return await this.holidayService.removeByDate(payload);
     }
 }

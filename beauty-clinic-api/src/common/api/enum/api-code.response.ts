@@ -213,6 +213,9 @@ export enum ApiCodeResponse {
     HOLIDAY_UPDATE_ERROR = 'api.holiday.update.error',
     HOLIDAY_DELETE_ERROR = 'api.holiday.delete.error',
     HOLIDAY_NOT_FOUND = 'api.holiday.not.found',
+    HOLIDAY_NOT_DATE_ERROR = 'api.holiday.not.date.error',
+    HOLIDAY_ALREADY_EXIST_ERROR = 'api.holiday.already.exist.error',
+    HOLIDAY_BAD_DATE_ERROR = 'api.holiday.bad.date.error',
 
     //Business Hours
     BUSINESSHOURS_CREATE_ERROR = 'api.business-hours.create.error',
