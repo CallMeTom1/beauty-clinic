@@ -1,0 +1,37 @@
+<div class="home-page-container">
+  <div class="top-container">
+    <div class="top-left">
+      <div class="title-text">
+        <h1>{{title | translate}}</h1>
+        <div class="intro-container">
+          <p class="intro">{{intro | translate}}</p>
+          <p class="intro">{{intro2 | translate}}</p>
+        </div>
+      </div>
+      <div class="mail-container">
+        <p class="mail">{{mail | translate}}</p>
+        <div class="sign-up">
+          <div class="input">
+            <app-floating-label-input [config]="formControlConfigs"></app-floating-label-input>
+          </div>
+          <div>
+            <button class="btn-primary" (click)="onSubmit()">{{mailBtn | translate}}</button>
+          </div>
+        </div>
+      </div>
+      <div class="error-form" [class.active]="error().length > 0">
+        @if(error().length > 0){
+          <p>{{ 'form-error.description' | labelWithParam:{count: error().length} }}</p>
+        }
+        @for(error of error(); track error){
+          <div>
+            <app-label-with-param [label]="'form.error.'+error.control+'-'+error.error"></app-label-with-param>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="top-right">
+      <img class="home-img" [ngSrc]="src" [alt]="'alt' | translate" [width]="width" [height]="height" priority>
+    </div>
+  </div>
+</div>

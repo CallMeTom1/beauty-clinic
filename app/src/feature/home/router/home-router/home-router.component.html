@@ -1,0 +1,48 @@
+  <header>
+    <div class="header-container">
+      <div (click)="redirectHome()" class="logo-container">
+        <img [ngSrc]="logoSrc" [alt]="'alt' | translate" [width]="width" [height]="height">
+        <span>{{ brand }}</span>
+      </div>
+      <i class="fa fa-bars menu-icon" (click)="toggleMenu()"></i>
+      <div class="nav-container" [ngClass]="{'active': menuActive}">
+        <nav>
+          <ul>
+            @for(item of menu; let index=$index; track index ){
+              <li (click)="navigate(item.link)">
+                <span class="title">{{item.title | translate}}</span>
+              </li>
+            }
+          </ul>
+        </nav>
+        @if(!securityService.isAuth$()){
+          <div class="btn-container">
+            <button class="btn-primary" (click)="redirectSignin()">{{ signinBtn | translate }}</button>
+            <button class="btn-primary" (click)="redirectSignup()">{{ signupBtn | translate }}</button>
+          </div>
+        } @else {
+          <div class="user-nav-container">
+            <app-user-navigation></app-user-navigation>
+          </div>
+        }
+      </div>
+      <div>
+        <app-theme-toggler></app-theme-toggler>
+      </div>
+    </div>
+  </header>
+  <main class="app-container">
+    <router-outlet></router-outlet>
+  </main>
+  <footer>
+    <div class="footer-content">
+      <div (click)="redirectHome()" class="logo-container">
+        <img [ngSrc]="logoSrc" [alt]="'alt' | translate" [width]="width_footer" [height]="height_footer">
+        <span>{{ brand }}</span>
+      </div>
+      <div class="copyright">
+        <p>{{ footer | translate: { year: currentYear } }}</p>
+      </div>
+    </div>
+  </footer>
+

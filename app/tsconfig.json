@@ -1,0 +1,55 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "resolveJsonModule": true,
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "paths": {
+      "@feature-security": ["./feature/security/index.ts"],
+      "@feature-admin": ["./feature/admin/index.ts"],
+      "@feature-forum": ["./feature/forum/index.ts"],
+      "@feature-home": ["./feature/home/index.ts"],
+      "@feature-market": ["./feature/market/index.ts"],
+      "@feature-swap": ["./feature/swap/index.ts"],
+      "@feature-subscription": ["./feature/subscription/index.ts"],
+      "@feature-trading": ["./feature/trading/index.ts"],
+      "@feature-root": ["./feature/root/index.ts"],
+      "@feature-dashboard": ["./feature/dashboard/index.ts"],
+      "@member-feature": ["./feature/dashboard/feature/member/index.ts"],
+      "@shared-avatar": ["./feature/shared/ui/avatar/index.ts"],
+      "@shared-api": ["./feature/shared/api/index.ts"],
+      "@shared-core": ["./feature/shared/core/index.ts"],
+      "@shared-ui": ["./feature/shared/ui/index.ts"],
+      "@shared-routes": ["./feature/shared/routes/index.ts"],
+      "@env": ["./environments/index.ts"]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true,
+    "_enabledBlockTypes": ["if", "for", "switch", "defer"]
+  }
+}

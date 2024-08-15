@@ -1,0 +1,30 @@
+<div class="user-nav">
+  <div class="avatar-container" (click)="toggleDropdown()">
+    <app-user-avatar></app-user-avatar>
+    @if(dropdownOpen){
+      <div class="dropdown-menu">
+        <ul>
+          <li (click)="navigateToProfile()">
+            <div class="menu-item">
+              {{profile | translate}}
+              <i class="fa-thin fa-user"></i>
+            </div>
+          </li>
+          <li>
+            <div class="menu-item">
+              {{wallet | translate}}
+              <i class="fa-thin fa-wallet"></i>
+            </div>
+          </li>
+          <li (click)="logout()">
+            <div class="menu-item">
+              {{logOut | translate}}
+              <i class="fa-thin fa-arrow-right-from-bracket"></i>
+            </div>
+          </li>
+        </ul>
+      </div>
+    }
+  </div>
+  <p> {{ securityService.account$().role | roleTransform}}</p>
+</div>

@@ -1,0 +1,57 @@
+<div class="container">
+
+  <!-- Hamburger Button for Small Screens -->
+  <div class="hamburger-menu" (click)="toggleSidenav()">
+    <span class="fa fa-bars"></span>
+  </div>
+
+  <!-- Side Navigation -->
+  <div class="sidenav" [class.sidenav-hidden]="isSidenavHidden">
+    <div class="top">
+      <div class="icon-name-top">
+        <div class="logo-container">
+          <img [src]="'./assets/pictures/logo-dark.png'" [alt]="'brand logo'">
+        </div>
+        <div class="name-container">
+          <span>{{clinic_name | translate}}</span>
+        </div>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="admin-avatar">
+        <app-user-avatar [width]="'25px'" [height]="'25px'" [alt]="'User Profile'"></app-user-avatar>
+        <span> Admin Admin</span>
+      </div>
+
+      <div class="separator"></div>
+
+      <nav class="nav-container">
+        <!-- Navigation Links -->
+        <ul class="nav-list">
+          @for(item of sideNav; track item.title){
+            <li (click)="navigate(item.link)" class="nav-item">
+              <span [class]="'nav-icon fa ' + item.icon"></span>
+              <span class="nav-title">{{ item.title | translate }}</span>
+            </li>
+          }
+        </ul>
+      </nav>
+    </div>
+    <div class="bottom">
+      <div class="separator"></div>
+      <div class="theme-toggler">
+        <app-theme-toggler></app-theme-toggler>
+      </div>
+      <div class="logout-icon" (click)="logout()">
+        <span class="fa fa-sign-out-alt"></span>
+        <span>{{ log_out | translate }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

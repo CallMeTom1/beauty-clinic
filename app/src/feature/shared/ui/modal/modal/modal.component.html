@@ -1,0 +1,13 @@
+<!-- modal.component.html -->
+<div class="modal-backdrop" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ title | translate }}</h2>
+      <button class="close-button" (click)="onClose()">×</button>
+    </div>
+    <div class="modal-body">
+      <!-- Dynamic content goes here -->
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

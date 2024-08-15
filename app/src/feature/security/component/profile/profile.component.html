@@ -1,0 +1,37 @@
+@if(securityService.account$().username.length > 0){
+  <div class="profile-container">
+    <div class="title-profile">
+      <h2>{{profileTitle | translate}}</h2>
+    </div>
+    <div class="avatar-profile">
+      <div class="avatar-container2" (mouseenter)="showUploadButton = true" (mouseleave)="showUploadButton = false">
+        <app-user-avatar [alt]="avatarAlt | translate" [width]="width" [height]="width"></app-user-avatar>
+        @if(showUploadButton){
+          <div class="upload-button-container">
+            <label for="profileImage" class="upload-button">{{changeAvatar | translate}}</label>
+            <input type="file" id="profileImage" (change)="onProfileImageChange($event)" accept="image/*" hidden>
+          </div>
+        }
+      </div>
+      <div class="personal-info">
+        <div class="perso-info-container">
+          <h3>{{personalInfoTitle | translate}}</h3>
+        </div>
+        <div class="sub-info-container">
+          <div class="full-name">
+            <p>{{fullNameLabel | translate}}</p>
+            <p>{{securityService.account$().firstname}} {{securityService.account$().lastname}}</p>
+          </div>
+          <div class="phone">
+            <p>{{phoneLabel | translate}}</p>
+            <p>{{securityService.account$().phoneNumber}}</p>
+          </div>
+          <div class="role">
+            <p>{{roleLabel | translate}}</p>
+            <p>{{securityService.account$().role | roleTransform}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

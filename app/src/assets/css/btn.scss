@@ -1,0 +1,20 @@
+button{
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  padding: 10px;
+  text-transform: uppercase;
+  font-weight: 500;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 2px;
+  font-size: 11px;
+  background: var(--theme-black);
+  border: 1px solid var(--theme-black);
+  color: var(--theme-standard-footer-bg);
+  font-family: Lexend-Light;
+  &:hover {
+    background: var(--theme-pink);
+    border: 1px solid var(--theme-pink);
+    color: var(--theme-standard-footer-bg);
+  }
+}

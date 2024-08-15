@@ -1,0 +1,32 @@
+<div class="signup-page">
+  <div class="logo-container">
+    <img class="logo-image" [ngSrc]="logoSrc" [height]="height" [width]="width" [alt]="alt">
+    <h1>{{ brand }}</h1>
+  </div>
+  <div class="form-container">
+    <app-security-form [formGroup]="formGroup" [title]="title | translate" [redirect]="redirect | translate"
+                       [config]="formControlConfigs" (initiateSubmit)="onSubmit()" (redirectSignup)="handleRedirect()">
+    </app-security-form>
+    <div class="error-form" [class.active]="error().length > 0">
+      @if(error().length > 0){
+        <p>{{ 'security-feature.sign-up-page.error.description' | labelWithParam:{count: error().length} }}</p>
+      }
+      @for(error of error(); track error){
+        <div>
+          <app-label-with-param [label]="'security-feature.sign-up-page.error.'+error.control+'-'+error.error"></app-label-with-param>
+        </div>
+      }
+    </div>
+    <div class="text-with-lines">{{or | translate}}</div>
+    <div class="social-btn">
+      <button class="btn-primary gap10px" (click)="googleSign()">
+        <i class="fa-brands fa-google"></i>
+        <span class="gl-text">{{googleBtn | translate}}</span>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="signin">
+  <p>{{already | translate}}</p>
+  <p class="link" (click)="handleRedirect()">{{connect | translate}}</p>
+</div>

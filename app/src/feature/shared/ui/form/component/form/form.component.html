@@ -1,0 +1,9 @@
+<section id="wrapper">
+  <div class="form-area">
+    @for(input of config;let index=$index; track index){
+      <div class="input">
+        <app-floating-label-input [config]="input"></app-floating-label-input>
+      </div>
+    }
+  </div>
+</section>

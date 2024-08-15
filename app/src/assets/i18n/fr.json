@@ -1,0 +1,173 @@
+{
+
+
+  "home-feature-nav-alt": "Logo de Coinify",
+  "home-feature-nav-login-btn": "Se connecter",
+  "home-feature-nav-signup-btn":" S'inscrire",
+
+  "home-feature-title": "Commencez Votre Expérience de Trading avec le Meilleur Exchange",
+  "home-feature-intro": "Où le trading crypto rencontre l'excellence",
+  "home-feature-intro2": "Sécurisé, innovant et convivial",
+  "home-feature-copyright": "© {year} Coinify. Tous droits réservés.",
+
+
+
+  "common.nav.order": "Commandes",
+  "common.nav.member": "Membres",
+  "common.nav.home": "Home",
+  "common.nav.swap": "Swap",
+  "common.nav.market": "Marchés",
+  "common.nav.trade": "Trader",
+  "common.nav.subscription": "Abonnements",
+  "common.nav.forum": "Forum",
+  "common.nav.signin": "Se connecter",
+  "common.nav.signup": "S'inscrire",
+  "common.nav.brand": "Coinify",
+  "common.loader.message": "Chargement en cours",
+  "common.empty": "-",
+  "common.admin.nav.dashboard": "Dashboard",
+  "common.admin.nav.care": "Gérer les soins",
+  "common.admin.nav.appointment": "Gérer les rendez-vous",
+  "common.admin.nav.customer": "Gérer les clients",
+
+
+  "admin-feature.admin-router.name": "Beauty Clinic By Françoise",
+  "admin-feature.admin-router.logout": "Se déconnecter",
+
+  "care": {
+    "form": {
+      "name": "Name",
+      "enter_name": "Enter the care name",
+      "category": "Category",
+      "select_category": "Select a category",
+      "zone": "Zone",
+      "select_zone": "Select a zone",
+      "machine": "Machine",
+      "select_machine": "Select a machine"
+    },
+    "category": {
+      "epilation": "Epilation",
+      "relaxation": "Relaxation",
+      "skincare": "Skincare"
+    },
+    "zone": {
+      "facial": "Facial",
+      "fullbody": "Full Body",
+      "legs": "Legs",
+      "none": "None"
+    },
+    "machine": {
+      "lasermaxpro": "LaserMax Pro",
+      "hydrofacialjr": "HydroFacial Jr.",
+      "none": "None"
+    }
+  },
+
+  "api.error.user-not-found": "L'utilisateur n'a pas été trouvé",
+
+  "security-feature.sign-up-page.more-than-18": "J'affirme avoir plus de 18 ans et d'avoir lu les conditions générales",
+  "security-feature.sign-up-page.title": "Créez votre compte",
+  "security-feature.sign-up-page.link-other-page": "Déjà inscrit?",
+  "security-feature.sign-up-page.link-other-page-important": "Connexion",
+  "security-feature.sign-in-page.link-other-page": "Pas encore de compte?",
+  "security-feature.sign-in-page.link-other-page-important": "Créer un compte",
+  "security-feature.sign-in-page.contact-page": "Besoin d'aide?",
+  "security-feature.sign-in-page.contact-page-important": "Contactez-nous",
+  "security-feature.sign-in-page.title": "Connectez-vous à ",
+  "security-feature.sign-in-page.label.username": "Identifiant",
+  "security-feature.sign-in-page.label.password": "Mot de passe",
+  "security-feature.sign-in-page.error.password-maxlength": "Le mot de passe ne doit pas excéder les 25 caractères",
+  "security-feature.sign-in-page.error.password-minlength": "Le mot de passe doit comporter au moins 10 caractères",
+  "security-feature.sign-in-page.error.password-required": "Le Mot de passe est requis",
+  "security-feature.sign-in-page.error.username-required": "L'identifiant est requis",
+  "security-feature.sign-in-page.error.username-maxlength": "L'identifiant ne doit pas excéder les 25 caractères",
+  "security-feature.sign-in-page.error.confirmation-matching": "La confirmation ne correspond pas",
+  "security-feature.sign-in-page.error.confirmation-required": "La confirmation est requise",
+  "security-feature.sign-in-page.error.mail-minlength": "L'email doit comporter au moins 10 caractères",
+  "security-feature.sign-in-page.error.mail-required": "L'email est requis",
+  "security-feature.sign-in-page.error.mail-maxlength": "L'email ne doit pas excéder 25 caractères",
+  "security-feature.sign-in-page.error.mail-email": "Entrez une adresse mail valide",
+  "security-feature.sign-in-page.error.description": "{count, plural, =0{Vous n'avez pas d'erreur} one{Vous avez une erreur} other{Vous avez {count} erreurs}}.",
+
+  "security-feature.sign-up-page.error.username-required": "L'identifiant est requis",
+  "security-feature.sign-up-page.error.username-minlength": "L'identifiant doit comporter au moins 1 caractère",
+  "security-feature.sign-up-page.error.username-maxlength": "L'identifiant ne doit pas excéder 10 caractères",
+  "security-feature.sign-up-page.error.mail-required": "L'email est requis",
+  "security-feature.sign-up-page.error.mail-minlength": "L'email doit comporter au moins 5 caractères",
+  "security-feature.sign-up-page.error.mail-maxlength": "L'email ne doit pas excéder 25 caractères",
+  "security-feature.sign-up-page.error.mail-email": "Entrez une adresse email valide",
+  "security-feature.sign-up-page.error.password-required": "Le mot de passe est requis",
+  "security-feature.sign-up-page.error.password-minlength": "Le mot de passe doit comporter au moins 10 caractères",
+  "security-feature.sign-up-page.error.password-maxlength": "Le mot de passe ne doit pas excéder 25 caractères",
+  "security-feature.sign-up-page.error.phoneNumber-required": "Le numéro de téléphone est requis",
+  "security-feature.sign-up-page.error.phoneNumber-pattern": "Le numéro de téléphone doit contenir uniquement des chiffres",
+  "security-feature.sign-up-page.error.phoneNumber-minlength": "Le numéro de téléphone doit comporter au moins 10 chiffres",
+  "security-feature.sign-up-page.error.phoneNumber-maxlength": "Le numéro de téléphone ne doit pas excéder 15 chiffres",
+  "security-feature.sign-up-page.error.firstname-required": "Le prénom est requis",
+  "security-feature.sign-up-page.error.firstname-minlength": "Le prénom doit comporter au moins 1 caractère",
+  "security-feature.sign-up-page.error.firstname-maxlength": "Le prénom ne doit pas excéder 25 caractères",
+  "security-feature.sign-up-page.error.lastname-required": "Le nom de famille est requis",
+  "security-feature.sign-up-page.error.lastname-minlength": "Le nom de famille doit comporter au moins 1 caractère",
+  "security-feature.sign-up-page.error.lastname-maxlength": "Le nom de famille ne doit pas excéder 25 caractères",
+  "security-feature.sign-up-page.error.description": "{count, plural, =0{Vous n'avez pas d'erreur} one{Vous avez une erreur} other{Vous avez {count} erreurs}}.",
+
+  "security-feature-sign-up-page-title": "S'inscrire",
+  "security-feature-sign-up-page-redirect": "Se connecter",
+
+  "security-feature.parameter-page.title": "Paramètre de {str}",
+  "security-feature.parameter-page.label.id": "Identifiant unique",
+  "security-feature.parameter-page.label.username": "Identifiant de connexion",
+  "security-feature.parameter-page.label.mail": "Email",
+  "security-feature.parameter-page.label.facebook-hash": "Compte facebook",
+  "security-feature.parameter-page.label.google-hash": "Compte google",
+  "security-feature.parameter-page.label.social-connected": "Compte lié",
+  "security-feature.parameter-page.label.facebook-hash-empty": "Aucun compte facebook associé",
+  "security-feature.parameter-page.label.google-hash-empty": "Aucun compte google associe",
+  "security-feature.parameter-page.btn.log-out": "Se déconnecter",
+
+  "security-feature-user-nav-alt": "Avatar image",
+  "security-feature-user-nav-profile": "Mon profil",
+  "security-feature-user-nav-logout": "Se déconnecter",
+
+
+  "security-feature-signin-title": "Se connecter",
+  "security-feature-signin-redirect": "S'inscrire",
+  "security-feature-signin-or": "OU",
+  "security-feature-signin-googleBtn": "Continuer avec Google",
+  "security-feature-signin-no-account": "Pas encore de compte ?",
+  "security-feature-signin-join-now": "Rejoignez Maintenant",
+
+
+  "security-feature-signup-or": "OU",
+  "security-feature-signup-googleBtn": "Continuer avec Google",
+  "security-feature-signup-already-account": "Vous avez déjà un compte?",
+  "security-feature-signup-connect": "Se connecter",
+
+  "security-feature-profile-title": "Votre Profil",
+  "security-feature-avatar-alt": "Avatar image",
+  "security-feature-change-avatar": "Changer",
+  "security-feature-personal-info-title": "Informations personnelles",
+  "security-feature-full-name": "Nom complet",
+  "security-feature-phone": "Téléphone",
+  "security-feature-role": "Rôle",
+  "security-feature-identity-verification-title": "Vérification de l'identité",
+  "security-feature-verify-identity": "Vérifiez votre identité",
+  "security-feature-id-card-front": "Carte d'identité (recto)",
+  "security-feature-id-card-back": "Carte d'identité (verso)",
+  "security-feature-submit-btn": "Soumettre",
+  "security-feature-verification-pending": "Votre vérification est en cours de traitement",
+  "security-feature-verification-rejected": "Votre vérification a été rejetée, veuillez réintroduire une demande",
+  "security-feature-identity-verified": "Votre identité est vérifiée",
+  "security-feature-enter-valid-number": "Veuillez entrer un nombre valide",
+  "security-feature-no-file-chose": "Aucun fichier sélectionné",
+
+  "security-feature-form-title": "Se connecter",
+  "security-feature-form-redirect": "S'inscrire'",
+  "security-feature-form-email-label": "Adresse e-mail",
+  "security-feature-form-email-placeholder": "Entrez votre adresse e-mail",
+  "security-feature-form-password-label": "Mot de passe",
+  "security-feature-form-password-placeholder": "Entrez votre mot de passe"
+
+
+
+}

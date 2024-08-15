@@ -1,0 +1,504 @@
+@import 'assets/css/reset.css';
+@import 'assets/css/font.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables de Thème */
+:root {
+
+  --marquee-speed: 30s;
+  --direction: scroll-left;
+
+  --theme-primary: #FFFFFF;
+  --theme-secondary: #8C8C8C;
+  --theme-black: #000000;
+  --theme-bg-primary: #000000;
+  --theme-bg-secondary: #d5d5d5;
+  --theme-black-dark: #1a2226;
+  --theme-white-light: #FFF;
+  --theme-card-bg-light: #1a2226;
+  --theme-card-color-light: #FFF;
+  --theme-card-bg-hover-light: linear-gradient(135deg, #1a2226, #000, #1a2226);
+  --theme-tr-hover-light: rgba(140, 140, 140, 0.02);
+  --theme-tr-hover-dark: rgba(140, 140, 140, 0.02);
+  --theme-card-bg-dark: #FFF;
+  --theme-card-color-dark: #000;
+  --theme-card-bg-hover-dark: linear-gradient(135deg, #d3d3d3, #ffffff, #d3d3d3);
+  --box-shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+  --box-shadow-dark: 0 4px 8px rgba(218, 211, 211, 0.3), 0 6px 20px rgba(255, 255, 255, 0.3);
+
+  --theme-buy-text-dark: #00ff00;
+  --theme-sell-text-dark: #ff0000;
+  --theme-buy-text-light: #008000;
+  --theme-sell-text-light: #ff4500;
+  /* Couleurs de survol */
+  --theme-nav-hover-bg-light: rgba(220, 219, 219, 0.5);
+  --theme-nav-hover-bg-dark: rgba(50, 50, 50, 0.5);
+
+  /* Couleurs des États */
+  --theme-error-clear: #F76D82;
+  --theme-error-clear-opacity: rgba(247, 109, 130, 0.5);
+  --theme-error-middle: #EC5564;
+  --theme-error-dark: #D94452;
+  --theme-success-clear: #62DDBD;
+  --theme-success-middle: #46CEAD;
+  --theme-success-dark: #35BB9B;
+  --theme-warning-clear: #FCD277;
+  --theme-warning-middle: #FECD57;
+  --theme-warning-dark: #F5BA45;
+  --theme-info-clear: #73B1F4;
+  --theme-info-middle: #5E9CEA;
+  --theme-info-dark: #4B89DA;
+
+  /* Autres Variables */
+  --var-security-input-height: 75px;
+  --var-side-menu-full-open: 250px;
+  --var-side-menu-minimal: 60px;
+  --var-header-height: 150px;
+  --var-header-background: #F8F9FA;
+  --transition-smooth: all ease 0.3s;
+}
+
+/* Définition de Base */
+body {
+  font-family: 'Roboto', sans-serif;
+  background: var(--theme-bg-primary);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  font-weight: 300;
+  font-size: 13px;
+  height: 100%;
+  color: var(--theme-primary);
+}
+
+html, body {
+  height: 100%;
+}
+
+/* Thème Clair */
+body.light {
+  --theme-bg-primary: #f8f9fa; /* Light gray background */
+  --theme-bg-secondary: #ffffff; /* Pure white background */
+  --theme-text-primary: #212529; /* Nearly black text */
+  --theme-header-bg: #e9ecef; /* Light gray header */
+  --theme-header-text: #212529; /* Nearly black text for header */
+  --theme-border: #dee2e6; /* Light gray border */
+  --theme-button-bg: #e9ecef; /* Light gray button */
+  --theme-button-text: #212529; /* Nearly black text on button */
+  --theme-button-hover-bg: #ced4da; /* Slightly darker gray for hover */
+  --theme-gradient-side-nav: linear-gradient(to top, #e9ecef, #f8f9fa); /* Gradient from light to lighter gray */
+  --theme-gradient-bg: linear-gradient(to bottom, #f8f9fa, #e9ecef); /* Gradient for main background */
+  --theme-icon-color: #adb5bd; /* Soft gray icon */
+  --theme-icon-hover-color: #6c757d; /* Darker gray for icon hover */
+  --theme-input-bg: #ffffff; /* White input background */
+  --theme-input-border: #ced4da; /* Light gray input border */
+  --theme-input-text: #495057; /* Dark gray text for input */
+  --theme-input-focus-border: #6c757d; /* Dark gray focus border */
+  --theme-cancel-btn-bg: #e9ecef; /* Light gray cancel button */
+  --theme-cancel-btn-text: #212529; /* Nearly black cancel button text */
+  --theme-cancel-btn-hover-bg: #ced4da; /* Slightly darker gray for cancel hover */
+  --theme-submit-btn-bg: #6c757d; /* Dark gray submit button */
+  --theme-submit-btn-text: #ffffff; /* White text for submit button */
+  --theme-submit-btn-hover-bg: #495057; /* Darker gray for submit hover */
+  --theme-error-color: #dc3545; /* Red for errors */
+  --theme-label-color: #212529; /* Nearly black label color */
+  --box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  --box-shadow-hover: 0px 6px 10px rgba(0, 0, 0, 0.15);
+  --theme-icon-bg: #e9ecef; /* Light gray icon background */
+  --theme-icon-text: #adb5bd;
+  --theme-icon-hover-bg: #ced4da;
+  --theme-icon-disabled-bg: #f8f9fa;
+  --theme-icon-disabled-text: #6c757d;
+  --theme-side-nav-bg: #e9ecef; /* Light gray side nav */
+  --theme-primary: #212529;
+  --theme-secondary: #adb5bd;
+  --theme-border: rgba(186, 186, 186, 0.89);
+  --theme-card-bg: #ffffff;
+  --theme-card-color: #212529;
+  --theme-card-hover: #f8f9fa;
+  --theme-tr-hover: #e9ecef;
+  --theme-color-text: #212529;
+  .logo-container img {
+    content: url('assets/pictures/light-logo-beauty-clinic.png');
+  }
+
+}
+
+
+
+/* Thème Sombre */
+body.dark {
+  --theme-bg-primary: #343a40; /* Dark gray background */
+  --theme-bg-secondary: #212529; /* Nearly black background */
+  --theme-text-primary: #f8f9fa; /* Light gray text */
+  --theme-header-bg: #495057; /* Dark gray header */
+  --theme-header-text: #f8f9fa; /* Light gray text for header */
+  --theme-border: #343a40; /* Dark gray border */
+  --theme-button-bg: #495057; /* Dark gray button */
+  --theme-button-text: #f8f9fa; /* Light gray text on button */
+  --theme-button-hover-bg: #343a40; /* Darker gray for hover */
+  --theme-gradient-side-nav: linear-gradient(to top, #343a40, #495057); /* Gradient from dark to darker gray */
+  --theme-gradient-bg: linear-gradient(to bottom, #212529, #343a40); /* Gradient for main background */
+  --theme-icon-color: #6c757d; /* Mid gray icon */
+  --theme-icon-hover-color: #adb5bd; /* Light gray for icon hover */
+  --theme-input-bg: #495057; /* Dark gray input background */
+  --theme-input-border: #343a40; /* Dark gray input border */
+  --theme-input-text: #f8f9fa; /* Light gray text for input */
+  --theme-input-focus-border: #6c757d; /* Mid gray focus border */
+  --theme-cancel-btn-bg: #343a40; /* Dark gray cancel button */
+  --theme-cancel-btn-text: #f8f9fa; /* Light gray cancel button text */
+  --theme-cancel-btn-hover-bg: #495057; /* Slightly darker gray for cancel hover */
+  --theme-submit-btn-bg: #6c757d; /* Mid gray submit button */
+  --theme-submit-btn-text: #f8f9fa; /* Light gray text for submit button */
+  --theme-submit-btn-hover-bg: #343a40; /* Darker gray for submit hover */
+  --theme-error-color: #dc3545; /* Red for errors */
+  --theme-label-color: #f8f9fa; /* Light gray label color */
+  --box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  --box-shadow-hover: 0px 6px 10px rgba(0, 0, 0, 0.25);
+  --theme-icon-bg: #495057;
+  --theme-icon-text: #6c757d;
+  --theme-icon-hover-bg: #343a40;
+  --theme-icon-disabled-bg: #212529;
+  --theme-icon-disabled-text: #6c757d;
+  --theme-side-nav-bg: #495057; /* Dark gray side nav */
+  --theme-primary: #f8f9fa;
+  --theme-secondary: #6c757d;
+  --theme-border: rgba(57, 57, 57, 0.89);
+  --theme-card-bg: #343a40;
+  --theme-card-color: #f8f9fa;
+  --theme-card-hover: #495057;
+  --theme-tr-hover: #343a40;
+  --theme-color-text: #f8f9fa;
+  .logo-container img {
+    content: url('assets/pictures/dark-logo-beauty-clinic.png');
+  }
+}
+
+
+
+
+
+body.dark header {
+  background: var(--theme-bg-primary);
+}
+
+body.light header {
+  background: var(--theme-bg-primary);
+}
+
+/* Composants et Classes Utilitaires */
+.btn-area {
+  padding-top: 20px;
+  app-simple-button {
+    width: 300px;
+  }
+}
+
+.card-title {
+  font-family: 'Lexend-Light';
+  padding-bottom: 15px;
+  text-transform: uppercase;
+  color: var(--theme-secondary);
+}
+
+.card-desc {
+  color: var(--theme-primary);
+}
+
+.fc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 600px) {
+  .wrapper {
+    width: 100%;
+    padding: 1rem;
+  }
+}
+
+.flex-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
+/* Boutons de Navigation */
+.btn-primary, .btn-secondary {
+  font-weight: bold;
+  border-radius: 25px;
+  font-size: 24px !important;
+  padding: 10px 20px !important;
+  white-space: nowrap;
+  border: solid 1px transparent;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+  box-sizing: border-box;
+}
+
+
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-primary);
+}
+
+html {
+  scrollbar-width: thin;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+
+
+.app-container {
+  background-color: var(--theme-bg-primary);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+
+
+body.light .nav-container nav ul li:hover {
+  background-color: var(--theme-nav-hover-bg-light);
+  border-radius: 25px;
+
+}
+
+body.dark .nav-container nav ul li:hover {
+  background-color: var(--theme-nav-hover-bg-dark);
+  border-radius: 25px;
+}
+
+
+
+/* Boutons de Navigation pour le Mode Sombre */
+body.dark .btn-primary {
+  cursor: pointer;
+  color: var(--theme-primary);
+  background-color: var(--theme-nav-hover-bg-dark);
+  border: solid 1px transparent;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+body.dark .btn-primary:hover {
+  background-color: var(--theme-bg-primary-btn-dark);
+  color: var(--theme-primary);
+}
+
+body.dark .btn-secondary {
+  border: solid 1px var(--theme-primary);
+  cursor: pointer;
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-secondary);
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+body.dark .btn-secondary:hover {
+  background-color: var(--theme-primary);
+  color: var(--theme-bg-primary);
+}
+
+
+/* Boutons de Navigation pour le Mode Clair */
+body.light .btn-primary {
+  cursor: pointer;
+  color: var(--theme-black);
+  background-color: var(--theme-nav-hover-bg-light);
+  border: solid 1px transparent;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+body.light .btn-primary:hover {
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-black);
+}
+
+body.light .btn-secondary {
+  border: solid 1px var(--theme-black);
+  cursor: pointer;
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-secondary);
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+body.light .btn-secondary:hover {
+  background-color: var(--theme-black);
+  color: var(--theme-bg-primary);
+}
+
+
+/* Boutons Buy et Sell pour le Mode Sombre */
+body.dark .btn-buy {
+  cursor: pointer;
+  color: var(--theme-buy-text-dark); /* Couleur de texte vert pour Buy */
+  background-color: var(--theme-nav-hover-bg-dark);
+  border: solid 1px transparent;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+body.dark .btn-buy:hover {
+  background-color: var(--theme-bg-primary-btn-dark);
+  color: var(--theme-buy-text-dark);
+}
+
+
+body.dark .btn-sell {
+  cursor: pointer;
+  color: var(--theme-sell-text-dark); /* Couleur de texte rouge pour Sell */
+  background-color: var(--theme-nav-hover-bg-dark);
+  border: solid 1px transparent;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+body.dark .btn-sell:hover {
+  background-color: var(--theme-bg-primary-btn-dark);
+  color: var(--theme-sell-text-dark);
+}
+
+
+/* Boutons Buy et Sell pour le Mode Clair */
+body.light .btn-buy {
+  cursor: pointer;
+  color: var(--theme-buy-text-light); /* Couleur de texte vert pour Buy */
+  background-color: var(--theme-nav-hover-bg-light);
+  border: solid 1px transparent;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+body.light .btn-buy:hover {
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-buy-text-light);
+}
+
+body.light .btn-sell {
+  cursor: pointer;
+  color: var(--theme-sell-text-light); /* Couleur de texte rouge pour Sell */
+  background-color: var(--theme-nav-hover-bg-light);
+  border: solid 1px transparent;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+body.light .btn-sell:hover {
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-sell-text-light);
+}
+
+
+/* Dark mode styles */
+body.dark .home-card {
+  background: linear-gradient(-135deg, #2f2f2f, #393939, #4d4d4d, #606060);
+}
+
+body.dark .home-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(-135deg, #2f2f2f, #393939, #4d4d4d, #606060);
+  background-size: 200% 200%;
+  animation: shimmer 3s 1;
+}
+
+body.dark .home-card .top-container-home-card .home-card-text .title,
+body.dark .home-card .top-container-home-card .home-card-text .text {
+  color: var(--theme-card-color-dark);
+}
+
+/* Light mode styles */
+body.light .home-card {
+  background: linear-gradient(-135deg, rgba(215, 215, 215, 0.8), rgba(184, 184, 184, 0.8), rgba(191, 191, 191, 0.8), rgba(198, 198, 198, 0.8), rgba(215, 215, 215, 0.8), rgba(195, 195, 195, 0.8), rgba(204, 204, 204, 0.8), rgba(198, 198, 198, 0.8));
+}
+
+body.light .home-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(-135deg, rgba(215, 215, 215, 0.8), rgba(184, 184, 184, 0.8), rgba(191, 191, 191, 0.8), rgba(198, 198, 198, 0.8), rgba(215, 215, 215, 0.8), rgba(195, 195, 195, 0.8), rgba(204, 204, 204, 0.8), rgba(198, 198, 198, 0.8));
+  background-size: 200% 200%;
+  animation: shimmer 3s 1;
+}
+
+body.light .home-card .top-container-home-card .home-card-text .title,
+body.light .home-card .top-container-home-card .home-card-text .text {
+  color: var(--theme-card-color-light);
+}
+
+
+/* Dark mode styles */
+body.dark .subscription-card {
+  background: linear-gradient(-135deg, #2f2f2f, #393939, #4d4d4d, #606060);
+}
+
+body.dark .subscription-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(-135deg, #2f2f2f, #393939, #4d4d4d, #606060);
+  background-size: 200% 200%;
+  animation: shimmer 3s 1;
+}
+
+body.dark .subscription-card .content h2,
+body.dark .subscription-card .content p,
+body.dark .subscription-card .content .price {
+  color: var(--theme-card-color-dark);
+}
+
+/* Light mode styles */
+body.light .subscription-card {
+  background: linear-gradient(-135deg, rgba(215, 215, 215, 0.8), rgba(184, 184, 184, 0.8), rgba(191, 191, 191, 0.8), rgba(198, 198, 198, 0.8), rgba(215, 215, 215, 0.8), rgba(195, 195, 195, 0.8), rgba(204, 204, 204, 0.8), rgba(198, 198, 198, 0.8));
+}
+
+body.light .subscription-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(-135deg, rgba(215, 215, 215, 0.8), rgba(184, 184, 184, 0.8), rgba(191, 191, 191, 0.8), rgba(198, 198, 198, 0.8), rgba(215, 215, 215, 0.8), rgba(195, 195, 195, 0.8), rgba(204, 204, 204, 0.8), rgba(198, 198, 198, 0.8));
+  background-size: 200% 200%;
+  animation: shimmer 3s 1;
+}
+
+body.light .subscription-card .content h2,
+body.light .subscription-card .content p,
+body.light .subscription-card .content .price {
+  color: var(--theme-card-color-light);
+}
+
+
+
+
+
+.error-form {
+  transition: var(--transition-smooth);
+  transform: translateX(-50%);
+  flex-direction: column;
+  justify-content: space-around;
+  background: var(--theme-error-clear-opacity);
+  color: white;
+  overflow: hidden;
+  width: 400px;
+  min-height: 100px;
+  display: none;
+
+}
+
+.error-form.active {
+  display: flex;
+  transform: translateX(0%);
+  border: 1px solid var(--theme-dark-clear);
+  border-radius: 10px;
+  height: auto;
+  padding: 10px 10px 10px 10px;
+  font-size: 15px;
+  color: var(--theme-error-dark);
+}

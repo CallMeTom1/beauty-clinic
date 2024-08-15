@@ -11,6 +11,7 @@ import {
     DeleteCareException,
     ModifyCareException
 } from "@feature/care/care.exception";
+import {GetCaresPaginatedPayload} from "@feature/care/data/payload/get-cares-paginated.payload";
 
 //todo: exceptions
 @Injectable()
@@ -76,6 +77,25 @@ export class CareService {
         } catch (e) {
             throw new ModifyCareException();
         }
+    }
+
+    async getCaresPaginated(payload: GetCaresPaginatedPayload): Promise<{ data: Care[], total: number }> {
+        const { page, limit, category } = payload;
+
+        // Calculate offsets
+        const [results, total] = await this.careRepository.findAndCount({
+            where: category ? { category } : {},
+            take: limit,
+            skip: (page - 1) * limit,
+            order: {
+                name: 'ASC' // sorting by name or choose another field as required
+            }
+        });
+
+        return {
+            data: results,
+            total
+        };
     }
 
 
