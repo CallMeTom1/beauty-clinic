@@ -1,96 +1,96 @@
 <div class="manage-care-container">
   <div class="manage-care-top">
-    <h2>Manage Care</h2>
+    <h2>{{title | translate}}</h2>
     <div class="add-care-btn">
       <button (click)="showCreateModal = true">
-        <i class="fas fa-plus"></i> Add Care
+        <i class="fas fa-plus"></i> {{ add_care | translate }}
       </button>
     </div>
   </div>
   <table class="manage-care-table">
     <thead>
     <tr>
-      <th (click)="toggleSort('name')">Name</th>
-      <th (click)="toggleSort('zone')">Zone</th>
-      <th (click)="toggleSort('category')">Category</th>
-      <th>Machine</th>
-      <th (click)="toggleSort('sessions')">Sessions</th>
-      <th (click)="toggleSort('price')">Price</th>
-      <th (click)="toggleSort('duration')">Duration</th>
-      <th (click)="toggleSort('time_between')">Time Between</th>
-      <th>Edit</th>
-      <th>Delete</th>
+      <th (click)="toggleSort('name')">{{ col_name | translate }}</th>
+      <th (click)="toggleSort('zone')">{{col_zone | translate}}</th>
+      <th (click)="toggleSort('category')">{{col_category | translate}}</th>
+      <th (click)="toggleSort('machine')">{{col_machine | translate}}</th>
+      <th (click)="toggleSort('sessions')">{{col_sessions | translate}}</th>
+      <th (click)="toggleSort('price')">{{col_price | translate}}</th>
+      <th (click)="toggleSort('duration')">{{col_duration | translate}}</th>
+      <th (click)="toggleSort('time_between')">{{col_time_between | translate}}</th>
+      <th>{{ col_edit | translate }}</th>
+      <th>{{col_delete | translate}}</th>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let care of securityService.cares$()">
-      <td>{{ care.name }}</td>
-      <td>{{ care.zone }}</td>
-      <td>{{ care.category }}</td>
-      <td>{{ care.beauty_care_machine }}</td>
-      <td>{{ care.sessions }}</td>
-      <td>{{ care.price | currency }}</td>
-      <td>{{ care.duration }}</td>
-      <td>{{ care.time_between }}</td>
-      <td>
-        <button (click)="loadCareDetails(care)">
-        <i class="fa-thin fa-pen-to-square"></i>
-        </button>
-      </td>
-      <td>
-        <button (click)="deleteCare(care)">
-          <i class="fa-thin fa-trash"></i>
-        </button>
-      </td>
-    </tr>
+    @for(care of securityService.cares$(); track care.care_id){
+      <tr>
+        <td>{{ care.name }}</td>
+        <td>{{ care.zone }}</td>
+        <td>{{ care.category }}</td>
+        <td>{{ care.beauty_care_machine }}</td>
+        <td>{{ care.sessions }}</td>
+        <td>{{ care.price | currency }}</td>
+        <td>{{ care.duration }}</td>
+        <td>{{ care.time_between }}</td>
+        <td>
+          <button (click)="loadCareDetails(care)">
+            <i class="fa-thin fa-pen-to-square"></i>
+          </button>
+        </td>
+        <td>
+          <button (click)="deleteCare(care)">
+            <i class="fa-thin fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    }
     </tbody>
   </table>
+  @if(showEditModal){
+    <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
+      <app-form [formGroup]="formGroup" [title]="'title' | translate"
+                [config]="formControlConfigs">
+      </app-form>
+      <!-- Submit and Cancel buttons -->
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>
+        <button type="submit" class="submit-btn" [disabled]="formGroup.invalid" (click)="onSubmitEditCare()">Submit</button>
+      </div>
+      <!-- Error form display -->
+      <div class="error-form" [class.active]="error().length > 0 && formGroup.touched">
+        @if(error().length > 0){
+          <p>{{ 'security-feature.sign-in-page.error.description' | labelWithParam:{count: error().length} }}</p>
+        }
+        @for(error of error(); track error){
+          <div>
+            <app-label-with-param [label]="'security-feature.sign-in-page.error.'+error.control+'-'+error.error"></app-label-with-param>
+          </div>
+        }
+      </div>
+    </app-modal>
+  }
+  @if(showCreateModal){
+    <app-modal [title]="modal_add_title | translate" (close)="handleClose()">
+      <app-form [formGroup]="formGroup" [title]="'title' | translate"
+                [config]="formControlConfigs">
+      </app-form>
 
-  <app-modal *ngIf="showEditModal" [title]="'Edit Care'" (close)="handleClose()">
-    <app-form [formGroup]="formGroup" [title]="'title' | translate"
-                        [config]="formControlConfigs" (initiateSubmit)="onSubmit()">
-    </app-form>
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>
+        <button type="submit" class="submit-btn" [disabled]="formGroup.invalid" (click)="onSubmitCreateCare()">Submit</button>
+      </div>
 
-    <!-- Submit and Cancel buttons -->
-    <div class="modal-footer">
-      <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>
-      <button type="submit" class="submit-btn" (click)="onSubmit()">Submit</button>
-    </div>
-
-    <!-- Error form display -->
-    <div class="error-form" [class.active]="error().length > 0">
-      @if(error().length > 0){
-        <p>{{ 'security-feature.sign-in-page.error.description' | labelWithParam:{count: error().length} }}</p>
-      }
-      @for(error of error(); track error){
-        <div>
-          <app-label-with-param [label]="'security-feature.sign-in-page.error.'+error.control+'-'+error.error"></app-label-with-param>
-        </div>
-      }
-    </div>
-  </app-modal>
-
-  <app-modal *ngIf="showCreateModal" [title]="'Create Care'" (close)="handleClose()">
-    <app-form [formGroup]="formGroup" [title]="'title' | translate"
-              [config]="formControlConfigs" (initiateSubmit)="onSubmit()">
-    </app-form>
-
-    <!-- Submit and Cancel buttons -->
-    <div class="modal-footer">
-      <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>
-      <button type="submit" class="submit-btn" (click)="onSubmit()">Submit</button>
-    </div>
-
-    <!-- Error form display -->
-    <div class="error-form" [class.active]="error().length > 0">
-      @if(error().length > 0){
-        <p>{{ 'security-feature.sign-in-page.error.description' | labelWithParam:{count: error().length} }}</p>
-      }
-      @for(error of error(); track error){
-        <div>
-          <app-label-with-param [label]="'security-feature.sign-in-page.error.'+error.control+'-'+error.error"></app-label-with-param>
-        </div>
-      }
-    </div>
-  </app-modal>
+      <div class="error-form" [class.active]="error().length > 0 && formGroup.touched">
+        @if(error().length > 0){
+          <p>{{ 'security-feature.sign-in-page.error.description' | labelWithParam:{count: error().length} }}</p>
+        }
+        @for(error of error(); track error){
+          <div>
+            <app-label-with-param [label]="'security-feature.sign-in-page.error.'+error.control+'-'+error.error"></app-label-with-param>
+          </div>
+        }
+      </div>
+    </app-modal>
+  }
 </div>

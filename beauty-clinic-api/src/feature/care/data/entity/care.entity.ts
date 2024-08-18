@@ -23,9 +23,10 @@ export class Care {
     @Column('decimal', { nullable: false, precision: 10, scale: 2 })
     price: number;
 
-    @Column('time', { nullable: false })
-    duration: string;
+    @Column('int', { nullable: false })
+    duration: number;
 
-    @Column('time', { nullable: true })
-    time_between: string;
+    @Column('int', { nullable: true })
+    time_between: number;
+
 }

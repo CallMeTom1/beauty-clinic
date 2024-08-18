@@ -23,7 +23,7 @@
       display: flex;
       align-items: center;
       background-color: var(--theme-button-bg);
-      color: white;
+      color: var(--theme-primary);
       border: none;
       padding: 10px 15px;
       border-radius: 4px;
@@ -152,7 +152,6 @@
 
           &.disabled {
             background-color: #f2f2f2;
-            cursor: default;
 
             i {
               color: var(--theme-secondary);
@@ -177,21 +176,41 @@
         transition: background-color 0.3s;
       }
 
+      &:disabled {
+        background-color: var(--theme-disabled-bg); /* Couleur de fond lorsque désactivé */
+        color: var(--theme-disabled-text); /* Couleur du texte lorsque désactivé */
+        cursor: not-allowed; /* Change le curseur pour montrer que l'interaction n'est pas possible */
+        opacity: 0.6; /* Réduit l'opacité pour un effet visuel de désactivation */
+      }
+
       .cancel-btn {
         background-color: var(--theme-secondary);
-        color: white;
+        color: var(--theme-primary);
 
         &:hover {
           background-color: var(--theme-secondary-dark);
         }
+
+        &:disabled {
+          background-color: var(--theme-disabled-bg); /* Couleur de fond désactivée */
+          color: var(--theme-disabled-text); /* Couleur du texte désactivé */
+          cursor: not-allowed; /* Changement de curseur pour montrer que l'action n'est pas possible */
+
+        }
       }
 
       .submit-btn {
-        background-color: var(--theme-primary);
-        color: white;
+        background-color: var(--theme-button-bg);
+        color: var(--theme-primary);
 
         &:hover {
           background-color: var(--theme-primary-dark);
+        }
+
+        &:disabled {
+          background-color: var(--theme-disabled-bg); /* Couleur de fond désactivée */
+          color: var(--theme-disabled-text); /* Couleur du texte désactivé */
+          cursor: not-allowed; /* Changement de curseur pour montrer que l'action n'est pas possible */
         }
       }
     }

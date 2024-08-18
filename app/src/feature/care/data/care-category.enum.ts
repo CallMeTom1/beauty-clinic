@@ -1,5 +1,11 @@
 export enum CareCategory {
-  Epilation = 'care.category.epilation',
-  Relaxation = 'care.category.relaxation',
-  Skincare = 'care.category.skincare'
+  Epilation = 'EPILATION',
+  Relaxation = 'RELAXATION',
+  Skincare = 'SKINCARE'
 }
+
+export const CareCategoryTranslations = {
+  [CareCategory.Epilation]: 'care.category.epilation',
+  [CareCategory.Relaxation]: 'care.category.relaxation',
+  [CareCategory.Skincare]: 'care.category.skincare'
+};

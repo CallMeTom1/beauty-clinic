@@ -22,6 +22,7 @@ export class CareService {
     ) {}
 
     async createCare(createCarePayload: CreateCarePayload): Promise<Care | null> {
+        console.log(createCarePayload)
         const existingCare: Care = await this.careRepository.findOneBy({name: createCarePayload.name});
         if(existingCare){
             throw new CareAlreadyExistException();
@@ -38,11 +39,12 @@ export class CareService {
                 .duration(createCarePayload.duration)
                 .time_between(createCarePayload.time_between)
                 .build();
-
+            console.log('new care:', newCare);
             await this.careRepository.save(newCare);
             return newCare;
         }
         catch(e){
+            console.error('Error while creating care:', e);  // Affiche l'erreur dans la console
             throw new CreateCareException();
         }
 
@@ -75,9 +77,11 @@ export class CareService {
             return await this.careRepository.findOne({ where: { care_id } });
 
         } catch (e) {
+            console.error('Error while modifying care:', e); // Ajout d'un log pour l'erreur
             throw new ModifyCareException();
         }
     }
+
 
     async getCaresPaginated(payload: GetCaresPaginatedPayload): Promise<{ data: Care[], total: number }> {
         const { page, limit, category } = payload;

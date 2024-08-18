@@ -39,11 +39,11 @@ export class ModifyCarePayload {
 
     @ApiProperty({ description: 'Duration of the care', required: false })
     @IsOptional()
-    @IsString({ message: 'duration must be a string' })
-    duration?: string;
+    @IsNumber({},{ message: 'duration must be a number' })
+    duration?: number;
 
     @ApiProperty({ description: 'time between next care for a single costumer' })
     @IsNotEmpty({ message: 'time between is required' })
-    @IsString({ message: 'time between must be a string' })
-    time_between?: string;
+    @IsNumber({},{ message: 'time between must be a number' })
+    time_between?: number;
 }

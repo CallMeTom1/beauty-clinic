@@ -1,7 +1,7 @@
 import {Body, Controller, Delete, Get, Post, Put, Query} from '@nestjs/common';
 import { CareService } from '@feature/care/care.service';
 import { ApiTags } from '@nestjs/swagger';
-import { Roles } from '@common/config/metadata';
+import {Public, Roles} from '@common/config/metadata';
 import { Care, CreateCarePayload, DeleteCarePayload, ModifyCarePayload } from '@feature/care/data';
 import { Role } from '@feature/security/data';
 import { GetCaresByCategoryPayload } from '@feature/care/data/payload/get-care-by-category.payload';
@@ -12,6 +12,7 @@ import {GetCaresPaginatedPayload} from "@feature/care/data/payload/get-cares-pag
 export class CareController {
     constructor(private readonly careService: CareService) {}
 
+    @Public()
     @Get()
     getAllCares(): Promise<Care[]> {
         return this.careService.getAllCares();
@@ -23,7 +24,8 @@ export class CareController {
     }
 
     @Post()
-    @Roles(Role.ADMIN)
+    @Public()
+    //@Roles(Role.ADMIN)
     createCare(@Body() payload: CreateCarePayload): Promise<Care> {
         return this.careService.createCare(payload);
     }

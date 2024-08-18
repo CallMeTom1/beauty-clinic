@@ -33,17 +33,38 @@
 
   "admin-feature.admin-router.name": "Beauty Clinic By Françoise",
   "admin-feature.admin-router.logout": "Se déconnecter",
+  "admin-feature.admin.manage-care.title": "Gérer les soins",
+  "admin-feature.admin.manage-care.add": "Ajouter un soin",
+  "admin-feature.admin.modal.add.title": "Ajouter un soin",
+  "admin-feature.admin.modal.edit.title": "Modifier le soin",
+  "admin-feature.admin.manage-care.column.name": "Nom",
+  "admin-feature.admin.manage-care.column.zone": "Zone",
+  "admin-feature.admin.manage-care.column.category": "Catégorie",
+  "admin-feature.admin.manage-care.column.machine": "Machine",
+  "admin-feature.admin.manage-care.column.sessions": "Sessions",
+  "admin-feature.admin.manage-care.column.price": "Prix",
+  "admin-feature.admin.manage-care.column.duration": "Durée",
+  "admin-feature.admin.manage-care.column.time_between": "Intervalle",
+  "admin-feature.admin.manage-care.column.edit": "Modifier",
+  "admin-feature.admin.manage-care.column.delete": "Supprimer",
 
   "care": {
     "form": {
-      "name": "Name",
-      "enter_name": "Enter the care name",
-      "category": "Category",
-      "select_category": "Select a category",
+      "name": "Nom du soin",
+      "enter_name": "Entrez le nom du soin",
+      "sessions": "Session",
+      "time_between": "temps entre session",
+      "category": "Categorie",
+      "duration": "Durée",
+      "price": "Prix",
+      "enter_price": "Entrez le prix",
+      "enter_duration": "Entrez la durée",
+      "enter_time_between": "Entrez le temps entre session",
+      "select_category": "Sélectionnez une catégorie",
       "zone": "Zone",
-      "select_zone": "Select a zone",
+      "select_zone": "Sélectionnez une zone",
       "machine": "Machine",
-      "select_machine": "Select a machine"
+      "select_machine": "Sélectionner une machine"
     },
     "category": {
       "epilation": "Epilation",
@@ -110,6 +131,9 @@
   "security-feature.sign-up-page.error.lastname-minlength": "Le nom de famille doit comporter au moins 1 caractère",
   "security-feature.sign-up-page.error.lastname-maxlength": "Le nom de famille ne doit pas excéder 25 caractères",
   "security-feature.sign-up-page.error.description": "{count, plural, =0{Vous n'avez pas d'erreur} one{Vous avez une erreur} other{Vous avez {count} erreurs}}.",
+
+
+
 
   "security-feature-sign-up-page-title": "S'inscrire",
   "security-feature-sign-up-page-redirect": "Se connecter",

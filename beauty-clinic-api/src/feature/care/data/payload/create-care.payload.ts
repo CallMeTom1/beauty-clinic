@@ -2,11 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString, IsNumber, IsDecimal } from 'class-validator';
 
 export class CreateCarePayload {
-    @ApiProperty({ description: 'Unique identifier of the care' })
-    @IsNotEmpty({ message: 'care_id is required' })
-    @IsString({ message: 'care_id must be a string' })
-    care_id: string;
-
     @ApiProperty({ description: 'Name of the care' })
     @IsNotEmpty({ message: 'name is required' })
     @IsString({ message: 'name must be a string' })
@@ -39,11 +34,11 @@ export class CreateCarePayload {
 
     @ApiProperty({ description: 'Duration of the care' })
     @IsNotEmpty({ message: 'duration is required' })
-    @IsString({ message: 'duration must be a string' })
-    duration: string;
+    @IsNumber({},{ message: 'duration must be a number' })
+    duration: number;
 
     @ApiProperty({ description: 'time between next care for a single costumer' })
     @IsNotEmpty({ message: 'time between is required' })
-    @IsString({ message: 'time between must be a string' })
-    time_between: string;
+    @IsNumber({},{ message: 'time between must be a number' })
+    time_between: number;
 }

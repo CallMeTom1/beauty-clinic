@@ -3,13 +3,15 @@ import {ApiResponse, ApiService, ApiURI} from "@shared-api";
 import {Router} from "@angular/router";
 import {UserUtils} from "./utils";
 import {environment} from "@env";
-import {Observable, Subscription, tap} from "rxjs";
+import {catchError, Observable, Subscription, tap, throwError} from "rxjs";
 import {AppNode, AppRoutes} from "@shared-routes";
 import {User} from "./data/model/user";
 import {SignInPayload, SignupPayload} from "./data";
 import {Care} from "../care/data/model/care.business";
 import {CareUtils} from "./utils/care.utils";
-import {response} from "express";
+import {AddCarePayload} from "./data/payload/care/add-care.payload";
+import {EditCarePayload} from "../admin/data/edit-care.payload";
+import {DeleteCarePayload} from "./data/payload/care/delete-care.payload";
 
 
 @Injectable({
@@ -45,14 +47,81 @@ export class SecurityService {
   }
 
   public fetchCares(): Observable<ApiResponse> {
+    console.log('fetchCares() called, making API call...');
     return this.api.get(ApiURI.CARE).pipe(
       tap((response: ApiResponse): void => {
+        console.log('API response received:', response);
         if (response.result) {
+          console.log('API call successful, updating cares...');
           this.cares$.set(response.data);
+        } else {
+          console.warn('API call did not return a successful result:', response);
         }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
       })
     );
   }
+
+
+  public addCare(payload: AddCarePayload): Observable<ApiResponse> {
+    console.log('Payload sent to server:', payload); // Log du payload envoyé au serveur
+
+    return this.api.post(ApiURI.ADD_CARE, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          console.log('Server response:', response); // Log de la réponse du serveur
+
+          if (response.result) {
+            console.log('Care successfully added, fetching updated cares...');
+            this.fetchCares();
+          } else {
+            console.warn('Server response indicates failure:', response);
+          }
+        }),
+        catchError((error) => {
+          console.error('Error occurred while adding care:', error); // Log de l'erreur du serveur
+          return throwError(error); // Rethrow l'erreur pour être gérée ailleurs si nécessaire
+        })
+      );
+  }
+
+  public editCare(payload: EditCarePayload): Observable<ApiResponse> {
+    console.log('Payload sent to server for editing:', payload); // Log du payload envoyé au serveur
+
+    return this.api.put(ApiURI.CARE, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          console.log('Server response:', response); // Log de la réponse du serveur
+
+          if (response.result) {
+            console.log('Care successfully edited, fetching updated cares...');
+            this.fetchCares(); // Met à jour la liste des soins après une modification réussie
+          } else {
+            console.warn('Server response indicates failure:', response);
+          }
+        }),
+        catchError((error) => {
+          console.error('Error occurred while editing care:', error); // Log de l'erreur du serveur
+          return throwError(error); // Rethrow l'erreur pour être gérée ailleurs si nécessaire
+        })
+      );
+  }
+
+  public deleteCare(payload: DeleteCarePayload){
+    return this.api.delete(ApiURI.CARE, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if(response.result){
+            this.fetchCares();
+          }
+        })
+      )
+  }
+
+
 
   fetchProfile(isAuth: boolean): false | Subscription {
     if (isAuth) {

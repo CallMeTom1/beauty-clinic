@@ -1,7 +1,6 @@
 import {Payload} from "@shared-core";
 
-export interface EditCarePayload extends Payload{
-  care_id: string;
+export interface AddCarePayload extends Payload {
   name: string;
   beauty_care_machine: string;
   category: string;
