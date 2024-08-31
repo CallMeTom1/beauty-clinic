@@ -1,0 +1,10 @@
+<div class="care-card-container" [ngStyle]="{'background-image': 'url(' + cardConfig.src + ')'}">
+  <div class="title-btn-container">
+    <div class="title">
+      <p>{{cardConfig.title | translate}}</p>
+    </div>
+    <div class="btn">
+      <button class="btn-5">{{cardConfig.btnTxt | translate }}</button>
+    </div>
+  </div>
+</div>

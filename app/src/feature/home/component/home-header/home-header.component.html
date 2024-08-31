@@ -1,0 +1,23 @@
+<div class="home-container">
+  <div class="left-container">
+    <img class="img-close-up" src="assets/pictures/close-up-woman-face.png" alt="close up women home">
+  </div>
+  <div class="right-container">
+    <div class="top-title">
+      {{topTitle | translate}}
+    </div>
+    <div class="home-title">
+      {{ title1 | translate }}<br>
+      {{ title2 | translate }} <br>
+      {{title3 | translate}}
+    </div>
+    <div class="home-buttons">
+      <button class="btn-primary">{{careBtn | translate}}</button>
+      <button class="btn-secondary">{{appointmentBtn | translate}}</button>
+    </div>
+    <div class="home-contacts">
+      <app-contact-card></app-contact-card>
+    </div>
+
+  </div>
+</div>

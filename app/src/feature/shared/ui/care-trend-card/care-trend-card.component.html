@@ -1,0 +1,10 @@
+<div
+  class="care-trend-container"
+  [ngStyle]="{ 'background-image': 'url(' + config.src + ')' }">
+  <div class="care-trend-title">
+    {{config.title | translate}}
+  </div>
+  <div class="care-trend-button">
+    <button class="btn-primary">{{config.btnTxt}}</button>
+  </div>
+</div>

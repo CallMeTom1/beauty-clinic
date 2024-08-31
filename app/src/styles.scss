@@ -1,12 +1,19 @@
 @import 'assets/css/reset.css';
 @import 'assets/css/font.css';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Variables de Thème */
 :root {
+  --column-width: 60px; /* Largeur d'une colonne */
+  --gutter-width: 20px; /* Largeur de la gouttière */
+  --container-width: calc((var(--column-width) * 12) + (var(--gutter-width) * 11)); /* Largeur totale du conteneur */
 
   --marquee-speed: 30s;
   --direction: scroll-left;
@@ -61,6 +68,9 @@
   --transition-smooth: all ease 0.3s;
 }
 
+.overlay-grid {
+  gap: var(--gutter-width); /* Espace entre les colonnes */
+}
 /* Définition de Base */
 body {
   font-family: 'Roboto', sans-serif;
@@ -80,6 +90,7 @@ html, body {
 
 /* Thème Clair */
 body.light {
+  --theme-bg-gradient: linear-gradient(45deg, rgb(245, 225, 210) 0%, rgb(225, 204, 191) 50%, rgb(206, 186, 175) 100%);
   --theme-bg-primary: #f8f9fa; /* Light gray background */
   --theme-bg-secondary: #ffffff; /* Pure white background */
   --theme-text-primary: #212529; /* Nearly black text */
@@ -177,10 +188,6 @@ body.dark {
   }
 }
 
-
-
-
-
 body.dark header {
   background: var(--theme-bg-primary);
 }
@@ -227,17 +234,156 @@ body.light header {
   justify-content: space-evenly;
   align-items: flex-start;
 }
-
 /* Boutons de Navigation */
-.btn-primary, .btn-secondary {
+body.light .btn-primary {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Léger effet d'ombre pour donner du relief */
+  font-size: 14px;
+  font-family: 'Lato', sans-serif;
+  background-color: transparent; /* Fond clair */
+  color: var(--theme-text-primary); /* Texte sombre */
   font-weight: bold;
-  border-radius: 25px;
-  font-size: 24px !important;
-  padding: 10px 20px !important;
-  white-space: nowrap;
-  border: solid 1px transparent;
-  transition: background-color 0.3s, color 0.3s, border 0.3s;
-  box-sizing: border-box;
+  border: 2px solid var(--theme-primary); /* Bordure légère */
+  padding: 5px 10px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
+  white-space: nowrap; /* Empêche le texte de se plier */
+}
+
+body.light .btn-primary:hover {
+  background-color: var(--theme-primary); /* Fond plus foncé au survol */
+  color: white; /* Texte blanc au survol */
+  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+body.light .btn-secondary {
+  font-size: 14px;
+  font-family: 'Lato', sans-serif;
+  background-color: black;
+  color: var(--theme-bg-primary); /* Texte sombre */
+  border: 1px solid var(--theme-text-primary);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
+  white-space: nowrap; /* Empêche le texte de se plier */
+}
+
+body.light .btn-secondary:hover {
+  background-color: transparent;
+  color: var(--theme-text-primary);
+  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .btn-primary {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Léger effet d'ombre pour donner du relief */
+  font-family: 'Lato', sans-serif;
+  background-color: var(--theme-bg-secondary); /* Fond sombre */
+  color: var(--theme-text-primary); /* Texte clair */
+  border: 1px solid var(--theme-border); /* Bordure foncée */
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
+  white-space: nowrap; /* Empêche le texte de se plier */
+}
+
+body.dark .btn-primary:hover {
+  background-color: var(--theme-button-hover-bg); /* Fond plus foncé au survol */
+  color: var(--theme-text-primary); /* Texte clair */
+  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .btn-secondary {
+  font-family: 'Lato', sans-serif;
+  background-color: transparent; /* Fond transparent */
+  color: var(--theme-text-primary); /* Texte clair */
+  border: 1px solid var(--theme-border); /* Bordure foncée */
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
+  white-space: nowrap; /* Empêche le texte de se plier */
+}
+
+body.dark .btn-secondary:hover {
+  background-color: var(--theme-bg-secondary); /* Fond plus sombre au survol */
+  color: var(--theme-text-primary); /* Texte clair */
+  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Style pour le thème clair */
+body.light .btn-ternary {
+  font-size: 14px;
+  font-family: 'Lato', sans-serif;
+  background-color: transparent; /* Fond transparent */
+  color: var(--theme-text-primary); /* Couleur du texte adaptée au thème clair */
+  font-weight: bold;
+  border: 1px solid var(--theme-primary); /* Bordure plus épaisse */
+  padding: 10px 20px;
+  border-radius: 8px; /* Coins très arrondis pour un look moderne */
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Léger effet d'ombre pour donner du relief */
+  height: 45px;
+  white-space: nowrap; /* Empêche le texte de se plier */
+}
+
+body.light .btn-ternary:hover {
+  background-color: var(--theme-primary); /* Fond rempli au survol */
+  color: white; /* Texte blanc pour le contraste */
+  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée au survol */
+}
+
+/* Style pour le thème sombre */
+body.dark .btn-ternary {
+  font-size: 16px;
+  font-family: 'Lato', sans-serif;
+  background-color: var(--theme-primary); /* Fond plein dès le départ pour un fort contraste avec le fond sombre */
+  color: white; /* Texte blanc */
+  font-weight: bold;
+  border: 2px solid var(--theme-primary); /* Bordure de la même couleur que le fond */
+  padding: 8px 16px;
+  border-radius: 30px;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée pour le thème sombre */
+  white-space: nowrap; /* Empêche le texte de se plier */
+}
+
+body.dark .btn-ternary:hover {
+  background-color: transparent; /* Fond transparent au survol pour l'effet inverse */
+  color: var(--theme-primary); /* Texte devient coloré au survol */
+  transform: translateY(-3px); /* Légère élévation au survol */
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3); /* Ombre encore plus prononcée */
+}
+
+body.light .btn-5 {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Léger effet d'ombre pour donner du relief */
+  font-size: 14px;
+  font-family: 'Lato', sans-serif;
+  background: radial-gradient(circle, rgb(215, 192, 171) 0%, rgba(239,223,208,1) 100%);
+  color: var(--theme-text-primary); /* Texte sombre */
+  font-weight: bold;
+  border: 2px solid var(--theme-primary); /* Bordure légère */
+  padding: 5px 10px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
+  white-space: nowrap; /* Empêche le texte de se plier */
+}
+
+body.light .btn-5:hover {
+  background-color: transparent; /* Fond plus foncé au survol */
+  color: black; /* Texte blanc au survol */
+  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -267,215 +413,6 @@ html {
 html, body {
   overflow-x: hidden;
 }
-
-
-.app-container {
-  background-color: var(--theme-bg-primary);
-  min-height: 100vh;
-  padding: 20px;
-}
-
-
-
-body.light .nav-container nav ul li:hover {
-  background-color: var(--theme-nav-hover-bg-light);
-  border-radius: 25px;
-
-}
-
-body.dark .nav-container nav ul li:hover {
-  background-color: var(--theme-nav-hover-bg-dark);
-  border-radius: 25px;
-}
-
-
-
-/* Boutons de Navigation pour le Mode Sombre */
-body.dark .btn-primary {
-  cursor: pointer;
-  color: var(--theme-primary);
-  background-color: var(--theme-nav-hover-bg-dark);
-  border: solid 1px transparent;
-  transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
-
-body.dark .btn-primary:hover {
-  background-color: var(--theme-bg-primary-btn-dark);
-  color: var(--theme-primary);
-}
-
-body.dark .btn-secondary {
-  border: solid 1px var(--theme-primary);
-  cursor: pointer;
-  background-color: var(--theme-bg-secondary);
-  color: var(--theme-secondary);
-  transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
-
-body.dark .btn-secondary:hover {
-  background-color: var(--theme-primary);
-  color: var(--theme-bg-primary);
-}
-
-
-/* Boutons de Navigation pour le Mode Clair */
-body.light .btn-primary {
-  cursor: pointer;
-  color: var(--theme-black);
-  background-color: var(--theme-nav-hover-bg-light);
-  border: solid 1px transparent;
-  transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
-
-body.light .btn-primary:hover {
-  background-color: var(--theme-bg-secondary);
-  color: var(--theme-black);
-}
-
-body.light .btn-secondary {
-  border: solid 1px var(--theme-black);
-  cursor: pointer;
-  background-color: var(--theme-bg-primary);
-  color: var(--theme-secondary);
-  transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
-
-body.light .btn-secondary:hover {
-  background-color: var(--theme-black);
-  color: var(--theme-bg-primary);
-}
-
-
-/* Boutons Buy et Sell pour le Mode Sombre */
-body.dark .btn-buy {
-  cursor: pointer;
-  color: var(--theme-buy-text-dark); /* Couleur de texte vert pour Buy */
-  background-color: var(--theme-nav-hover-bg-dark);
-  border: solid 1px transparent;
-  transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
-
-body.dark .btn-buy:hover {
-  background-color: var(--theme-bg-primary-btn-dark);
-  color: var(--theme-buy-text-dark);
-}
-
-
-body.dark .btn-sell {
-  cursor: pointer;
-  color: var(--theme-sell-text-dark); /* Couleur de texte rouge pour Sell */
-  background-color: var(--theme-nav-hover-bg-dark);
-  border: solid 1px transparent;
-  transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
-
-body.dark .btn-sell:hover {
-  background-color: var(--theme-bg-primary-btn-dark);
-  color: var(--theme-sell-text-dark);
-}
-
-
-/* Boutons Buy et Sell pour le Mode Clair */
-body.light .btn-buy {
-  cursor: pointer;
-  color: var(--theme-buy-text-light); /* Couleur de texte vert pour Buy */
-  background-color: var(--theme-nav-hover-bg-light);
-  border: solid 1px transparent;
-  transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
-
-body.light .btn-buy:hover {
-  background-color: var(--theme-bg-secondary);
-  color: var(--theme-buy-text-light);
-}
-
-body.light .btn-sell {
-  cursor: pointer;
-  color: var(--theme-sell-text-light); /* Couleur de texte rouge pour Sell */
-  background-color: var(--theme-nav-hover-bg-light);
-  border: solid 1px transparent;
-  transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
-
-body.light .btn-sell:hover {
-  background-color: var(--theme-bg-secondary);
-  color: var(--theme-sell-text-light);
-}
-
-
-/* Dark mode styles */
-body.dark .home-card {
-  background: linear-gradient(-135deg, #2f2f2f, #393939, #4d4d4d, #606060);
-}
-
-body.dark .home-card:hover {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(-135deg, #2f2f2f, #393939, #4d4d4d, #606060);
-  background-size: 200% 200%;
-  animation: shimmer 3s 1;
-}
-
-body.dark .home-card .top-container-home-card .home-card-text .title,
-body.dark .home-card .top-container-home-card .home-card-text .text {
-  color: var(--theme-card-color-dark);
-}
-
-/* Light mode styles */
-body.light .home-card {
-  background: linear-gradient(-135deg, rgba(215, 215, 215, 0.8), rgba(184, 184, 184, 0.8), rgba(191, 191, 191, 0.8), rgba(198, 198, 198, 0.8), rgba(215, 215, 215, 0.8), rgba(195, 195, 195, 0.8), rgba(204, 204, 204, 0.8), rgba(198, 198, 198, 0.8));
-}
-
-body.light .home-card:hover {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(-135deg, rgba(215, 215, 215, 0.8), rgba(184, 184, 184, 0.8), rgba(191, 191, 191, 0.8), rgba(198, 198, 198, 0.8), rgba(215, 215, 215, 0.8), rgba(195, 195, 195, 0.8), rgba(204, 204, 204, 0.8), rgba(198, 198, 198, 0.8));
-  background-size: 200% 200%;
-  animation: shimmer 3s 1;
-}
-
-body.light .home-card .top-container-home-card .home-card-text .title,
-body.light .home-card .top-container-home-card .home-card-text .text {
-  color: var(--theme-card-color-light);
-}
-
-
-/* Dark mode styles */
-body.dark .subscription-card {
-  background: linear-gradient(-135deg, #2f2f2f, #393939, #4d4d4d, #606060);
-}
-
-body.dark .subscription-card:hover {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(-135deg, #2f2f2f, #393939, #4d4d4d, #606060);
-  background-size: 200% 200%;
-  animation: shimmer 3s 1;
-}
-
-body.dark .subscription-card .content h2,
-body.dark .subscription-card .content p,
-body.dark .subscription-card .content .price {
-  color: var(--theme-card-color-dark);
-}
-
-/* Light mode styles */
-body.light .subscription-card {
-  background: linear-gradient(-135deg, rgba(215, 215, 215, 0.8), rgba(184, 184, 184, 0.8), rgba(191, 191, 191, 0.8), rgba(198, 198, 198, 0.8), rgba(215, 215, 215, 0.8), rgba(195, 195, 195, 0.8), rgba(204, 204, 204, 0.8), rgba(198, 198, 198, 0.8));
-}
-
-body.light .subscription-card:hover {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(-135deg, rgba(215, 215, 215, 0.8), rgba(184, 184, 184, 0.8), rgba(191, 191, 191, 0.8), rgba(198, 198, 198, 0.8), rgba(215, 215, 215, 0.8), rgba(195, 195, 195, 0.8), rgba(204, 204, 204, 0.8), rgba(198, 198, 198, 0.8));
-  background-size: 200% 200%;
-  animation: shimmer 3s 1;
-}
-
-body.light .subscription-card .content h2,
-body.light .subscription-card .content p,
-body.light .subscription-card .content .price {
-  color: var(--theme-card-color-light);
-}
-
-
-
 
 
 .error-form {

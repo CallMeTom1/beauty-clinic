@@ -1,0 +1,29 @@
+.contact-card-container{
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+  font-size: 14px;
+
+  .top-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:25px;
+
+    .phone, .address, .mail{
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      gap: 15px;
+    }
+  }
+  .bottom-container{
+    img{
+      width:25px;
+    }
+    display: flex;
+    flex-direction: row;
+    gap:20px;
+  }
+}

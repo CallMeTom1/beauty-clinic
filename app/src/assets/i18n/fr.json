@@ -4,22 +4,36 @@
   "home-feature-nav-alt": "Logo de Coinify",
   "home-feature-nav-login-btn": "Se connecter",
   "home-feature-nav-signup-btn":" S'inscrire",
+  "home-feature-take-appointment-btn": "Réserver maintenant",
 
-  "home-feature-title": "Commencez Votre Expérience de Trading avec le Meilleur Exchange",
-  "home-feature-intro": "Où le trading crypto rencontre l'excellence",
-  "home-feature-intro2": "Sécurisé, innovant et convivial",
-  "home-feature-copyright": "© {year} Coinify. Tous droits réservés.",
+  "home-feature-header-top-title": "Soins d'exceptions",
+  "home-feature-header-home-title1":"Beauté et bien-être",
+  "home-feature-header-home-title2":"accessibles à",
+  "home-feature-header-home-title3":"chacun",
+
+  "home-feature-header-care-btn": "Découvrir les soins",
+  "home-feature-header-appointment-btn":"Réserver maintenant",
+
+  "home-feature-presentation-up-title": "Pour vous sublimer",
+  "home-feature-presentation-title": "Françoise",
+  "home-feature-presentation-text-1": "Françoise vous accueille dans son établissement où règne une atmosphère de calme et d'élégance.",
+  "home-feature-presentation-text-2": "Ses années d'expérience se traduisent par une compréhension approfondie des besoins de chacun, permettant de sculpter des moments de soin qui sont à la fois un art et une science.",
+  "home-feature-presentation-text-3": "Son espace est conçu pour être un refuge, un lieu où la beauté se cultive et se célèbre en toute intimité et splendeur.",
+
+  "home-feature-diag-title": "Diagnostique Gratuit",
+  "home-feature-diag-text": "Françoise vous offre un diagnostic beauté personnalisé et gratuit pour cerner précisément vos besoins et vous proposer des soins sur mesure qui répondront parfaitement à vos attentes.",
+  "home-feature-diag-btn-text":"Reserver votre diagnostique",
 
 
+  "home-feature-care-trend-title": "Soins en tendance",
+
+  "home-feature-care-all-btn-text": "Découvrir tout les soins",
 
   "common.nav.order": "Commandes",
   "common.nav.member": "Membres",
-  "common.nav.home": "Home",
-  "common.nav.swap": "Swap",
-  "common.nav.market": "Marchés",
-  "common.nav.trade": "Trader",
-  "common.nav.subscription": "Abonnements",
-  "common.nav.forum": "Forum",
+  "common.nav.home": "Accueil",
+  "common.nav.care": "Soins",
+  "common.nav.contact": "Contact",
   "common.nav.signin": "Se connecter",
   "common.nav.signup": "S'inscrire",
   "common.nav.brand": "Coinify",
@@ -190,8 +204,156 @@
   "security-feature-form-email-label": "Adresse e-mail",
   "security-feature-form-email-placeholder": "Entrez votre adresse e-mail",
   "security-feature-form-password-label": "Mot de passe",
-  "security-feature-form-password-placeholder": "Entrez votre mot de passe"
+  "security-feature-form-password-placeholder": "Entrez votre mot de passe",
 
 
+  "care-feature-header-title": "Raffinement et soin",
+  "care-feature-header-text": "Vivez l'expérience ultime de soin.",
+  "care-feature-header-btn": "Réserver Maintenant",
 
+  "care-feautre-care-page-diagnostic": "Diagnostique gratuit",
+  "care-feautre-care-page-epilation": "Epilation",
+  "care-feature-care-page-title1": "Des Soins à la hauteur de vos espérances",
+  "care-feature-care-page-title2": "Explorez une gamme de soins esthétiques innovants, conçus pour sublimer votre beauté naturelle et répondre à vos besoins spécifiques.",
+
+  "care-feature-care-page-diag-title": "Diagnostique esthétique gratuit",
+  "care-feature-care-page-epil-title": "Epilation laser femme & homme",
+
+
+  "care-feature-care-page-card": {
+    "title1": "Diagnostique esthétique gratuit",
+    "btnTxt1": "En savoir plus",
+    "title2": "Epilation laser femme & homme",
+    "title3": "Electrolyse",
+    "title4": "Epilation à la cire",
+    "title5": "Traitement anti-cellulite",
+    "title6": "Rajeunissement, lifting et contouring",
+    "title7": "Peeling",
+    "title8": "Traitement anti-âge"
+  },
+
+  "care-feature-page-epil-laser-header-btn": "Réserver maintenant",
+  "care-feature-page-epil-laser-header-title": "Epilation laser femme & homme",
+  "care-feature-page-epil-laser-header-sub": "IPL/Epil Expert 2.0",
+  "care-feature-page-epil-laser-header-text": "Réduction Permanente des Poils.\nOubliez les rasoirs. Fini la cire. Découvrez l'épilation laser de qualité médicale et profitez de la liberté d'être prêt à tout moment.",
+
+  "care-feature-page-epil-laser-resume": "Résumé du traitement",
+  "care-feature-page-epil-laser-title": "épilation laser femme & homme",
+  "care-feature-page-epil-laser-sub-title": "IPL/Epil Expert 2.0 pour Épilation Laser Femme & Homme\n",
+  "care-feature-page-epil-laser-title2": "Technologie Avancée pour un Résultat Optimal\n",
+  "care-feature-page-epil-laser-sub-title2": "Innovation Technique:",
+  "care-feature-page-epil-laser-text2": "Le système IPL/Epil Expert 2.0 intègre une technologie de pointe pour garantir une efficacité maximale. \nLa technologie de balayage continu permet une distribution homogène de l'énergie lumineuse, réduisant ainsi le risque de zones manquées ou de traitement inégal",
+  "care-feature-page-epil-laser-title3": "Épilation de Précision:",
+  "care-feature-page-epil-laser-text3": " Cette méthode assure une épilation ciblée et précise, permettant de traiter efficacement les zones délicates ou difficiles d'accès.\n",
+  "care-feature-page-epil-laser-title4": "Adapté à Tous les Types de Peau et de Poils\n",
+  "care-feature-page-epil-laser-title5": "Polyvalence du Traitement:",
+  "care-feature-page-epil-laser-text5": "Le système est conçu pour être efficace sur une vaste gamme de phototypes de peaux, des plus claires aux plus foncées, ainsi que sur différents types de poils, des plus fins aux plus épais.\n",
+  "care-feature-page-epil-laser-title6": "Personnalisation des Soins:",
+  "care-feature-page-epil-laser-text6": "Nous ajustons les paramètres du traitement en fonction des caractéristiques individuelles de chaque client, assurant ainsi un traitement personnalisé et optimal.\n",
+  "care-feature-page-epil-laser-title7": "Traitement Confortable et Sûr\n",
+  "care-feature-page-epil-laser-title8": "Minimisation de l'Inconfort:",
+  "care-feature-page-epil-laser-text8": "Grâce à l'échauffement contrôlé et précis, le traitement est généralement moins douloureux que les méthodes traditionnelles d'épilation laser.",
+  "care-feature-page-epil-laser-title9": "Sécurité Renforcée:",
+  "care-feature-page-epil-laser-text9": "Nous prenons toutes les mesures nécessaires pour garantir la sécurité de nos clients durant le traitement, minimisant les risques d'effets secondaires ou de complications.\nRésultats à Long Terme\n",
+  "care-feature-page-epil-laser-title10": "Efficacité Prouvée:",
+  "care-feature-page-epil-laser-text10": "Les clients observent généralement une réduction significative de la pilosité dès les premières séances, avec des résultats qui s'améliorent au fil des traitements.\nSuivi et Entretien: Nous proposons un suivi régulier et des séances d'entretien pour maintenir les résultats à long terme, en adaptant le plan de traitement aux besoins évolutifs de chaque client.",
+
+  "care-feature-page-epil-laser-avant": "Avant le traitement",
+  "care-feature-page-epil-laser-raser": "Rasez la zone 24 heures avant le traitement.",
+  "care-feature-page-epil-laser-retirez": "Retirez le déodorant ou d'autres produits cutanés avant le traitement.",
+  "care-feature-page-epil-laser-resultat": "Résultats du traitement",
+  "care-feature-page-epil-laser-general": "En général, 8 à 10 séances sont nécessaires pour une réduction substantielle des poils, et les séances de maintenance varient en fonction de la couleur, de l'épaisseur des poils, de la zone de traitement et du type de peau.",
+  "care-feature-page-epil-laser-apres": "Après le traitement",
+  "care-feature-page-epil-laser-maintenez": "Maintenez la peau au frais.",
+  "care-feature-page-epil-laser-appliquez": "Appliquez un produit apaisant.",
+  "care-feature-page-epil-laser-eviter": "Évitez la chaleur et l'exposition directe au soleil.",
+  "care-feature-page-epil-laser-rdv": "Prise de rendez-vous en ligne ou pas téléphone",
+
+  "care-feature-page-epil-laser-tarif": "tarifs",
+  "care-feature-page-epil-laser-coute":"combien ça coûte?",
+
+  "common.body.part-femme":"Femme",
+  "common.body.part-homme":"Homme",
+  "common.body.part-visage":"Visage",
+  "common.body.part-sourcil":"Inter-sourcilier",
+  "common.body.part-visage-complet":"Visage complet",
+  "common.body.part-corps":"Corps",
+  "common.body.part-cou":"Cou, nuque",
+  "common.body.part-aisselles":"Aisselles",
+  "common.body.part-aisselles-avant-bras":"Avant-bras",
+  "common.body.part-dos":"Dos entier",
+  "common.body.part-demies-jambes":"Demies-jambes",
+  "common.body.part-jambes-entieres":"Jambes entières",
+  "common.body.part-aisselles-demi-jambes":"Aisselles et demies-jambes",
+  "common.body.part-aisselles-jambes-completes":"Aisselles et jambes complètes",
+  "common.body.part-maillot-intégral-aisselles":"Maillot intégral et aisselles",
+  "common.body.part-corps-entier":"Corps entier",
+  "common.body.part-mise-en-forme-barbe":"Mise en forme de la barbe",
+  "common.body.part-barbe-entiere":"Barbe entière",
+  "common.body.part-haut-dos-epaule":"Visage complet",
+  "common.body.part-main-pied":"Mains, pieds",
+
+  "common.time.minute": "minutes",
+
+  "home-feature-title": "L'excellence au service de votre bien-être",
+  "home-feature-intro": "Découvrez la fusion de technologie de pointe et d'expertise esthétique chez Beauty Clinic By Françoise. Des soins sur mesure, de la cryolipolyse à l'épilation laser, conçus pour révéler votre beauté naturelle et unique.",
+  "home-intro-card": {
+    "title": "Carte d'introduction",
+    "description": "Ceci est une description de la carte d'introduction.",
+    "btnTxt": "Prendre Rendez-vous",
+
+    "title1": "Trouvez la clinique facilement",
+    "description1": "Consultez la carte pour l'itinéraire et laissez Françoise prendre soin de vous.",
+    "btnTxt1": "Trouver la clinique",
+
+    "title2": "Soins",
+    "description2": "Naviguer à travers une large variété de traitements disponnibles. Redevenez à l’aise et ayez confiance en vous à nouveau.",
+    "btnTxt2": "Découvrir les soins",
+
+    "title3": "Parlons",
+    "description3": "Dites-en plus à propos de vous et comment Françoise peut vous aider à accomplir vos objectifs beauté. Contactez Françoise.",
+    "btnTxt3": "Contacter"
+  },
+
+  "home-care-card": {
+    "title1": "Diagnostique esthétique gratuit",
+    "btnTxt1": "En savoir plus",
+    "title2": "Epilation ",
+    "title3": "Relâchement cutané",
+    "title4": "Traitement anti-cellulite",
+    "title5": "Rajeunissement,lifting et contouring",
+    "title6": "Peeling",
+    "title7": "Traitement anti-âge",
+    "title8": "Massage",
+    "title9": "Gommage"
+  },
+
+  "contact": {
+    "form": {
+      "firstName": "Prénom",
+      "enter_firstName": "Entrez votre prénom",
+      "email": "Email",
+      "enter_email": "Entrez votre email",
+      "phoneNumber": "Numéro de téléphone",
+      "enter_phoneNumber": "Entrez votre numéro de téléphone",
+      "careCategory": "Catégorie de soin",
+      "select_careCategory": "Sélectionnez une catégorie de soin",
+      "message": "Message",
+      "enter_message": "Entrez votre message"
+    }
+  },
+  "form.errors": {
+    "required": "Ce champ est requis.",
+    "minlength": "Ce champ doit comporter au moins { length } caractères.",
+    "email": "Veuillez entrer une adresse e-mail valide.",
+    "passwordMismatch": "Les mots de passe ne correspondent pas."
+  },
+  "care": {
+    "category": {
+      "epilation": "Épilation",
+      "relaxation": "Relaxation",
+      "skincare": "Soins de la peau"
+    }
+  }
 }
+

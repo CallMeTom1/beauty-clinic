@@ -14,6 +14,16 @@ export const homeRoutes: Routes = [
           .then(c => c.HomePageComponent),
       },
       {
+        path: AppNode.CARE,
+        loadChildren: () => import('../care/care.routes')
+          .then(m => m.careRoutes),
+      },
+      {
+        path: AppNode.CONTACT,
+        loadComponent: () => import('../contact/page/contact-page/contact-page.component')
+          .then(c => c.ContactPageComponent),
+      },
+      {
         path: AppNode.ACCOUNT,
         loadChildren: () => import('../security/security.routes').then(m => m.securityRoutes)
       },

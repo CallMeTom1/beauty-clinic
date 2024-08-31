@@ -1,0 +1,21 @@
+.care-trend-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  background-size: cover; /* Pour couvrir tout le conteneur */
+  background-position: center; /* Centrer l'image */
+  background-repeat: no-repeat; /* Ne pas répéter l'image */
+  width: 100%; /* S'assure que le conteneur prend toute la largeur */
+  height: 300px; /* Hauteur fixe ou ajustable selon vos besoins */
+  padding: 20px; /* Espace intérieur */
+  color: white; /* Contraste du texte sur l'image */
+  border-radius: 10px; /* Coins arrondis pour un meilleur style */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajout d'une ombre pour du relief */
+}
+
+.care-trend-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+

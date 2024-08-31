@@ -9,6 +9,10 @@ export enum AppNode {
     SIGNUP=`signup`,
     PROFILE=`profile`,
     CARE=`care`,
+    DIAGNOSTIC=`diagnostique-gratuit`,
+    EPIL_LASER=`epilation-laser`,
+    CONTACT=`contact`,
+
     APPOINTMENT= `appointment`,
     CUSTOMER= `customer`,
     FALL_BACK = '**',

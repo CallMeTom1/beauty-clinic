@@ -1,0 +1,163 @@
+.content-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 40px;
+
+  .text-container{
+    padding:0 200px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap:10px;
+
+    .title{
+      font-family: 'Lato', sans-serif;
+      font-size: 24px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+    .intro{
+      font-family: 'Roboto', sans-serif;
+      font-size: 26px;
+
+    }
+  }
+
+  .home-intro-cards{
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+  }
+
+  .home-presentation-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px;
+    gap: 100px;
+    min-height:600px;
+    width: 100%;
+    background: radial-gradient(circle, rgb(215, 192, 171) 0%, rgba(239,223,208,1) 100%);
+
+    .left-pres{
+
+      img{
+        height:600px;
+      }
+      display: flex;
+      flex-direction: column;
+    }
+
+    .right-pres{
+      display: flex;
+      flex-direction: column;
+      width: 500px;
+      gap:50px;
+
+      .right-pres-up{
+
+      }
+
+      .up-title-pres{
+        font-family: 'Playfair Display', sans-serif;
+        font-size: 20px;
+        text-transform: uppercase;
+      }
+
+      .title-pres{
+        font-family: 'Playfair Display', sans-serif;
+        font-size: 50px;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .text-pres{
+        font-family: 'Roboto';
+        font-size: 16px;
+        display: flex;
+        flex-direction: column;
+        gap:15px;
+        font-weight: 400;
+      }
+
+      .diag-pres-container{
+        border: 1px solid black;
+        border-radius: 15px;
+        padding: 0 10px;
+        display: flex;
+        gap:25px;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: row;
+        width:500px;
+
+        .left-icon{
+          font-size: 125px;
+        }
+        .right-diag{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-evenly;
+          gap:10px;
+          .right-diag-title{
+            text-transform: uppercase;
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+          }
+          .right-diag-text{
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .care-trend-title{
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    text-transform: uppercase;
+  }
+
+  .scrolling-card-wrapper {
+    width: 100%;
+    min-height: 250px;
+    overflow: hidden;
+    padding: 20px 0;
+  }
+
+  .scrolling-card-container {
+    display: flex;
+    width: max-content;
+    animation: scroll 30s linear infinite;
+
+    .scrolling-cards {
+      display: flex;
+
+      &.duplicate {
+        display: flex;
+        position: relative;
+      }
+    }
+  }
+
+  .contact-container{
+    display: flex;
+    flex-direction: row;
+  }
+
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

@@ -1,0 +1,22 @@
+
+.care-detail-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  background-size: cover; /* Pour couvrir tout le conteneur */
+  background-position: center; /* Centrer l'image */
+  background-repeat: no-repeat; /* Ne pas répéter l'image */
+  width: 100%; /* S'assurer que le conteneur prenne toute la largeur de la grille */
+  height: 300px; /* Hauteur fixe pour uniformiser toutes les cartes */
+  min-height: 300px;
+  padding: 20px; /* Espace intérieur */
+  color: black; /* Contraste du texte sur l'image */
+  border-radius: 10px; /* Coins arrondis pour un meilleur style */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajout d'une ombre pour du relief */
+}
+
+.care-detail-title {
+  font-size: 24px;
+  font-weight: bold;
+}

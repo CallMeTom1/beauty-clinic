@@ -1,48 +1,57 @@
+<div class="container-all">
   <header>
     <div class="header-container">
-      <div (click)="redirectHome()" class="logo-container">
-        <img [ngSrc]="logoSrc" [alt]="'alt' | translate" [width]="width" [height]="height">
-        <span>{{ brand }}</span>
+      <div class="left-header">
+        <div class="brand-name">
+          <div class="brand-name1">
+            <span>{{title1}}</span>
+          </div>
+          <div class="brand-name2">
+            <span>{{title2}}</span>
+          </div>
+        </div>
       </div>
-      <i class="fa fa-bars menu-icon" (click)="toggleMenu()"></i>
-      <div class="nav-container" [ngClass]="{'active': menuActive}">
-        <nav>
-          <ul>
-            @for(item of menu; let index=$index; track index ){
-              <li (click)="navigate(item.link)">
-                <span class="title">{{item.title | translate}}</span>
-              </li>
-            }
-          </ul>
-        </nav>
+      <div class="mid-header">
+        <div class="nav-container" [ngClass]="{'active': menuActive}">
+          <nav>
+            <ul>
+              @for(item of menu; let index=$index; track index ){
+                <li (click)="navigate(item.link)" routerLinkActive="active"
+                    [routerLink]="item.link">
+                  <span class="title">{{item.title | translate}}</span>
+                </li>
+              }
+            </ul>
+          </nav>
+        </div>
+        <div class="btn-appointment">
+          <button class="btn-secondary">  {{appointmentBtn | translate}}</button>
+        </div>
+      </div>
+      <div class="right-header">
+        <div class="left-header-hamburger-btn">
+          <i class="fa-thin fa-bars menu-icon" (click)="toggleMenu()"></i>
+        </div>
         @if(!securityService.isAuth$()){
           <div class="btn-container">
-            <button class="btn-primary" (click)="redirectSignin()">{{ signinBtn | translate }}</button>
-            <button class="btn-primary" (click)="redirectSignup()">{{ signupBtn | translate }}</button>
+            <button class="btn-ternary" (click)="redirectSignin()">{{ signinBtn | translate }}</button>
+            <button class="btn-ternary" (click)="redirectSignup()">{{ signupBtn | translate }}</button>
           </div>
         } @else {
           <div class="user-nav-container">
             <app-user-navigation></app-user-navigation>
           </div>
         }
-      </div>
-      <div>
-        <app-theme-toggler></app-theme-toggler>
+        <div class="theme-toggler">
+          <app-theme-toggler></app-theme-toggler>
+        </div>
       </div>
     </div>
   </header>
   <main class="app-container">
     <router-outlet></router-outlet>
   </main>
-  <footer>
-    <div class="footer-content">
-      <div (click)="redirectHome()" class="logo-container">
-        <img [ngSrc]="logoSrc" [alt]="'alt' | translate" [width]="width_footer" [height]="height_footer">
-        <span>{{ brand }}</span>
-      </div>
-      <div class="copyright">
-        <p>{{ footer | translate: { year: currentYear } }}</p>
-      </div>
-    </div>
+  <footer class="footer">
+    <app-footer></app-footer>
   </footer>
-
+</div>

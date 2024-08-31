@@ -5,112 +5,208 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 16px;
+}
+
+.container-all {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--theme-bg-primary);
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
 .header-container {
+  background: var(--theme-bg-gradient);
   display: flex;
   flex-direction: row;
-  gap: 50px;
-  margin: auto;
   align-items: center;
-  justify-content: center;
-  padding: 0 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: var(--var-header-height);
-  font-family: Figtree-Light !important;
+  justify-content: space-evenly;
+  padding: 20px 20px;
+  height: 100px;
   width: 100%;
-  border-bottom: 1px solid var(--theme-primary);
-
-  .logo-container {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--theme-white);
-    font-weight: bold;
-    font-family: 'figtree';
-    font-size: 36px;
-    min-width: 150px;
-
-    img {
-      height: 50px;
-      flex-shrink: 0;
-    }
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 
   .menu-icon {
     display: none;
-    font-size: 2rem;
+    font-size: 24px; /* 2 rem correspond à 32px */
     color: var(--theme-white);
     cursor: pointer;
   }
 
-  .nav-container {
+  .left-header {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    padding: 0 10px;
+    flex-shrink: 1;
+    white-space: nowrap;
 
-    nav {
+    .brand-name {
+      cursor: pointer;
       display: flex;
+      font-family: 'Monserrat', sans-serif;
+      font-weight: bold;
+      flex-direction: column;
+      font-size: 18px;
 
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+      .brand-name1 {
+        text-transform: uppercase;
+      }
+      .brand-name2 {
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  .mid-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+
+    .nav-container {
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+
+      nav {
         display: flex;
-        flex-direction: row;
-        gap: 30px;
 
-        li {
-          padding: 10px 15px;
-          font-size: 24px;
-          color: var(--theme-white);
-          font-weight: bold;
-          white-space: nowrap;
-          position: relative;
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: row;
+          gap: 24px;
 
-          &:hover {
-            cursor: pointer;
+          li {
+            font-family: 'Lato', sans-serif;
+            font-size: 16px;
+            color: var(--theme-white);
+            font-weight: 500;
+            white-space: nowrap;
+            position: relative;
+            transition: color 0.3s ease;
 
             &::after {
               content: '';
               position: absolute;
               left: 0;
               right: 0;
-              bottom: -25px;
-              height: 4px;
-              background-color: var(--theme-prim-blue);
-              width: 100%;
+              bottom: -3px;
+              height: 1px;
+              background-color: var(--theme-text-primary);
+              transform: scaleX(0);
+              transform-origin: left;
+              transition: transform 0.3s ease;
+            }
+
+            &:hover {
+              cursor: pointer;
+
+              &::after {
+                transform: scaleX(1);
+              }
+            }
+
+            &.active::after {
+              transform: scaleX(1);
             }
           }
         }
       }
     }
+    .btn-appointment{
+    }
+  }
+
+  .right-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 1;
   }
 
   .btn-container {
-    padding: 0 15px;
+    padding: 0 0.9375rem; /* 15px */
     display: flex;
     flex-direction: row;
-    gap: 15px;
+    gap: 0.9375rem; /* 15px */
   }
 
   .user-nav-container {
     display: flex;
-    margin-left: 25px;
+    margin-left: 1.5625rem; /* 25px */
   }
 
-  @media (max-width: 768px) {
-    align-self: center;
-    justify-content: center;
-    flex-direction: row;
 
-    .nav-container {
+  /* Écrans moyens (tablettes) */
+  @media (max-width: 1200px) {
+    .header-container {
+      padding: 15px 30px;
+      height: 120px;
+      justify-content: space-between;
+    }
+    .brand-name{
+      display: flex;
+    }
+
+    .mid-header .nav-container,
+    .mid-header .btn-appointment, .right-header .theme-toggler {
       display: none;
-      z-index: 9;
+    }
+
+    .logo-container {
+      font-size: 1.75rem; /* 28px */
     }
 
     .menu-icon {
-      align-self: center;
       display: flex;
+    }
+
+    .right-header {
+      margin-left: auto;
+    }
+  }
+
+  /* Petits écrans (mobiles) */
+  @media (max-width: 768px) {
+    html {
+      font-size: 14px;
+    }
+
+    .header-container {
+      padding: 10px 20px;
+      height: 100px;
+    }
+
+    .brand-name {
+      font-size: 18px; /* 24px */
+    }
+
+    .logo-container {
+      font-size: 16px; /* 20px */
+    }
+
+    .menu-icon {
+      font-size: 16px; /* 28px */
+    }
+
+    .mid-header .nav-container li {
+      font-size: 16px;
+    }
+
+    .btn-container {
+      display: none; /* Masquer les boutons de connexion sur petits écrans */
     }
 
     .nav-container.active {
@@ -123,7 +219,7 @@
       background-color: var(--theme-bg-primary);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       padding: 20px;
-      gap: 2px;
+      gap: 10px;
       align-items: center;
       justify-content: center;
 
@@ -142,49 +238,12 @@
         align-items: center;
       }
     }
-  }
-}
 
-footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 10vh;
-  background-color: var(--theme-bg-primary);
-  border-top: 1px solid var(--theme-primary);
-  padding: 0 40px;
-
-  .footer-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-
-    .logo-container {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--theme-white);
-      font-weight: bold;
-      font-family: 'figtree';
-      font-size: 24px;
-
-      img {
-        height: 40px;
-      }
-    }
-
-    .copyright {
-      font-size: 14px;
-      color: var(--theme-white);
+    .right-header {
+      margin-left: auto;
     }
   }
 }
 
-@media (max-width: 768px) {
-  header {
-    justify-content: space-between;
-  }
+.footer{
 }

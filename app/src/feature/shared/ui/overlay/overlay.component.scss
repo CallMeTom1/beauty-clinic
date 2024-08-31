@@ -1,0 +1,23 @@
+.overlay-grid {
+  position: fixed;
+  top: 0;
+  left: 50%; /* Centrer la grille horizontalement */
+  transform: translateX(-50%);
+  width: 100vw; /* Utiliser toute la largeur de l'écran */
+  height: 100vh; /* Prendre toute la hauteur de l'écran */
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none; /* Pour que l'overlay ne bloque pas les interactions */
+  z-index: 9999; /* Placer l'overlay au-dessus de tout */
+  padding-left: calc((100vw - (8.33vw * 12 + 1.66vw * 11)) / 2); /* Centrer les colonnes horizontalement */
+}
+
+.column {
+  width: 8.33vw; /* Chaque colonne prend 8.33% de la largeur de l'écran */
+  background-color: rgba(66, 87, 241, 0.2); /* Couleur de fond transparente pour visualiser les colonnes */
+  height: 100%; /* Colonne s'étendant sur toute la hauteur de l'écran */
+}
+
+.overlay-grid .column:not(:last-child) {
+  margin-right: 1.66vw; /* Gouttière de 1.66% de la largeur de l'écran */
+}

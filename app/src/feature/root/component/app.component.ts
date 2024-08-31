@@ -4,12 +4,13 @@ import {RouterModule} from "@angular/router";
 import {TranslateService} from "@ngx-translate/core";
 import {Language} from "@shared-core";
 import {Title} from "@angular/platform-browser";
+import {OverlayComponent} from "../../shared/ui/overlay/overlay.component";
 
 @Component({ selector: 'component-root',
     standalone: true,
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, OverlayComponent],
 })
 export class AppComponent implements OnInit {
 

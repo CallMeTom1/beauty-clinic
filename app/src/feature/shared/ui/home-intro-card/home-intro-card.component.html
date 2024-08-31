@@ -1,0 +1,16 @@
+<div class="home-intro-card-container">
+  <div class="img-container">
+    <img [src]="config.src" alt="A woman looking through the mirror">
+  </div>
+  <div class="container-bas">
+    <div class="title-container">
+      {{config.title | translate}}
+    </div>
+    <div class="description-container">
+      {{config.description | translate}}
+    </div>
+    <div class="btn-container">
+      <button class="btn-5">{{config.btnTxt | translate}}</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<script src="../../../home/component/home-header/home-header.component.ts"></script>
+<div class="footer-container">
+  <div class="top-container">
+    <div (click)="redirectHome()" class="logo-container">
+      <img [ngSrc]="logoSrc" [alt]="'alt' | translate" [width]="'150'" [height]="'150'">
+    </div>
+    <app-contact-card></app-contact-card>
+  </div>
+  <div class="separator"></div>
+  <div class="bottom-footer">
+    <div class="col1">
+      <div class="title">
+        <h4>Naviguer</h4>
+      </div>
+      <span>Accueil</span>
+      <span>Soins</span>
+      <span>Contact</span>
+    </div>
+    <div class="col2">
+      <div class="title">
+        <h4>Heures d'ouverture</h4>
+      </div>
+      <span>Lundi : 09:00 - 19h00</span>
+      <span>Lundi : 09:00 - 19h00</span>
+      <span>Lundi : 09:00 - 19h00</span>
+      <span>Lundi : 09:00 - 19h00</span>
+      <span>Lundi : 09:00 - 19h00</span>
+      <span>Lundi : 09:00 - 19h00</span>
+      <span>Lundi : 09:00 - 19h00</span>
+    </div>
+    <div class="col3">
+      <div class="title">
+        Réserver maintenant
+      </div>
+      <span>Prenez rendez-vous pour une consultation afin d'évoquer vos préoccupations et découvrir les meilleurs soins disponibles.</span>
+      <button class="btn-primary">Réserver maintenant</button>
+    </div>
+  </div>
+</div>

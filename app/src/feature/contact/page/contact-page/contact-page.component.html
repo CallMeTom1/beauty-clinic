@@ -1,0 +1,42 @@
+<div class="form-container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- Champ Nom -->
+    <div class="form-group">
+      <label for="name">{{ 'contact.form.firstName' | translate }}</label>
+      <input id="name" type="text" formControlName="name" [placeholder]="'contact.form.enter_firstName' | translate">
+      <div class="error" *ngIf="getErrorsForControl('name').length > 0">
+        <span *ngFor="let error of getErrorsForControl('name')">{{ error }}</span>
+      </div>
+    </div>
+
+    <!-- Champ Email -->
+    <div class="form-group">
+      <label for="email">{{ 'contact.form.email' | translate }}</label>
+      <input id="email" type="email" formControlName="email" [placeholder]="'contact.form.enter_email' | translate">
+      <div class="error" *ngIf="getErrorsForControl('email').length > 0">
+        <span *ngFor="let error of getErrorsForControl('email')">{{ error }}</span>
+      </div>
+    </div>
+
+    <!-- Champ Mot de Passe -->
+    <div class="form-group">
+      <label for="password">{{ 'security-feature.sign-in-page.label.password' | translate }}</label>
+      <input id="password" type="password" formControlName="password" [placeholder]="'security-feature.sign-in-page.label.password' | translate">
+      <div class="error" *ngIf="getErrorsForControl('password').length > 0">
+        <span *ngFor="let error of getErrorsForControl('password')">{{ error }}</span>
+      </div>
+    </div>
+
+    <!-- Confirmation du Mot de Passe -->
+    <div class="form-group">
+      <label for="confirmPassword">{{ 'security-feature.sign-up-page.error.confirmation-required' | translate }}</label>
+      <input id="confirmPassword" type="password" formControlName="confirmPassword" [placeholder]="'security-feature.sign-up-page.error.confirmation-required' | translate">
+      <div class="error" *ngIf="getErrorsForControl('confirmPassword').length > 0">
+        <span *ngFor="let error of getErrorsForControl('confirmPassword')">{{ error }}</span>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="form.invalid">{{ 'form.submit' | translate }}</button>
+  </form>
+</div>

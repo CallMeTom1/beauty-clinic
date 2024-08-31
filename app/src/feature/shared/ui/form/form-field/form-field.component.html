@@ -1,0 +1,7 @@
+<div class="form-group">
+  <label [for]="controlName">{{ labelKey | translate }}</label>
+  <input *ngIf="control" [id]="controlName" [type]="type" [formControl]="control">
+  <div class="error" *ngIf="getErrorMessages().length > 0">
+    <span *ngFor="let error of getErrorMessages()">{{ error }}</span>
+  </div>
+</div>
