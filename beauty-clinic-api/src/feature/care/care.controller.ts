@@ -6,6 +6,7 @@ import { Care, CreateCarePayload, DeleteCarePayload, ModifyCarePayload } from '@
 import { Role } from '@feature/security/data';
 import { GetCaresByCategoryPayload } from '@feature/care/data/payload/get-care-by-category.payload';
 import {GetCaresPaginatedPayload} from "@feature/care/data/payload/get-cares-paginated.payload";
+import {CareCategory} from "@feature/care/enum";
 
 @ApiTags('Care')
 @Controller('care')
@@ -19,9 +20,10 @@ export class CareController {
     }
 
     @Get('category')
-    getCaresByCategory(@Body() payload: GetCaresByCategoryPayload): Promise<Care[]> {
-        return this.careService.getCaresByCategory(payload);
+    getCaresByCategory(@Query('category') category: CareCategory): Promise<Care[]> {
+        return this.careService.getCaresByCategory({ category });
     }
+
 
     @Post()
     @Public()

@@ -9,7 +9,7 @@ export class GetAvailableDaysPayload {
         minimum: 1,
         maximum: 12,
     })
-    @Type(() => Number) // Add this to convert from string to number
+    @Type(() => Number)
     @IsNumber({}, { message: 'Month must be a numeric value' })
     @IsInt({ message: 'Month must be an integer' })
     @Min(1, { message: 'Month must be at least 1' })
@@ -21,7 +21,7 @@ export class GetAvailableDaysPayload {
         example: 2024,
         minimum: 2000
     })
-    @Type(() => Number) // Add this to convert from string to number
+    @Type(() => Number)
     @IsNumber({}, { message: 'Year must be a numeric value' })
     @IsInt({ message: 'Year must be an integer' })
     year: number;

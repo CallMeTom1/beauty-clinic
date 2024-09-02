@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import {IsEnum, IsNotEmpty, IsString} from 'class-validator';
+import {CareCategory} from "@feature/care/enum/care-category.enum";
 
 export class GetCaresByCategoryPayload {
-    @ApiProperty({ description: 'Category of the care to be retrieved' })
+    @ApiProperty({ description: 'Category of the care', enum: CareCategory })
     @IsNotEmpty({ message: 'category is required' })
-    @IsString({ message: 'category must be a string' })
-    category: string;
+    @IsEnum(CareCategory, { message: 'category must be a valid CareCategory value' })
+    category: CareCategory;
 }

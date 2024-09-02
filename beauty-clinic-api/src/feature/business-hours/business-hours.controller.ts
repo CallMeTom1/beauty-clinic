@@ -10,7 +10,7 @@ import { BusinessHoursService } from './business-hours.service';
 import { BusinessHours } from './data/entity/business-hours.entity';
 import { UpdateBusinessHoursPayload } from './data/payload/update-business-hours.payload';
 import { DayOfWeekEnum } from './data/day-of-week.enum';
-import {Public, Roles} from '@common/config/metadata';
+import { Public, Roles } from '@common/config/metadata';
 import { Role } from '@feature/security/data';
 
 @ApiTags('BusinessHours')
@@ -32,7 +32,7 @@ export class BusinessHoursController {
         @Param('day_of_week') day_of_week: DayOfWeekEnum,
         @Body() updateBusinessHoursPayload: UpdateBusinessHoursPayload
     ): Promise<BusinessHours> {
-        return await this.businessHoursService.updateBusinessHoursByDayOfWeek(updateBusinessHoursPayload);
+        return await this.businessHoursService.updateBusinessHoursByDayOfWeek(day_of_week, updateBusinessHoursPayload);
     }
 
     @Roles(Role.ADMIN)

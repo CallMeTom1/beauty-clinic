@@ -12,6 +12,7 @@ import {
     ModifyCareException
 } from "@feature/care/care.exception";
 import {GetCaresPaginatedPayload} from "@feature/care/data/payload/get-cares-paginated.payload";
+import {CareCategory} from "@feature/care/enum/care-category.enum";
 
 //todo: exceptions
 @Injectable()
@@ -33,18 +34,20 @@ export class CareService {
                 .name(createCarePayload.name)
                 .beauty_care_machine(createCarePayload.beauty_care_machine)
                 .category(createCarePayload.category)
+                .subCategory(createCarePayload.subCategory)
                 .zone(createCarePayload.zone)
                 .sessions(createCarePayload.sessions)
                 .price(createCarePayload.price)
                 .duration(createCarePayload.duration)
                 .time_between(createCarePayload.time_between)
+                .description(createCarePayload.description)
                 .build();
             console.log('new care:', newCare);
             await this.careRepository.save(newCare);
             return newCare;
         }
         catch(e){
-            console.error('Error while creating care:', e);  // Affiche l'erreur dans la console
+            console.error('Error while creating care:', e);
             throw new CreateCareException();
         }
 
@@ -86,13 +89,12 @@ export class CareService {
     async getCaresPaginated(payload: GetCaresPaginatedPayload): Promise<{ data: Care[], total: number }> {
         const { page, limit, category } = payload;
 
-        // Calculate offsets
         const [results, total] = await this.careRepository.findAndCount({
             where: category ? { category } : {},
             take: limit,
             skip: (page - 1) * limit,
             order: {
-                name: 'ASC' // sorting by name or choose another field as required
+                name: 'ASC'
             }
         });
 
@@ -102,13 +104,12 @@ export class CareService {
         };
     }
 
-
     async getAllCares(): Promise<Care[]> {
         return this.careRepository.find();
     }
 
     async getCaresByCategory(payload: GetCaresByCategoryPayload): Promise<Care[]> {
-        const category: string = payload.category;
+        const category: CareCategory = payload.category;
         return this.careRepository.find({ where: { category } });
     }
 

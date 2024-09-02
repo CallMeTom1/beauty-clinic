@@ -51,54 +51,8 @@ export enum ApiCodeResponse {
     SIGNUP_PAYLOAD_GOOGLE_HASH_INVALID_CHARACTERS= 'api.signup.payload.google_hash.invalid_characters',
     SIGNUP_PAYLOAD_FACEBOOK_HASH_INVALID_CHARACTERS= 'api.signup.payload.facebook_hash.invalid_characters',
 
-    // Wallet errors
-    WALLET_NOT_FOUND = 'api.wallet.wallet_not_found',
-    WALLET_CREATION_ERROR = 'api.wallet.wallet_creation_error',
-    WALLET_DUPLICATE_ERROR = 'api.wallet.wallet_duplicate_error',
-    WALLET_ASSET_ERROR = 'api.wallet.wallet_asset_not_found_error',
-    WALLET_INSUFFICIENT_FUND_ERROR = 'api.wallet.wallet_insufficient_fund_error',
-    WALLET_TRANSFERT_USDT_SPOT_TO_MARGIN_ERROR = 'api.wallet.error.transfer.usdt.spot_to_margin',
-
-    // Asset errors
-    ASSET_NOT_FOUND= 'api.asset.asset_not_found',
-    ASSET_CREATION_ERROR= 'api.asset.asset_creation_error',
-    FETCHING_PRICES_ERROR= 'api.asset.fetching.price.error',
-    SWAP_CALCULATE_FEES_ERROR = 'api.asset.swap.calculate.fees.error',
-
-    // Add USDT payload validation errors
-    ADD_USDT_PAYLOAD_AMOUNT_IS_NOT_NUMBER= 'api.asset.payload.add.usdt.amount.isnot.number',
-    ADD_USDT_PAYLOAD_AMOUNT_IS_EMPTY= 'api.asset.payload.add.usdt.amount.is.empty',
-    ADD_USDT_PAYLOAD_AMOUNT_IS_LESS_THAN_MINIMUM_VALUE= 'api.asset.payload.add.usdt.amount.is.lessThan0',
-    ADD_USDT_PAYLOAD_AMOUNT_IS_TOO_HIGH='api.asset.payload.add.usdt.amount.is.biggerThan1000000',
-
-    // SwapAsset payload validation errors
-    CONVERT_ASSET_PAYLOAD_SYMBOLA_IS_NOT_ENUM= 'api.asset.payload.convert.symbolA.isnot.enum',
-    CONVERT_ASSET_PAYLOAD_SYMBOLA_IS_EMPTY= 'api.asset.payload.convert.symbolA.is.empty',
-    CONVERT_ASSET_PAYLOAD_SYMBOLB_IS_NOT_ENUM= 'api.asset.payload.convert.symbolB.isnot.enum',
-    CONVERT_ASSET_PAYLOAD_SYMBOLB_IS_EMPTY= 'api.asset.payload.convert.symbolB.is.empty',
-    CONVERT_ASSET_PAYLOAD_QUANTITY_IS_NOT_NUMBER= 'api.asset.payload.convert.quantity.isnot.number',
-    CONVERT_ASSET_PAYLOAD_QUANTITY_IS_EMPTY= 'api.asset.payload.convert.quantity.is.empty',
-    CONVERT_ASSET_PAYLOAD_SIDE_IS_NOT_ENUM= 'api.asset.payload.convert.side.isnot.enum',
-    CONVERT_ASSET_PAYLOAD_SIDE_IS_EMPTY= 'api.asset.payload.convert.side.is.empty',
-    CONVERT_ASSET_PAYLOAD_IS_NOT_POSITIVE='api.asset.payload.convert.side.is.not.positive',
-
-    // CreateAsset payload validation errors
-    CREATE_ASSET_PAYLOAD_SYMBOL_IS_NOT_ENUM= 'api.asset.payload.create.symbol.isnot.enum',
-    CREATE_ASSET_PAYLOAD_SYMBOL_IS_EMPTY= 'api.asset.payload.create.symbol.is.empty',
-    CREATE_ASSET_PAYLOAD_AMOUNT_IS_NOT_NUMBER= 'api.asset.payload.create.amount.isnot.number',
-    CREATE_ASSET_PAYLOAD_AMOUNT_IS_EMPTY= 'api.asset.payload.create.amount.is.empty',
-    CREATE_ASSET_PAYLOAD_AMOUNT_IS_NOT_POSITIVE= 'api.asset.payload.create.amount.isnot.positive',
-    CREATE_ASSET_PAYLOAD_WALLET_ID_IS_EMPTY= 'api.asset.payload.create.walletId.is.empty',
-    CREATE_ASSET_PAYLOAD_WALLET_ID_IS_NOT_STRING= 'api.asset.payload.create.walletId.isnot.string',
-
-    // Symbol errors
-    SYMBOL_NOT_FOUND_ERROR = 'api.symbol.not.found.error',
-
     // User management errors
     USER_CREATION_ERROR = 'api.user.user_creation_error',
-
-    // Transaction errors
-    TRANSACTION_NOT_FOUND = 'api.transaction.transaction_not_found',
 
     // File and document errors
     INVALID_FILE_TYPE_ERROR = 'api.file.invalid.type.error',
@@ -108,86 +62,6 @@ export enum ApiCodeResponse {
     LIST_PENDING_DOCUMENT_ERROR = 'api.document.list.pending.error',
     DOCUMENT_NOT_FOUND_EXCEPTION = 'api.document.not_found.error',
 
-    // Message errors
-    MESSAGE_DELETE_USER_NOT_MODO_ERROR = 'api.error.message.user.not.modo',
-    MESSAGE_NOT_FOUND_ERROR = 'api.error.message.not.found',
-    MESSAGE_DELETE_NOT_AUTHORIZE = 'api.error.message.user.not.authorize',
-
-    // CreateMessage payload validation errors
-    MESSAGE_PAYLOAD_CONTENT_IS_EMPTY = 'api.message.payload.content.is_empty',
-    MESSAGE_PAYLOAD_CONTENT_IS_NOT_STRING = 'api.message.payload.content.is_not_string',
-    MESSAGE_PAYLOAD_CONTENT_LENGTH_INVALID = 'api.message.payload.content.length_invalid',
-
-    // CreateTopic payload validation errors
-    TOPIC_PAYLOAD_TITLE_IS_EMPTY = 'api.topic.payload.title.is_empty',
-    TOPIC_PAYLOAD_TITLE_IS_NOT_STRING = 'api.topic.payload.title.is_not_string',
-    TOPIC_PAYLOAD_TITLE_LENGTH_INVALID = 'api.topic.payload.title.length_invalid',
-    TOPIC_PAYLOAD_DESCRIPTION_IS_EMPTY = 'api.topic.payload.description.is_empty',
-    TOPIC_PAYLOAD_DESCRIPTION_IS_NOT_STRING = 'api.topic.payload.description.is_not_string',
-    TOPIC_PAYLOAD_DESCRIPTION_LENGTH_INVALID = 'api.topic.payload.description.length_invalid',
-
-    // Message param validation errors
-    MESSAGE_PAYLOAD_MESSAGE_ID_IS_EMPTY = 'api.message.payload.messageId.is_empty',
-
-    // Topic errors
-    TOPIC_DELETE_USER_NOT_MODO_ERROR = 'api.error.topic.user.not.modo',
-    TOPIC_NOT_FOUND_ERROR = 'api.error.topic.not.found',
-    TOPIC_NOT_AUTHORIZE_DELETE_ERROR = 'api.error.topic.delete.not.authorize',
-
-    // Topic param validation errors
-    DELETE_TOPIC_PAYLOAD_TOPIC_ID_IS_EMPTY = 'api.topic.payload.topicId.is_empty',
-    DELETE_TOPIC_PAYLOAD_TOPIC_ID_IS_NOT_STRING = 'api.topic.payload.topicId.is_not_string',
-
-    // Position errors
-    POSITION_INISUFICIENT_MARGIN_AVAILABLE = 'api.position.insufficient.margin.available',
-    POSITION_EXECUTE_TRADE_EXCEPTION = 'api.position.execute.trade.error',
-    POSITION_OPEN_POSITION_ERROR = 'api.position.open.error',
-    POSITION_UPDATE_EXCEPTION = 'api.position.update.error',
-    POSITION_CLOSE_TRADE_EXCEPTION = 'api.position.closing.error',
-    POSITION_NOT_FOUND_ERROR = 'api.position.closing.error',
-
-    // Close Position payload validation errors
-    CLOSE_POSITION_PAYLOAD_POSITION_ID_IS_NOT_STRING = 'api.position.payload.close.positionId.is_not_string',
-    CLOSE_POSITION_PAYLOAD_POSITION_ID_LENGTH_INVALID = 'api.position.payload.close.positionId.length_invalid',
-    CLOSE_POSITION_PAYLOAD_POSITION_ID_IS_EMPTY = 'api.position.payload.close.positionId.is_empty',
-
-    // Execute Trade payload validation errors
-    EXECUTE_TRADE_PAYLOAD_SYMBOL_IS_NOT_ENUM = 'api.trade.payload.execute.symbol.is_not_enum',
-    EXECUTE_TRADE_PAYLOAD_SYMBOL_IS_EMPTY = 'api.trade.payload.execute.symbol.is_empty',
-    EXECUTE_TRADE_PAYLOAD_QUANTITY_IS_NOT_NUMBER = 'api.trade.payload.execute.quantity.is_not_number',
-    EXECUTE_TRADE_PAYLOAD_QUANTITY_IS_EMPTY = 'api.trade.payload.execute.quantity.is_empty',
-    EXECUTE_TRADE_PAYLOAD_SIDE_IS_NOT_ENUM = 'api.trade.payload.execute.side.is_not_enum',
-    EXECUTE_TRADE_PAYLOAD_SIDE_IS_EMPTY = 'api.trade.payload.execute.side.is_empty',
-    EXECUTE_TRADE_PAYLOAD_LEVERAGE_IS_NOT_NUMBER = 'api.trade.payload.execute.leverage.is_not_number',
-    EXECUTE_TRADE_PAYLOAD_LEVERAGE_IS_EMPTY = 'api.trade.payload.execute.leverage.is_empty',
-
-    // Create Wallet payload validation errors
-    CREATE_WALLET_PAYLOAD_TYPE_IS_NOT_ENUM = 'api.wallet.payload.create.type.is_not_enum',
-    CREATE_WALLET_PAYLOAD_TYPE_IS_EMPTY = 'api.wallet.payload.create.type.is_empty',
-    CREATE_WALLET_PAYLOAD_USER_ID_IS_EMPTY = 'api.wallet.payload.create.user_id.is_empty',
-    CREATE_WALLET_PAYLOAD_USER_ID_IS_NOT_STRING = 'api.wallet.payload.create.user_id.is_not_string',
-
-    // Get Futures Wallet payload validation errors
-    GET_FUTURES_WALLET_PAYLOAD_USER_ID_IS_EMPTY = 'api.wallet.payload.get_futures.user_id.is_empty',
-    GET_FUTURES_WALLET_PAYLOAD_USER_ID_IS_NOT_STRING = 'api.wallet.payload.get_futures.user_id.is_not_string',
-
-    // Transfer USDT payload validation errors
-    TRANSFER_USDT_PAYLOAD_AMOUNT_IS_EMPTY = 'api.wallet.payload.transfer_usdt.amount.is_empty',
-    TRANSFER_USDT_PAYLOAD_AMOUNT_IS_NOT_NUMBER = 'api.wallet.payload.transfer_usdt.amount.is_not_number',
-    TRANSFER_USDT_PAYLOAD_AMOUNT_IS_NOT_POSITIVE = 'api.wallet.payload.transfer_usdt.amount.is_not_positive',
-
-    // Subscription errors
-    INVALID_SUBSCRIPTION_TIER_ERROR = 'api.subscription.invalid.tier.error',
-    SUBSCRIPTION_USER_NOT_VERIFY = 'api.subscription.user.not.verified',
-    SUBSCRIPTION_NOT_FOUND_ERROR = 'api.subscription.not_found',
-    SUBSCRIPTION_INVALID_SUBSCRIPTION_UPGRADE = 'api.subscription.error.invalid.upgrade.',
-
-    // Add Subscription payload validation errors
-    ADD_SUBSCRIPTION_PAYLOAD_TIER_IS_EMPTY = 'api.subscription.payload.tier.is_empty',
-    ADD_SUBSCRIPTION_PAYLOAD_TIER_IS_NOT_ENUM = 'api.subscription.payload.tier.is_not_enum',
-
-
-    //Care
     //Care
     CARE_NOT_FOUND = 'api.care.not.found',
     ADD_CARE_USER_N0T_ADMIN_ERROR = 'api.care.create.error.user-not-admin',

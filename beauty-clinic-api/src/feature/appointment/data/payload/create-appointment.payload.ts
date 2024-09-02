@@ -26,6 +26,7 @@ export class CreateAppointmentPayload {
     @IsDateString()
     @IsNotEmpty({ message: 'The end_time field cannot be empty.' })
     end_time: string;
+
     @ApiProperty({
         description: 'The status of the appointment, indicating if it is confirmed, pending, or another status.',
         example: CareStatus.CONFIRMED

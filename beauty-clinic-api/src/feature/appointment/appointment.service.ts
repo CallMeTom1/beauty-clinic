@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { Appointment } from './data/entity';
@@ -9,19 +9,21 @@ import { Care } from '@feature/care/data';
 import { ulid } from 'ulid';
 import {
     AppointmentConflictException,
-    AppointmentDateException, AppointmentNotFoundException, BusinessHoursConflictException,
-    CreateAppointmentException, HolidayConflictException,
-    UpdateAppointmentStatusException
+    AppointmentDateException,
+    AppointmentNotFoundException,
+    BusinessHoursConflictException,
+    CreateAppointmentException,
+    HolidayConflictException,
+    UpdateAppointmentStatusException,
 } from './appointment.exception';
 import { UpdateAppointmentStatusPayload } from './data/payload';
 import { CareStatus } from './data/status.enum';
-import {User} from "@feature/user/model";
-import {CareNotFoundException} from "@feature/care/care.exception";
-import {UserNotFoundException} from "@feature/security/security.exception";
-import { Between } from 'typeorm';
-import {GetAvailableDaysPayload} from "./data/payload";
-import {DayOfWeekEnum} from "../business-hours/data/day-of-week.enum";
-import { In } from 'typeorm';
+import { User } from '@feature/user/model';
+import { CareNotFoundException } from '@feature/care/care.exception';
+import { UserNotFoundException } from '@feature/security/security.exception';
+import { Between, In } from 'typeorm';
+import { GetAvailableDaysPayload } from './data/payload';
+import { DayOfWeekEnum } from '../business-hours/data/day-of-week.enum';
 
 @Injectable()
 export class AppointmentService {
@@ -42,8 +44,6 @@ export class AppointmentService {
         private readonly userRepository: Repository<User>,
     ) {}
 
-
-
     async createAppointment(createAppointmentPayload: CreateAppointmentPayload, user_id: string): Promise<Appointment> {
         const { care_id, start_time, end_time, status, notes } = createAppointmentPayload;
 
@@ -55,7 +55,8 @@ export class AppointmentService {
             await this.validateAppointmentTiming(appointmentStartTime, appointmentEndTime);
 
             // Check business hours and holidays
-            await this.checkBusinessHoursAndHolidays(appointmentStartTime, appointmentEndTime);
+            await this.checkBusinessHours(appointmentStartTime, appointmentEndTime);
+            await this.checkHolidays(appointmentStartTime);
 
             // Check for scheduling conflicts
             await this.checkAppointmentConflicts(user_id, care_id, appointmentStartTime, appointmentEndTime);
@@ -84,21 +85,20 @@ export class AppointmentService {
         }
     }
 
-
     async updateAppointmentStatus(payload: UpdateAppointmentStatusPayload): Promise<Appointment> {
         const { appointment_id, status } = payload;
 
         try {
-            // Trouver le rendez-vous à l'aide de l'ID fourni
+            // Find the appointment using the provided ID
             const appointment: Appointment = await this.appointmentRepository.findOne({ where: { appointment_id } });
             if (!appointment) {
                 throw new AppointmentNotFoundException();
             }
 
-            // Mettre à jour le statut du rendez-vous
+            // Update the appointment status
             appointment.status = status;
 
-            // Enregistrer les modifications dans la base de données
+            // Save the changes in the database
             await this.appointmentRepository.save(appointment);
             return appointment;
         } catch (e) {
@@ -123,34 +123,41 @@ export class AppointmentService {
                 care: care,
                 start_time: MoreThanOrEqual(dayStart),
                 end_time: LessThanOrEqual(dayEnd),
-                status: In([CareStatus.CONFIRMED, CareStatus.PENDING])
-            }
+                status: In([CareStatus.CONFIRMED, CareStatus.PENDING]),
+            },
         });
 
-        // Proceed with business hour retrieval and slot generation as before
-        const businessHours: BusinessHours = await this.businessHoursRepository.findOne({ where: { day_of_week: dayOfWeek }});
+        // Fetch business hours for the specified day of the week
+        const businessHours: BusinessHours = await this.businessHoursRepository.findOne({ where: { day_of_week: dayOfWeek } });
         if (!businessHours || !businessHours.is_open) {
             throw new BusinessHoursConflictException();
         }
 
+        // Convert opening and closing times to Date objects for comparison
+        const openingTime: Date = new Date(`1970-01-01T${businessHours.opening_time}`);
+        const closingTime: Date = new Date(`1970-01-01T${businessHours.closing_time}`);
+
         // Calculate available time slots
-        const availableSlots: any[] = [];
-        let slotStartTime: Date = new Date(dayStart.getTime());
-        slotStartTime.setHours(businessHours.opening_time.getHours(), businessHours.opening_time.getMinutes());
+        const availableSlots: string[] = [];
+        let slotStartTime: Date = new Date(dayStart);
+        slotStartTime.setHours(openingTime.getHours(), openingTime.getMinutes(), openingTime.getSeconds());
 
-        while (slotStartTime < businessHours.closing_time) {
-            let slotEndTime: Date = new Date(slotStartTime.getTime());
-            slotEndTime.setMinutes(Number(slotEndTime.getMinutes() + care.duration)); // Assuming duration is in minutes
+        while (slotStartTime < closingTime) {
+            let slotEndTime: Date = new Date(slotStartTime);
+            slotEndTime.setMinutes(slotEndTime.getMinutes() + care.duration); // Assuming duration is in minutes
 
-            const isOverlapping: boolean = appointments.some(appointment =>
-                slotStartTime < appointment.end_time && slotEndTime > appointment.start_time
+            const isOverlapping: boolean = appointments.some(
+                (appointment) =>
+                    slotStartTime < appointment.end_time && slotEndTime > appointment.start_time
             );
 
-            if (!isOverlapping && slotEndTime <= businessHours.closing_time) {
-                availableSlots.push(`${slotStartTime.toLocaleTimeString('en-US')} - ${slotEndTime.toLocaleTimeString('en-US')}`);
+            if (!isOverlapping && slotEndTime <= closingTime) {
+                availableSlots.push(
+                    `${slotStartTime.toLocaleTimeString('en-US')} - ${slotEndTime.toLocaleTimeString('en-US')}`
+                );
             }
 
-            slotStartTime.setMinutes(Number(slotStartTime.getMinutes() + care.duration));
+            slotStartTime.setMinutes(slotStartTime.getMinutes() + care.duration);
         }
 
         return availableSlots;
@@ -169,8 +176,14 @@ export class AppointmentService {
         await this.appointmentRepository.save(appointment);
         return appointment;
     }
+
     private async validateAppointmentTiming(start_time: Date, end_time: Date): Promise<void> {
         const now: Date = new Date();
+
+        if (end_time < start_time) {
+            throw new AppointmentDateException();
+        }
+
         if (start_time < now || end_time < now) {
             throw new AppointmentDateException();
         }
@@ -183,18 +196,18 @@ export class AppointmentService {
 
         const holidays: Holiday[] = await this.holidayRepository.find({
             where: {
-                holiday_date: Between(startDate, endDate)
-            }
+                holiday_date: Between(startDate, endDate),
+            },
         });
 
-        const availableDays: any[] = [];
+        const availableDays: Date[] = [];
         for (let day = new Date(startDate); day <= endDate; day.setDate(day.getDate() + 1)) {
             const formattedDay: Date = new Date(day);
             const dayOfWeek: number = formattedDay.getDay(); // Get day as a number (0-6)
 
             // Check if it's a holiday
-            const isHoliday: boolean = holidays.some(holiday =>
-                holiday.holiday_date.toISOString().slice(0, 10) === formattedDay.toISOString().slice(0, 10)
+            const isHoliday: boolean = holidays.some(
+                (holiday) => holiday.holiday_date.toISOString().slice(0, 10) === formattedDay.toISOString().slice(0, 10)
             );
 
             // Assume business hours include Monday to Friday (dayOfWeek 1-5)
@@ -206,30 +219,31 @@ export class AppointmentService {
         return availableDays;
     }
 
+    private async checkBusinessHours(start_time: Date, end_time: Date): Promise<void> {
+        const dayOfWeek: DayOfWeekEnum = start_time.toLocaleDateString('fr-FR', { weekday: 'long' }) as DayOfWeekEnum;
+        const businessHours: BusinessHours = await this.businessHoursRepository.findOne({ where: { day_of_week: dayOfWeek } });
 
+        if (!businessHours || !businessHours.is_open) {
+            throw new BusinessHoursConflictException();
+        }
 
-    private async checkBusinessHoursAndHolidays(start_time: Date, end_time: Date): Promise<void> {
-        const businessHours: BusinessHours[] = await this.businessHoursRepository.find();
+        this.validateBusinessHours(businessHours, start_time, end_time);
+    }
+
+    private async checkHolidays(date: Date): Promise<void> {
         const holidays: Holiday[] = await this.holidayRepository.find();
-
-        const dayOfWeek: string = start_time.toLocaleDateString('fr-FR', { weekday: 'long' });
-        const businessHour: BusinessHours = businessHours.find(bh => bh.day_of_week === dayOfWeek);
-        const isHoliday: boolean = holidays.some(holiday => holiday.holiday_date.toDateString() === start_time.toDateString());
+        const isHoliday: boolean = holidays.some(
+            (holiday) => holiday.holiday_date.toDateString() === date.toDateString()
+        );
 
         if (isHoliday) {
             throw new HolidayConflictException();
         }
-
-        this.validateBusinessHours(businessHour, start_time, end_time);
     }
 
     private validateBusinessHours(businessHour: BusinessHours, start_time: Date, end_time: Date): void {
-        if (!businessHour || !businessHour.is_open) {
-            throw new BusinessHoursConflictException();
-        }
-
-        const openingTime: Date = new Date(`1970-01-01T${businessHour.opening_time.toISOString().substring(11, 19)}`);
-        const closingTime: Date = new Date(`1970-01-01T${businessHour.closing_time.toISOString().substring(11, 19)}`);
+        const openingTime: Date = new Date(`1970-01-01T${businessHour.opening_time}`);
+        const closingTime: Date = new Date(`1970-01-01T${businessHour.closing_time}`);
         if (start_time < openingTime || end_time > closingTime) {
             throw new BusinessHoursConflictException();
         }
@@ -244,7 +258,7 @@ export class AppointmentService {
                     start_time: LessThanOrEqual(end_time),
                     end_time: MoreThanOrEqual(start_time),
                     status: In([CareStatus.CONFIRMED, CareStatus.PENDING]),
-                }
+                },
             ],
         });
 
@@ -252,5 +266,5 @@ export class AppointmentService {
             throw new AppointmentConflictException();
         }
     }
-
 }
+
