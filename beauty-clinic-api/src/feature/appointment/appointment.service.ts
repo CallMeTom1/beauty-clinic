@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
-import { Appointment } from './data/entity';
-import { BusinessHours } from '../business-hours/data/entity/business-hours.entity';
-import { Holiday } from '../holiday/data/entity/holiday.entity';
-import { CreateAppointmentPayload } from './data/payload';
-import { Care } from '@feature/care/data';
-import { ulid } from 'ulid';
+import {Injectable, Logger} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Between, In, LessThanOrEqual, MoreThanOrEqual, Repository} from 'typeorm';
+import {ulid} from 'ulid';
+import {Appointment} from './data/entity';
+import {BusinessHours} from '../business-hours/data/entity/business-hours.entity';
+import {Holiday} from '../holiday/data/entity/holiday.entity';
+import {Care} from '@feature/care/data';
+import {User} from '@feature/user/model';
+
+import {CreateAppointmentPayload, GetAvailableDaysPayload, UpdateAppointmentStatusPayload} from './data/payload';
+import {CareStatus} from './data/status.enum';
+import {DayOfWeekEnum} from '../business-hours/data/day-of-week.enum';
+
 import {
     AppointmentConflictException,
     AppointmentDateException,
@@ -16,151 +21,106 @@ import {
     HolidayConflictException,
     UpdateAppointmentStatusException,
 } from './appointment.exception';
-import { UpdateAppointmentStatusPayload } from './data/payload';
-import { CareStatus } from './data/status.enum';
-import { User } from '@feature/user/model';
-import { CareNotFoundException } from '@feature/care/care.exception';
-import { UserNotFoundException } from '@feature/security/security.exception';
-import { Between, In } from 'typeorm';
-import { GetAvailableDaysPayload } from './data/payload';
-import { DayOfWeekEnum } from '../business-hours/data/day-of-week.enum';
+import {CareNotFoundException} from '@feature/care/care.exception';
+import {UserNotFoundException} from '@feature/security/security.exception';
 
 @Injectable()
 export class AppointmentService {
+    logger: Logger = new Logger('AppointmentService');
+
     constructor(
         @InjectRepository(Appointment)
         private readonly appointmentRepository: Repository<Appointment>,
-
         @InjectRepository(BusinessHours)
         private readonly businessHoursRepository: Repository<BusinessHours>,
-
         @InjectRepository(Holiday)
         private readonly holidayRepository: Repository<Holiday>,
-
         @InjectRepository(Care)
         private readonly careRepository: Repository<Care>,
-
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
     ) {}
 
-    async createAppointment(createAppointmentPayload: CreateAppointmentPayload, user_id: string): Promise<Appointment> {
-        const { care_id, start_time, end_time, status, notes } = createAppointmentPayload;
+    async createAppointment(createAppointmentPayload: CreateAppointmentPayload, userId: string): Promise<void> {
+        this.logger.log(`Starting createAppointment with payload: ${JSON.stringify(createAppointmentPayload)} for user: ${userId}`);
+        let { care_id, start_time } = createAppointmentPayload;
+
+        const appointmentStartTime = new Date(start_time);
+        this.logger.log(`Appointment start time: ${appointmentStartTime}`);
 
         try {
-            const appointmentStartTime: Date = new Date(start_time);
-            const appointmentEndTime: Date = new Date(end_time);
-
-            // Validate timing
-            await this.validateAppointmentTiming(appointmentStartTime, appointmentEndTime);
-
-            // Check business hours and holidays
-            await this.checkBusinessHours(appointmentStartTime, appointmentEndTime);
-            await this.checkHolidays(appointmentStartTime);
-
-            // Check for scheduling conflicts
-            await this.checkAppointmentConflicts(user_id, care_id, appointmentStartTime, appointmentEndTime);
-
-            // Find care and user
-            const care: Care = await this.careRepository.findOne({ where: { care_id } });
+            const care = await this.careRepository.findOne({ where: { care_id } });
+            this.logger.log(`Care found: ${JSON.stringify(care)}`);
             if (!care) throw new CareNotFoundException();
 
-            const user: User = await this.userRepository.findOne({ where: { idUser: user_id } });
+            const appointmentEndTime = new Date(appointmentStartTime.getTime() + care.duration * 60 * 1000);
+            this.logger.log(`Calculated end time: ${appointmentEndTime}`);
+
+            const start_time_str = this.formatDateTime(appointmentStartTime);
+            const end_time_str = this.formatDateTime(appointmentEndTime);
+            this.logger.log(`Formatted start time: ${start_time_str}, end time: ${end_time_str}`);
+
+            const availableSlots = await this.getAvailableTimeSlots(userId, care_id, appointmentStartTime);
+            this.logger.log(`Available slots: ${JSON.stringify(availableSlots)}`);
+
+            const selectedSlot = `${start_time_str} - ${end_time_str}`;
+            this.logger.log(`Selected slot: ${selectedSlot}`);
+            if (!availableSlots.includes(selectedSlot)) {
+                this.logger.warn(`Selected slot not in available slots`);
+                throw new AppointmentConflictException();
+            }
+
+            await this.validateAppointmentTiming(start_time_str, end_time_str);
+            this.logger.log('Appointment timing validated');
+
+            await this.checkBusinessHours(start_time_str, end_time_str);
+            this.logger.log('Business hours checked');
+
+            await this.checkHolidays(start_time_str);
+            this.logger.log('Holidays checked');
+
+            await this.checkAppointmentConflicts(userId, care_id, start_time_str, end_time_str);
+            this.logger.log('Appointment conflicts checked');
+
+            const user = await this.userRepository.findOne({ where: { idUser: userId } });
+            this.logger.log(`User found: ${JSON.stringify(user)}`);
             if (!user) throw new UserNotFoundException();
 
-            // Create and save the new appointment
-            const newAppointment: Appointment = new Appointment();
-            newAppointment.appointment_id = ulid();
-            newAppointment.care = care;
-            newAppointment.user = user;
-            newAppointment.start_time = appointmentStartTime;
-            newAppointment.end_time = appointmentEndTime;
-            newAppointment.status = status;
-            newAppointment.notes = notes;
+            const newAppointment = this.appointmentRepository.create({
+                appointment_id: ulid(),
+                care,
+                user,
+                start_time: start_time_str,
+                end_time: end_time_str,
+                status: CareStatus.PENDING,
+                notes: 'Votre rendez-vous est en attente de confirmation par Françoise',
+            });
+            this.logger.log(`New appointment created: ${JSON.stringify(newAppointment)}`);
 
             await this.appointmentRepository.save(newAppointment);
-            return newAppointment;
+            this.logger.log('Appointment saved successfully');
+
         } catch (e) {
+            this.logger.error(`Error creating appointment: ${e.message}`, e.stack);
             throw new CreateAppointmentException();
         }
     }
+
 
     async updateAppointmentStatus(payload: UpdateAppointmentStatusPayload): Promise<Appointment> {
         const { appointment_id, status } = payload;
 
         try {
-            // Find the appointment using the provided ID
-            const appointment: Appointment = await this.appointmentRepository.findOne({ where: { appointment_id } });
+            const appointment = await this.appointmentRepository.findOne({ where: { appointment_id } });
             if (!appointment) {
                 throw new AppointmentNotFoundException();
             }
 
-            // Update the appointment status
             appointment.status = status;
-
-            // Save the changes in the database
-            await this.appointmentRepository.save(appointment);
-            return appointment;
+            return await this.appointmentRepository.save(appointment);
         } catch (e) {
             throw new UpdateAppointmentStatusException();
         }
-    }
-
-    async getAvailableTimeSlots(dayOfWeek: DayOfWeekEnum, careId: string, date: Date): Promise<string[]> {
-        // Fetch the Care object
-        const care: Care = await this.careRepository.findOne({ where: { care_id: careId } });
-        if (!care) {
-            throw new CareNotFoundException();
-        }
-
-        // Define the start and end of the day
-        const dayStart: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-        const dayEnd: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
-
-        // Fetch all relevant appointments for the care on the specified day
-        const appointments: Appointment[] = await this.appointmentRepository.find({
-            where: {
-                care: care,
-                start_time: MoreThanOrEqual(dayStart),
-                end_time: LessThanOrEqual(dayEnd),
-                status: In([CareStatus.CONFIRMED, CareStatus.PENDING]),
-            },
-        });
-
-        // Fetch business hours for the specified day of the week
-        const businessHours: BusinessHours = await this.businessHoursRepository.findOne({ where: { day_of_week: dayOfWeek } });
-        if (!businessHours || !businessHours.is_open) {
-            throw new BusinessHoursConflictException();
-        }
-
-        // Convert opening and closing times to Date objects for comparison
-        const openingTime: Date = new Date(`1970-01-01T${businessHours.opening_time}`);
-        const closingTime: Date = new Date(`1970-01-01T${businessHours.closing_time}`);
-
-        // Calculate available time slots
-        const availableSlots: string[] = [];
-        let slotStartTime: Date = new Date(dayStart);
-        slotStartTime.setHours(openingTime.getHours(), openingTime.getMinutes(), openingTime.getSeconds());
-
-        while (slotStartTime < closingTime) {
-            let slotEndTime: Date = new Date(slotStartTime);
-            slotEndTime.setMinutes(slotEndTime.getMinutes() + care.duration); // Assuming duration is in minutes
-
-            const isOverlapping: boolean = appointments.some(
-                (appointment) =>
-                    slotStartTime < appointment.end_time && slotEndTime > appointment.start_time
-            );
-
-            if (!isOverlapping && slotEndTime <= closingTime) {
-                availableSlots.push(
-                    `${slotStartTime.toLocaleTimeString('en-US')} - ${slotEndTime.toLocaleTimeString('en-US')}`
-                );
-            }
-
-            slotStartTime.setMinutes(slotStartTime.getMinutes() + care.duration);
-        }
-
-        return availableSlots;
     }
 
     async findAllAppointments(): Promise<Appointment[]> {
@@ -168,49 +128,32 @@ export class AppointmentService {
     }
 
     async cancelAppointment(appointmentId: string): Promise<Appointment> {
-        const appointment: Appointment = await this.appointmentRepository.findOne({ where: { appointment_id: appointmentId } });
+        const appointment = await this.appointmentRepository.findOne({ where: { appointment_id: appointmentId } });
         if (!appointment) {
             throw new AppointmentNotFoundException();
         }
         appointment.status = CareStatus.CANCELLED;
-        await this.appointmentRepository.save(appointment);
-        return appointment;
-    }
-
-    private async validateAppointmentTiming(start_time: Date, end_time: Date): Promise<void> {
-        const now: Date = new Date();
-
-        if (end_time < start_time) {
-            throw new AppointmentDateException();
-        }
-
-        if (start_time < now || end_time < now) {
-            throw new AppointmentDateException();
-        }
+        return await this.appointmentRepository.save(appointment);
     }
 
     async getAvailableDays(payload: GetAvailableDaysPayload): Promise<Date[]> {
         const { month, year } = payload;
-        const startDate: Date = new Date(year, month - 1, 1);
-        const endDate: Date = new Date(year, month, 0);
+        const startDate = new Date(year, month - 1, 1);
+        const endDate = new Date(year, month, 0);
 
-        const holidays: Holiday[] = await this.holidayRepository.find({
-            where: {
-                holiday_date: Between(startDate, endDate),
-            },
+        const holidays = await this.holidayRepository.find({
+            where: { holiday_date: Between(startDate, endDate) },
         });
 
         const availableDays: Date[] = [];
         for (let day = new Date(startDate); day <= endDate; day.setDate(day.getDate() + 1)) {
-            const formattedDay: Date = new Date(day);
-            const dayOfWeek: number = formattedDay.getDay(); // Get day as a number (0-6)
+            const formattedDay = new Date(day);
+            const dayOfWeek = formattedDay.getDay();
 
-            // Check if it's a holiday
-            const isHoliday: boolean = holidays.some(
+            const isHoliday = holidays.some(
                 (holiday) => holiday.holiday_date.toISOString().slice(0, 10) === formattedDay.toISOString().slice(0, 10)
             );
 
-            // Assume business hours include Monday to Friday (dayOfWeek 1-5)
             if (!isHoliday && dayOfWeek >= 1 && dayOfWeek <= 5) {
                 availableDays.push(new Date(formattedDay));
             }
@@ -219,42 +162,93 @@ export class AppointmentService {
         return availableDays;
     }
 
-    private async checkBusinessHours(start_time: Date, end_time: Date): Promise<void> {
-        const dayOfWeek: DayOfWeekEnum = start_time.toLocaleDateString('fr-FR', { weekday: 'long' }) as DayOfWeekEnum;
-        const businessHours: BusinessHours = await this.businessHoursRepository.findOne({ where: { day_of_week: dayOfWeek } });
+    async getAvailableTimeSlots(userId: string, careId: string, date: Date): Promise<string[]> {
+        try {
+            const care: Care = await this.careRepository.findOne({ where: { care_id: careId } });
+            if (!care) {
+                throw new CareNotFoundException();
+            }
+
+            // Validate minimum time between appointments
+            await this.validateTimeBetweenAppointments(userId, careId, date);
+
+            const dayOfWeek = this.getDayOfWeek(date);
+            const businessHours = await this.getBusinessHours(dayOfWeek);
+            if (!businessHours || !businessHours.is_open) {
+                return [];
+            }
+
+            const isHoliday = await this.isHoliday(date);
+            if (isHoliday) {
+                return [];
+            }
+
+            const existingAppointments = await this.getExistingAppointments(date, businessHours);
+
+            return this.generateAvailableSlots(date, businessHours, care.duration, existingAppointments);
+        } catch (error) {
+            this.logger.error(`Error getting available time slots: ${error.message}`, error.stack);
+            // Returning an empty array if there's an error to ensure the API remains usable
+            return [];
+        }
+    }
+
+
+    private async validateAppointmentTiming(start_time: string, end_time: string): Promise<void> {
+        const now = new Date();
+        const startTimeDate = new Date(start_time);
+        const endTimeDate = new Date(end_time);
+
+        if (endTimeDate <= startTimeDate || startTimeDate < now || endTimeDate < now) {
+            throw new AppointmentDateException();
+        }
+    }
+
+    private async checkBusinessHours(start_time: string, end_time: string): Promise<void> {
+        this.logger.log(`Checking business hours for start=${start_time}, end=${end_time}`);
+        const startDate = new Date(start_time);
+        const dayOfWeek = this.getDayOfWeek(startDate);
+        this.logger.log(`Day of week: ${dayOfWeek}`);
+
+        const businessHours = await this.getBusinessHours(dayOfWeek);
+        this.logger.log(`Business hours: ${JSON.stringify(businessHours)}`);
 
         if (!businessHours || !businessHours.is_open) {
+            this.logger.warn('Business is closed on this day');
             throw new BusinessHoursConflictException();
         }
 
         this.validateBusinessHours(businessHours, start_time, end_time);
+        this.logger.log('Business hours are valid for the appointment');
     }
 
-    private async checkHolidays(date: Date): Promise<void> {
-        const holidays: Holiday[] = await this.holidayRepository.find();
-        const isHoliday: boolean = holidays.some(
-            (holiday) => holiday.holiday_date.toDateString() === date.toDateString()
-        );
-
+    private async checkHolidays(date: string): Promise<void> {
+        const isHoliday = await this.isHoliday(new Date(date));
         if (isHoliday) {
             throw new HolidayConflictException();
         }
     }
 
-    private validateBusinessHours(businessHour: BusinessHours, start_time: Date, end_time: Date): void {
-        const openingTime: Date = new Date(`1970-01-01T${businessHour.opening_time}`);
-        const closingTime: Date = new Date(`1970-01-01T${businessHour.closing_time}`);
-        if (start_time < openingTime || end_time > closingTime) {
+    private validateBusinessHours(businessHour: BusinessHours, start_time: string, end_time: string): void {
+        const startTimeDate = new Date(start_time);
+        const endTimeDate = new Date(end_time);
+
+        // Convert opening and closing times into full Date objects for comparison
+        const openingTime = this.combineDateAndTime(startTimeDate, businessHour.opening_time);
+        const closingTime = this.combineDateAndTime(startTimeDate, businessHour.closing_time);
+
+        if (startTimeDate < openingTime || endTimeDate > closingTime) {
+            console.warn('Appointment time is outside business hours');
             throw new BusinessHoursConflictException();
         }
     }
 
-    private async checkAppointmentConflicts(user_id: string, care_id: string, start_time: Date, end_time: Date): Promise<void> {
-        const existingAppointments: Appointment[] = await this.appointmentRepository.find({
+    private async checkAppointmentConflicts(userId: string, careId: string, start_time: string, end_time: string): Promise<void> {
+        const existingAppointments = await this.appointmentRepository.find({
             where: [
                 {
-                    care: { care_id } as Care,
-                    user: { idUser: user_id } as User,
+                    care: { care_id: careId } as Care,
+                    user: { idUser: userId } as User,
                     start_time: LessThanOrEqual(end_time),
                     end_time: MoreThanOrEqual(start_time),
                     status: In([CareStatus.CONFIRMED, CareStatus.PENDING]),
@@ -262,9 +256,142 @@ export class AppointmentService {
             ],
         });
 
-        if (existingAppointments.length > 0) {
+        const conflicts = existingAppointments.some(appointment => {
+            return new Date(appointment.start_time) < new Date(end_time) && new Date(appointment.end_time) > new Date(start_time);
+        });
+
+        if (conflicts) {
             throw new AppointmentConflictException();
         }
     }
-}
 
+    private getDayOfWeek(date: Date): DayOfWeekEnum {
+        const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        return days[date.getDay()] as DayOfWeekEnum;
+    }
+
+    private async getBusinessHours(dayOfWeek: DayOfWeekEnum): Promise<BusinessHours | null> {
+        return await this.businessHoursRepository.findOne({ where: { day_of_week: dayOfWeek } });
+    }
+
+    private async isHoliday(date: Date): Promise<boolean> {
+        const holiday = await this.holidayRepository.findOne({
+            where: { holiday_date: Between(date, new Date(date.getTime() + 24 * 60 * 60 * 1000)) }
+        });
+        return !!holiday;
+    }
+
+    private async getExistingAppointments(date: Date, businessHours: BusinessHours): Promise<Appointment[]> {
+        const startTimeStr = this.combineDateAndTimeToString(date, businessHours.opening_time);
+        const endTimeStr = this.combineDateAndTimeToString(date, businessHours.closing_time);
+
+        return await this.appointmentRepository.find({
+            where: {
+                start_time: Between(startTimeStr, endTimeStr),
+                status: In([CareStatus.CONFIRMED, CareStatus.PENDING]),
+            },
+        });
+    }
+
+    private generateAvailableSlots(
+        date: Date,
+        businessHours: BusinessHours,
+        careDuration: number,
+        existingAppointments: Appointment[]
+    ): string[] {
+        const availableSlots: string[] = [];
+        const slotDuration = careDuration * 60 * 1000;
+
+        let currentSlotStart = this.combineDateAndTime(date, businessHours.opening_time);
+        const closingTime = this.combineDateAndTime(date, businessHours.closing_time);
+
+        while (currentSlotStart.getTime() + slotDuration <= closingTime.getTime()) {
+            const currentSlotEnd = new Date(currentSlotStart.getTime() + slotDuration);
+
+            const currentSlotStartStr = this.formatDateTime(currentSlotStart);
+            const currentSlotEndStr = this.formatDateTime(currentSlotEnd);
+
+            const isConflicting = existingAppointments.some(appointment => {
+                const apptStart = new Date(appointment.start_time);
+                const apptEnd = new Date(appointment.end_time);
+                return currentSlotStart < apptEnd && currentSlotEnd > apptStart;
+            });
+
+            if (!isConflicting) {
+                availableSlots.push(`${currentSlotStartStr} - ${currentSlotEndStr}`);
+            }
+
+            currentSlotStart = new Date(currentSlotStart.getTime() + slotDuration);
+        }
+
+        return availableSlots;
+    }
+
+
+
+    private combineDateAndTime(date: Date, time: string): Date {
+        const [hours, minutes] = time.split(':').map(Number);
+        const combinedDate = new Date(date);
+        combinedDate.setHours(hours, minutes, 0, 0);
+        return combinedDate;
+    }
+
+    private formatTime(date: Date): string {
+        return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    private formatDateTime(date: Date): string {
+        const year = date.getFullYear();
+        const month = (`0${date.getMonth() + 1}`).slice(-2);
+        const day = (`0${date.getDate()}`).slice(-2);
+        const hours = (`0${date.getHours()}`).slice(-2);
+        const minutes = (`0${date.getMinutes()}`).slice(-2);
+        const seconds = (`0${date.getSeconds()}`).slice(-2);
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    // Utility function to combine date and time into a string
+    private combineDateAndTimeToString(date: Date, time: string): string {
+        const [hours, minutes] = time.split(':').map(Number);
+        const combinedDate = new Date(date);
+        combinedDate.setHours(hours, minutes, 0, 0);
+        return this.formatDateTime(combinedDate);
+    }
+
+    private async validateTimeBetweenAppointments(userId: string, careId: string, newStartTime: Date): Promise<void> {
+        // Fetch the latest appointment of the same care type for this user
+        const latestAppointment = await this.appointmentRepository.findOne({
+            where: {
+                user: { idUser: userId } as User,
+                care: { care_id: careId } as Care,
+                status: In([CareStatus.CONFIRMED, CareStatus.PENDING]),
+            },
+            order: {
+                end_time: "DESC"
+            }
+        });
+
+        if (latestAppointment) {
+            const care = await this.careRepository.findOne({
+                where: { care_id: careId }
+            });
+
+            if (!care || care.time_between === null) {
+                // If no time between constraint is set, return without error
+                return;
+            }
+
+            const lastEndTime = new Date(latestAppointment.end_time);
+            const requiredInterval = care.time_between * 24 * 60 * 60 * 1000; // Convert days to milliseconds
+            const newStartTimeMs = newStartTime.getTime();
+
+            // Check if the new start time is at least the required interval after the last end time
+            if (newStartTimeMs - lastEndTime.getTime() < requiredInterval) {
+                throw new Error(`A minimum of ${care.time_between} days is required between appointments for this type of care.`);
+            }
+        }
+    }
+
+
+}

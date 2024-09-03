@@ -28,7 +28,7 @@ export class AppointmentController {
     @ApiOperation({ summary: 'Create a new appointment' })
     async create(@UserReq() userReq: UserRequest,
         @Body() createAppointmentPayload: CreateAppointmentPayload
-    ): Promise<Appointment> {
+    ): Promise<void> {
         return await this.appointmentService.createAppointment(createAppointmentPayload, userReq.idUser);
     }
 
@@ -62,11 +62,15 @@ export class AppointmentController {
     }
 
     @Get('available-slots')
-    @ApiOperation({ summary: 'Get available time slots for a specific care and date' })
-    async getAvailableTimeSlots(@Query() params: GetAvailableTimeSlotsPayload): Promise<string[]> {
-        return this.appointmentService.getAvailableTimeSlots(params.dayOfWeek, params.careId, new Date(params.date));
+    @ApiOperation({ summary: 'Get available time slots for a specific care, date, and user' })
+    @ApiQuery({ name: 'careId', type: String, description: 'The ID of the care' })
+    @ApiQuery({ name: 'date', type: String, description: 'The date for which to fetch available slots' })
+    async getAvailableTimeSlots(
+        @UserReq() userReq: UserRequest,
+        @Query('careId') careId: string,
+        @Query('date') date: string
+    ): Promise<string[]> {
+        return this.appointmentService.getAvailableTimeSlots(userReq.idUser, careId, new Date(date));
     }
-
-
 
 }

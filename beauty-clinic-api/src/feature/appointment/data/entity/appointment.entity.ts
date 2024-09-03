@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { CareStatus } from '../status.enum';
 import { Care } from '@feature/care/data';
 import { User } from '@feature/user/model';
@@ -8,19 +8,19 @@ export class Appointment {
     @PrimaryColumn('varchar', { length: 50 })
     appointment_id: string;
 
-    @OneToOne(() => Care)
+    @ManyToOne(() => Care)
     @JoinColumn({ name: 'care_id' })
     care: Care;
 
-    @OneToOne(() => User)
+    @ManyToOne(() => User)
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @Column('timestamp', { nullable: false })
-    start_time: Date;
+    @Column('varchar', { length: 19, nullable: false }) // 'YYYY-MM-DD HH:mm:ss' format
+    start_time: string;
 
-    @Column('timestamp', { nullable: false })
-    end_time: Date;
+    @Column('varchar', { length: 19, nullable: false }) // 'YYYY-MM-DD HH:mm:ss' format
+    end_time: string;
 
     @Column({ type: 'enum', enum: CareStatus, nullable: false })
     status: CareStatus;
