@@ -12,6 +12,10 @@ import {CareUtils} from "./utils/care.utils";
 import {AddCarePayload} from "./data/payload/care/add-care.payload";
 import {EditCarePayload} from "../admin/data/edit-care.payload";
 import {DeleteCarePayload} from "./data/payload/care/delete-care.payload";
+import {BusinessHoursUtils} from "./utils/business-hours.utils";
+import {BusinessHours} from "../business-hours/data/model/business-hours.business";
+import {DayOfWeekEnum} from "../business-hours/day-of-week.enum";
+import {UpdateBusinessHoursPayload} from "./data/payload/businessHours/edit-business-hours.payload";
 
 
 @Injectable({
@@ -25,6 +29,7 @@ export class SecurityService {
   public account$: WritableSignal<User> = signal(UserUtils.getEmpty());
   public isAuth$: WritableSignal<boolean> = signal(this.getInitialAuthState());
   public cares$: WritableSignal<Care[]> = signal(CareUtils.getEmpties());
+  public businessHours$: WritableSignal<BusinessHours[]> = signal(BusinessHoursUtils.getEmpties());
 
   private getInitialAuthState(): boolean {
     const storedAuthState: string | null = localStorage.getItem(environment.LOCAL_STORAGE_AUTH);
@@ -45,6 +50,89 @@ export class SecurityService {
       localStorage.setItem(environment.LOCAL_STORAGE_AUTH, JSON.stringify(isAuth));
     });
   }
+
+  public fetchBusinessHours(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.BUSINESS_HOURS).pipe(
+      tap((response: ApiResponse): void => {
+        if(response.result){
+          this.businessHours$.set(response.data);
+        } else {
+          console.warn('API call did not return a successful result:', response);
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    )
+  }
+
+  public updateBusinessHoursByDay(dayOfWeek: DayOfWeekEnum, payload: UpdateBusinessHoursPayload): Observable<ApiResponse> {
+    return this.api.put(`${ApiURI.BUSINESS_HOURS}/${dayOfWeek}`, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          console.log('Business hours successfully updated', response);
+        } else {
+          console.warn('Update failed', response);
+        }
+      }),
+      catchError(error => {
+        console.error('Error during updating business hours:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+  public closeBusinessDay(dayOfWeek: DayOfWeekEnum): Observable<ApiResponse> {
+    return this.api.put(`${ApiURI.BUSINESS_HOURS}/close/${dayOfWeek}`, {}).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          console.log('Business day successfully closed', response);
+        } else {
+          console.warn('Failed to close the business day', response);
+        }
+      }),
+      catchError(error => {
+        console.error('Error during closing business day:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+  public openBusinessDay(dayOfWeek: DayOfWeekEnum): Observable<ApiResponse> {
+    return this.api.put(`${ApiURI.BUSINESS_HOURS}/open/${dayOfWeek}`, {}).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          console.log('Business day successfully opened', response);
+        } else {
+          console.warn('Failed to open the business day', response);
+        }
+      }),
+      catchError(error => {
+        console.error('Error during opening business day:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+  /*
+    public updateBusinessHoursByDay(dayOfWeek: DayOfWeekEnum, payload: UpdateBusinessHoursPayload): Observable<BusinessHours> {
+    return this.api.put(`${ApiURI.BUSINESS_HOURS}/${dayOfWeek}`, payload).pipe(
+        tap((response: ApiResponse): void => {
+            if (response.result) {
+                console.log('Business hours successfully updated', response);
+            } else {
+                console.warn('Update failed', response);
+            }
+        }),
+        catchError(error => {
+            console.error('Error during updating business hours:', error);
+            return throwError(error);
+        })
+    );
+}
+
+   */
 
   public fetchCares(): Observable<ApiResponse> {
     console.log('fetchCares() called, making API call...');

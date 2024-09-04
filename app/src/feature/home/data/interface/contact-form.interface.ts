@@ -1,4 +1,4 @@
-import {CareCategory} from "../../../care/data/care-category.enum";
+import {CareCategory} from "../../../care/enum/care-category.enum";
 import {FormControl} from "@angular/forms";
 
 export interface ContactForm {

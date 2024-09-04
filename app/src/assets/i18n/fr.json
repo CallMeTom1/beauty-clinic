@@ -43,6 +43,7 @@
   "common.admin.nav.care": "Gérer les soins",
   "common.admin.nav.appointment": "Gérer les rendez-vous",
   "common.admin.nav.customer": "Gérer les clients",
+  "common.admin.nav.business-hours": "Gérer les heures d'ouvertures",
 
 
   "admin-feature.admin-router.name": "Beauty Clinic By Françoise",
@@ -61,6 +62,24 @@
   "admin-feature.admin.manage-care.column.time_between": "Intervalle",
   "admin-feature.admin.manage-care.column.edit": "Modifier",
   "admin-feature.admin.manage-care.column.delete": "Supprimer",
+
+  "admin-feature.admin.manage-appointment.title": "Gérer les heures d'ouvertures et de fermetures",
+  "admin-feature.admin.manage-appointment.col_day": "Jour de la semaine",
+  "admin-feature.admin.manage-appointment.col_opening_time": "Heure d'ouverture",
+  "admin-feature.admin.manage-appointment.col_closing_time": "Heure de fermeture",
+  "admin-feature.admin.manage-appointment.col_is_open": "Ouvert / Fermé",
+  "admin-feature.admin.manage-appointment.col_edit": "Modifier les heures d'ouvertures",
+  "admin-feature.admin.manage-appointment.col_open": "Ouvrir la journée",
+  "admin-feature.admin.manage-appointment.col_close": "Fermer la journée",
+  "admin-feature.admin.manage-appointment.btn_open": "Ouvrir",
+  "admin-feature.admin.manage-appointment.btn_close": "Fermer",
+  "admin-feature.admin.manage-appointment.modal_edit_title": "Editer les heures d'ouvertures et de fermetures pour cette journée",
+  "admin-feature.admin.manage-appointment.submit": "Confirmer",
+  "admin-feature.admin.manage-appointment.open": "Ouvert",
+  "admin-feature.admin.manage-appointment.close": "Fermé",
+
+
+
 
   "care": {
     "form": {
@@ -95,6 +114,14 @@
       "lasermaxpro": "LaserMax Pro",
       "hydrofacialjr": "HydroFacial Jr.",
       "none": "None"
+    }
+  },
+
+  "business_hours": {
+    "form": {
+      "opening_time": "Heure d'ouverture",
+      "closing_time": "Heure de fermeture",
+      "is_open": "Ouvert / Fermé"
     }
   },
 

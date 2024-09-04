@@ -1,6 +1,6 @@
 import {inject, Injectable} from "@angular/core";
 import {TranslateService} from "@ngx-translate/core";
-import {CareCategory, CareCategoryTranslations} from "../care/data/care-category.enum";
+import {CareCategory, CareCategoryTranslations} from "../care/enum/care-category.enum";
 
 @Injectable({
   providedIn: 'root'

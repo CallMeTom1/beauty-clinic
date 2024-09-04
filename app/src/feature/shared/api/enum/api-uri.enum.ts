@@ -7,7 +7,8 @@ export enum ApiURI {
   UPLOAD_PROFILE_IMAGE= 'users/upload-profile-image',
 
   CARE='care',
-  ADD_CARE='care'
+  ADD_CARE='care',
+  BUSINESS_HOURS='business-hours'
 
 
 

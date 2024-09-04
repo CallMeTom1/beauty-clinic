@@ -16,7 +16,7 @@ import {CareTrendCardComponent} from "../../../shared/ui/care-trend-card/care-tr
 import {FormComponent} from "../../../shared/ui/form/component/form/form.component";
 import {ContactForm} from "../../data/interface/contact-form.interface";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {CareCategory} from "../../../care/data/care-category.enum";
+import {CareCategory} from "../../../care/enum/care-category.enum";
 import {CareCardConfig} from "../../../shared/ui/care-card/care-card.config";
 import {CareCardComponent} from "../../../shared/ui/care-card/care-card.component";
 

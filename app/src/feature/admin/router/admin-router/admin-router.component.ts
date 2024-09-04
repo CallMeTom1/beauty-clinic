@@ -32,6 +32,7 @@ export class AdminRouterComponent {
     { title: 'common.admin.nav.care', icon: 'fa-hand-holding-heart', link: AppNode.MANAGE_CARE },
     { title: 'common.admin.nav.appointment', icon: 'fa-calendar-check', link: AppNode.MANAGE_APPOINTMENT },
     { title: 'common.admin.nav.customer', icon: 'fa-users', link: AppNode.MANAGE_CUSTOMER },
+    { title: 'common.admin.nav.business-hours', icon: 'fa-thin fa-clock', link: AppNode.MANAGE_BUSINESS_HOURS },
   ];
 
   protected clinic_name: string = "admin-feature.admin-router.name"

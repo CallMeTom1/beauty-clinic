@@ -9,42 +9,42 @@
   </div>
   <table class="manage-care-table">
     <thead>
-    <tr>
-      <th (click)="toggleSort('name')">{{ col_name | translate }}</th>
-      <th (click)="toggleSort('zone')">{{col_zone | translate}}</th>
-      <th (click)="toggleSort('category')">{{col_category | translate}}</th>
-      <th (click)="toggleSort('machine')">{{col_machine | translate}}</th>
-      <th (click)="toggleSort('sessions')">{{col_sessions | translate}}</th>
-      <th (click)="toggleSort('price')">{{col_price | translate}}</th>
-      <th (click)="toggleSort('duration')">{{col_duration | translate}}</th>
-      <th (click)="toggleSort('time_between')">{{col_time_between | translate}}</th>
-      <th>{{ col_edit | translate }}</th>
-      <th>{{col_delete | translate}}</th>
-    </tr>
+      <tr>
+        <th (click)="toggleSort('name')">{{ col_name | translate }}</th>
+        <th (click)="toggleSort('zone')">{{col_zone | translate}}</th>
+        <th (click)="toggleSort('category')">{{col_category | translate}}</th>
+        <th (click)="toggleSort('machine')">{{col_machine | translate}}</th>
+        <th (click)="toggleSort('sessions')">{{col_sessions | translate}}</th>
+        <th (click)="toggleSort('price')">{{col_price | translate}}</th>
+        <th (click)="toggleSort('duration')">{{col_duration | translate}}</th>
+        <th (click)="toggleSort('time_between')">{{col_time_between | translate}}</th>
+        <th>{{ col_edit | translate }}</th>
+        <th>{{col_delete | translate}}</th>
+      </tr>
     </thead>
     <tbody>
-    @for(care of securityService.cares$(); track care.care_id){
-      <tr>
-        <td>{{ care.name }}</td>
-        <td>{{ care.zone }}</td>
-        <td>{{ care.category }}</td>
-        <td>{{ care.beauty_care_machine }}</td>
-        <td>{{ care.sessions }}</td>
-        <td>{{ care.price | currency }}</td>
-        <td>{{ care.duration }}</td>
-        <td>{{ care.time_between }}</td>
-        <td>
-          <button (click)="loadCareDetails(care)">
-            <i class="fa-thin fa-pen-to-square"></i>
-          </button>
-        </td>
-        <td>
-          <button (click)="deleteCare(care)">
-            <i class="fa-thin fa-trash"></i>
-          </button>
-        </td>
-      </tr>
-    }
+      @for(care of securityService.cares$(); track care.care_id){
+        <tr>
+          <td>{{ care.name }}</td>
+          <td>{{ care.zone }}</td>
+          <td>{{ care.category }}</td>
+          <td>{{ care.beauty_care_machine }}</td>
+          <td>{{ care.sessions }}</td>
+          <td>{{ care.price | currency }}</td>
+          <td>{{ care.duration }}</td>
+          <td>{{ care.time_between }}</td>
+          <td>
+            <button (click)="loadCareDetails(care)">
+              <i class="fa-thin fa-pen-to-square"></i>
+            </button>
+          </td>
+          <td>
+            <button (click)="deleteCare(care)">
+              <i class="fa-thin fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      }
     </tbody>
   </table>
   @if(showEditModal){

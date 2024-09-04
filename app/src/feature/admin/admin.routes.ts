@@ -23,6 +23,11 @@ export const adminRoutes: Routes = [
           .then(c => c.ManageAppointmentPageComponent),
       },
       {
+        path: AppNode.BUSINESS_HOURS,
+        loadComponent: () => import('./page/manage-business-hours-page/manage-business-hours-page.component')
+          .then(c => c.ManageBusinessHoursPageComponent),
+      },
+      {
         path: AppNode.FALL_BACK,
         loadComponent: () => import('./page/admin-fall-back-page/admin-fall-back-page.component')
           .then(c=> c.AdminFallBackPageComponent),

@@ -8,9 +8,9 @@ import { CareForm } from "../../../care/care-form.interface";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import { FormcontrolSimpleConfig, FormError, handleFormError, LabelWithParamComponent, LabelWithParamPipe } from "@shared-ui";
 import { EditCarePayload } from "../../data/edit-care.payload";
-import {BeautyCareMachine, BeautyCareMachineTranslations} from "../../../care/data/care-machine.enum";
-import {CareZone, CareZoneTranslations} from "../../../care/data/care-zone.enum";
-import {CareCategory, CareCategoryTranslations} from "../../../care/data/care-category.enum";
+import {BeautyCareMachine, BeautyCareMachineTranslations} from "../../../care/enum/care-machine.enum";
+import {CareZone, CareZoneTranslations} from "../../../care/enum/care-zone.enum";
+import {CareCategory, CareCategoryTranslations} from "../../../care/enum/care-category.enum";
 import {SecurityService} from "@feature-security";
 import {AddCarePayload} from "../../../security/data/payload/care/add-care.payload";
 import {DeleteCarePayload} from "../../../security/data/payload/care/delete-care.payload";
@@ -50,6 +50,9 @@ export class ManageCareComponent {
   protected readonly col_edit : string = "admin-feature.admin.manage-care.column.edit";
   protected readonly col_delete : string = "admin-feature.admin.manage-care.column.delete";
   protected readonly col_sessions: string = "admin-feature.admin.manage-care.column.sessions";
+
+
+
   private readonly translateService: TranslateService = inject(TranslateService);
   protected readonly securityService: SecurityService = inject(SecurityService);
   public formError$: WritableSignal<FormError[]> = signal([]);
