@@ -1,4 +1,4 @@
-import {DayOfWeekEnum} from "../business-hours/data/day-of-week.enum";
+import {DayOfWeekEnum} from "../business-hours/day-of-week.enum";
 
 export function getDayOfWeekEnum(dayIndex: number): DayOfWeekEnum {
     switch(dayIndex) {

@@ -1,17 +1,11 @@
-import {
-    Body,
-    Controller,
-    Get,
-    Param,
-    Put
-} from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { BusinessHoursService } from './business-hours.service';
-import { BusinessHours } from './data/entity/business-hours.entity';
-import { UpdateBusinessHoursPayload } from './data/payload/update-business-hours.payload';
-import { DayOfWeekEnum } from './data/day-of-week.enum';
-import { Public, Roles } from '@common/config/metadata';
-import { Role } from '@feature/security/data';
+import {ApiOperation, ApiTags} from "@nestjs/swagger";
+import {Body, Controller, Get, Param, Put} from "@nestjs/common";
+import {BusinessHoursService} from "./business-hours.service"
+import {Public, Roles} from "@common/config/metadata";
+import {BusinessHours, UpdateBusinessHoursPayload} from "@feature/business-hours/data";
+import {Role} from "@feature/security/data";
+import {DayOfWeekEnum} from "@feature/business-hours/day-of-week.enum";
+
 
 @ApiTags('BusinessHours')
 @Controller('business-hours')

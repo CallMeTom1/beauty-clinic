@@ -10,7 +10,7 @@ import {User} from '@feature/user/model';
 
 import {CreateAppointmentPayload, GetAvailableDaysPayload, UpdateAppointmentStatusPayload} from './data/payload';
 import {CareStatus} from './data/status.enum';
-import {DayOfWeekEnum} from '../business-hours/data/day-of-week.enum';
+import {DayOfWeekEnum} from '../business-hours/day-of-week.enum';
 
 import {
     AppointmentConflictException,

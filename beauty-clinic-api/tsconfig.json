@@ -18,7 +18,7 @@
       "@feature/care/*": ["./feature/care/*"],
       "@feature/root/*": ["./feature/root/*"],
       //"@feature/holiday/*": ["./feature/holiday/*"],
-      //"@feature/business-hours/*": ["./feature/business-hours/*"]
+      "@feature/business-hours/*": ["./feature/business-hours/*"]
 
     },
     "incremental": true,

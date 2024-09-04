@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { DayOfWeekEnum } from '../day-of-week.enum';
+import {DayOfWeekEnum} from "@feature/business-hours/day-of-week.enum";
 
 @Entity()
 export class BusinessHours {

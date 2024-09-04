@@ -96,6 +96,10 @@ export enum ApiCodeResponse {
     BUSINESSHOURS_UPDATE_ERROR = 'api.business-hours.update.error',
     BUSINESSHOURS_DELETE_ERROR = 'api.business-hours.delete.error',
     BUSINESSHOURS_NOT_FOUND = 'api.business-hours.not.found',
-    BUSINESSHOURS_DAY_OF_WEEK_ERROR = 'api.business-hours.wrong_day_of_week'
+    BUSINESSHOURS_DAY_OF_WEEK_ERROR = 'api.business-hours.wrong_day_of_week',
+    BUSINESSHOURS_INIT_ERROR = 'api.business-hours.init.error',
+    BUSINESSHOURS_OPEN_ERROR = 'api.business-hours.open_error',
+    BUSINESSHOURS_CLOSE_ERROR = 'api.business-hours.open_error',
+
 
 }
