@@ -28,15 +28,6 @@ export class HolidayController {
         return await this.holidayService.findAll();
     }
 
-    /*
-    @Public()
-    @Get(':date')
-    @ApiOperation({ summary: 'Get holiday by date' })
-    async findOneByDate(@Param('date') date: string): Promise<Holiday> {
-        const parsedDate = new Date(date);
-        return await this.holidayService.findOneByDate(parsedDate);
-    }
-    */
 
     @Roles(Role.ADMIN)
     @Post()
@@ -53,9 +44,12 @@ export class HolidayController {
     }
 
     @Roles(Role.ADMIN)
-    @Delete()
+    @Delete(':holiday_date')  // Utilisation de Paramètre de route pour la date
     @ApiOperation({ summary: 'Delete holiday by date' })
-    async removeByDate(@Query() payload: DeleteHolidayPayload): Promise<void> {
+    async removeByDate(@Param('holiday_date') holidayDate: string): Promise<void> {
+        const payload: DeleteHolidayPayload = { holiday_date: holidayDate };
+
         return await this.holidayService.removeByDate(payload);
     }
+
 }

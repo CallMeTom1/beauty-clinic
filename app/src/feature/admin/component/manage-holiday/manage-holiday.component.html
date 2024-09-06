@@ -1,0 +1,53 @@
+<div class="manage-holiday-container">
+  <div class="manage-holiday-top">
+    <h2>{{ title | translate }}</h2>
+    <div class="add-holiday-btn">
+      <button (click)="showCreateModal = true">
+        <i class="fas fa-plus"></i> {{ add_holiday | translate }}
+      </button>
+    </div>
+  </div>
+  <table class="manage-holiday-table">
+    <thead>
+    <tr>
+      <th (click)="toggleSort('holiday_date')">{{ col_date | translate }}</th>
+      <th>{{ col_delete | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for(holiday of securityService.holidays$(); track holiday.holiday_date){
+        <tr>
+          <td>{{ holiday.holiday_date | date: 'yyyy-MM-dd' }}</td>
+          <td>
+            <button (click)="deleteHoliday(holiday)">
+              <i class="fa-thin fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  @if(showCreateModal){
+    <app-modal [title]="modal_add_title | translate" (close)="handleClose()">
+      <app-form [formGroup]="formGroup" [title]="'title' | translate"
+                [config]="formControlConfigs">
+      </app-form>
+      <!-- Submit and Cancel buttons -->
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>
+        <button type="submit" class="submit-btn" [disabled]="formGroup.invalid" (click)="onSubmitCreateHoliday()">Submit</button>
+      </div>
+      <!-- Error form display -->
+      <div class="error-form" [class.active]="error().length > 0 && formGroup.touched">
+        @if(error().length > 0){
+          <p>{{ 'security-feature.sign-in-page.error.description' | labelWithParam:{count: error().length} }}</p>
+        }
+        @for(error of error(); track error){
+          <div>
+            <app-label-with-param [label]="'security-feature.sign-in-page.error.'+error.control+'-'+error.error"></app-label-with-param>
+          </div>
+        }
+      </div>
+    </app-modal>
+  }
+</div>
