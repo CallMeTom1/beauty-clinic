@@ -4,22 +4,22 @@ import { Type } from 'class-transformer';
 
 export class UpdateBusinessHoursPayload {
     @ApiProperty({
-        description: 'The updated opening time of the business on this day in HH:mm:ss format.',
-        example: '09:00:00',
+        description: 'The updated opening time of the business on this day in HH:mm format.',
+        example: '09:00',
         required: true
     })
     @IsNotEmpty({ message: 'The opening_time is required.' })
-    @Matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: 'The opening_time must be a valid time string in HH:mm:ss format.' })
+    @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'The opening_time must be a valid time string in HH:mm format.' })
     @ValidateIf((o) => o.is_open === true)
     opening_time: string;
 
     @ApiProperty({
-        description: 'The updated closing time of the business on this day in HH:mm:ss format.',
-        example: '20:00:00',
+        description: 'The updated closing time of the business on this day in HH:mm format.',
+        example: '20:00',
         required: true
     })
     @IsNotEmpty({ message: 'The closing_time is required.' })
-    @Matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: 'The closing_time must be a valid time string in HH:mm:ss format.' })
+    @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'The closing_time must be a valid time string in HH:mm format.' })
     @ValidateIf((o) => o.is_open === true)
     closing_time: string;
 

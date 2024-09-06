@@ -33,8 +33,8 @@ export class BusinessHoursService implements OnModuleInit {
                     const newBusinessHours: BusinessHours = this.businessHoursRepository.create({
                         businessHours_id: ulid(),
                         day_of_week: day,
-                        opening_time: '09:00:00',  // Default opening time
-                        closing_time: '17:00:00',  // Default closing time
+                        opening_time: '09:00',  // Default opening time
+                        closing_time: '17:00',  // Default closing time
                         is_open: true,
                     });
                     await this.businessHoursRepository.save(newBusinessHours);
@@ -99,8 +99,8 @@ export class BusinessHoursService implements OnModuleInit {
             }
 
             businessHours.is_open = true;
-            businessHours.opening_time = '09:00:00';  // Default opening time
-            businessHours.closing_time = '17:00:00';  // Default closing time
+            businessHours.opening_time = '09:00';  // Default opening time
+            businessHours.closing_time = '17:00';  // Default closing time
 
             return await this.businessHoursRepository.save(businessHours);
         }
