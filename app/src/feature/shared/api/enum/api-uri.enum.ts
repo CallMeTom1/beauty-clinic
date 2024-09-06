@@ -8,7 +8,9 @@ export enum ApiURI {
 
   CARE='care',
   ADD_CARE='care',
-  BUSINESS_HOURS='business-hours'
+  BUSINESS_HOURS='business-hours',
+  HOLIDAY = 'holiday',
+  HOLIDAY_INTERVAL = 'holiday/interval'
 
 
 

@@ -31,6 +31,26 @@
       </option>
     </select>
 
+    <!-- Time Input -->
+    <input *ngSwitchCase="'time'"
+           class="floating-input"
+           [formControl]="config.formControl"
+           [type]="config.inputType"
+           [placeholder]="config.placeholder"
+           autocomplete="new-password"
+           (focus)="inputFocus=true"
+           (blur)="inputFocus=false">
+
+    <!-- Date Input -->
+    <input *ngSwitchCase="'date'"
+           class="floating-input"
+           [formControl]="config.formControl"
+           [type]="config.inputType"
+           [placeholder]="config.placeholder"
+           autocomplete="new-password"
+           (focus)="inputFocus=true"
+           (blur)="inputFocus=false">
+
 
 
 

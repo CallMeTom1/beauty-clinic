@@ -12,7 +12,8 @@ export enum AppNode {
     DIAGNOSTIC=`diagnostique-gratuit`,
     EPIL_LASER=`epilation-laser`,
     CONTACT=`contact`,
-    BUSINESS_HOURS= `business_hours`,
+    BUSINESS_HOURS= `business-hours`,
+    HOLIDAY= `holiday`,
 
     APPOINTMENT= `appointment`,
 
@@ -24,6 +25,7 @@ export enum AppNode {
     DASHBOARD= `admin`,
     MANAGE_APPOINTMENT= `admin/appointment`,
     MANAGE_CUSTOMER= `admin/customer`,
-    MANAGE_BUSINESS_HOURS= `admin/business_hours`,
+    MANAGE_BUSINESS_HOURS= `admin/business-hours`,
+    MANAGE_HOLIDAY= `admin/holiday`,
 
 }

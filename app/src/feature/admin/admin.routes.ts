@@ -28,6 +28,11 @@ export const adminRoutes: Routes = [
           .then(c => c.ManageBusinessHoursPageComponent),
       },
       {
+        path: AppNode.HOLIDAY,
+        loadComponent: () => import('./page/manage-holiday-page/manage-holiday-page.component')
+          .then(c => c.ManageHolidayPageComponent),
+      },
+      {
         path: AppNode.FALL_BACK,
         loadComponent: () => import('./page/admin-fall-back-page/admin-fall-back-page.component')
           .then(c=> c.AdminFallBackPageComponent),

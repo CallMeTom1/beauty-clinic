@@ -16,8 +16,14 @@ import {BusinessHoursUtils} from "./utils/business-hours.utils";
 import {BusinessHours} from "../business-hours/data/model/business-hours.business";
 import {DayOfWeekEnum} from "../business-hours/day-of-week.enum";
 import {UpdateBusinessHoursPayload} from "./data/payload/businessHours/edit-business-hours.payload";
+import {Holiday} from "../holiday/data/model/holiday.business";
+import {HolidayUtils} from "./utils/holiday.utils";
+import {CreateHolidayPayload} from "./data/payload/holiday/create-holiday.payload";
+import {DeleteHolidayPayload} from "./data/payload/holiday/delete-holiday.payload";
+import {CreateHolidayIntervalPayload} from "./data/payload/holiday/create-holiday-interval.payload";
 
 
+//todo réaliser tout les fetch dans ce service pour économiser les call api
 @Injectable({
   providedIn: 'root'
 })
@@ -30,6 +36,7 @@ export class SecurityService {
   public isAuth$: WritableSignal<boolean> = signal(this.getInitialAuthState());
   public cares$: WritableSignal<Care[]> = signal(CareUtils.getEmpties());
   public businessHours$: WritableSignal<BusinessHours[]> = signal(BusinessHoursUtils.getEmpties());
+  public holidays$: WritableSignal<Holiday[]> = signal(HolidayUtils.getEmpties());
 
   private getInitialAuthState(): boolean {
     const storedAuthState: string | null = localStorage.getItem(environment.LOCAL_STORAGE_AUTH);
@@ -51,13 +58,11 @@ export class SecurityService {
     });
   }
 
-  public fetchBusinessHours(): Observable<ApiResponse> {
-    return this.api.get(ApiURI.BUSINESS_HOURS).pipe(
+  public fetchHolidays(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.HOLIDAY).pipe(
       tap((response: ApiResponse): void => {
         if(response.result){
-          this.businessHours$.set(response.data);
-        } else {
-          console.warn('API call did not return a successful result:', response);
+          this.holidays$.set(response.data)
         }
       }),
       catchError(error => {
@@ -66,6 +71,74 @@ export class SecurityService {
       })
     )
   }
+
+  public createHoliday(payload: CreateHolidayPayload): Observable<ApiResponse> {
+    return this.api.post(ApiURI.HOLIDAY, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if(response.result) {
+          console.log('Holiday successfully created', response);
+        }
+      }),
+      catchError(error => {
+        console.error('Error during creating holiday:', error);
+        return throwError(error);
+      })
+    )
+  }
+
+  public deleteHoliday(payload: DeleteHolidayPayload): Observable<ApiResponse> {
+    return this.api.delete(`${ApiURI.HOLIDAY}/${payload.holiday_date}`, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          console.log('Holiday successfully deleted', response);
+        } else {
+          console.warn('Holiday deletion failed', response);
+        }
+      }),
+      catchError(error => {
+        console.error('Error during holiday deletion:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+
+
+  public createHolidayInterval(payload: CreateHolidayIntervalPayload): Observable<ApiResponse> {
+    return this.api.post(ApiURI.HOLIDAY_INTERVAL, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if(response.result){
+          console.log('Holiday interval successfully added', response)
+        }
+      }),
+      catchError(error => {
+        console.error('Error during deleting holiday:', error);
+        return throwError(error);
+      })
+    )
+  }
+
+  public fetchBusinessHours(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.BUSINESS_HOURS).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          const sortedBusinessHours = response.data.sort((a: BusinessHours, b: BusinessHours) => {
+            const dayAIndex = this.daysOfWeekOrder.indexOf(a.day_of_week);
+            const dayBIndex = this.daysOfWeekOrder.indexOf(b.day_of_week);
+            return dayAIndex - dayBIndex;
+          });
+          this.businessHours$.set(sortedBusinessHours);
+        } else {
+          console.warn('API call did not return a successful result:', response);
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    );
+  }
+
 
   public updateBusinessHoursByDay(dayOfWeek: DayOfWeekEnum, payload: UpdateBusinessHoursPayload): Observable<ApiResponse> {
     return this.api.put(`${ApiURI.BUSINESS_HOURS}/${dayOfWeek}`, payload).pipe(
@@ -114,25 +187,6 @@ export class SecurityService {
       })
     );
   }
-
-  /*
-    public updateBusinessHoursByDay(dayOfWeek: DayOfWeekEnum, payload: UpdateBusinessHoursPayload): Observable<BusinessHours> {
-    return this.api.put(`${ApiURI.BUSINESS_HOURS}/${dayOfWeek}`, payload).pipe(
-        tap((response: ApiResponse): void => {
-            if (response.result) {
-                console.log('Business hours successfully updated', response);
-            } else {
-                console.warn('Update failed', response);
-            }
-        }),
-        catchError(error => {
-            console.error('Error during updating business hours:', error);
-            return throwError(error);
-        })
-    );
-}
-
-   */
 
   public fetchCares(): Observable<ApiResponse> {
     console.log('fetchCares() called, making API call...');
@@ -284,5 +338,16 @@ export class SecurityService {
   navigate(link: string) {
     this.router.navigate([link]).then();
   }
+
+  private readonly daysOfWeekOrder: DayOfWeekEnum[] = [
+    DayOfWeekEnum.MONDAY,
+    DayOfWeekEnum.TUESDAY,
+    DayOfWeekEnum.WEDNESDAY,
+    DayOfWeekEnum.THURSDAY,
+    DayOfWeekEnum.FRIDAY,
+    DayOfWeekEnum.SATURDAY,
+    DayOfWeekEnum.SUNDAY
+  ];
+
 
 }

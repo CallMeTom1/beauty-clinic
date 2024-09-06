@@ -1,0 +1,66 @@
+<div class="manage-business-hours-container">
+  <div class="manage-business-hours-top">
+    <h2>{{title | translate}}</h2>
+  </div>
+  <table class="manage-business-hours-table">
+    <thead>
+    <tr>
+      <th>{{col_day | translate}}</th>
+      <th>{{col_opening_time | translate}}</th>
+      <th>{{col_closing_time | translate}}</th>
+      <th> {{col_is_open | translate}}</th>
+      <th> {{col_edit | translate}}</th>
+      <th> {{col_open | translate}}</th>
+      <th> {{col_close | translate}}</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for(day of securityService.businessHours$(); track day.day_of_week){
+        <tr>
+          <td>{{day.day_of_week}}</td>
+          <td>{{day.opening_time}}</td>
+          <td>{{day.closing_time}}</td>
+          <td>{{ day.is_open ? (open | translate) : (close | translate) }}</td>
+          <td>
+            <button (click)="loadBusinessHoursDetails(day)">
+              <i class="fa-thin fa-pen-to-square"></i>
+            </button>
+          </td>
+          <td>
+            <button (click)="onSubmitOpenBusinessHours(day.day_of_week)">
+              {{btn_open | translate}}
+            </button>
+          </td>
+          <td>
+            <button (click)="onSubmitCloseBusinessHours(day.day_of_week)">
+              {{btn_close | translate}}
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  @if(showEditModal){
+    <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
+      <app-form [formGroup]="formGroup" [title]="'title' | translate"
+                [config]="formControlConfigs">
+      </app-form>
+      <!-- Submit and Cancel buttons -->
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>
+        <button type="submit" class="submit-btn" [disabled]="formGroup.invalid" (click)="onSubmitEditBusinessHours()">{{submit | translate}}</button>
+      </div>
+      <!-- Error form display -->
+      <div class="error-form" [class.active]="error().length > 0 && formGroup.touched">
+        @if(error().length > 0){
+          <p>{{ 'security-feature.sign-in-page.error.description' | labelWithParam:{count: error().length} }}</p>
+        }
+        @for(error of error(); track error){
+          <div>
+            <app-label-with-param [label]="'security-feature.sign-in-page.error.'+error.control+'-'+error.error"></app-label-with-param>
+          </div>
+        }
+      </div>
+    </app-modal>
+  }
+</div>
