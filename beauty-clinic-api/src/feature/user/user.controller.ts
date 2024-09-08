@@ -1,10 +1,11 @@
-import { Controller, Post, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {Controller, Post, UseInterceptors, UploadedFile, Get} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import {UserService} from "@feature/user/user.service";
 import {UploadImagePayload} from "@feature/user/model/payload/upload-image.payload";
 import {UserRequest} from "@common/config/metadata/user-req.interface";
 import {UserReq} from "@common/config/metadata";
+import {User} from "@feature/user/model";
 
 @ApiTags('users')
 @Controller('users')
@@ -24,4 +25,10 @@ export class UserController {
     ): Promise<any> {
         return await this.userService.updateUserProfileImage(request.idUser, file);
     }
+
+    @Get()
+    async findAllUsersWithoutProfileImage(): Promise<Omit<User, 'profileImage'>[]> {
+        return this.userService.findAllUsersWithoutProfileImage();
+    }
+
 }

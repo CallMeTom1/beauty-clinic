@@ -1,14 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {DayOfWeekEnum} from "../../../business-hours/day-of-week.enum";
 
 export class GetAvailableTimeSlotsPayload {
-    @ApiProperty({
-        description: 'Day of the week as an enum',
-        enum: DayOfWeekEnum,
-        example: DayOfWeekEnum.MONDAY
-    })
-    dayOfWeek: DayOfWeekEnum;
-
     @ApiProperty({
         description: 'Care ID for which to find available time slots',
         type: String,

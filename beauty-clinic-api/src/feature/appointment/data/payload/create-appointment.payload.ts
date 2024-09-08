@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString, IsDateString } from 'class-validator';
-import { CareStatus } from '../status.enum';
+import { AppointmentStatus } from '../appointment-status.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAppointmentPayload {

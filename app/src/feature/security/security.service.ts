@@ -21,9 +21,21 @@ import {HolidayUtils} from "./utils/holiday.utils";
 import {CreateHolidayPayload} from "./data/payload/holiday/create-holiday.payload";
 import {DeleteHolidayPayload} from "./data/payload/holiday/delete-holiday.payload";
 import {CreateHolidayIntervalPayload} from "./data/payload/holiday/create-holiday-interval.payload";
+import {Appointment} from "../appointment/data/model/appointment.business";
+import {AppointmentUtils} from "./utils/appointment.utils";
+import {CreateAppointmentPayload} from "./data/payload/appointment/create-appointment.payload";
+import {
+  CreateAppointmentAdminUserDoesNotExist
+} from "./data/payload/appointment/create-appointment-admin-user-does-not-exist.payload";
+import {UpdateAppointmentStatusPayload} from "./data/payload/appointment/update-appointment-status.payload";
+import {GetAvailableDaysPayload} from "./data/payload/appointment/get-available-days.payload";
+import {GetAvailableTimeSlotsPayload} from "./data/payload/appointment/get-available-time-slots.payload";
+import {response} from "express";
 
 
 //todo réaliser tout les fetch dans ce service pour économiser les call api
+//todo séparer le service avec un autre service admin
+//todo rajouter les fromdto et to dto dans les méthodes qui recoivent ou font les calls api
 @Injectable({
   providedIn: 'root'
 })
@@ -37,6 +49,9 @@ export class SecurityService {
   public cares$: WritableSignal<Care[]> = signal(CareUtils.getEmpties());
   public businessHours$: WritableSignal<BusinessHours[]> = signal(BusinessHoursUtils.getEmpties());
   public holidays$: WritableSignal<Holiday[]> = signal(HolidayUtils.getEmpties());
+  public appointment$: WritableSignal<Appointment[]> = signal(AppointmentUtils.getEmpties());
+  public availableDays$: WritableSignal<Date[]> = signal([]);
+  public availableSlots$: WritableSignal<string[]> = signal([]);
 
   private getInitialAuthState(): boolean {
     const storedAuthState: string | null = localStorage.getItem(environment.LOCAL_STORAGE_AUTH);
@@ -56,7 +71,123 @@ export class SecurityService {
       }
       localStorage.setItem(environment.LOCAL_STORAGE_AUTH, JSON.stringify(isAuth));
     });
-  }
+  };
+
+  public fetchAppointments(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.APPOINTMENT).pipe(
+      tap((response: ApiResponse): void => {
+        console.log('API response received:', response);
+        if(response.result){
+          this.appointment$.set(response.data)
+
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    )
+  };
+
+  public createAppointment(payload: CreateAppointmentPayload): Observable<ApiResponse> {
+    return this.api.post(ApiURI.APPOINTMENT, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if(response.result){
+          console.log('rendez vous créé')
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    )
+  };
+
+  public createAppointmentAdmin(payload: CreateAppointmentAdminUserDoesNotExist): Observable<ApiResponse> {
+    return this.api.post(ApiURI.APPOINTMENT_CREATE_ADMIN, payload).pipe(
+      tap((response: ApiResponse): void =>{
+        if(response.result){
+          console.log('rendez vous créé')
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    )
+  };
+
+  public updateAppointmentNote(payload: UpdateAppointmentStatusPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.APPOINTMENT_UPDATE_NOTE, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if(response.result){
+          console.log('note du rendez vous mise à jour')
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    )
+  };
+
+  public confirmAppointment(payload: UpdateAppointmentStatusPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.APPOINTMENT_CONFIRM, payload).pipe(
+      tap((response: ApiResponse): void =>{
+        if(response.result){
+          console.log('rendez vous confirmé')
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    )
+  };
+
+  public cancelAppointment(payload: UpdateAppointmentStatusPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.APPOINTMENT_CANCEL, payload).pipe(
+      tap((response: ApiResponse): void =>{
+        if(response.result){
+          console.log('rendez vous annulé')
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    )
+  };
+
+  public getAvailableDays(payload: GetAvailableDaysPayload): Observable<ApiResponse> {
+    return this.api.post(ApiURI.APPOINTMENT_AVAILABLE_DAYS, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if(response.result) {
+          this.availableDays$.set(response.data);
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    )
+  };
+
+
+  public getAvailableSlots(payload: GetAvailableTimeSlotsPayload): Observable<ApiResponse> {
+      return this.api.post(ApiURI.APPOINTMENT_AVAILABLE_SLOTS, payload).pipe(
+        tap((response: ApiResponse): void => {
+          if(response.result) {
+            this.availableSlots$.set(response.data);
+          }
+        }),
+        catchError(error => {
+          console.error('Error during API call:', error);
+          return throwError(error);
+        })
+      )
+  };
+
 
   public fetchHolidays(): Observable<ApiResponse> {
     return this.api.get(ApiURI.HOLIDAY).pipe(

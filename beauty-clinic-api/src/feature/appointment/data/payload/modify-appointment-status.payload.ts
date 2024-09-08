@@ -1,12 +1,9 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { CareStatus } from '../status.enum';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateAppointmentStatusPayload {
+    @ApiProperty({ description: 'The ID of the appointment to update' })
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Appointment ID is required' })
     appointment_id: string;
-
-    @IsEnum(CareStatus)
-    @IsNotEmpty()
-    status: CareStatus;
 }

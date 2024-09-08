@@ -4,10 +4,10 @@ import {Request, Response} from 'express';
 import {ApiCodeResponse} from '@common/api';
 import {UserRequest} from "@common/config/metadata/user-req.interface";
 import {SignInPayload, SignsocialPayload, SignupPayload, Token, UserDetails} from "@feature/security/data";
-import {SecurityService} from "@feature/security/service";
 import {Public, UserReq} from "@common/config/metadata";
 import {AUTH_COOKIE_NAME} from "@common/config";
 import {FacebookGuard, GoogleAuthGuard} from "@feature/security/guard";
+import {SecurityService} from "@feature/security/service/security.service";
 
 @ApiBearerAuth('access-token')
 @ApiTags('Account')

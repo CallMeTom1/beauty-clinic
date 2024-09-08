@@ -10,8 +10,14 @@ export enum ApiURI {
   ADD_CARE='care',
   BUSINESS_HOURS='business-hours',
   HOLIDAY = 'holiday',
-  HOLIDAY_INTERVAL = 'holiday/interval'
-
+  HOLIDAY_INTERVAL = 'holiday/interval',
+  APPOINTMENT = 'appointment',
+  APPOINTMENT_CREATE_ADMIN = 'appointment/admin-create-appointment',
+  APPOINTMENT_CONFIRM = 'appointment/confirm',
+  APPOINTMENT_CANCEL = 'appointment/cancel',
+  APPOINTMENT_AVAILABLE_DAYS = 'appointment/available-days',
+  APPOINTMENT_AVAILABLE_SLOTS = 'appointment/available-slots',
+  APPOINTMENT_UPDATE_NOTE = 'appointment/update-note'
 
 
 }

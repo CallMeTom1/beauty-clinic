@@ -54,7 +54,17 @@ export class UserService {
             throw new UserCreationException();
         }
     }
+
+
     */
+
+    async findAllUsersWithoutProfileImage(): Promise<Omit<User, 'profileImage'>[]> {
+        return this.userRepository.find({
+            select: ['idUser', 'firstname', 'lastname', 'phoneNumber']  // Exclude profileImage
+        });
+    }
+
+
     async findUserById(idUser: string): Promise<User> {
         const user: User = await this.userRepository.findOne({ where: { idUser } });
         if (!user) {

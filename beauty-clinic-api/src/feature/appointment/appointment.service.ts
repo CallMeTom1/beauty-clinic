@@ -3,13 +3,18 @@ import {InjectRepository} from '@nestjs/typeorm';
 import {Between, In, LessThanOrEqual, MoreThanOrEqual, Repository} from 'typeorm';
 import {ulid} from 'ulid';
 import {Appointment} from './data/entity';
-import {BusinessHours} from '../business-hours/data/entity/business-hours.entity';
+import {BusinessHours} from '@feature/business-hours/data';
 import {Holiday} from '../holiday/data/entity/holiday.entity';
 import {Care} from '@feature/care/data';
 import {User} from '@feature/user/model';
 
-import {CreateAppointmentPayload, GetAvailableDaysPayload, UpdateAppointmentStatusPayload} from './data/payload';
-import {CareStatus} from './data/status.enum';
+import {
+    CreateAppointmentPayload,
+    GetAvailableDaysPayload,
+    GetAvailableTimeSlotsPayload,
+    UpdateAppointmentStatusPayload
+} from './data/payload';
+import {AppointmentStatus} from './data/appointment-status.enum';
 import {DayOfWeekEnum} from '../business-hours/day-of-week.enum';
 
 import {
@@ -23,12 +28,18 @@ import {
 } from './appointment.exception';
 import {CareNotFoundException} from '@feature/care/care.exception';
 import {UserNotFoundException} from '@feature/security/security.exception';
+import {UserService} from "@feature/user/user.service";
+import {
+    CreateAppointmentAdminUserDoesNotExistPayload
+} from "./data/payload/create-appointment-admin-user-does-not-exist.payload";
+import {UpdateAppointmentNotePayload} from "./data/payload/appointment-edit-note.payload";
 
 @Injectable()
 export class AppointmentService {
     logger: Logger = new Logger('AppointmentService');
 
     constructor(
+        private readonly userService: UserService,
         @InjectRepository(Appointment)
         private readonly appointmentRepository: Repository<Appointment>,
         @InjectRepository(BusinessHours)
@@ -40,6 +51,61 @@ export class AppointmentService {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
     ) {}
+
+    async createAppointmentAdminUserDoesNotExist(payload: CreateAppointmentAdminUserDoesNotExistPayload): Promise<void> {
+        const { firstname, lastname, phoneNumber, care_id, start_time } = payload;
+
+        try {
+            // 1. Créer un nouvel utilisateur
+            const newUser = await this.userService.createUser({ firstname, lastname, phoneNumber });
+            this.logger.log(`User created: ${JSON.stringify(newUser)}`);
+
+            // 2. Trouver le soin correspondant
+            const care = await this.careRepository.findOne({ where: { care_id } });
+            if (!care) {
+                throw new CareNotFoundException();
+            }
+
+            // 3. Calculer l'heure de fin du rendez-vous
+            const appointmentStartTime = new Date(start_time);
+            const appointmentEndTime = new Date(appointmentStartTime.getTime() + care.duration * 60 * 1000);
+
+            // 4. Créer le rendez-vous pour l'utilisateur
+            const newAppointment = this.appointmentRepository.create({
+                appointment_id: ulid(),
+                care: care,
+                user: newUser,
+                start_time: this.formatDateTime(appointmentStartTime),
+                end_time: this.formatDateTime(appointmentEndTime),
+                status: AppointmentStatus.PENDING,
+                notes: 'Rendez-vous créé par l\'administrateur.',
+            });
+
+            // 5. Sauvegarder le rendez-vous
+            await this.appointmentRepository.save(newAppointment);
+            this.logger.log('Appointment successfully created.');
+
+        } catch (error) {
+            this.logger.error(`Error creating appointment: ${error.message}`, error.stack);
+            throw new CreateAppointmentException();
+        }
+    }
+
+    async updateAppointmentNote(payload: UpdateAppointmentNotePayload): Promise<Appointment> {
+        const { appointment_id, note } = payload;
+        const appointment = await this.appointmentRepository.findOne({ where: { appointment_id } });
+
+        if (!appointment) {
+            this.logger.error(`Appointment not found with ID: ${appointment_id}`);
+            throw new AppointmentNotFoundException();
+        }
+
+        appointment.notes = note;
+        await this.appointmentRepository.save(appointment);
+        this.logger.log(`Updated appointment note for ID: ${appointment_id}`);
+
+        return appointment;
+    }
 
     async createAppointment(createAppointmentPayload: CreateAppointmentPayload, userId: string): Promise<void> {
         this.logger.log(`Starting createAppointment with payload: ${JSON.stringify(createAppointmentPayload)} for user: ${userId}`);
@@ -60,7 +126,9 @@ export class AppointmentService {
             const end_time_str = this.formatDateTime(appointmentEndTime);
             this.logger.log(`Formatted start time: ${start_time_str}, end time: ${end_time_str}`);
 
-            const availableSlots = await this.getAvailableTimeSlots(userId, care_id, appointmentStartTime);
+            const payload: GetAvailableTimeSlotsPayload = {careId: care_id, date:appointmentStartTime.toDateString()}
+
+            const availableSlots = await this.getAvailableTimeSlots(userId, payload);
             this.logger.log(`Available slots: ${JSON.stringify(availableSlots)}`);
 
             const selectedSlot = `${start_time_str} - ${end_time_str}`;
@@ -86,13 +154,13 @@ export class AppointmentService {
             this.logger.log(`User found: ${JSON.stringify(user)}`);
             if (!user) throw new UserNotFoundException();
 
-            const newAppointment = this.appointmentRepository.create({
+            const newAppointment: Appointment = this.appointmentRepository.create({
                 appointment_id: ulid(),
                 care,
                 user,
                 start_time: start_time_str,
                 end_time: end_time_str,
-                status: CareStatus.PENDING,
+                status: AppointmentStatus.PENDING,
                 notes: 'Votre rendez-vous est en attente de confirmation par Françoise',
             });
             this.logger.log(`New appointment created: ${JSON.stringify(newAppointment)}`);
@@ -107,8 +175,9 @@ export class AppointmentService {
     }
 
 
-    async updateAppointmentStatus(payload: UpdateAppointmentStatusPayload): Promise<Appointment> {
-        const { appointment_id, status } = payload;
+    // Logic to confirm an appointment
+    async confirmAppointment(payload: UpdateAppointmentStatusPayload): Promise<Appointment> {
+        const { appointment_id } = payload;
 
         try {
             const appointment = await this.appointmentRepository.findOne({ where: { appointment_id } });
@@ -116,7 +185,30 @@ export class AppointmentService {
                 throw new AppointmentNotFoundException();
             }
 
-            appointment.status = status;
+            appointment.status = AppointmentStatus.CONFIRMED;
+
+            // Add any future business logic related to confirmation here
+
+            return await this.appointmentRepository.save(appointment);
+        } catch (e) {
+            throw new UpdateAppointmentStatusException();
+        }
+    }
+
+    // Logic to cancel an appointment
+    async cancelAppointment(payload: UpdateAppointmentStatusPayload): Promise<Appointment> {
+        const { appointment_id } = payload;
+
+        try {
+            const appointment = await this.appointmentRepository.findOne({ where: { appointment_id } });
+            if (!appointment) {
+                throw new AppointmentNotFoundException();
+            }
+
+            appointment.status = AppointmentStatus.CANCELLED;
+
+            // Add any future business logic related to cancellation here
+
             return await this.appointmentRepository.save(appointment);
         } catch (e) {
             throw new UpdateAppointmentStatusException();
@@ -124,17 +216,28 @@ export class AppointmentService {
     }
 
     async findAllAppointments(): Promise<Appointment[]> {
-        return await this.appointmentRepository.find();
-    }
-
-    async cancelAppointment(appointmentId: string): Promise<Appointment> {
-        const appointment = await this.appointmentRepository.findOne({ where: { appointment_id: appointmentId } });
-        if (!appointment) {
+        try {
+            // Fetch all appointments and include user and care details
+            return await this.appointmentRepository.find({
+                relations: ['user', 'care'], // Include user and care details in the results
+                select: {
+                    user: {
+                        firstname: true, // Select only the firstname
+                        lastname: true  // Select only the lastname
+                    },
+                    care: {
+                        name: true, // Select only the name of the care
+                        price: true
+                    }
+                }
+            });
+        } catch (error) {
+            this.logger.error(`Error fetching all appointments: ${error.message}`, error.stack);
             throw new AppointmentNotFoundException();
         }
-        appointment.status = CareStatus.CANCELLED;
-        return await this.appointmentRepository.save(appointment);
     }
+
+
 
     async getAvailableDays(payload: GetAvailableDaysPayload): Promise<Date[]> {
         const { month, year } = payload;
@@ -162,30 +265,34 @@ export class AppointmentService {
         return availableDays;
     }
 
-    async getAvailableTimeSlots(userId: string, careId: string, date: Date): Promise<string[]> {
+    async getAvailableTimeSlots(userId: string, payload: GetAvailableTimeSlotsPayload): Promise<string[]> {
         try {
+            const {careId, date} = payload
+
+            const date_date = new Date(date);
+            // careId: string, date: Date
             const care: Care = await this.careRepository.findOne({ where: { care_id: careId } });
             if (!care) {
                 throw new CareNotFoundException();
             }
 
             // Validate minimum time between appointments
-            await this.validateTimeBetweenAppointments(userId, careId, date);
+            await this.validateTimeBetweenAppointments(userId, payload.careId, date_date);
 
-            const dayOfWeek = this.getDayOfWeek(date);
+            const dayOfWeek = this.getDayOfWeek(date_date);
             const businessHours = await this.getBusinessHours(dayOfWeek);
             if (!businessHours || !businessHours.is_open) {
                 return [];
             }
 
-            const isHoliday = await this.isHoliday(date);
+            const isHoliday = await this.isHoliday(date_date);
             if (isHoliday) {
                 return [];
             }
 
-            const existingAppointments = await this.getExistingAppointments(date, businessHours);
+            const existingAppointments = await this.getExistingAppointments(date_date, businessHours);
 
-            return this.generateAvailableSlots(date, businessHours, care.duration, existingAppointments);
+            return this.generateAvailableSlots(date_date, businessHours, care.duration, existingAppointments);
         } catch (error) {
             this.logger.error(`Error getting available time slots: ${error.message}`, error.stack);
             // Returning an empty array if there's an error to ensure the API remains usable
@@ -251,7 +358,7 @@ export class AppointmentService {
                     user: { idUser: userId } as User,
                     start_time: LessThanOrEqual(end_time),
                     end_time: MoreThanOrEqual(start_time),
-                    status: In([CareStatus.CONFIRMED, CareStatus.PENDING]),
+                    status: In([AppointmentStatus.CONFIRMED, AppointmentStatus.PENDING]),
                 },
             ],
         });
@@ -288,7 +395,7 @@ export class AppointmentService {
         return await this.appointmentRepository.find({
             where: {
                 start_time: Between(startTimeStr, endTimeStr),
-                status: In([CareStatus.CONFIRMED, CareStatus.PENDING]),
+                status: In([AppointmentStatus.CONFIRMED, AppointmentStatus.PENDING]),
             },
         });
     }
@@ -365,7 +472,7 @@ export class AppointmentService {
             where: {
                 user: { idUser: userId } as User,
                 care: { care_id: careId } as Care,
-                status: In([CareStatus.CONFIRMED, CareStatus.PENDING]),
+                status: In([AppointmentStatus.CONFIRMED, AppointmentStatus.PENDING]),
             },
             order: {
                 end_time: "DESC"
@@ -390,6 +497,24 @@ export class AppointmentService {
             if (newStartTimeMs - lastEndTime.getTime() < requiredInterval) {
                 throw new Error(`A minimum of ${care.time_between} days is required between appointments for this type of care.`);
             }
+        }
+    }
+
+    async getAppointmentsByUser(userId: string): Promise<Appointment[]> {
+        try {
+            const appointments = await this.appointmentRepository.find({
+                where: { user: { idUser: userId } },
+                relations: ['care'],  // Include care details if necessary
+                order: { start_time: 'ASC' }  // Sort by appointment start time
+            });
+
+            if (!appointments || appointments.length === 0) {
+                throw new AppointmentNotFoundException();
+            }
+
+            return appointments;
+        } catch (error) {
+            throw new AppointmentNotFoundException();
         }
     }
 

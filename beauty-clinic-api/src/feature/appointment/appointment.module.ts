@@ -9,12 +9,13 @@ import {BusinessHours} from "../business-hours/data/entity/business-hours.entity
 import {Holiday} from "../holiday/data/entity/holiday.entity";
 import {BusinessHoursService} from "../business-hours/business-hours.service";
 import {HolidayService} from "../holiday/holiday.service";
+import {UserService} from "@feature/user/user.service";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Appointment, BusinessHours, Holiday, Care, User]),
   ],
   controllers: [AppointmentController],
-  providers: [AppointmentService, BusinessHoursService, HolidayService]
+  providers: [AppointmentService, BusinessHoursService, HolidayService, UserService]
 })
 export class AppointmentModule {}

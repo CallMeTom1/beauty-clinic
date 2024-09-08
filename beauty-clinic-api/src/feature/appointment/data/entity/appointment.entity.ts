@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { CareStatus } from '../status.enum';
+import { AppointmentStatus } from '../appointment-status.enum';
 import { Care } from '@feature/care/data';
 import { User } from '@feature/user/model';
 
@@ -22,8 +22,8 @@ export class Appointment {
     @Column('varchar', { length: 19, nullable: false }) // 'YYYY-MM-DD HH:mm:ss' format
     end_time: string;
 
-    @Column({ type: 'enum', enum: CareStatus, nullable: false })
-    status: CareStatus;
+    @Column({ type: 'enum', enum: AppointmentStatus, nullable: false })
+    status: AppointmentStatus;
 
     @Column('varchar', { length: 500, nullable: true })
     notes?: string;

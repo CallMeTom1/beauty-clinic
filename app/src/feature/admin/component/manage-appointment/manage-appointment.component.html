@@ -1,0 +1,41 @@
+<div class="manage-appointment-container">
+  <h2>{{ title | translate }}</h2>
+  <button (click)="showCreateModal = true">{{ add_appointment | translate }}</button>
+
+  <table class="manage-appointment-table">
+    <thead>
+    <tr>
+      <th (click)="toggleSort('careDetail.name')">{{ col_care_name | translate }}</th>
+      <th (click)="toggleSort('userDetail.lastname')">{{ col_lastname | translate }}</th>
+      <th (click)="toggleSort('userDetail.firstname')">{{ col_firstname | translate }}</th>
+      <th (click)="toggleSort('start_time')">{{ col_start_time | translate }}</th>
+      <th (click)="toggleSort('end_time')">{{ col_end_time | translate }}</th>
+      <th (click)="toggleSort('careDetail.price')">{{ col_price | translate }}</th>
+      <th>{{ col_notes | translate }}</th>
+      <th>{{ 'Status' | translate }}</th>
+      <th>{{ col_modifier_note | translate }}</th>
+      <th>{{ col_confirmer | translate }}</th>
+      <th>{{ col_annuler | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for(appointment of securityService.appointment$(); track appointment.care_id){
+      <tr>
+        <td>{{ appointment.careDetail?.name }}</td>
+        <td>{{ appointment.userDetail?.lastname }}</td>
+        <td>{{ appointment.userDetail?.firstname }}</td>
+        <td>{{ appointment.start_time }}</td>
+        <td>{{ appointment.end_time }}</td>
+        <td>{{ appointment.careDetail?.price | currency }}</td>
+        <td>{{ appointment.notes }}</td>
+        <td>{{ appointment.status }}</td>
+        <td><button (click)="loadAppointmentDetails(appointment)">Edit Note</button></td>
+        <td><button (click)="confirmAppointment(appointment.appointment_id)">Confirm</button></td>
+        <td><button (click)="cancelAppointment(appointment.appointment_id)">Cancel</button></td>
+      </tr>
+    }
+    </tbody>
+  </table>
+
+  <!-- Modals Here -->
+</div>
