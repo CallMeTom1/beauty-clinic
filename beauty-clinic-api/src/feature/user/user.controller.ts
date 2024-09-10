@@ -12,6 +12,11 @@ import {User} from "@feature/user/model";
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
+    @Get()
+    async findAllUsersWithoutProfileImage(): Promise<Omit<User, 'profileImage'>[]> {
+        return this.userService.findAllUsersWithoutProfileImage();
+    }
+
     @Post('upload-profile-image')
     @UseInterceptors(FileInterceptor('profileImage'))
     @ApiConsumes('multipart/form-data')
@@ -24,11 +29,6 @@ export class UserController {
         @UserReq() request: UserRequest,
     ): Promise<any> {
         return await this.userService.updateUserProfileImage(request.idUser, file);
-    }
-
-    @Get()
-    async findAllUsersWithoutProfileImage(): Promise<Omit<User, 'profileImage'>[]> {
-        return this.userService.findAllUsersWithoutProfileImage();
     }
 
 }

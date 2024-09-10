@@ -2,6 +2,81 @@
   <h2>{{ title | translate }}</h2>
   <button (click)="showCreateModal = true">{{ add_appointment | translate }}</button>
 
+  <!-- Create Appointment Modal -->
+  <app-modal *ngIf="showCreateModal" [title]="modal_add_title | translate" (close)="showCreateModal = false">
+    <form [formGroup]="formGroupCreateAppointment" (ngSubmit)="onSubmitCreateAppointment()">
+
+      <!-- Select Category -->
+      <div class="form-group">
+        <label for="category">{{ 'appointment.form.category' | translate }}</label>
+        <select id="category" (change)="onCategorySelected($event)" class="form-control">
+          <option [value]="null">{{ 'appointment.form.select_category' | translate }}</option>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+      </div>
+
+      <!-- Select Care (filtered based on category selection) -->
+      <div class="form-group" *ngIf="filteredCares.length > 0">
+        <label for="care">{{ 'appointment.form.care' | translate }}</label>
+        <select formControlName="care_id" class="form-control" id="care">
+          <option [value]="null">{{ 'appointment.form.select_care' | translate }}</option>
+          <option *ngFor="let care of filteredCares" [value]="care.care_id">{{ care.name }} - {{ care.price | currency }}</option>
+        </select>
+      </div>
+
+      <!-- First Name -->
+      <div class="form-group">
+        <label for="firstName">{{ 'appointment.form.first_name' | translate }}</label>
+        <input id="firstName" type="text" formControlName="firstName" class="form-control" placeholder="{{ 'appointment.form.enter_first_name' | translate }}">
+        <div *ngIf="formGroupCreateAppointment.get('firstName')?.invalid && formGroupCreateAppointment.get('firstName')?.touched" class="error">
+          <p *ngIf="formGroupCreateAppointment.get('firstName')?.errors?.['required']">{{ 'appointment.form.required_first_name' | translate }}</p>
+        </div>
+      </div>
+
+      <!-- Last Name -->
+      <div class="form-group">
+        <label for="lastName">{{ 'appointment.form.last_name' | translate }}</label>
+        <input id="lastName" type="text" formControlName="lastName" class="form-control" placeholder="{{ 'appointment.form.enter_last_name' | translate }}">
+        <div *ngIf="formGroupCreateAppointment.get('lastName')?.invalid && formGroupCreateAppointment.get('lastName')?.touched" class="error">
+          <p *ngIf="formGroupCreateAppointment.get('lastName')?.errors?.['required']">{{ 'appointment.form.required_last_name' | translate }}</p>
+        </div>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="form-group">
+        <label for="phoneNumber">{{ 'appointment.form.phone_number' | translate }}</label>
+        <input id="phoneNumber" type="text" formControlName="phoneNumber" class="form-control" placeholder="{{ 'appointment.form.enter_phone_number' | translate }}">
+        <div *ngIf="formGroupCreateAppointment.get('phoneNumber')?.invalid && formGroupCreateAppointment.get('phoneNumber')?.touched" class="error">
+          <p *ngIf="formGroupCreateAppointment.get('phoneNumber')?.errors?.['required']">{{ 'appointment.form.required_phone_number' | translate }}</p>
+          <p *ngIf="formGroupCreateAppointment.get('phoneNumber')?.errors?.['pattern']">{{ 'appointment.form.invalid_phone_number' | translate }}</p>
+        </div>
+      </div>
+
+      <!-- Start Time -->
+      <div class="form-group">
+        <label for="startTime">{{ 'appointment.form.start_time' | translate }}</label>
+        <input id="startTime" type="datetime-local" formControlName="start_time" class="form-control">
+        <div *ngIf="formGroupCreateAppointment.get('start_time')?.invalid && formGroupCreateAppointment.get('start_time')?.touched" class="error">
+          <p *ngIf="formGroupCreateAppointment.get('start_time')?.errors?.['required']">{{ 'appointment.form.required_start_time' | translate }}</p>
+        </div>
+      </div>
+
+      <!-- Submit and Cancel buttons -->
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" (click)="showCreateModal = false">{{ 'appointment.form.cancel' | translate }}</button>
+        <button type="submit" class="submit-btn" [disabled]="formGroupCreateAppointment.invalid">{{ 'appointment.form.submit' | translate }}</button>
+      </div>
+
+      <!-- Error Handling
+        <div *ngIf="errorCreateAppointment().length > 0" class="error-form">
+          <ul>
+            <li *ngFor="let error of errorCreateAppointment()">{{ 'error.' + error.control + '.' + error.error | translate }}</li>
+          </ul>
+        </div>
+      -->
+    </form>
+  </app-modal>
+
   <table class="manage-appointment-table">
     <thead>
     <tr>
@@ -19,7 +94,7 @@
     </tr>
     </thead>
     <tbody>
-    @for(appointment of securityService.appointment$(); track appointment.care_id){
+    @for(appointment of securityService.appointment$(); track appointment.appointment_id){
       <tr>
         <td>{{ appointment.careDetail?.name }}</td>
         <td>{{ appointment.userDetail?.lastname }}</td>
@@ -36,6 +111,4 @@
     }
     </tbody>
   </table>
-
-  <!-- Modals Here -->
 </div>

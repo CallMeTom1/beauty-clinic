@@ -28,6 +28,11 @@ export const adminRoutes: Routes = [
           .then(c => c.ManageBusinessHoursPageComponent),
       },
       {
+        path: AppNode.CUSTOMER,
+        loadComponent: () => import('./page/manage-customer-page/manage-customer-page.component')
+          .then(c => c.ManageCustomerPageComponent),
+      },
+      {
         path: AppNode.HOLIDAY,
         loadComponent: () => import('./page/manage-holiday-page/manage-holiday-page.component')
           .then(c => c.ManageHolidayPageComponent),

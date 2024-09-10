@@ -1,0 +1,22 @@
+<div class="manage-customer-container">
+  <h2>{{ title | translate }}</h2>
+
+  <table class="manage-customer-table">
+    <thead>
+    <tr>
+      <th (click)="toggleSort('firstName')">{{ col_firstname | translate }}</th>
+      <th (click)="toggleSort('lastName')">{{ col_lastname | translate }}</th>
+      <th (click)="toggleSort('phoneNumber')">{{ col_phoneNumber | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for(customer of this.securityService.customers$(); track customer.idUser){
+      <tr>
+        <td>{{ customer.firstname }}</td>
+        <td>{{ customer.lastname}}</td>
+        <td>{{ customer.phoneNumber }}</td>
+      </tr>
+    }
+    </tbody>
+  </table>
+</div>

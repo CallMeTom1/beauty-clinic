@@ -9,27 +9,34 @@ import {EditApppointmentNotePayload} from "../../../security/data/payload/appoin
 import {
   UpdateAppointmentStatusPayload
 } from "../../../security/data/payload/appointment/update-appointment-status.payload";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Appointment} from "../../../appointment/data/model/appointment.business";
 import {Care} from "../../../care/data/model/care.business";
 import {map} from "rxjs";
-import {CurrencyPipe} from "@angular/common";
+import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
+import {ModalComponent} from "../../../shared/ui/modal/modal/modal.component";
 
 @Component({
   selector: 'app-manage-appointment',
   standalone: true,
   imports: [
     TranslateModule,
-    CurrencyPipe
+    CurrencyPipe,
+    ModalComponent,
+    ReactiveFormsModule,
+    NgIf,
+    NgForOf
   ],
   templateUrl: './manage-appointment.component.html',
   styleUrl: './manage-appointment.component.scss'
 })
+//todo ajouter un type
+//todo rajouter numéro de la personne
 export class ManageAppointmentComponent {
 
   protected showCreateModal: boolean = false;
   protected showEditNoteModal: boolean = false;
-  protected readonly title: string =   "admin-feature.admin.manage-care.title";
+  protected readonly title: string =   "admin-feature.admin.manage-appointment.title";
   protected readonly add_appointment: string = "admin-feature.admin.manage-appointment.add";
   protected readonly modal_add_title: string = "admin-feature.admin.manage-appointment.modal.add.title";
   protected readonly col_care_name: string = "admin-feature.admin.manage-appointment.col_care_name";
@@ -46,7 +53,6 @@ export class ManageAppointmentComponent {
   private readonly translateService: TranslateService = inject(TranslateService);
   protected readonly securityService: SecurityService = inject(SecurityService);
   public formErrorEditNote$: WritableSignal<FormError[]> = signal([]);
-  //todo ajouter un type
   public categories: string[] = [];
   private currentAppointmentId: string | null = null;
 
@@ -101,6 +107,7 @@ export class ManageAppointmentComponent {
   private initializeCategories(): void {
     const cares: Care[] = this.securityService.cares$(); // Assuming cares$ exposes current value directly
     this.categories = Array.from(new Set(cares.map(care => care.category)));
+    console.log('les catégories', this.categories)
   }
 
   public errorEdit(): FormError[] {
@@ -144,10 +151,12 @@ export class ManageAppointmentComponent {
 
   public filteredCares: Care[] = []; // Holds cares filtered by selected category
 
-  onCategorySelected(category: string): void {
-    this.filteredCares = this.securityService.cares$().filter(care => care.category === category);
+  public onCategorySelected(event: Event): void {
+    const selectedCategory = (event.target as HTMLSelectElement).value;
+    this.filteredCares = this.securityService.cares$().filter(care => care.category === selectedCategory);
     this.formGroupCreateAppointment.get('care_id')?.reset(); // Reset care selection
   }
+
 
 
   handleAppointmentUpdate(updatedAppointment: Appointment): void {

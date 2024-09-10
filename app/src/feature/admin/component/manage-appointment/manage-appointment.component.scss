@@ -1,0 +1,189 @@
+.manage-appointment-container {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  padding: 20px;
+  height: 100vh;
+  background: var(--theme-bg-primary);
+  overflow: hidden;
+
+  .manage-appointment-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .add-appointment-btn button {
+      display: flex;
+      align-items: center;
+      background-color: var(--theme-button-bg);
+      color: var(--theme-primary);
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+
+      i {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .manage-appointment-table {
+    border: 1px solid var(--theme-secondary);
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--theme-bg-secondary);
+    border-radius: 8px;
+    overflow: hidden;
+
+    th, td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: var(--theme-primary-light);
+      font-weight: bold;
+      color: var(--theme-text-light);
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    td {
+      background-color: var(--theme-bg-primary);
+      color: var(--theme-text-primary);
+    }
+
+    td button {
+      background: none;
+      border: none;
+      cursor: pointer;
+
+      i {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: var(--theme-primary);
+
+        &:hover {
+          color: var(--theme-accent-color);
+        }
+      }
+
+      .fa-pen-to-square {
+        color: var(--theme-edit-icon-color);
+      }
+
+      .fa-trash {
+        color: var(--theme-delete-icon-color);
+      }
+    }
+  }
+
+  app-modal {
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+
+      label {
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: var(--theme-primary);
+      }
+
+      input {
+        padding: 10px;
+        border: 1px solid var(--theme-dark-clear);
+        border-radius: 4px;
+        font-size: 14px;
+        background-color: var(--theme-bg-primary);
+        color: var(--theme-text-primary);
+
+        &:focus {
+          border-color: var(--theme-accent-color);
+          outline: none;
+        }
+      }
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+      gap: 10px;
+
+      button {
+        padding: 10px 16px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+      }
+
+      &:disabled {
+        background-color: var(--theme-disabled-bg);
+        color: var(--theme-disabled-text);
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      .cancel-btn {
+        background-color: var(--theme-secondary);
+        color: var(--theme-primary);
+
+        &:hover {
+          background-color: var(--theme-secondary-dark);
+        }
+
+        &:disabled {
+          background-color: var(--theme-disabled-bg);
+          color: var(--theme-disabled-text);
+          cursor: not-allowed;
+        }
+      }
+
+      .submit-btn {
+        background-color: var(--theme-button-bg);
+        color: var(--theme-primary);
+
+        &:hover {
+          background-color: var(--theme-primary-dark);
+        }
+
+        &:disabled {
+          background-color: var(--theme-disabled-bg);
+          color: var(--theme-disabled-text);
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .error-form {
+      margin-top: 10px;
+      color: var(--theme-error);
+      font-size: 14px;
+
+      &.active {
+        display: block;
+      }
+
+      & > div {
+        margin-top: 5px;
+        font-size: 12px;
+      }
+    }
+  }
+}

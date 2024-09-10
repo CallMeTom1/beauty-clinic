@@ -5,6 +5,7 @@ export enum ApiURI {
   REFRESH_TOKEN = 'account/refresh',
   SIGN_GOOGLE_URL= 'https://localhost:2023/api/account/google/login',
   UPLOAD_PROFILE_IMAGE= 'users/upload-profile-image',
+  USER = 'users',
 
   CARE='care',
   ADD_CARE='care',

@@ -41,20 +41,20 @@ export class ManageBusinessHoursComponent implements OnInit{
   public formError$: WritableSignal<FormError[]> = signal([]);
   private currentDayOfWeek: DayOfWeekEnum | null = null;
 
-  protected readonly title: string =   "admin-feature.admin.manage-appointment.title";
-  protected readonly col_day: string =   "admin-feature.admin.manage-appointment.col_day";
-  protected readonly col_opening_time: string =   "admin-feature.admin.manage-appointment.col_opening_time";
-  protected readonly col_closing_time: string =   "admin-feature.admin.manage-appointment.col_closing_time";
-  protected readonly col_is_open: string =   "admin-feature.admin.manage-appointment.col_is_open";
-  protected readonly col_edit: string =   "admin-feature.admin.manage-appointment.col_edit";
-  protected readonly col_open: string =   "admin-feature.admin.manage-appointment.col_open";
-  protected readonly col_close: string =   "admin-feature.admin.manage-appointment.col_close";
-  protected readonly btn_open: string =   "admin-feature.admin.manage-appointment.btn_open";
-  protected readonly btn_close: string =   "admin-feature.admin.manage-appointment.btn_close";
-  protected readonly modal_edit_title: string =   "admin-feature.admin.manage-appointment.modal_edit_title";
-  protected readonly submit: string =   "admin-feature.admin.manage-appointment.submit";
-  protected readonly open: string = 'admin-feature.admin.manage-appointment.open';
-  protected readonly close: string = 'admin-feature.admin.manage-appointment.close';
+  protected readonly title: string =   "admin-feature.admin.manage-business-hours.title";
+  protected readonly col_day: string =   "admin-feature.admin.manage-business-hours.col_day";
+  protected readonly col_opening_time: string =   "admin-feature.admin.manage-business-hours.col_opening_time";
+  protected readonly col_closing_time: string =   "admin-feature.admin.manage-business-hours.col_closing_time";
+  protected readonly col_is_open: string =   "admin-feature.admin.manage-business-hours.col_is_open";
+  protected readonly col_edit: string =   "admin-feature.admin.manage-business-hours.col_edit";
+  protected readonly col_open: string =   "admin-feature.admin.manage-business-hours.col_open";
+  protected readonly col_close: string =   "admin-feature.admin.manage-business-hours.col_close";
+  protected readonly btn_open: string =   "admin-feature.admin.manage-business-hours.btn_open";
+  protected readonly btn_close: string =   "admin-feature.admin.manage-business-hours.btn_close";
+  protected readonly modal_edit_title: string =   "admin-feature.admin.manage-business-hours.modal_edit_title";
+  protected readonly submit: string =   "admin-feature.admin.manage-business-hours.submit";
+  protected readonly open: string = 'admin-feature.admin.manage-business-hours.open';
+  protected readonly close: string = 'admin-feature.admin.manage-business-hours.close';
 
 
   private editBusinessHoursPayload: EditBusinessHoursPayload = {

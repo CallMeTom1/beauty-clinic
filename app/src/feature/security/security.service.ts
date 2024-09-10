@@ -31,6 +31,7 @@ import {UpdateAppointmentStatusPayload} from "./data/payload/appointment/update-
 import {GetAvailableDaysPayload} from "./data/payload/appointment/get-available-days.payload";
 import {GetAvailableTimeSlotsPayload} from "./data/payload/appointment/get-available-time-slots.payload";
 import {response} from "express";
+import {Customer} from "../customer/data/model/customer.business";
 
 
 //todo réaliser tout les fetch dans ce service pour économiser les call api
@@ -50,8 +51,11 @@ export class SecurityService {
   public businessHours$: WritableSignal<BusinessHours[]> = signal(BusinessHoursUtils.getEmpties());
   public holidays$: WritableSignal<Holiday[]> = signal(HolidayUtils.getEmpties());
   public appointment$: WritableSignal<Appointment[]> = signal(AppointmentUtils.getEmpties());
+  //todo faire des utils
   public availableDays$: WritableSignal<Date[]> = signal([]);
   public availableSlots$: WritableSignal<string[]> = signal([]);
+  public customers$: WritableSignal<Customer[]> = signal([]);
+
 
   private getInitialAuthState(): boolean {
     const storedAuthState: string | null = localStorage.getItem(environment.LOCAL_STORAGE_AUTH);
@@ -73,13 +77,34 @@ export class SecurityService {
     });
   };
 
+  public fetchCustomers(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.USER).pipe(
+      tap((response: ApiResponse): void => {
+        console.log(response)
+        if(response.result){
+          this.customers$.set(response.data)
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    )
+  }
+
+
   public fetchAppointments(): Observable<ApiResponse> {
     return this.api.get(ApiURI.APPOINTMENT).pipe(
       tap((response: ApiResponse): void => {
         console.log('API response received:', response);
         if(response.result){
-          this.appointment$.set(response.data)
-
+          this.appointment$.set(
+            response.data.map((appointment: any) => ({
+              ...appointment,
+              userDetail: appointment.user ? appointment.user : { firstname: 'N/A', lastname: 'N/A' },
+              careDetail: appointment.care ? appointment.care : { name: 'Unknown', price: 0 }
+            }))
+          );
         }
       }),
       catchError(error => {

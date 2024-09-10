@@ -1,0 +1,47 @@
+.manage-customer-container {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  padding: 20px;
+  height: 100vh;
+  background: var(--theme-bg-primary);
+  overflow: hidden;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--theme-text-primary);
+  }
+
+  .manage-customer-table {
+    border: 1px solid var(--theme-secondary);
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--theme-bg-secondary);
+    border-radius: 8px;
+    overflow: hidden;
+
+    th, td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: var(--theme-primary-light);
+      font-weight: bold;
+      color: var(--theme-text-light);
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    td {
+      background-color: var(--theme-bg-primary);
+      color: var(--theme-text-primary);
+    }
+  }
+}
