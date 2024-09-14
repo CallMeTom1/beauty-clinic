@@ -16,6 +16,8 @@ export class ThemeTogglerComponent implements OnInit {
   public isDarkTheme: boolean = false;
 
   ngOnInit(): void {
+    this.themeService.theme$.set('light');
+    document.body.classList.add('light');
     this.loadTheme();
   }
 

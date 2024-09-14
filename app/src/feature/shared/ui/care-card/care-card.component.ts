@@ -14,5 +14,5 @@ import {TranslateModule} from "@ngx-translate/core";
   styleUrl: './care-card.component.scss'
 })
 export class CareCardComponent {
-  @Input({required:true}) cardConfig!: CareCardConfig;
+  @Input({required:true}) care!: CareCardConfig;
 }

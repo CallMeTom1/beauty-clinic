@@ -11,14 +11,15 @@ import {SecurityFormComponent} from "@feature-security";
 import {HomeHeaderComponent} from "../../component/home-header/home-header.component";
 import {HomeIntroConfigCard} from "../../../shared/ui/home-intro-card/home-intro-config.interface";
 import {HomeIntroCardComponent} from "../../../shared/ui/home-intro-card/home-intro-card.component";
-import {CareTrendCardConfig} from "../../../shared/ui/care-trend-card/care-trend-card.config";
 import {CareTrendCardComponent} from "../../../shared/ui/care-trend-card/care-trend-card.component";
 import {FormComponent} from "../../../shared/ui/form/component/form/form.component";
 import {ContactForm} from "../../data/interface/contact-form.interface";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CareCategory} from "../../../care/enum/care-category.enum";
+import {CarouselLandingComponent} from "../../../shared/ui/carousel-landing/carousel-landing.component";
 import {CareCardConfig} from "../../../shared/ui/care-card/care-card.config";
-import {CareCardComponent} from "../../../shared/ui/care-card/care-card.component";
+import {CareSliderComponent} from "../../component/care-slider/care-slider.component";
+import {PresentationComponent} from "../../component/presentation/presentation.component";
 
 @Component({
   selector: 'app-home-page',
@@ -35,7 +36,9 @@ import {CareCardComponent} from "../../../shared/ui/care-card/care-card.componen
     HomeIntroCardComponent,
     CareTrendCardComponent,
     FormComponent,
-    CareCardComponent
+    CarouselLandingComponent,
+    CareSliderComponent,
+    PresentationComponent
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
@@ -148,45 +151,6 @@ export class HomePageComponent {
       btnTxt: 'home-intro-card.btnTxt3'
     }
   ];
-
-  careCardConfig: CareCardConfig[] = [
-    {
-    src: './assets/pictures/diagnostique.png',
-    title: 'home-care-card.title1',
-    btnTxt: 'home-care-card.btnTxt1'
-    },
-    {
-      src: './assets/pictures/epilation-laser.png',
-      title: 'home-care-card.title2',
-      btnTxt: 'home-care-card.btnTxt1'
-    },
-    {
-      src: './assets/pictures/relachement-cutane.png',
-      title: 'home-care-card.title3',
-      btnTxt: 'home-care-card.btnTxt1'
-    },
-    {
-      src: './assets/pictures/anti-cellulite.png',
-      title: 'home-care-card.title4',
-      btnTxt: 'home-care-card.btnTxt1'
-    },
-    {
-      src: './assets/pictures/radio-frequence.png',
-      title: 'home-care-card.title5',
-      btnTxt: 'home-care-card.btnTxt1'
-    },
-    {
-      src: './assets/pictures/peeling.png',
-      title: 'home-care-card.title6',
-      btnTxt: 'home-care-card.btnTxt1'
-    },
-    {
-      src: './assets/pictures/anti-age.png',
-      title: 'home-care-card.title7',
-      btnTxt: 'home-care-card.btnTxt1'
-    },
-  ]
-
 
   public error(): FormError[] {
     return this.formError$();

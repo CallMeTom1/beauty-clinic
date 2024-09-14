@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 
 @Component({
-  selector: 'app-overlay',
+  selector: 'app-overlay-grid',
   standalone: true,
   imports: [],
   templateUrl: './overlay.component.html',

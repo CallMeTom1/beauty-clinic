@@ -1,0 +1,14 @@
+<div class="cares">
+  <div class="cares-top">
+    <h3>Les soins</h3>
+    <div class="cares-top-see-more">
+      <span>Tout voir</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </div>
+  </div>
+  <div class="cares-slider">
+    @for(care of careCardConfig; track care.title){
+      <app-care-card [care]="care"></app-care-card>
+    }
+  </div>
+</div>

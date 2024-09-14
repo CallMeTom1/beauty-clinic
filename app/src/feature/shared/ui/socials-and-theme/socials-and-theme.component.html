@@ -1,0 +1,10 @@
+<div class="social-icons">
+  <ng-container>
+    <app-theme-toggler></app-theme-toggler>
+  </ng-container>
+  @for(social of socialsConfig; track social.icon){
+    <a  [href]="social.link" target="_blank">
+      <img [src]="social.icon" [alt]="social.alt">
+    </a>
+  }
+</div>

@@ -7,8 +7,8 @@
   height: 100vh; /* Prendre toute la hauteur de l'écran */
   display: flex;
   justify-content: space-between;
-  pointer-events: none; /* Pour que l'overlay ne bloque pas les interactions */
-  z-index: 9999; /* Placer l'overlay au-dessus de tout */
+  pointer-events: none; /* Pour que l'overlay-grid ne bloque pas les interactions */
+  z-index: 9999; /* Placer l'overlay-grid au-dessus de tout */
   padding-left: calc((100vw - (8.33vw * 12 + 1.66vw * 11)) / 2); /* Centrer les colonnes horizontalement */
 }
 

@@ -13,10 +13,5 @@ import {ContactCardComponent} from "../../../shared/ui/contact-card/contact-card
   styleUrl: './home-header.component.scss'
 })
 export class HomeHeaderComponent {
-  topTitle: string = "home-feature-header-top-title";
-  title1: string = "home-feature-header-home-title1";
-  title2: string = "home-feature-header-home-title2";
-  title3: string = "home-feature-header-home-title3";
-  careBtn: string = "home-feature-header-care-btn";
-  appointmentBtn: string = "home-feature-header-appointment-btn";
+
 }

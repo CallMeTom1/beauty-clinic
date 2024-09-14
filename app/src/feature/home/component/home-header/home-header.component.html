@@ -1,23 +1,17 @@
-<div class="home-container">
-  <div class="left-container">
-    <img class="img-close-up" src="assets/pictures/close-up-woman-face.png" alt="close up women home">
+<div class="home-header">
+  <div class="home-header__brand">
+    <img src='./assets/icon/logo-beauty-clinic.svg' alt='clinic logo'>
+    <div class="home-header__brand__name">
+      <span>Beauty Clinic</span>
+      <span>By Françoise</span>
+    </div>
   </div>
-  <div class="right-container">
-    <div class="top-title">
-      {{topTitle | translate}}
+  <div class="home-header__text_and_img">
+    <div class="home-header__text">
+      <h1>Des soins et des produits de beauté pour chacun.</h1>
     </div>
-    <div class="home-title">
-      {{ title1 | translate }}<br>
-      {{ title2 | translate }} <br>
-      {{title3 | translate}}
+    <div class="home-header__img">
+      <img src="./assets/pictures/close-up-woman-face.png" alt="close up of a woman">
     </div>
-    <div class="home-buttons">
-      <button class="btn-primary">{{careBtn | translate}}</button>
-      <button class="btn-secondary">{{appointmentBtn | translate}}</button>
-    </div>
-    <div class="home-contacts">
-      <app-contact-card></app-contact-card>
-    </div>
-
   </div>
 </div>

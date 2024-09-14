@@ -10,8 +10,8 @@ import {SecurityService} from "@feature-security";
 })
 export class UserAvatarComponent {
   @Input() alt: string = 'avatar';
-  @Input() width: string = '50px';
-  @Input() height: string = '50px';
+  @Input() width: string = '48px';
+  @Input() height: string = '48px';
 
   private securityService: SecurityService = inject(SecurityService);
 
@@ -20,7 +20,7 @@ export class UserAvatarComponent {
     if (profileImage && profileImage.length > 0) {
       return `data:image/png;base64,${profileImage}`;
     } else {
-      return './assets/default-profile.png'; // Chemin vers votre image par défaut
+      return './assets/default-profile.png';
     }
   });
 }

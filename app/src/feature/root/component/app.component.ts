@@ -4,7 +4,7 @@ import {RouterModule} from "@angular/router";
 import {TranslateService} from "@ngx-translate/core";
 import {Language} from "@shared-core";
 import {Title} from "@angular/platform-browser";
-import {OverlayComponent} from "../../shared/ui/overlay/overlay.component";
+import {OverlayComponent} from "../../shared/ui/overlay-grid/overlay.component";
 
 @Component({ selector: 'component-root',
     standalone: true,

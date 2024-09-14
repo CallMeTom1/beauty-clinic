@@ -1,0 +1,22 @@
+<div class="carousel__container">
+  <div class="carousel__container__carousel" [style.transform]="'rotateY(' + currentRotation + 'deg)'">
+    @for(slide of slides; track slide.title; let i = $index){
+      <div class="carousel__container__carousel__slide"
+           [style.transform]="'rotateY(' + (i * 120) + 'deg) translateZ(300px)'">
+        <h2>{{ slide.title }}</h2>
+        <p>{{ slide.content }}</p>
+        <app-button *ngIf="slide.button" [text]="slide.button.text" (click)="slide.button.action()"></app-button>
+      </div>
+    }
+  </div>
+
+  <!-- Indicators for slide selection -->
+  <div class="carousel__container__carousel__indicators">
+    @for(slide of slides; track slide.title; let i = $index){
+      <div class="carousel__container__carousel__indicators-indicator"
+           [class.active]="isActive(i)"
+           (click)="goToSlide(i)">
+      </div>
+    }
+  </div>
+</div>

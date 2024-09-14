@@ -1,0 +1,24 @@
+.social-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* Aligne les éléments horizontalement au centre */
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  gap: 16px;  /* Espace entre les icônes */
+  border-radius: 15px;
+  padding: 8px;
+  background: rgba(202, 199, 199, 0.55);
+}
+
+.social-icons a {
+  width: 16px;
+  height: 16px;
+}
+
+.social-icons img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+

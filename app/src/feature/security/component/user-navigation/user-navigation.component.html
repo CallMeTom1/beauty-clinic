@@ -1,30 +1,39 @@
 <div class="user-nav">
-  <div class="avatar-container" (click)="toggleDropdown()">
+  <div class="avatar-container" (click)="toggleDrop()">
     <app-user-avatar></app-user-avatar>
-    @if(dropdownOpen){
+    @if(dropOpen){
       <div class="dropdown-menu">
-        <ul>
-          <li (click)="navigateToProfile()">
-            <div class="menu-item">
-              {{profile | translate}}
+        <nav>
+          <ul>
+            <div class="avatar-container__dropdown-menu__profile">
+              <app-user-avatar></app-user-avatar>
+              <!--
+              <span>{{this.securityService.account$().firstname}}</span>
+              <span>{{this.securityService.account$().lastname}}</span>
+              -->
+              <span>Florence</span>
+              <br>
+              <span>Shawn</span>
+            </div>
+            <li (click)="navigateToProfile()">
               <i class="fa-thin fa-user"></i>
-            </div>
-          </li>
-          <li>
-            <div class="menu-item">
-              {{wallet | translate}}
-              <i class="fa-thin fa-wallet"></i>
-            </div>
-          </li>
-          <li (click)="logout()">
-            <div class="menu-item">
-              {{logOut | translate}}
-              <i class="fa-thin fa-arrow-right-from-bracket"></i>
-            </div>
-          </li>
-        </ul>
+              <span>{{profile | translate}}</span>
+            </li>
+            <li>
+              <div class="menu-item">
+                <i class="fa-thin fa-calendar-circle-exclamation"></i>
+                <span>Mes rendez-vous</span>
+              </div>
+            </li>
+            <li (click)="logout()">
+              <div class="menu-item">
+                <i class="fa-thin fa-arrow-right-from-bracket"></i>
+                <span>{{logOut | translate}}</span>
+              </div>
+            </li>
+          </ul>
+        </nav>
       </div>
     }
   </div>
-  <p> {{ securityService.account$().role | roleTransform}}</p>
 </div>

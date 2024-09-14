@@ -1,40 +1,18 @@
-.care-card-container {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 15px;
-  padding: 20px;
-  overflow: hidden;
-  margin: 0 20px;
-  height: 275px;
-  width: 275px;
-  display: flex;
-  align-items: flex-end;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Effet de survol (hover) avec soulevement et ombre */
-.care-card-container:hover {
-  cursor: pointer;
-  transform: translateY(-10px); /* Soulevement léger */
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Ombre moderne */
-}
-
-.title-btn-container {
+.care-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  border-radius: 10px;
-}
+  gap: 4px;
+  width: 138px;
+  img {
+    border-radius: 15px;
+    width: 138px;
+    height: 138px;
+    object-fit: cover; // Ajuste l'image pour qu'elle remplisse la box en gardant ses proportions
+    display: block;    // Évite les espaces blancs sous l'image
+  }
 
-.title {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.btn {
-  button {
-    padding: 10px 20px;
+  h4 {
+    padding: 4px;
+    font-size: 12px;
   }
 }

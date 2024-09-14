@@ -1,249 +1,77 @@
-/* Reset CSS */
-* {
+:root {
+  --menu-height: 50px; /* Hauteur du menu */
+}
+
+.main-content {
+  overflow-y: auto; /* Permet le défilement vertical */
+  padding-bottom: 116px; /* Évite que le contenu ne soit caché derrière le menu */
+}
+
+.bottom-nav {
+  background: white;
+  padding: 16px 16px;
+  height: 64px;
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+
 }
 
-html {
-  font-size: 16px;
-}
-
-.container-all {
+.bottom-nav li {
+  padding: 16px 16px;
   display: flex;
   flex-direction: column;
-  background-color: var(--theme-bg-primary);
-}
-
-.app-container {
-  width: 100%;
-  min-height: 100vh;
-}
-
-.header-container {
-  background: var(--theme-bg-gradient);
-  display: flex;
-  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  justify-content: space-evenly;
-  padding: 20px 20px;
-  height: 100px;
-  width: 100%;
+  border-radius: 8px;
+}
+
+.bottom-nav li.active {
+  color: #007bff; /* Couleur du texte et icône pour l'élément actif */
+}
+
+.menu__icon {
+  font-size: 24px;
+}
+
+.menu__icon.active {
+  color: #007bff; /* Changement de couleur de l'icône lorsqu'actif */
+}
+
+.menu__title {
+  font-size: 11px;
+}
+
+.menu__title.active {
+  color: #007bff; /* Changement de couleur du texte lorsqu'actif */
+}
+
+.active {
+}
+
+.grid-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
-
-  .menu-icon {
-    display: none;
-    font-size: 24px; /* 2 rem correspond à 32px */
-    color: var(--theme-white);
-    cursor: pointer;
-  }
-
-  .left-header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-shrink: 1;
-    white-space: nowrap;
-
-    .brand-name {
-      cursor: pointer;
-      display: flex;
-      font-family: 'Monserrat', sans-serif;
-      font-weight: bold;
-      flex-direction: column;
-      font-size: 18px;
-
-      .brand-name1 {
-        text-transform: uppercase;
-      }
-      .brand-name2 {
-        text-transform: capitalize;
-      }
-    }
-  }
-
-  .mid-header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 24px;
-
-    .nav-container {
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      padding: 10px;
-
-      nav {
-        display: flex;
-
-        ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          display: flex;
-          flex-direction: row;
-          gap: 24px;
-
-          li {
-            font-family: 'Lato', sans-serif;
-            font-size: 16px;
-            color: var(--theme-white);
-            font-weight: 500;
-            white-space: nowrap;
-            position: relative;
-            transition: color 0.3s ease;
-
-            &::after {
-              content: '';
-              position: absolute;
-              left: 0;
-              right: 0;
-              bottom: -3px;
-              height: 1px;
-              background-color: var(--theme-text-primary);
-              transform: scaleX(0);
-              transform-origin: left;
-              transition: transform 0.3s ease;
-            }
-
-            &:hover {
-              cursor: pointer;
-
-              &::after {
-                transform: scaleX(1);
-              }
-            }
-
-            &.active::after {
-              transform: scaleX(1);
-            }
-          }
-        }
-      }
-    }
-    .btn-appointment{
-    }
-  }
-
-  .right-header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-shrink: 1;
-  }
-
-  .btn-container {
-    padding: 0 0.9375rem; /* 15px */
-    display: flex;
-    flex-direction: row;
-    gap: 0.9375rem; /* 15px */
-  }
-
-  .user-nav-container {
-    display: flex;
-    margin-left: 1.5625rem; /* 25px */
-  }
-
-
-  /* Écrans moyens (tablettes) */
-  @media (max-width: 1200px) {
-    .header-container {
-      padding: 15px 30px;
-      height: 120px;
-      justify-content: space-between;
-    }
-    .brand-name{
-      display: flex;
-    }
-
-    .mid-header .nav-container,
-    .mid-header .btn-appointment, .right-header .theme-toggler {
-      display: none;
-    }
-
-    .logo-container {
-      font-size: 1.75rem; /* 28px */
-    }
-
-    .menu-icon {
-      display: flex;
-    }
-
-    .right-header {
-      margin-left: auto;
-    }
-  }
-
-  /* Petits écrans (mobiles) */
-  @media (max-width: 768px) {
-    html {
-      font-size: 14px;
-    }
-
-    .header-container {
-      padding: 10px 20px;
-      height: 100px;
-    }
-
-    .brand-name {
-      font-size: 18px; /* 24px */
-    }
-
-    .logo-container {
-      font-size: 16px; /* 20px */
-    }
-
-    .menu-icon {
-      font-size: 16px; /* 28px */
-    }
-
-    .mid-header .nav-container li {
-      font-size: 16px;
-    }
-
-    .btn-container {
-      display: none; /* Masquer les boutons de connexion sur petits écrans */
-    }
-
-    .nav-container.active {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      top: var(--var-header-height);
-      left: 0;
-      width: 100%;
-      background-color: var(--theme-bg-primary);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-
-      nav ul {
-        flex-direction: column;
-        gap: 10px;
-
-        li {
-          padding: 10px 20px;
-          text-align: center;
-        }
-      }
-
-      .btn-container {
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-
-    .right-header {
-      margin-left: auto;
-    }
-  }
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  box-sizing: border-box;
 }
 
-.footer{
+.grid-overlay .column {
+  flex-grow: 1;
+  margin: 0 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+  height: 100%;
 }

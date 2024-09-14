@@ -1,57 +1,32 @@
-<div class="container-all">
-  <header>
-    <div class="header-container">
-      <div class="left-header">
-        <div class="brand-name">
-          <div class="brand-name1">
-            <span>{{title1}}</span>
-          </div>
-          <div class="brand-name2">
-            <span>{{title2}}</span>
-          </div>
-        </div>
-      </div>
-      <div class="mid-header">
-        <div class="nav-container" [ngClass]="{'active': menuActive}">
-          <nav>
-            <ul>
-              @for(item of menu; let index=$index; track index ){
-                <li (click)="navigate(item.link)" routerLinkActive="active"
-                    [routerLink]="item.link">
-                  <span class="title">{{item.title | translate}}</span>
-                </li>
-              }
-            </ul>
-          </nav>
-        </div>
-        <div class="btn-appointment">
-          <button class="btn-secondary">  {{appointmentBtn | translate}}</button>
-        </div>
-      </div>
-      <div class="right-header">
-        <div class="left-header-hamburger-btn">
-          <i class="fa-thin fa-bars menu-icon" (click)="toggleMenu()"></i>
-        </div>
-        @if(!securityService.isAuth$()){
-          <div class="btn-container">
-            <button class="btn-ternary" (click)="redirectSignin()">{{ signinBtn | translate }}</button>
-            <button class="btn-ternary" (click)="redirectSignup()">{{ signupBtn | translate }}</button>
-          </div>
-        } @else {
-          <div class="user-nav-container">
-            <app-user-navigation></app-user-navigation>
-          </div>
-        }
-        <div class="theme-toggler">
-          <app-theme-toggler></app-theme-toggler>
-        </div>
-      </div>
-    </div>
-  </header>
-  <main class="app-container">
-    <router-outlet></router-outlet>
-  </main>
-  <footer class="footer">
-    <app-footer></app-footer>
-  </footer>
+<div class="main-content">
+
+<app-socials-and-theme></app-socials-and-theme>
+  <router-outlet></router-outlet>
+
+<div class="menu__nav">
+  <nav>
+    <ul class="bottom-nav">
+      <li *ngFor="let item of menu" (click)="navigate(item.link)" routerLinkActive="active" [routerLink]="item.link" [routerLinkActiveOptions]="{exact: true}">
+        <i class="menu__icon {{item.icon}}"></i>
+        <span class="menu__title">{{ item.title | translate }}</span>
+      </li>
+      <li class="menu__profile">
+        <ng-container>
+          <app-user-navigation></app-user-navigation>
+        </ng-container>
+        <span class="menu__title">{{ 'Profile' | translate }}</span>
+      </li>
+    </ul>
+  </nav>
 </div>
+</div>
+<!--
+<div class="grid-overlay">
+  <div class="column"></div>
+  <div class="column"></div>
+  <div class="column"></div>
+  <div class="column"></div>
+  <div class="column"></div>
+  <div class="column"></div>
+</div>
+-->

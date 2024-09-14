@@ -21,20 +21,20 @@ export class UserNavigationComponent {
   protected securityService: SecurityService = inject(SecurityService);
   private elementRef: ElementRef = inject(ElementRef);
 
-  protected dropdownOpen: boolean = false;
+  protected dropOpen: boolean = false;
   protected width: string = '50px';
   protected profile: string = 'security-feature-user-nav-profile';
   protected wallet: string = 'security-feature-user-nav-wallet';
   protected logOut: string = 'security-feature-user-nav-logout';
   protected alt: string = 'security-feature-user-nav-alt'
 
-  toggleDropdown(): void {
-    this.dropdownOpen = !this.dropdownOpen;
+  toggleDrop(): void {
+    this.dropOpen = !this.dropOpen;
   }
 
   navigateToProfile(): void {
     this.securityService.navigate(AppRoutes.PROFILE)
-    this.dropdownOpen = false;
+    this.dropOpen = false;
   }
 
   logout(): void {
@@ -44,7 +44,7 @@ export class UserNavigationComponent {
   @HostListener('document:click', ['$event'])
   onClick(event: Event): void {
     if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.dropdownOpen = false;
+      this.dropOpen = false;
     }
   }
 
