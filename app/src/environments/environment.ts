@@ -7,5 +7,6 @@ export const environment: EnvironmentType = {
     LOCAL_STORAGE_AUTH: 'isAuth',
     LOCAL_STORAGE_THEME: 'theme',
     LOCAL_STORAGE_ROLE: 'userRole',
+    GOOGLE_CLIENT: '643472850164-36g86jlhj40ns5enbrkk0691ac8pabre.apps.googleusercontent.com',
 
 };

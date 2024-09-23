@@ -1,0 +1,10 @@
+
+@for(care of careService.filteredCares$(); track care.care_id){
+  <div class="care">
+    <img src="{{care.name}}.png" alt="{{care.name}}">
+    <div class="care__tiltle-description">
+      <h3>{{care.name}}</h3>
+      <p> {{care.}}</p>
+    </div>
+  </div>
+}

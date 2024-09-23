@@ -1,26 +1,25 @@
 <div class="main-content">
 
-<app-socials-and-theme></app-socials-and-theme>
   <router-outlet></router-outlet>
 
-<div class="menu__nav">
-  <nav>
-    <ul class="bottom-nav">
-      <li *ngFor="let item of menu" (click)="navigate(item.link)" routerLinkActive="active" [routerLink]="item.link" [routerLinkActiveOptions]="{exact: true}">
-        <i class="menu__icon {{item.icon}}"></i>
-        <span class="menu__title">{{ item.title | translate }}</span>
-      </li>
-      <li class="menu__profile">
-        <ng-container>
-          <app-user-navigation></app-user-navigation>
-        </ng-container>
-        <span class="menu__title">{{ 'Profile' | translate }}</span>
-      </li>
-    </ul>
-  </nav>
+  <div class="menu__nav">
+    <nav>
+      <ul class="bottom-nav">
+        <li *ngFor="let item of menu" (click)="navigate(item.link)" routerLinkActive="active" [routerLink]="item.link" [routerLinkActiveOptions]="{exact: true}">
+          <i class="menu__icon {{item.icon}}"></i>
+          <span class="menu__title">{{ item.title | translate }}</span>
+        </li>
+        <li class="menu__profile z-index200">
+          <ng-container>
+            <app-user-navigation></app-user-navigation>
+          </ng-container>
+          <span class="menu__title z-index200">{{ 'Profile' | translate }}</span>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
-</div>
-<!--
+
 <div class="grid-overlay">
   <div class="column"></div>
   <div class="column"></div>
@@ -29,4 +28,4 @@
   <div class="column"></div>
   <div class="column"></div>
 </div>
--->
+

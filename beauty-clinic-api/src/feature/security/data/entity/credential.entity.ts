@@ -38,4 +38,10 @@ export class Credential {
     @JoinColumn({ name: 'userId' })
     user: User;
 
+    @Column({ nullable: true })
+    resetToken: string;
+
+    @Column({ nullable: true, type: 'timestamp' })
+    resetTokenExpiresAt: Date;
+
 }

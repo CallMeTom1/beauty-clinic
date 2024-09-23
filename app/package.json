@@ -30,6 +30,7 @@
     "@types/bignumber.js": "^5.0.0",
     "bignumber.js": "^9.1.2",
     "express": "^4.18.2",
+    "google-auth-library": "^9.14.1",
     "messageformat": "^2.3.0",
     "ngx-cookie-service": "^18.0.0",
     "ngx-pagination": "^6.0.3",

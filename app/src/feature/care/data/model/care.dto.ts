@@ -9,4 +9,5 @@ export interface CareDto {
   price: number;
   duration: string;
   time_between: string;
+  description: string;
 }

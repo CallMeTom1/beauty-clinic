@@ -32,6 +32,8 @@ import {GetAvailableDaysPayload} from "./data/payload/appointment/get-available-
 import {GetAvailableTimeSlotsPayload} from "./data/payload/appointment/get-available-time-slots.payload";
 import {response} from "express";
 import {Customer} from "../customer/data/model/customer.business";
+import {ResetPasswordPayload} from "./data/payload/user/reset-password.payload";
+import {ForgotPasswordPayload} from "./data/payload/user/forgot-password.payload";
 
 
 //todo réaliser tout les fetch dans ce service pour économiser les call api
@@ -494,6 +496,32 @@ export class SecurityService {
   navigate(link: string) {
     this.router.navigate([link]).then();
   }
+
+  resetPassword(payload: ResetPasswordPayload) {
+    return this.api.post(ApiURI.RESET_PASSWORD, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+            this.router.navigate([AppNode.SIGNIN]).then();
+          }
+        })
+      );
+  }
+
+  forgotPassword(payload: ForgotPasswordPayload) {
+    return this.api.post(ApiURI.FORGOT_PASSWORD, payload) // Assure-toi de bien passer le payload avec l'email
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+
+          }
+          else{
+            this.router.navigate([AppNode.SIGNIN]).then();
+          }
+        })
+      );
+  }
+
 
   private readonly daysOfWeekOrder: DayOfWeekEnum[] = [
     DayOfWeekEnum.MONDAY,

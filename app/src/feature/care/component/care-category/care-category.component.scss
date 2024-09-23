@@ -1,0 +1,43 @@
+// care-category.component.scss
+.care-category {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .category-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    h3 {
+      font-size: 20px;
+      font-weight: bold;
+    }
+  }
+
+  .category-slider {
+    display: flex;
+    flex-direction: row; // Affiche les catégories en ligne
+    overflow-x: auto; // Permet le défilement horizontal
+    overflow-y: hidden; // Évite le défilement vertical
+    gap: 16px; // Ajoute un espace entre les catégories
+    scroll-behavior: smooth; // Ajoute une transition fluide pour le défilement programmé
+  }
+
+  .category-item {
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &.selected {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+  }
+}

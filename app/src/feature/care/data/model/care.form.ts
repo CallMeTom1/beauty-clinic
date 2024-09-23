@@ -7,4 +7,5 @@ export interface CareForm {
   price: number;
   duration: string;
   timeBetween: string;
+  description: string;
 }

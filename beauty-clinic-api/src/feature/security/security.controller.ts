@@ -1,4 +1,4 @@
-import {Body, Controller, Get, HttpCode, Param, Post, Req, Res, UseGuards,} from '@nestjs/common';
+import {Body, Controller, Get, HttpCode, Param, Post, Put, Req, Res, UseGuards,} from '@nestjs/common';
 import {ApiBearerAuth, ApiTags} from '@nestjs/swagger';
 import {Request, Response} from 'express';
 import {ApiCodeResponse} from '@common/api';
@@ -8,6 +8,9 @@ import {Public, UserReq} from "@common/config/metadata";
 import {AUTH_COOKIE_NAME} from "@common/config";
 import {FacebookGuard, GoogleAuthGuard} from "@feature/security/guard";
 import {SecurityService} from "@feature/security/service/security.service";
+import {ChangePasswordPayload} from "@feature/security/data/payload/change-password.payload";
+import {ForgotPasswordPayload} from "@feature/security/data/payload/forgot-password.payload";
+import {ResetPasswordPayload} from "@feature/security/data/payload/reset-password.payload";
 
 @ApiBearerAuth('access-token')
 @ApiTags('Account')
@@ -90,39 +93,43 @@ export class SecurityController {
     @Get('facebook/login')
     public loginFacebook(): void { }
 
-    /*
-    @UseGuards(FacebookGuard)
-    @Public()
-    @Get('facebook/redirect')
-    async SignSocialFacebook(@Req() req: Request, @Res() res: Response): Promise<void> {
-        const user: SignsocialPayload = req.user as SignsocialPayload;
-        const token: Token = await this.service.signSocial(user);
-        if (!token) {
-            res.status(401).send("Authentication Failed");
-        } else {
-            res.cookie('Authentication', token, { httpOnly: true, secure: true });
-            res.cookie('auth_front', 'auth')
-            res.redirect(`https://localhost:4200/dashboard/home`);
-        }
-    }
-    @UseGuards(GoogleAuthGuard)
-    @Public()
-    @Get('google/login')
-    public loginGoogle(): void { }
 
-    @UseGuards(GoogleAuthGuard)
     @Public()
-    @Get('google/redirect')
-    async SignSocialGoogle(@Req() req: Request, @Res() res: Response): Promise<void> {
-        const user: SignsocialPayload = req.user as SignsocialPayload;
-        const token: Token = await this.service.signSocial(user);
-        if (!token) {
-            res.status(401).send("Authentication Failed");
-        } else {
+    @Post('google-signin')
+    public async googleSignIn(@Body('credential') credential: string, @Res() res: Response): Promise<void> {
+        try {
+            const token = await this.service.googleSignIn(credential);
             res.cookie('Authentication', token, { httpOnly: true, secure: true });
-            res.cookie('auth_front', 'auth')
-            res.redirect(`https://localhost:4200/dashboard/home`);
+            res.send({
+                result: true,
+                code: 200,
+                data: token
+            });
+        } catch (error) {
+            console.error('Erreur lors de la connexion Google:', error);
+            res.status(401).send({
+                result: false,
+                code: 401,
+                message: 'Authentification Google échouée'
+            });
         }
     }
-     */
+
+    @Put('change-password')
+    public async changePassword(@Body() payload: ChangePasswordPayload, @UserReq() user: UserRequest): Promise<void> {
+        return this.service.changePassword(payload, user.idUser)
+    }
+
+    //todo: forgot password
+    @Post('forgot-password')
+    async forgotPassword(@Body() forgotPasswordPayload: ForgotPasswordPayload): Promise<void> {
+        return this.service.forgotPassword(forgotPasswordPayload);
+    }
+
+    //todo: reset password
+    @Post('reset-password')
+    async resetPassword(@Body() payload: ResetPasswordPayload): Promise<void> {
+        return this.service.resetPassword(payload);
+    }
+
 }

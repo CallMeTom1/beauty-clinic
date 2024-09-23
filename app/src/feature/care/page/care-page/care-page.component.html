@@ -1,27 +1,15 @@
-<app-care-header></app-care-header>
-<div class="care-container">
-  <div class="care-text">
-    <h3>{{title1 | translate}}</h3>
-    <h4>{{title2 | translate}}</h4>
-  </div>
-  <div class="diag-category">
-    <div class="diag-title">
-      <h4>{{diag_title | translate}}</h4>
-    </div>
-    <div class="card-list">
-      @for(care of diagConfig; track care.title){
-        <app-care-detail-card [config]="care"></app-care-detail-card>
-      }
-    </div>
-  </div>
-  <div class="epil-category">
-    <div class="epil-title">
-      <h4>{{epil_title | translate}}</h4>
-    </div>
-    <div class="card-list">
-      @for(care of epilationConfig; track care.title){
-        <app-care-detail-card [config]="care"></app-care-detail-card>
-      }
-    </div>
-  </div>
+<div class="socials">
+  <app-socials-and-theme></app-socials-and-theme>
 </div>
+<div class="care-page">
+  <header class="care-page__header">
+    <div class="care-page__title">
+      <i class="fa-regular fa-sparkles"></i>
+      <h2>La liste des soins</h2>
+    </div>
+    <app-care-search-by-name></app-care-search-by-name>
+  </header>
+  <app-care-category></app-care-category>
+</div>
+
+

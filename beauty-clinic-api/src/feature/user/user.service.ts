@@ -32,6 +32,7 @@ export class UserService {
                 lastname: payload.lastname,
                 phoneNumber: payload.phoneNumber,
                 profileImage: this.defaultProfileImage,
+                profileImageUrl: payload.profileImageUrl
             });
 
             return await this.userRepository.save(newUser);

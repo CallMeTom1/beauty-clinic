@@ -1,39 +1,37 @@
 <div class="user-nav">
   <div class="avatar-container" (click)="toggleDrop()">
     <app-user-avatar></app-user-avatar>
+
     @if(dropOpen){
-      <div class="dropdown-menu">
-        <nav>
-          <ul>
-            <div class="avatar-container__dropdown-menu__profile">
-              <app-user-avatar></app-user-avatar>
-              <!--
-              <span>{{this.securityService.account$().firstname}}</span>
-              <span>{{this.securityService.account$().lastname}}</span>
-              -->
-              <span>Florence</span>
+      <nav class="dropdown-nav">
+        <ul class="dropdown-list">
+
+          <li class="dropdown-item profile">
+            <app-user-avatar></app-user-avatar>
+            <div class="profile-info">
+              <span class="profile-name">Florence</span>
               <br>
-              <span>Shawn</span>
+              <span class="profile-name">Shawn</span>
             </div>
-            <li (click)="navigateToProfile()">
-              <i class="fa-thin fa-user"></i>
-              <span>{{profile | translate}}</span>
-            </li>
-            <li>
-              <div class="menu-item">
-                <i class="fa-thin fa-calendar-circle-exclamation"></i>
-                <span>Mes rendez-vous</span>
-              </div>
-            </li>
-            <li (click)="logout()">
-              <div class="menu-item">
-                <i class="fa-thin fa-arrow-right-from-bracket"></i>
-                <span>{{logOut | translate}}</span>
-              </div>
-            </li>
-          </ul>
-        </nav>
-      </div>
+          </li>
+
+          <li class="dropdown-item" (click)="navigateToProfile()">
+            <i class="fa-thin fa-user icon"></i>
+            <span class="text">{{ profile | translate }}</span>
+          </li>
+
+          <li class="dropdown-item">
+            <i class="fa-thin fa-calendar-circle-exclamation icon"></i>
+            <span class="text">Mes rendez-vous</span>
+          </li>
+
+          <li class="dropdown-item" (click)="logout()">
+            <i class="fa-thin fa-arrow-right-from-bracket icon"></i>
+            <span class="text">{{ logOut | translate }}</span>
+          </li>
+
+        </ul>
+      </nav>
     }
   </div>
 </div>

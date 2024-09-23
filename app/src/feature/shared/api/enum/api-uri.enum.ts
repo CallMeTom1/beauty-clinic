@@ -18,7 +18,11 @@ export enum ApiURI {
   APPOINTMENT_CANCEL = 'appointment/cancel',
   APPOINTMENT_AVAILABLE_DAYS = 'appointment/available-days',
   APPOINTMENT_AVAILABLE_SLOTS = 'appointment/available-slots',
-  APPOINTMENT_UPDATE_NOTE = 'appointment/update-note'
+  APPOINTMENT_UPDATE_NOTE = 'appointment/update-note',
+
+
+  RESET_PASSWORD = 'account/reset-password',
+  FORGOT_PASSWORD = 'account/forgot-password'
 
 
 }

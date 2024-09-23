@@ -9,4 +9,5 @@ export interface CareForm {
   price: FormControl<number | null>;
   duration: FormControl<string | null>;
   time_between: FormControl<string | null>;
+  description: FormControl<string | null>;
 }

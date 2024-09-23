@@ -14,7 +14,9 @@ export class User extends BaseEntity {
     @Column({nullable: true, unique: false})
     lastname: string;
 
+    @Column({ nullable: true })
+    profileImageUrl: string;
+
     @Column({ type: 'bytea', nullable: true })
     profileImage: Buffer;
-
 }

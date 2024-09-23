@@ -24,6 +24,16 @@ export const securityRoutes: Routes = [
     canActivate: [ProfileAndWalletGuard()]
   },
   {
+    path: ':token',
+    loadComponent: () => import('./page/reset-password-page/reset-password-page.component')
+      .then(c => c.ResetPasswordPageComponent),
+  },
+  {
+    path:'forgot-password',
+    loadComponent: () => import('./page/forgot-password-page/forgot-password-page.component')
+      .then(c => c.ForgotPasswordPageComponent)
+  },
+  {
     path: '**',
     loadComponent: () => import('../home/page/home-page/home-page.component')
       .then(c => c.HomePageComponent),

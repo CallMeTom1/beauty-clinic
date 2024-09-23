@@ -9,6 +9,7 @@ import {User} from "@feature/user/model/entity/user.entity";
 import {SecurityController} from "@feature/security/security.controller";
 import {TokenService} from "./service/token.service"
 import {SecurityService} from "./service/security.service";
+import {MailService} from "@feature/security/service/mail.service";
 
 @Module({
     imports: [
@@ -20,7 +21,7 @@ import {SecurityService} from "./service/security.service";
         TypeOrmModule.forFeature([Credential, Token, User]),
         UserModule
     ],
-    providers: [TokenService, SecurityService, GoogleStrategy, FacebookStrategy],
+    providers: [TokenService, SecurityService, GoogleStrategy, FacebookStrategy, MailService],
     exports: [SecurityService],
     controllers: [SecurityController]
 })

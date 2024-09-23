@@ -10,4 +10,5 @@ export interface Care extends Business{
   price: number;
   duration: string;
   time_between: string;
+  description: string;
 }

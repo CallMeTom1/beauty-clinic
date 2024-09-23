@@ -51,8 +51,6 @@ export class ManageCareComponent {
   protected readonly col_delete : string = "admin-feature.admin.manage-care.column.delete";
   protected readonly col_sessions: string = "admin-feature.admin.manage-care.column.sessions";
 
-
-
   private readonly translateService: TranslateService = inject(TranslateService);
   protected readonly securityService: SecurityService = inject(SecurityService);
   public formError$: WritableSignal<FormError[]> = signal([]);
@@ -67,7 +65,8 @@ export class ManageCareComponent {
     price: 0,
     zone: '',
     category: '',
-    time_between: ''
+    time_between: '',
+    description: ''
   };
 
   public formGroup: FormGroup<CareForm> = new FormGroup<CareForm>({
@@ -78,8 +77,9 @@ export class ManageCareComponent {
     duration: new FormControl(this.editCarePayload.duration, [Validators.required, Validators.minLength(10), Validators.maxLength(25)]),
     category: new FormControl(this.editCarePayload.category as CareCategory, [Validators.required]),
     price: new FormControl(this.editCarePayload.price, [Validators.required, Validators.min(0)]),
-    time_between: new FormControl(this.editCarePayload.time_between, [Validators.required, Validators.minLength(3), Validators.maxLength(50)])
-  });
+    time_between: new FormControl(this.editCarePayload.time_between, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+    description: new FormControl(this.editCarePayload.description, [Validators.required, Validators.min(0)]),
+});
 
   public formControlConfigs: FormcontrolSimpleConfig[] = [
     {
@@ -141,6 +141,12 @@ export class ManageCareComponent {
       formControl: this.formGroup.get('time_between') as FormControl,
       inputType: 'text',
       placeholder: 'care.form.enter_time_between'
+    },
+    {
+      label: 'care.form.description',
+      formControl: this.formGroup.get('description') as FormControl,
+      inputType: 'text',
+      placeholder: 'care.form.enter_description'
     }
   ].map(item => ({
     ...item,
@@ -173,7 +179,8 @@ export class ManageCareComponent {
         sessions: formValue.sessions ?? 0,
         price: formValue.price ?? 0,
         duration: formValue.duration ?? '',
-        time_between: formValue.time_between ?? ''
+        time_between: formValue.time_between ?? '',
+        description: formValue.description ?? ''
       };
 
       this.securityService.addCare(createdCare).subscribe()
@@ -197,7 +204,8 @@ export class ManageCareComponent {
         sessions: formValue.sessions ?? 0,
         price: formValue.price ?? 0,
         duration: formValue.duration ?? '',
-        time_between: formValue.time_between ?? ''
+        time_between: formValue.time_between ?? '',
+        description: formValue.description ?? ''
       };
 
       this.securityService.editCare(updatedCare).subscribe(response => {

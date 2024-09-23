@@ -13,7 +13,9 @@ export class CareUtils{
       category: dto.category,
       zone: dto.zone,
       duration: dto.duration,
-      price: dto.price
+      price: dto.price,
+      description: dto.description
+
     }
   }
 
@@ -27,7 +29,8 @@ export class CareUtils{
       category: "",
       zone: "",
       duration: "",
-      price: 0
+      price: 0,
+      description: ""
     }
   }
 
@@ -41,7 +44,8 @@ export class CareUtils{
       category: business.category,
       zone: business.zone,
       duration: business.duration,
-      price: business.price
+      price: business.price,
+      description: business.description
     }
   }
 
@@ -55,7 +59,8 @@ export class CareUtils{
       category: "",
       zone: "",
       duration: "",
-      price: 0
+      price: 0,
+      description: ""
     }]
   }
 

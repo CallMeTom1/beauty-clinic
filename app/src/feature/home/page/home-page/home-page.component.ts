@@ -20,6 +20,8 @@ import {CarouselLandingComponent} from "../../../shared/ui/carousel-landing/caro
 import {CareCardConfig} from "../../../shared/ui/care-card/care-card.config";
 import {CareSliderComponent} from "../../component/care-slider/care-slider.component";
 import {PresentationComponent} from "../../component/presentation/presentation.component";
+import {SocialsAndThemeComponent} from "../../../shared/ui/socials-and-theme/socials-and-theme.component";
+import {LoginComponent} from "../../../security/component/login/login.component";
 
 @Component({
   selector: 'app-home-page',
@@ -38,7 +40,9 @@ import {PresentationComponent} from "../../component/presentation/presentation.c
     FormComponent,
     CarouselLandingComponent,
     CareSliderComponent,
-    PresentationComponent
+    PresentationComponent,
+    SocialsAndThemeComponent,
+    LoginComponent
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'

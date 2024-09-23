@@ -10,4 +10,5 @@ export interface EditCarePayload extends Payload{
   price: number;
   duration: string;
   time_between: string;
+  description: string;
 }
