@@ -7,7 +7,7 @@ import {SecurityService, UserNavigationComponent} from "@feature-security";
 import {headerNav} from "@feature-home";
 import {AppNode, AppRoutes} from "@shared-routes";
 import {FooterComponent} from "../../../shared/ui/footer/footer.component";
-import {ThemeService} from "../../../shared/ui/theme-toggler/theme-toggler.service";
+import {ThemeService} from "../../../shared/ui/theme.service";
 import {SocialsAndThemeComponent} from "../../../shared/ui/socials-and-theme/socials-and-theme.component";
 
 @Component({
@@ -39,7 +39,7 @@ export class HomeRouterComponent {
   protected title2: string = 'By Françoise';
   protected appointmentBtn: string = 'home-feature-take-appointment-btn';
   protected brand: string = 'Beauty Clinic By Françoise';
-  protected signinBtn: string = 'home-feature-nav-login-btn';
+  protected signinBtn: string = 'home-feature-nav-google-login-btn';
   protected signupBtn: string = 'home-feature-nav-signup-btn';
   protected logoSrc: string = 'assets/pictures/dark-logo.png';
   protected width: string= '100';

@@ -1,88 +1,41 @@
-
-
 section {
-  flex: 2;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
+  background: red;
 
-  h2 {
-    font-size: 20px;
-    color: var(--theme-primary);
-    align-self: flex-start;
-    margin-bottom: 15px;
-    font-weight: bold;
-  }
-
-
-  .separator{
-    border-top: 1px solid var(--theme-dark-clear);
-
-  }
   .form-area {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    width: 400px;
+    gap: 8px; /* Espace entre chaque champ de formulaire */
+    width: 100%; /* Largeur à 100% pour responsive */
+    padding: 20px;
     border: 1px solid var(--theme-dark-clear);
     border-radius: 12px;
-    overflow: hidden;
-    border-top: 1px solid var(--theme-dark-clear);
+    background: white; /* Ajout d'un fond blanc à la zone de formulaire */
 
-    .input {
-      display: flex;
-      flex-direction: row;
-      text-align: left;
-
-      height: var(--var-security-input-height) ;
-
-
-      app-floating-label-input {
-        flex: 1;
-      }
+    button {
+      width: 100%;
+      padding: 10px 15px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      color: black;
+      border: solid 1px black;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
-  }
-  .icon{
-    min-width: var(--var-security-input-height);
-    width: var(--var-security-input-height);
-    height: var(--var-security-input-height);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: var(--theme-label-text);
-    cursor: pointer;
-    transition: all .3s ease;
-    padding: 10px;
-    &:hover{
-      background: var(--theme-standard-bg-hover);
-      color: var(--theme-standard-text-hover)
+    button:hover {
+      background-color: orange;
     }
 
+    button:disabled {
+      background-color: var(--theme-disabled-btn-bg);
+      cursor: not-allowed;
+    }
   }
-  .icon.disabled i {
-    color: var(--theme-secondary);
-    cursor: default;
-    opacity: 0.7;
-  }
-
 }
-
-
-
-.input.with-icon.disabled .icon {
-  cursor: default;
-  background: #f2f2f2;
-  color: var(--theme-secondary);
-}
-
-.input.with-icon.disabled .icon i {
-  color: var(--theme-blue);
-  opacity: 0.7;
-}
-
-
-

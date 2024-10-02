@@ -1,8 +1,9 @@
 <div class="signup-page">
-  <div class="logo-container">
+  <div class="signup-page__header">
     <img class="logo-image" [ngSrc]="logoSrc" [height]="height" [width]="width" [alt]="alt">
-    <h1>{{ brand }}</h1>
+    <h1>{{brand}}</h1>
   </div>
+  <h2>Inscrivez-vous pour continuer</h2>
   <div class="form-container">
     <app-security-form [formGroup]="formGroup" [title]="title | translate" [redirect]="redirect | translate"
                        [config]="formControlConfigs" (initiateSubmit)="onSubmit()" (redirectSignup)="handleRedirect()">
@@ -17,16 +18,16 @@
         </div>
       }
     </div>
-    <div class="text-with-lines">{{or | translate}}</div>
-    <div class="social-btn">
-      <button class="btn-primary gap10px" (click)="googleSign()">
-        <i class="fa-brands fa-google"></i>
-        <span class="gl-text">{{googleBtn | translate}}</span>
-      </button>
+    <div class="text-with-lines">
+      <div class="line"></div>
+      <span class="text">{{or | translate}}</span>
+      <div class="line"></div>
     </div>
   </div>
+  <div class="signin">
+    <p>{{already | translate}}</p>
+    <p class="link" (click)="handleRedirect()">{{connect | translate}}</p>
+  </div>
 </div>
-<div class="signin">
-  <p>{{already | translate}}</p>
-  <p class="link" (click)="handleRedirect()">{{connect | translate}}</p>
-</div>
+<app-google-button></app-google-button>
+

@@ -6,7 +6,7 @@ import { ConfigKey, configManager } from '@common/config';
 import { Builder } from 'builder-pattern';
 import {ulid} from "ulid";
 import {TokenGenerationException, UserNotFoundException} from "@feature/security/security.exception";
-import {Token} from "@feature/security/data";
+import {Role, Token} from "@feature/security/data";
 import {Credential} from "@feature/security/data";
 
 @Injectable()
@@ -18,16 +18,21 @@ export class TokenService {
 
     async getTokens(credential: Credential): Promise<any> {
         try {
+
             await this.deleteFor(credential)
-            const payload = {
+
+            const payload: {sub: string, roles: Role[]} = {
                 sub: credential.credential_id,
                 roles: [credential.role]
             };
+
+            //générer le token
             const token: string = this.jwtService.sign(payload, {
                 secret: configManager.getValue(ConfigKey.JWT_TOKEN_SECRET),
                 expiresIn: configManager.getValue(ConfigKey.JWT_TOKEN_EXPIRE_IN)
             });
 
+            //générer le refresh token
             const refreshToken: string = this.jwtService.sign(payload, {
                 secret: configManager.getValue(ConfigKey.JWT_REFRESH_TOKEN_SECRET),
                 expiresIn: configManager.getValue(ConfigKey.JWT_REFRESH_TOKEN_EXPIRE_IN)
@@ -60,6 +65,17 @@ export class TokenService {
             throw new TokenGenerationException();
         }
     }
+
+    async revokeToken(token: string, tokenTypeHint?: string): Promise<void> {
+        // Recherche du token dans la base de données
+        const tokenEntity = await this.repository.findOne({ where: { token: token } });
+
+        if (tokenEntity) {
+            // Suppression ou marquage comme révoqué
+            await this.repository.remove(tokenEntity);
+        }
+    }
+
 
 
     async deleteFor(credential: Credential): Promise<void> {

@@ -1,0 +1,38 @@
+.input {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Espace entre le label et l'input */
+
+  .floating-label {
+    font-size: 14px;
+    color: var(--theme-primary); /* Couleur du label */
+    margin-bottom: 5px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .floating-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px; /* Taille du texte de l'input */
+    background: transparent;
+    color: var(--theme-input-text); /* Couleur du texte dans l'input */
+    border: 2px solid var(--theme-secondary); /* Bordure par défaut */
+    border-radius: 10px;
+    transition: border-color 0.3s ease, border-width 0.3s ease;
+  }
+
+  /* Effet de focus: La bordure devient plus épaisse et change de couleur */
+  .floating-input:focus {
+    border-color: var(--theme-primary); /* Change la couleur de la bordure au focus */
+    border-width: 3px; /* Épaissit la bordure */
+    outline: none; /* Supprime l'effet de contour par défaut du navigateur */
+  }
+
+  /* Placeholder en focus */
+  .floating-input::placeholder {
+    color: var(--theme-placeholder-color); /* Couleur du placeholder */
+    opacity: 0.7;
+  }
+
+}

@@ -12,6 +12,7 @@ import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {AppRoutes} from "@shared-routes";
 import {MailService} from "@feature-home";
 import {SignupForm} from "../../interface";
+import {GoogleButtonComponent} from "../../component/google-button/google-button.component";
 
 @Component({
   selector: 'app-sign-up-page',
@@ -25,28 +26,27 @@ import {SignupForm} from "../../interface";
     LabelWithParamComponent,
     LabelWithParamDirective,
     SecurityFormComponent,
-    NgOptimizedImage
+    NgOptimizedImage,
+    GoogleButtonComponent,
   ],
   templateUrl: './sign-up-page.component.html',
   styleUrls: ['./sign-up-page.component.scss']
 })
 export class SignUpPageComponent {
 
-
   private readonly securityService: SecurityService = inject(SecurityService);
   private readonly mailService: MailService = inject(MailService);
   protected readonly translateService: TranslateService = inject(TranslateService);
 
-
-  protected logoSrc: string = 'assets/pictures/dark-logo.png';
+  protected logoSrc: string = './assets/icon/logo-beauty-clinic.svg';
   protected alt: string = 'brand logo';
   protected height: string = '50';
   protected width: string = '50';
-  protected brand: string = 'Coinify'
+  protected brand: string = 'Izzy Beauty'
   protected title:string='security-feature-sign-up-page-title';
   protected redirect: string= 'security-feature-sign-up-page-redirect';
   private initialMail: string | null = this.mailService.mailHome$() || '';
-  private signUpPayload: SignupPayload = { username:'', password: '', mail:'', phoneNumber: '', firstname: '', lastname: '' };
+  private signUpPayload: SignupPayload = { password: '', mail:'' };
   protected or: string = 'security-feature-signup-or';
   protected googleBtn: string = 'security-feature-signup-googleBtn';
   protected already: string = 'security-feature-signup-already-account';
@@ -55,11 +55,6 @@ export class SignUpPageComponent {
   public formError$: WritableSignal<FormError[]> = signal([]);
 
   public formGroup: FormGroup<SignupForm> = new FormGroup<SignupForm>({
-    username: new FormControl(this.signUpPayload.username, [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(25)
-    ]),
     mail: new FormControl(this.signUpPayload.mail || this.initialMail, [
       Validators.required,
       Validators.email,
@@ -71,31 +66,9 @@ export class SignUpPageComponent {
       Validators.minLength(10),
       Validators.maxLength(25)
     ]),
-    phoneNumber: new FormControl(this.signUpPayload.phoneNumber, [
-      Validators.required,
-      Validators.pattern('^[0-9]+$'),
-      Validators.minLength(10),
-      Validators.maxLength(15)
-    ]),
-    firstname: new FormControl(this.signUpPayload.firstname, [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(25)
-    ]),
-    lastname: new FormControl(this.signUpPayload.lastname, [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(25)
-    ])
   });
 
   public formControlConfigs: FormcontrolSimpleConfig[] = [
-    {
-      label: this.translateService.instant('form.username.label'),
-      formControl: this.formGroup.get('username') as FormControl,
-      inputType: 'text',
-      placeholder: this.translateService.instant('form.username.placeholder')
-    },
     {
       label: this.translateService.instant('form.password.label'),
       formControl: this.formGroup.get('password') as FormControl,
@@ -107,24 +80,6 @@ export class SignUpPageComponent {
       formControl: this.formGroup.get('mail') as FormControl,
       inputType: 'email',
       placeholder: this.translateService.instant('form.mail.placeholder')
-    },
-    {
-      label: this.translateService.instant('form.phoneNumber.label'),
-      formControl: this.formGroup.get('phoneNumber') as FormControl,
-      inputType: 'tel',
-      placeholder: this.translateService.instant('form.phoneNumber.placeholder')
-    },
-    {
-      label: this.translateService.instant('form.firstname.label'),
-      formControl: this.formGroup.get('firstname') as FormControl,
-      inputType: 'text',
-      placeholder: this.translateService.instant('form.firstname.placeholder')
-    },
-    {
-      label: this.translateService.instant('form.lastname.label'),
-      formControl: this.formGroup.get('lastname') as FormControl,
-      inputType: 'text',
-      placeholder: this.translateService.instant('form.lastname.placeholder')
     }
   ];
 
@@ -138,15 +93,11 @@ export class SignUpPageComponent {
 
   onSubmit(): void {
     if (this.formGroup.valid) {
-      const { username, password, mail, firstname, phoneNumber, lastname } = this.formGroup.value;
+      const { password, mail } = this.formGroup.value;
 
       const signUpPayload: SignupPayload = {
-        username: username || '',
         password: password || '',
-        mail: mail || '',
-        firstname: firstname || '',
-        lastname: lastname || '',
-        phoneNumber: phoneNumber || '',
+        mail: mail || ''
       };
 
       this.securityService.SignUp(signUpPayload).subscribe();

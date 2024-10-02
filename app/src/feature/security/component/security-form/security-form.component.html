@@ -1,18 +1,14 @@
 <section id="wrapper">
-    <h2>{{title | translate}}</h2>
     <div class="form-area">
       @for(input of config; let last=$last;let index=$index; track index){
         <div class="input">
           <app-floating-label-input [config]="input"></app-floating-label-input>
           @if(last){
-            <div class="icon" (click)="formGroup.valid && triggerFormSubmission()">
-              <i class="{{icon}}"></i>
+            <div (click)="formGroup.valid && triggerFormSubmission()">
+              <button> Create account </button>
             </div>
           }
         </div>
-        @if(!last){
-          <div class="separator"></div>
-        }
       }
     </div>
 </section>

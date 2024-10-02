@@ -29,9 +29,11 @@
   </table>
   @if(showCreateModal){
     <app-modal [title]="modal_add_title | translate" (close)="handleClose()">
+      <!--
       <app-form [formGroup]="formGroup" [title]="'title' | translate"
                 [config]="formControlConfigs">
       </app-form>
+      -->
       <!-- Submit and Cancel buttons -->
       <div class="modal-footer">
         <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>

@@ -14,7 +14,7 @@ export const securityRoutes: Routes = [
     path: AppNode.SIGNUP,
     loadComponent: () => import('./page/sign-up-page/sign-up-page.component')
       .then(c => c.SignUpPageComponent),
-    canActivate: [CanSignGuard()]
+    //canActivate: [CanSignGuard()]
 
   },
   {

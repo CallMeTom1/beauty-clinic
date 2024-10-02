@@ -14,6 +14,11 @@ export const homeRoutes: Routes = [
           .then(c => c.HomePageComponent),
       },
       {
+        path: 'test',
+        loadComponent: () => import('./page/test-page/test-page.component')
+          .then(c => c.TestPageComponent),
+      },
+      {
         path: AppNode.CARE,
         loadChildren: () => import('../care/care.routes')
           .then(m => m.careRoutes),

@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {environment} from "@env";
 
 declare var google: any;
 
 @Component({
+  selector: 'app-google-button',
   standalone: true,
-  selector: 'app-login',
-  template: `<div id="google-signin-button"></div>`,
-  styleUrls: ['./login.component.css']
+  imports: [],
+  templateUrl: './google-button.component.html',
+  styleUrl: './google-button.component.scss'
 })
-export class LoginComponent implements OnInit {
-
+export class GoogleButtonComponent {
   ngOnInit() {
     // Initialiser Google Sign-In
     google.accounts.id.initialize({
@@ -57,5 +57,4 @@ export class LoginComponent implements OnInit {
         console.error('Error sending credential to server:', error);
       });
   }
-
 }

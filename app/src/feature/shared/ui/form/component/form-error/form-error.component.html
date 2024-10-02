@@ -1,0 +1,23 @@
+@if(control && control.errors){
+  <div>
+    @for(errorKey of getErrorKeys(control.errors); track errorKey){
+      <div>
+        @if(control.errors[errorKey]?.requiredLength){
+          <span>
+          {{ 'form.errors.' + errorKey | translate:{minlength: control.errors[errorKey]?.requiredLength} }}
+          </span>
+        }
+        @if(control.errors[errorKey]?.maxLength){
+          <span>
+          {{ 'form.errors.' + errorKey | translate:{maxlength: control.errors[errorKey]?.maxLength} }}
+          </span>
+        }
+        @if(!control.errors[errorKey]?.requiredLength && !control.errors[errorKey]?.maxLength){
+          <span>
+          {{ 'form.errors.' + errorKey | translate }}
+          </span>
+        }
+      </div>
+    }
+  </div>
+}

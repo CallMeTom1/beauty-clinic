@@ -42,9 +42,11 @@
   </table>
   @if(showEditModal){
     <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
+      <!--
       <app-form [formGroup]="formGroup" [title]="'title' | translate"
                 [config]="formControlConfigs">
       </app-form>
+      -->
       <!-- Submit and Cancel buttons -->
       <div class="modal-footer">
         <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>

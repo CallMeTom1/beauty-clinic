@@ -12,16 +12,13 @@ import {HomeHeaderComponent} from "../../component/home-header/home-header.compo
 import {HomeIntroConfigCard} from "../../../shared/ui/home-intro-card/home-intro-config.interface";
 import {HomeIntroCardComponent} from "../../../shared/ui/home-intro-card/home-intro-card.component";
 import {CareTrendCardComponent} from "../../../shared/ui/care-trend-card/care-trend-card.component";
-import {FormComponent} from "../../../shared/ui/form/component/form/form.component";
 import {ContactForm} from "../../data/interface/contact-form.interface";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CareCategory} from "../../../care/enum/care-category.enum";
 import {CarouselLandingComponent} from "../../../shared/ui/carousel-landing/carousel-landing.component";
-import {CareCardConfig} from "../../../shared/ui/care-card/care-card.config";
 import {CareSliderComponent} from "../../component/care-slider/care-slider.component";
 import {PresentationComponent} from "../../component/presentation/presentation.component";
 import {SocialsAndThemeComponent} from "../../../shared/ui/socials-and-theme/socials-and-theme.component";
-import {LoginComponent} from "../../../security/component/login/login.component";
 
 @Component({
   selector: 'app-home-page',
@@ -37,12 +34,10 @@ import {LoginComponent} from "../../../security/component/login/login.component"
     HomeHeaderComponent,
     HomeIntroCardComponent,
     CareTrendCardComponent,
-    FormComponent,
     CarouselLandingComponent,
     CareSliderComponent,
     PresentationComponent,
     SocialsAndThemeComponent,
-    LoginComponent
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'

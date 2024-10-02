@@ -3,7 +3,6 @@ import { CurrencyPipe, NgForOf, NgIf } from "@angular/common";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Care } from "../../../care/data/model/care.business";
 import { ModalComponent } from "../../../shared/ui/modal/modal/modal.component";
-import { FormComponent } from "../../../shared/ui/form/component/form/form.component";
 import { CareForm } from "../../../care/care-form.interface";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import { FormcontrolSimpleConfig, FormError, handleFormError, LabelWithParamComponent, LabelWithParamPipe } from "@shared-ui";
@@ -24,7 +23,6 @@ import {DeleteCarePayload} from "../../../security/data/payload/care/delete-care
     CurrencyPipe,
     ModalComponent,
     NgIf,
-    FormComponent,
     LabelWithParamComponent,
     LabelWithParamPipe,
     TranslateModule,

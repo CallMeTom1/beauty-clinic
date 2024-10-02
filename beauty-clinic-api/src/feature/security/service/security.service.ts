@@ -51,7 +51,7 @@ export class SecurityService {
 
     async userDetail(userId: string, token: string): Promise<{ user: UserDetails }> {
         const userDetails: User = await this.userService.findUserById(userId);
-        if(!userDetails){
+        if(isNil(userDetails)){
             throw new UserNotFoundException();
         }
 
@@ -199,6 +199,10 @@ export class SecurityService {
 
     async refresh(token: string): Promise<Token | null> {
         return this.tokenService.refresh(token);
+    }
+
+    async revokeToken(token: string): Promise<void> {
+        return this.tokenService.revokeToken(token);
     }
 
     async delete(id: string): Promise<void> {

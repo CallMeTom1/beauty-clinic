@@ -14,7 +14,6 @@ import {DeleteHolidayPayload} from "../../../security/data/payload/holiday/delet
 import {Holiday} from "../../../holiday/data/model/holiday.business";
 import {DatePipe} from "@angular/common";
 import {ModalComponent} from "../../../shared/ui/modal/modal/modal.component";
-import {FormComponent} from "../../../shared/ui/form/component/form/form.component";
 
 @Component({
   selector: 'app-manage-holiday',
@@ -23,7 +22,6 @@ import {FormComponent} from "../../../shared/ui/form/component/form/form.compone
     TranslateModule,
     DatePipe,
     ModalComponent,
-    FormComponent,
     LabelWithParamPipe,
     LabelWithParamComponent
   ],

@@ -434,6 +434,40 @@
       "relaxation": "Relaxation",
       "skincare": "Soins de la peau"
     }
+  },
+  "form": {
+    "username": {
+      "label": "Nom d'utilisateur",
+      "placeholder": "Entrez votre nom d'utilisateur"
+    },
+    "password": {
+      "label": "Mot de passe",
+      "placeholder": "Entrez votre mot de passe"
+    },
+    "mail": {
+      "label": "Adresse e-mail",
+      "placeholder": "Entrez votre adresse e-mail"
+    },
+    "phoneNumber": {
+      "label": "Numéro de téléphone",
+      "placeholder": "Entrez votre numéro de téléphone"
+    },
+    "firstname": {
+      "label": "Prénom",
+      "placeholder": "Entrez votre prénom"
+    },
+    "lastname": {
+      "label": "Nom de famille",
+      "placeholder": "Entrez votre nom de famille"
+    },
+    "errors": {
+      "required": "Ce champ est requis.",
+      "minlength": "Ce champ doit comporter au moins {minlength} caractères.",
+      "maxlength": "Ce champ doit comporter au maximum {maxlength} caractères.",
+      "email": "Veuillez entrer une adresse e-mail valide.",
+      "passwordMismatch": "Les mots de passe ne correspondent pas."
+    }
   }
+
 }
 

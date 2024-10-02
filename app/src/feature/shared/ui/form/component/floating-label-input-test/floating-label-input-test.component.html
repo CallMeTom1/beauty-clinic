@@ -1,27 +1,16 @@
-<div class="floating-label-input">
-  <ng-container *ngIf="formControlAsFormControl">
-    <ng-container [ngSwitch]="config.inputType">
-      <input *ngSwitchCase="'text'"
-             [formControl]="formControlAsFormControl"
-             [placeholder]="config.placeholder"
-             (focus)="inputFocus=true"
-             (blur)="inputFocus=false">
+<div class="input" >
+  <label class="floating-label"
+         [class.fixed-label]="inputFocus || config.formControl.value.length > 0">{{ config.label }}</label>
+  <input class="floating-input"
+         [formControl]="config.formControl"
+         [type]="config.inputType"
+         [placeholder]="config.placeholder"
+         autocomplete="new-password"
+         (focus)="inputFocus=true"
+         (blur)="inputFocus=false"  >
 
-      <input *ngSwitchCase="'email'"
-             [formControl]="formControlAsFormControl"
-             [placeholder]="config.placeholder"
-             (focus)="inputFocus=true"
-             (blur)="inputFocus=false">
 
-      <!-- Autres types d'inputs -->
-    </ng-container>
+  <app-form-error [control]="config.formControl"></app-form-error>
 
-    <!-- Messages d'erreur personnalisés -->
-    <div *ngIf="formControlAsFormControl?.invalid && formControlAsFormControl?.touched" class="error-message">
-      <span *ngIf="formControlAsFormControl?.errors?.['required']">{{ config.validationMessages?.required }}</span>
-      <span *ngIf="formControlAsFormControl?.errors?.['minlength']">{{ config.validationMessages?.minlength }}</span>
-      <span *ngIf="formControlAsFormControl?.errors?.['maxlength']">{{ config.validationMessages?.maxlength }}</span>
-      <span *ngIf="formControlAsFormControl?.errors?.['email']">{{ config.validationMessages?.email }}</span>
-    </div>
-  </ng-container>
 </div>
+

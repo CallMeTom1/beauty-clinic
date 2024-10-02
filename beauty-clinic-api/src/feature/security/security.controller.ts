@@ -1,12 +1,12 @@
-import {Body, Controller, Get, HttpCode, Param, Post, Put, Req, Res, UseGuards,} from '@nestjs/common';
+import {Body, Controller, Get, HttpCode, Post, Put, Req, Res, UseGuards,} from '@nestjs/common';
 import {ApiBearerAuth, ApiTags} from '@nestjs/swagger';
 import {Request, Response} from 'express';
 import {ApiCodeResponse} from '@common/api';
 import {UserRequest} from "@common/config/metadata/user-req.interface";
-import {SignInPayload, SignsocialPayload, SignupPayload, Token, UserDetails} from "@feature/security/data";
+import {SignInPayload, SignupPayload, Token, UserDetails} from "@feature/security/data";
 import {Public, UserReq} from "@common/config/metadata";
 import {AUTH_COOKIE_NAME} from "@common/config";
-import {FacebookGuard, GoogleAuthGuard} from "@feature/security/guard";
+import {FacebookGuard} from "@feature/security/guard";
 import {SecurityService} from "@feature/security/service/security.service";
 import {ChangePasswordPayload} from "@feature/security/data/payload/change-password.payload";
 import {ForgotPasswordPayload} from "@feature/security/data/payload/forgot-password.payload";
@@ -37,10 +37,11 @@ export class SecurityController {
             res.send({
                 result: true,
                 code: ApiCodeResponse.COMMON_SUCCESS,
-                data: token
+                data: null
             });
         }
     }
+
     @Public()
     @Post('signup')
     @HttpCode(200)
@@ -57,7 +58,7 @@ export class SecurityController {
             res.send({
                 result: true,
                 code: ApiCodeResponse.COMMON_SUCCESS,
-                data: token
+                data: null
             });
         }
     }
@@ -84,15 +85,20 @@ export class SecurityController {
         }
     }
 
+    @Post('revoke')
+    async revokeToken(@UserReq() request: UserRequest): Promise<void> {
+        await this.service.revokeToken(request.token);
+    }
+
     @Get('me')
     public async me(@UserReq() user: UserRequest):Promise<{user: UserDetails}> {
         return await this.service.userDetail(user.idUser, user.token);
     }
+
     @UseGuards(FacebookGuard)
     @Public()
-    @Get('facebook/login')
+    @Get('facebook/google-login')
     public loginFacebook(): void { }
-
 
     @Public()
     @Post('google-signin')

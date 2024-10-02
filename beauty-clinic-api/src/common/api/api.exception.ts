@@ -1,6 +1,7 @@
 import {HttpException, ValidationError} from '@nestjs/common';
 import {ApiCodeResponse} from "@common/api/enum";
-export class ApiException extends HttpException{
+
+export class ApiException extends HttpException {
     constructor(code:ApiCodeResponse, status:number) {
         super({
             code: code,
@@ -9,6 +10,7 @@ export class ApiException extends HttpException{
         }, status);
     }
 }
+
 export class ValidationException extends HttpException {
     constructor(errors: ValidationError[]) {
         console.log(errors);

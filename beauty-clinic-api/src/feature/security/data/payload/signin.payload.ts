@@ -23,7 +23,7 @@ export class SignInPayload {
     @IsString({ message: ApiCodeResponse.SIGNIN_PAYLOAD_FACEBOOK_HASH_IS_NOT_STRING })
     facebookHash?: string;
 
-    @ApiProperty({ description: 'Indicates if it is a social login' })
+    @ApiProperty({ description: 'Indicates if it is a social google-login' })
     @IsOptional()
     @IsBoolean({ message: ApiCodeResponse.SIGNIN_PAYLOAD_SOCIAL_LOGIN_IS_NOT_BOOLEAN })
     socialLogin: boolean;

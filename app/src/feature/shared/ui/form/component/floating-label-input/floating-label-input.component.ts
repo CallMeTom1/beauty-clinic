@@ -1,13 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { ReactiveFormsModule } from "@angular/forms";
 import {FormcontrolSimpleConfig} from "../../data";
-import {NgForOf, NgSwitch, NgSwitchCase} from "@angular/common";
-import {TranslateModule} from "@ngx-translate/core";
+import {FormErrorComponent} from "../form-error/form-error.component";
 
 @Component({
   selector: 'app-floating-label-input',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSwitch, NgSwitchCase, TranslateModule, NgForOf],
+  imports: [ReactiveFormsModule, FormErrorComponent],
   templateUrl: './floating-label-input.component.html',
   styleUrls: ['./floating-label-input.component.scss']
 })

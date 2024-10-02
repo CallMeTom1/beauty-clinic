@@ -5,6 +5,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {Language} from "@shared-core";
 import {Title} from "@angular/platform-browser";
 import {OverlayComponent} from "../../shared/ui/overlay-grid/overlay.component";
+import {ThemeService} from "../../shared/ui/theme.service";
 
 @Component({ selector: 'component-root',
     standalone: true,
@@ -16,12 +17,13 @@ export class AppComponent implements OnInit {
 
   private translate: TranslateService = inject(TranslateService);
   private titleService: Title = inject(Title);
-  private title: string = 'Beauty Clinic By Françoise'
+  private themeService: ThemeService = inject(ThemeService);
+  private title: string = 'Beauty Clinic By Françoise';
 
   ngOnInit(): void {
     this.titleService.setTitle(this.title);
     this.translate.setDefaultLang(Language.FR);
     this.translate.use(Language.FR);
+    this.themeService.loadTheme();
   }
-
 }

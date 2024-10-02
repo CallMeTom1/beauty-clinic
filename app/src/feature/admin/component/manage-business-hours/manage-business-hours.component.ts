@@ -14,10 +14,8 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {BusinessHours} from "../../../business-hours/data/model/business-hours.business";
 import {ModalComponent} from "../../../shared/ui/modal/modal/modal.component";
-import {FormComponent} from "../../../shared/ui/form/component/form/form.component";
 import {BusinessStatus, BusinessStatusTranslations} from "./business-status.enum";
-import {CareZone} from "../../../care/enum/care-zone.enum";
-import {timeValidator} from "./time-validator.helper";
+
 
 @Component({
   selector: 'app-manage-business-hours',
@@ -25,7 +23,6 @@ import {timeValidator} from "./time-validator.helper";
   imports: [
     TranslateModule,
     ModalComponent,
-    FormComponent,
     LabelWithParamComponent,
     LabelWithParamPipe
   ],
@@ -118,7 +115,6 @@ export class ManageBusinessHoursComponent implements OnInit{
   loadBusinessHoursDetails(businessHours: BusinessHours): void {
     this.currentDayOfWeek = businessHours.day_of_week;
     const isOpenString = businessHours.is_open ? 'Open' : 'Closed';
-
 
 
     // Patch the form with the selected business hour's values

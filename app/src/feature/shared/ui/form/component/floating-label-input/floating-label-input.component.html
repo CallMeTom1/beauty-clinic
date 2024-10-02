@@ -1,63 +1,13 @@
-<div class="input">
-  <ng-container [ngSwitch]="config.inputType">
-    <!-- Input Field -->
-    <input *ngSwitchCase="'text'"
-           class="floating-input"
-           [formControl]="config.formControl"
-           [type]="config.inputType"
-           [placeholder]="config.placeholder"
-           autocomplete="new-password"
-           (focus)="inputFocus=true"
-           (blur)="inputFocus=false">
-
-    <!-- Number Input -->
-    <input *ngSwitchCase="'number'"
-           class="floating-input"
-           [formControl]="config.formControl"
-           [type]="config.inputType"
-           [placeholder]="config.placeholder"
-           autocomplete="new-password"
-           (focus)="inputFocus=true"
-           (blur)="inputFocus=false">
-
-    <!-- Select Dropdown -->
-    <select *ngSwitchCase="'select'"
-            class="floating-select"
-            [formControl]="config.formControl"
-            (focus)="inputFocus=true"
-            (blur)="inputFocus=false">
-      <option *ngFor="let option of config.options" [value]="option.value">
-        {{ option.label | translate }}
-      </option>
-    </select>
-
-    <!-- Time Input -->
-    <input *ngSwitchCase="'time'"
-           class="floating-input"
-           [formControl]="config.formControl"
-           [type]="config.inputType"
-           [placeholder]="config.placeholder"
-           autocomplete="new-password"
-           (focus)="inputFocus=true"
-           (blur)="inputFocus=false">
-
-    <!-- Date Input -->
-    <input *ngSwitchCase="'date'"
-           class="floating-input"
-           [formControl]="config.formControl"
-           [type]="config.inputType"
-           [placeholder]="config.placeholder"
-           autocomplete="new-password"
-           (focus)="inputFocus=true"
-           (blur)="inputFocus=false">
-
-
-
-
-  </ng-container>
-
+<div class="input" >
+  <input class="floating-input"
+         [formControl]="config.formControl"
+         [type]="config.inputType"
+         [placeholder]="config.placeholder"
+         autocomplete="new-password"
+         (focus)="inputFocus=true"
+         (blur)="inputFocus=false"  >
   <label class="floating-label"
-         [class.fixed-label]="inputFocus || config.formControl.value.length > 0">
-    {{ config.label! | translate }}
-  </label>
+         [class.fixed-label]="inputFocus || config.formControl.value.length > 0">{{ config.label }}</label>
+
 </div>
+
