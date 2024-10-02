@@ -1,0 +1,14 @@
+/* Style pour le conteneur des messages d'erreur */
+.error-message {
+  color: var(--theme-error-color); /* Couleur rouge pour les erreurs */
+  font-style: italic; /* Texte en italique */
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Espace entre l'icône et le texte */
+}
+
+/* Style de l'icône Font Awesome */
+.error-message i {
+  color: var(--theme-error-color); /* La même couleur que le texte */
+  font-size: 1.2em; /* Légèrement plus grande que le texte */
+}

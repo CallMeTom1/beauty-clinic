@@ -1,21 +1,22 @@
-@if(control && control.errors){
+@if(control && control.errors && control.touched){
   <div>
     @for(errorKey of getErrorKeys(control.errors); track errorKey){
-      <div>
+      <div class="error-message">
+        <i class="fa-thin fa-circle-exclamation"></i> <!-- Icône ajoutée avant le message -->
         @if(control.errors[errorKey]?.requiredLength){
-          <span>
-          {{ 'form.errors.' + errorKey | translate:{minlength: control.errors[errorKey]?.requiredLength} }}
-          </span>
+          <em> <!-- Texte en italique -->
+            {{ 'form.errors.' + errorKey | translate:{minlength: control.errors[errorKey]?.requiredLength} }}
+          </em>
         }
         @if(control.errors[errorKey]?.maxLength){
-          <span>
-          {{ 'form.errors.' + errorKey | translate:{maxlength: control.errors[errorKey]?.maxLength} }}
-          </span>
+          <em> <!-- Texte en italique -->
+            {{ 'form.errors.' + errorKey | translate:{maxlength: control.errors[errorKey]?.maxLength} }}
+          </em>
         }
         @if(!control.errors[errorKey]?.requiredLength && !control.errors[errorKey]?.maxLength){
-          <span>
-          {{ 'form.errors.' + errorKey | translate }}
-          </span>
+          <em> <!-- Texte en italique -->
+            {{ 'form.errors.' + errorKey | translate }}
+          </em>
         }
       </div>
     }
