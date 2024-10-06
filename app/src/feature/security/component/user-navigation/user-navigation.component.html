@@ -5,13 +5,12 @@
     @if(dropOpen){
       <nav class="dropdown-nav">
         <ul class="dropdown-list">
-
           <li class="dropdown-item profile">
             <app-user-avatar></app-user-avatar>
             <div class="profile-info">
-              <span class="profile-name">Florence</span>
+              <span class="profile-name">{{securityService.account$().firstname}}</span>
               <br>
-              <span class="profile-name">Shawn</span>
+              <span class="profile-name">{{securityService.account$().lastname}}</span>
             </div>
           </li>
 
@@ -29,7 +28,6 @@
             <i class="fa-thin fa-arrow-right-from-bracket icon"></i>
             <span class="text">{{ logOut | translate }}</span>
           </li>
-
         </ul>
       </nav>
     }

@@ -1,7 +1,6 @@
 import {Routes} from "@angular/router";
-import {CanSignGuard, WalletGuard} from "./guard";
+import {CanSignGuard} from "./guard";
 import {AppNode} from "@shared-routes";
-import {ProfileAndWalletGuard} from "./guard";
 
 export const securityRoutes: Routes = [
   {
@@ -21,12 +20,16 @@ export const securityRoutes: Routes = [
     path: AppNode.PROFILE,
     loadComponent: () => import('./page/profile-page/profile-page.component')
       .then(c => c.ProfilePageComponent),
-    canActivate: [ProfileAndWalletGuard()]
   },
   {
-    path: ':token',
-    loadComponent: () => import('./page/reset-password-page/reset-password-page.component')
-      .then(c => c.ResetPasswordPageComponent),
+    path:'verify-email',
+    loadComponent: () => import('./page/confirm-mail-page/confirm-mail-page.component')
+      .then(c => c.ConfirmMailPageComponent),
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./component/reset-password/reset-password.component')
+      .then(c => c.ResetPasswordComponent),
   },
   {
     path:'forgot-password',

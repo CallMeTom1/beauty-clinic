@@ -1,5 +1,6 @@
 /* Style pour le conteneur des messages d'erreur */
 .error-message {
+  margin-top: 2px;
   color: var(--theme-error-color); /* Couleur rouge pour les erreurs */
   font-style: italic; /* Texte en italique */
   display: flex;

@@ -19,22 +19,38 @@ import {
 export class TestPageComponent {
   form: FormGroup;
 
-  // Définir la configuration du champ "name" en utilisant FormcontrolSimpleConfig
-  nameConfig: FormcontrolSimpleConfig;
+  // Liste de configurations pour les champs
+  fieldConfigs: FormcontrolSimpleConfig[];
 
   constructor() {
-    // Initialisation du formulaire avec un champ "name" qui est requis
+    // Initialisation du formulaire avec plusieurs champs
     this.form = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(3)])
+      name: new FormControl('', [Validators.required, Validators.minLength(10)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8)])
     });
 
-    // Configuration du champ "name"
-    this.nameConfig = {
-      label: 'Nom',
-      formControl: this.form.get('name') as FormControl, // Lier le contrôle de formulaire
-      inputType: 'text',
-      placeholder: 'Entrez votre nom'
-    };
+    // Configuration des champs
+    this.fieldConfigs = [
+      {
+        label: 'Nom',
+        formControl: this.form.get('name') as FormControl,
+        inputType: 'text',
+        placeholder: 'Entrez votre nom'
+      },
+      {
+        label: 'Email',
+        formControl: this.form.get('email') as FormControl,
+        inputType: 'email',
+        placeholder: 'Entrez votre email'
+      },
+      {
+        label: 'Mot de passe',
+        formControl: this.form.get('password') as FormControl,
+        inputType: 'password',
+        placeholder: 'Entrez votre mot de passe'
+      }
+    ];
   }
 
   submitForm() {

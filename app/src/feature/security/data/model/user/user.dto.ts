@@ -6,6 +6,8 @@ export interface UserDto {
   lastname: string;
   role: string;
   token: string;
-  profileImage:string
+  profileImage:string;
+  profileImageUrl: string;
+  hasCustomProfileImage: boolean;
 }
 

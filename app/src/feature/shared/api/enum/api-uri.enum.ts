@@ -6,6 +6,8 @@ export enum ApiURI {
   SIGN_GOOGLE_URL= 'https://localhost:2023/api/account/google/login',
   UPLOAD_PROFILE_IMAGE= 'users/upload-profile-image',
   USER = 'users',
+  VERIFY_EMAIL = 'account/verify-email',
+  SIGN_OUT = 'account/signout',
 
   CARE='care',
   ADD_CARE='care',
@@ -20,7 +22,7 @@ export enum ApiURI {
   APPOINTMENT_AVAILABLE_SLOTS = 'appointment/available-slots',
   APPOINTMENT_UPDATE_NOTE = 'appointment/update-note',
 
-
+  CHANGE_PASSWORD = 'account/change-password',
   RESET_PASSWORD = 'account/reset-password',
   FORGOT_PASSWORD = 'account/forgot-password'
 

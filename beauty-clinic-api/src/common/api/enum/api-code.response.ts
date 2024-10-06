@@ -14,6 +14,7 @@ export enum ApiCodeResponse {
     FACEBOOK_AUTH_ERROR = 'api.security.user.facebook-auth-error',
     SOCIAL_SIGN_ERROR = 'api.security.user.social-sign-error',
     USER_NOT_FOUND = 'api.security.user.user_not_found',
+    USER_WRONG_PASSWORD = 'api.security.user.wrong_password',
     CREDENTIAL_NOT_FOUND = 'api.security.credential.not_found',
     CREDENTIAL_DELETE_ERROR = 'api.security.user.credential_delete_error',
     USER_ALREADY_EXIST = 'api.security.user.user_already_exist',

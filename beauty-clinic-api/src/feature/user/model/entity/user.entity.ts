@@ -1,4 +1,7 @@
-import {BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
+import {BaseEntity, Column, Entity, JoinColumn, OneToOne, OneToMany, PrimaryColumn} from "typeorm";
+import {Address} from "@common/model/address.entity";
+import {Cart} from "../../../cart/data/model/cart.entity";
+import { Order } from "../../../order/data/model/order.entity";  // Assure-toi d'importer l'entité Order
 
 @Entity()
 export class User extends BaseEntity {
@@ -19,4 +22,21 @@ export class User extends BaseEntity {
 
     @Column({ type: 'bytea', nullable: true })
     profileImage: Buffer;
+
+    @Column({default: false})
+    hasCustomProfileImage: boolean;
+
+    @OneToOne(() => Address)
+    @JoinColumn()
+    shippingAddress: Address;
+
+    @OneToOne(() => Address)
+    @JoinColumn()
+    billingAddress: Address;
+
+    @OneToOne(() => Cart, (cart: { user: User; }) => cart.user)  // Relation One-to-One avec Cart
+    cart: Cart;
+
+    @OneToMany(() => Order, (order) => order.user)  // Relation One-to-Many avec Order
+    orders: Order[];
 }

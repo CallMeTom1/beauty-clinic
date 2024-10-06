@@ -1,4 +1,4 @@
-import {Controller, Post, UseInterceptors, UploadedFile, Get} from '@nestjs/common';
+import {Controller, Post, UseInterceptors, UploadedFile, Get, Put, Body} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import {UserService} from "@feature/user/user.service";
@@ -6,6 +6,7 @@ import {UploadImagePayload} from "@feature/user/model/payload/upload-image.paylo
 import {UserRequest} from "@common/config/metadata/user-req.interface";
 import {UserReq} from "@common/config/metadata";
 import {User} from "@feature/user/model";
+import {ModifyUserPayload} from "@feature/user/model/payload/modify-user.payload";
 
 @ApiTags('users')
 @Controller('users')
@@ -29,6 +30,18 @@ export class UserController {
         @UserReq() request: UserRequest,
     ): Promise<any> {
         return await this.userService.updateUserProfileImage(request.idUser, file);
+    }
+
+    @Put()
+    @ApiBody({
+        description: 'Modify user information',
+        type: ModifyUserPayload,
+    })
+    async modifyUser(
+        @Body() modifyUserPayload: ModifyUserPayload,
+        @UserReq() request: UserRequest
+    ): Promise<User> {
+        return await this.userService.modifyUser(request.idUser, modifyUserPayload);
     }
 
 }

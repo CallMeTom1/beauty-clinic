@@ -12,6 +12,7 @@ import {
     InvalidFileTypeException,
     UserNotFoundException
 } from "@feature/security/security.exception";
+import {ModifyUserPayload} from "@feature/user/model/payload/modify-user.payload";
 
 @Injectable()
 export class UserService {
@@ -91,6 +92,7 @@ export class UserService {
         }
 
         user.profileImage = Buffer.from(file.buffer);
+        user.hasCustomProfileImage = true;
 
         try {
             return await this.userRepository.save(user);
@@ -102,6 +104,24 @@ export class UserService {
 
     async findOne(userId: string): Promise<User> {
         return this.userRepository.findOne({ where: { idUser: userId }, relations: ['wallets', 'wallets.assets'] });
+    }
+
+    async modifyUser(userId: string, payload: ModifyUserPayload): Promise<User> {
+        const user: User = await this.findUserById(userId);
+
+        if (!user) {
+            throw new UserNotFoundException();
+        }
+
+        user.firstname = payload.firstname || user.firstname;
+        user.lastname = payload.lastname || user.lastname;
+        user.phoneNumber = payload.phoneNumber || user.phoneNumber;
+
+        try {
+            return await this.userRepository.save(user);
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
 }

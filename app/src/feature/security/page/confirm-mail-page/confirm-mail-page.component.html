@@ -1,0 +1,27 @@
+<h1>TEST PAGE</h1>
+<div class="verification-container">
+  @if(verificationStatus ==='pending'){
+    <div class="message pending">
+      <i class="fas fa-spinner fa-spin icon" aria-label="Vérification en cours"></i>
+      <p>{{ message }}</p>
+      <!--
+      <button (click)="resendVerificationEmail()" class="btn btn-secondary">Renvoyer l'email de vérification</button>
+      -->
+    </div>
+  }
+
+  @if(verificationStatus ==='success'){
+    <div class="message success">
+      <i class="fas fa-check-circle icon" aria-label="Succès"></i>
+      <p>{{ message }}</p>
+      <button (click)="goHome()" class="btn btn-primary">Aller à la page d'accueil</button>
+    </div>
+  }
+
+  @if(verificationStatus ==='error'){
+    <div class="message error">
+      <i class="fas fa-exclamation-triangle icon" aria-label="Erreur"></i>
+      <p>{{ message }}</p>
+    </div>
+  }
+</div>

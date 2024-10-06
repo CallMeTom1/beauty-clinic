@@ -445,3 +445,14 @@ html, body {
   font-size: 15px;
   color: var(--theme-error-dark);
 }
+
+
+input[type="checkbox"] {
+  appearance: auto;
+  -webkit-appearance: checkbox; /* Pour Safari */
+  width: initial;
+  height: initial;
+  margin: initial;
+  padding: initial;
+  border: initial;
+}

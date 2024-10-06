@@ -1,6 +1,5 @@
 import {Component, ElementRef, HostListener, inject} from '@angular/core';
 import {SecurityService} from "@feature-security";
-import {RoleTransformPipe} from "@shared-ui";
 import {TranslateModule} from "@ngx-translate/core";
 import {AppRoutes} from "@shared-routes";
 import {UserAvatarComponent} from "../../../shared/ui/user-avatar/user-avatar.component";
@@ -9,7 +8,6 @@ import {UserAvatarComponent} from "../../../shared/ui/user-avatar/user-avatar.co
   selector: 'app-user-navigation',
   standalone: true,
   imports: [
-    RoleTransformPipe,
     TranslateModule,
     UserAvatarComponent
   ],
@@ -29,7 +27,11 @@ export class UserNavigationComponent {
   protected alt: string = 'security-feature-user-nav-alt'
 
   toggleDrop(): void {
-    this.dropOpen = !this.dropOpen;
+    if (!this.securityService.isAuth$()) {
+      this.securityService.navigate(AppRoutes.SIGNIN);
+    } else {
+      this.dropOpen = !this.dropOpen;
+    }
   }
 
   navigateToProfile(): void {
@@ -38,7 +40,7 @@ export class UserNavigationComponent {
   }
 
   logout(): void {
-    this.securityService.logout();
+    this.securityService.logout().subscribe();
   }
 
   @HostListener('document:click', ['$event'])

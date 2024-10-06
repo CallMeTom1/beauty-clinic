@@ -6,4 +6,6 @@ export interface UserDetails {
     firstname: string;
     lastname: string;
     phoneNumber: string;
+    profileImageUrl: string;
+    hasCustomImage: boolean;
 }

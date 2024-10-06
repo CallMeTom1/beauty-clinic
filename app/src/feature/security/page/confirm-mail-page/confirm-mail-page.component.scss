@@ -1,0 +1,34 @@
+.verification-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+
+  .message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.25rem;
+    }
+
+    &.pending .icon {
+      color: #007bff;
+    }
+
+    &.success .icon {
+      color: #28a745;
+    }
+
+    &.error .icon {
+      color: #dc3545;
+    }
+  }
+}

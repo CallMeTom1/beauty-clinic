@@ -9,4 +9,6 @@ export interface User extends Business {
   firstname: string;
   lastname: string;
   profileImage: string;
+  profileImageUrl: string;
+  hasCustomProfileImage: boolean;
 }

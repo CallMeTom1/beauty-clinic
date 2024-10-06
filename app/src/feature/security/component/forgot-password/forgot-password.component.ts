@@ -1,15 +1,19 @@
-import {Component, inject, signal, WritableSignal} from '@angular/core';
-import {FloatingLabelInputComponent, FormcontrolSimpleConfig, FormError} from "@shared-ui";
-import {SecurityService} from "@feature-security";
-import {TranslateService} from "@ngx-translate/core";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ForgotPasswordPayload} from "../../data/payload/user/forgot-password.payload";
+import { Component, inject, signal, WritableSignal } from '@angular/core';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { SecurityService } from '@feature-security';
+import { TranslateService } from '@ngx-translate/core';
+import { ForgotPasswordPayload } from '../../data/payload/user/forgot-password.payload';
+import { FormcontrolSimpleConfig, FormError } from '@shared-ui';
+import { FloatingLabelInputTestComponent } from '../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component';
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
   imports: [
-    FloatingLabelInputComponent
+    FloatingLabelInputTestComponent,
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss']
@@ -22,19 +26,24 @@ export class ForgotPasswordComponent {
   public formError$: WritableSignal<FormError[]> = signal([]);
 
   public formGroup: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]), // Utilise Validators.email pour validation
+    email: new FormControl('', [Validators.required, Validators.email]),
   });
 
   formControlConfigs: FormcontrolSimpleConfig[] = [
     {
-      label: this.translateService.instant('security-feature-form-mail-label'),
+      label: 'Adresse e-mail',
       formControl: this.formGroup.get('email') as FormControl,
-      inputType: 'email', // Assure-toi d'utiliser 'email' comme input type
-      placeholder: this.translateService.instant('security-feature-form-mail-placeholder')
+      inputType: 'email',
+      placeholder: 'Entrez votre adresse e-mail'
     }
   ];
 
-  // Variables pour stocker l'état du message
+  // Variables pour le logo et la marque
+  protected logoSrc: string = './assets/icon/logo-beauty-clinic.svg';
+  protected alt: string = 'Logo de la marque';
+  protected brand: string = 'Izzy Beauty';
+
+  // Messages d'état
   public successMessage: string = '';
   public errorMessage: string = '';
 
@@ -56,17 +65,19 @@ export class ForgotPasswordComponent {
         next: (response) => {
           // En cas de succès, afficher un message de succès
           if (response.result) {
-            this.successMessage = 'An email has been sent to reset your password. Please check your inbox.';
+            this.successMessage = 'Un e-mail vous a été envoyé pour réinitialiser votre mot de passe. Veuillez vérifier votre boîte de réception.';
           } else {
             // Affiche un message d'erreur si nécessaire
-            this.errorMessage = 'Something went wrong. Please try again.';
+            this.errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
           }
         },
         error: () => {
           // Gestion des erreurs
-          this.errorMessage = 'Failed to send reset email. Please check your email address and try again.';
+          this.errorMessage = 'Impossible d\'envoyer l\'e-mail de réinitialisation. Veuillez vérifier votre adresse e-mail et réessayer.';
         }
       });
+    } else {
+      this.errorMessage = 'Veuillez entrer une adresse e-mail valide.';
     }
   }
 }

@@ -66,7 +66,7 @@ export class TokenService {
         }
     }
 
-    async revokeToken(token: string, tokenTypeHint?: string): Promise<void> {
+    async revokeToken(token: string): Promise<void> {
         // Recherche du token dans la base de données
         const tokenEntity = await this.repository.findOne({ where: { token: token } });
 

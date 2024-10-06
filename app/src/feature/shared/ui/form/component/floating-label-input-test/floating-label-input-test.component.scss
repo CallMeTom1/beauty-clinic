@@ -2,12 +2,11 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 5px; /* Espace entre le label et l'input */
+  gap: 4px;
 
   .floating-label {
     font-size: 14px;
     color: var(--theme-primary); /* Couleur du label */
-    margin-bottom: 5px;
     transition: all 0.2s ease-in-out;
   }
 
@@ -19,13 +18,12 @@
     color: var(--theme-input-text); /* Couleur du texte dans l'input */
     border: 2px solid var(--theme-secondary); /* Bordure par défaut */
     border-radius: 10px;
-    transition: border-color 0.3s ease, border-width 0.3s ease;
   }
 
   /* Effet de focus: La bordure devient plus épaisse et change de couleur */
   .floating-input:focus {
     border-color: var(--theme-primary); /* Change la couleur de la bordure au focus */
-    border-width: 3px; /* Épaissit la bordure */
+    border-width: 2px; /* Épaissit la bordure */
     outline: none; /* Supprime l'effet de contour par défaut du navigateur */
   }
 
@@ -36,3 +34,5 @@
   }
 
 }
+
+

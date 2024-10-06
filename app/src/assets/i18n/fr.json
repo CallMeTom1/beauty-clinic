@@ -287,6 +287,7 @@
   "security-feature-form-password-placeholder": "Entrez votre mot de passe",
 
 
+
   "care-feature-header-title": "Raffinement et soin",
   "care-feature-header-text": "Vivez l'expérience ultime de soin.",
   "care-feature-header-btn": "Réserver Maintenant",
@@ -467,7 +468,11 @@
       "email": "Veuillez entrer une adresse e-mail valide.",
       "passwordMismatch": "Les mots de passe ne correspondent pas."
     }
-  }
+  },
+
+  "error.email_already_used": "L'email est déjà utilisé, veuillez réessayer",
+  "error.generic_error": "Une erreur est survenue, veuillez réessayer ou contacter le support",
+  "error.wrong_password_or_mail": "L'email ou le mot de passe est incorrect"
 
 }
 

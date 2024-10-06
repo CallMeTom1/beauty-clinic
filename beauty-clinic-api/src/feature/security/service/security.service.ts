@@ -68,7 +68,9 @@ export class SecurityService {
                 profileImage: userDetails.profileImage ? userDetails.profileImage.toString('base64') : null,
                 firstname: userDetails.firstname,
                 lastname: userDetails.lastname,
-                phoneNumber: userDetails.phoneNumber
+                phoneNumber: userDetails.phoneNumber,
+                profileImageUrl: userDetails.profileImageUrl,
+                hasCustomImage: userDetails.hasCustomProfileImage
             }
         };
     }
@@ -89,9 +91,8 @@ export class SecurityService {
 
         try {
             const createUserInterface: CreateUserInterface = {
-                firstname: payload.firstname,
-                lastname: payload.lastname,
-                phoneNumber: payload.phoneNumber,
+                firstname: '',
+                lastname: '',
             };
 
             const newUser: User = await this.userService.createUser(createUserInterface);
@@ -104,7 +105,21 @@ export class SecurityService {
                 .mail(payload.mail)
                 .build();
 
+            // Générer un token de vérification d'email unique
+            // Générer un jeton de vérification d'email unique
+            const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+            const expiresAt = new Date();
+            expiresAt.setHours(expiresAt.getHours() + 24); // Le jeton expire dans 24 heures
+
+            newCredential.emailVerificationToken = emailVerificationToken;
+            newCredential.emailVerificationExpiresAt = expiresAt;
+
             await this.repository.save(newCredential);
+
+            // Générer un lien de vérification avec l'email
+            const verificationLink = `https://localhost:4200/account/verify-email?token=${encodeURIComponent(emailVerificationToken)}`;
+            await this.mailService.sendEmailVerificationEmail(newCredential.mail, verificationLink);
+
 
             return this.signIn({
                 mail: payload.mail,
@@ -117,6 +132,33 @@ export class SecurityService {
             throw new SignupException();
         }
     }
+
+    async verifyEmail(token: string): Promise<void> {
+        // Récupérer le Credential avec le token fourni
+        const credential = await this.repository.findOne({
+            where: {
+                emailVerificationToken: token
+            }
+        });
+
+        if (!credential) {
+            throw new BadRequestException('Token invalide ou expiré');
+        }
+
+        // Vérifier que le token n'est pas expiré
+        if (credential.emailVerificationExpiresAt < new Date()) {
+            throw new BadRequestException('Token expiré');
+        }
+
+        // Mettre à jour l'état de validation de l'email
+        credential.is_validated = true;
+        credential.emailVerificationToken = null;
+        credential.emailVerificationExpiresAt = null;
+
+        await this.repository.save(credential);
+    }
+
+
 
     async googleSignIn(idToken: string): Promise<Token> {
         try {
@@ -182,6 +224,7 @@ export class SecurityService {
         }
     }
 
+    //validate google token
     private validateToken(token: { exp: number, aud: string, iss: string }) {
         const currentTime = Math.floor(Date.now() / 1000);
 
@@ -201,7 +244,7 @@ export class SecurityService {
         return this.tokenService.refresh(token);
     }
 
-    async revokeToken(token: string): Promise<void> {
+    async signout(token: string): Promise<void> {
         return this.tokenService.revokeToken(token);
     }
 
@@ -296,7 +339,7 @@ export class SecurityService {
             await this.repository.save(credential);
 
             // Générer le lien de réinitialisation avec le token non haché
-            const resetLink = `https://localhost:4200/reset-password?token=${encodeURIComponent(resetToken)}`;
+            const resetLink = `https://localhost:4200/account/reset-password?token=${encodeURIComponent(resetToken)}`;
 
             // Envoyer le lien de réinitialisation de mot de passe par email
             await this.mailService.sendPasswordResetEmail(credential.mail, resetLink);
@@ -325,12 +368,30 @@ export class SecurityService {
         }
 
         // Hacher le nouveau mot de passe (avec bcrypt par exemple)
-        credential.password = await bcrypt.hash(payload.newPassword, 10);
-
-        // Supprimer le token et sa date d'expiration pour des raisons de sécurité
+        credential.password = await encryptPassword(payload.newPassword);
         credential.resetToken = null;
         credential.resetTokenExpiresAt = null;
 
+        await this.repository.save(credential);
+    }
+
+    async changePasswordByUserId(userId: string, newPassword: string): Promise<void> {
+        const credential: Credential = await this.getCredentialsByUserId(userId);
+
+        if (!credential) {
+            throw new UserNotFoundException();
+        }
+
+        // Vérification que le nouveau mot de passe est différent de l'ancien
+        const isSamePassword: boolean = await comparePassword(newPassword, credential.password);
+        if (isSamePassword) {
+            throw new Error('Le nouveau mot de passe doit être différent de l\'ancien.');
+        }
+
+        // Hachage du nouveau mot de passe
+        credential.password = await encryptPassword(newPassword);
+
+        // Sauvegarde du nouveau mot de passe
         await this.repository.save(credential);
     }
 

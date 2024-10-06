@@ -1,4 +1,4 @@
-import {Component, inject, signal, WritableSignal} from "@angular/core";
+import {Component, effect, inject, signal, WritableSignal} from "@angular/core";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
@@ -9,10 +9,15 @@ import {
   LabelWithParamDirective,
   LabelWithParamPipe
 } from "@shared-ui";
-import { AppRoutes} from "@shared-routes";
+import {AppNode, AppRoutes} from "@shared-routes";
 import {SecurityService} from "../../security.service";
 import {SecurityFormComponent, SignInPayload} from "@feature-security";
 import {SigninForm} from "../../interface";
+import {GoogleButtonComponent} from "../../component/google-button/google-button.component";
+import {RouterLink} from "@angular/router";
+import {
+  FloatingLabelInputTestComponent
+} from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
 
 
 @Component({
@@ -28,77 +33,77 @@ import {SigninForm} from "../../interface";
     LabelWithParamDirective,
     SecurityFormComponent,
     NgOptimizedImage,
+    GoogleButtonComponent,
+    RouterLink,
+    FloatingLabelInputTestComponent,
   ],
     templateUrl: './sign-in-page.component.html',
     styleUrls: ['./sign-in-page.component.scss']
 })
 export class SignInPageComponent {
-
-  private readonly securityService: SecurityService = inject(SecurityService);
+  protected readonly securityService: SecurityService = inject(SecurityService);
   protected readonly translateService: TranslateService = inject(TranslateService);
 
-  public formError$: WritableSignal<FormError[]> = signal([]);
-
-  public title:string='security-feature-signin-title';
-  public redirect: string= 'security-feature-signin-redirect';
-  protected brand: string = 'Coinify'
-  protected logoSrc: string = 'assets/pictures/dark-logo.png';
-  protected continueGoogle: string = 'security-feature-signin-googleBtn';
-  protected noAccount: string = 'security-feature-signin-no-account'
-  protected or: string = 'security-feature-signin-or'
+  protected logoSrc: string = './assets/icon/logo-beauty-clinic.svg';
   protected alt: string = 'brand logo';
   protected height: string = '50';
   protected width: string = '50';
+  protected brand: string = 'Izzy Beauty';
+  protected title: string = 'Connexion à votre compte';
+  protected or: string = 'security-feature-signin-or';
+  protected googleBtn: string = 'security-feature-signin-googleBtn';
+  protected noAccount: string = 'Vous n\'avez pas encore de compte ?';
+  protected createAccount: string = 'Créer un compte';
 
-  private signInPayload: SignInPayload = { mail:'', password: '' };
+  public signinSuccess: boolean = false;
+  public successMessage: string = '';
 
-  public formGroup: FormGroup<SigninForm> = new FormGroup<SigninForm>({
-        mail: new FormControl(this.signInPayload.mail, [Validators.required, Validators.minLength(10), Validators.maxLength(25), Validators.email]),
-        password: new FormControl(this.signInPayload.password, [Validators.required, Validators.minLength(10), Validators.maxLength(25)])
+  public formGroup: FormGroup = new FormGroup({
+    mail: new FormControl('', [
+      Validators.required,
+      Validators.email,
+      Validators.minLength(5),
+      Validators.maxLength(50)
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.maxLength(25)
+    ]),
   });
 
-  public formControlConfigs: FormcontrolSimpleConfig[] = [
+
+  public formControlConfigs = [
     {
-      label: this.translateService.instant('security-feature-form-email-label'),
+      label: this.translateService.instant('form.mail.label'),
       formControl: this.formGroup.get('mail') as FormControl,
-      inputType: 'mail',
-      placeholder: this.translateService.instant('security-feature-form-email-placeholder')
+      inputType: 'email',
+      placeholder: this.translateService.instant('form.mail.placeholder')
     },
     {
-      label: this.translateService.instant('security-feature-form-password-label'),
+      label: this.translateService.instant('form.password.label'),
       formControl: this.formGroup.get('password') as FormControl,
       inputType: 'password',
-      placeholder: this.translateService.instant('security-feature-form-password-placeholder')
+      placeholder: this.translateService.instant('form.password.placeholder')
     }
   ];
 
-  constructor() {
-      handleFormError(this.formGroup, this.formError$);
-  }
-
-  public error(): FormError[] {
-      return this.formError$();
-  }
-
   onSubmit(): void {
-      if (this.formGroup.valid) {
-          const { mail, password } = this.formGroup.value;
+    this.securityService.error$.set(null);
 
-          const signInPayload: SignInPayload = {
-              mail: mail || '',
-              password: password || ''
-          };
-          this.securityService.SignIn(signInPayload).subscribe()
+    if (this.formGroup.valid) {
+      const { password, mail } = this.formGroup.value;
 
-      }
+      const signinPayload: SignInPayload = {
+        password: password || '',
+        mail: mail || ''
+      };
+
+      this.securityService.SignIn(signinPayload).subscribe();
+    }
   }
 
-  handleRedirect(): void {
-      this.securityService.navigate(AppRoutes.SIGNUP);
+  googleSign(): void {
+    this.securityService.initiateGoogleLogin();
   }
-
-  googleSign(): void{
-      this.securityService.initiateGoogleLogin();
-  }
-
 }

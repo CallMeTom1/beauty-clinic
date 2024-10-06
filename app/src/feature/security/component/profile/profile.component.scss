@@ -1,259 +1,107 @@
-:host {
+.profile-page {
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
+  gap: 24px;
 
-h2, h3 {
-  color: var(--theme-primary);
-}
-
-h2 {
-  font-size: 36px;
-}
-
-h3 {
-  font-size: 24px;
-}
-
-p{
-  font-size: 20px;
-}
-
-.avatar-profile {
-  padding: 25px;
-  border-radius: 15px;
-  border: 1px solid var(--theme-secondary);
-  justify-content: space-between;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.title-container {
-  display: flex;
-  flex-direction: row;
-  gap: 25px;
-  align-items: center;
-
-  i {
-    font-size: 50px;
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 16px;
   }
-}
 
-.profile-container {
-  border: 1px solid var(--theme-secondary);
-  border-radius: 10px;
-  margin-top: 50px;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px 30px;
-  gap: 50px;
-}
-
-.sub-info-container {
-  gap: 25px;
-  align-items: center;
-  justify-content: space-around;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.full-name, .phone, .role {
-  font-weight: bold;
-  font-size: 16px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.personal-info {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 75%;
-  padding: 25px;
-}
-
-.verify-container {
-  border: 1px solid var(--theme-secondary);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  border-radius: 8px;
-  margin: 20px 0;
-  width: 100%;
-  display: flex;
-  gap: 25px;
-  flex-direction: column;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.avatar-container2 {
-  position: relative;
-  display: inline-block;
-
-  .upload-button-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  .avatar-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    font-size: 1.2em;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s;
+    margin-bottom: 20px;
+
+    app-user-avatar {
+      margin-bottom: 12px;
+    }
+
+    .upload-button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-align: center;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
   }
 
-  &:hover .upload-button-container {
-    opacity: 1;
-    border-radius: 50%;
-  }
-
-  input[type="file"] {
-    display: none;
-  }
-}
-
-.file-input {
-  display: none;
-}
-
-.file-input-container {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-}
-
-.btn-primary.small-btn {
-  font-size: 16px !important;
-}
-
-.btn-primary.submit-btn {
-  width: 100%;
-  text-align: center;
-}
-
-.form-container-flex {
-  display: flex;
-  flex-direction: row;
-  align-self: center;
-  gap: 20px;
-  padding: 25px;
-}
-
-@media (max-width: 1200px) {
-  .profile-container {
-    width: 70%;
-  }
-
-  .sub-info-container {
+  .form-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
     flex-direction: column;
+    gap: 16px;
 
-  }
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-  .personal-info {
-    width: 100%;
-  }
+    .error-message {
+      display: flex;
+      align-items: center;
+      color: #e74c3c;
+      font-size: 0.9rem;
 
-  .form-container-flex {
-    flex-direction: column;
-  }
+      i {
+        margin-right: 8px;
+      }
+    }
 
-  .title-container i {
-    font-size: 40px;
-  }
+    button {
+      padding: 12px 0;
+      background-color: #2ecc71;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
 
-  .file-input-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
+      &:hover {
+        background-color: #27ae60;
+      }
 
-@media (max-width: 768px) {
-  .profile-container {
-    width: 90%;
-  }
+      &:disabled {
+        background-color: #bdc3c7;
+        cursor: not-allowed;
+      }
+    }
 
-  h2 {
-    font-size: 28px;
-  }
+    .profile-update-button {
+      background-color: #1abc9c;
 
+      &:hover {
+        background-color: #16a085;
+      }
+    }
 
-  h3 {
-    font-size: 20px;
-  }
+    .password-update-button {
+      background-color: #e67e22;
 
-  .title-container i {
-    font-size: 30px;
-  }
-
-  .form-container-flex {
-    padding: 10px;
-  }
-
-  .file-input-container {
-    gap: 5px;
-  }
-
-  .btn-primary.small-btn {
-    font-size: 14px !important;
-    padding: 5px 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  h2 {
-    font-size: 24px;
-  }
-
-  h3 {
-    font-size: 18px;
-  }
-
-  .title-container i {
-    font-size: 25px;
-  }
-
-  .file-input-container {
-    gap: 5px;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .form-container-flex {
-    padding: 5px;
-  }
-
-  .btn-primary.small-btn {
-    font-size: 12px !important;
-    padding: 5px 8px;
-  }
-}
-
-
-.valid-identity{
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-
-  i{
-    color: green;
-    font-size: 30px;
+      &:hover {
+        background-color: #d35400;
+      }
+    }
   }
 }

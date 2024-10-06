@@ -20,6 +20,12 @@ export class UserNotFoundException extends ApiException {
     }
 }
 
+export class WrongPasswordException extends ApiException {
+    constructor() {
+        super(ApiCodeResponse.USER_WRONG_PASSWORD, 200);
+    }
+}
+
 export class CredentialNotFoundException extends ApiException {
     constructor() {
         super(ApiCodeResponse.CREDENTIAL_NOT_FOUND, 200);

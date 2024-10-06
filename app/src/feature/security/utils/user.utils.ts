@@ -15,6 +15,8 @@ export class UserUtils {
       id: dto.idUser,
       str: dto.username,
       profileImage: dto.profileImage,
+      profileImageUrl: dto.profileImageUrl,
+      hasCustomProfileImage: dto.hasCustomProfileImage,
     };
   }
 
@@ -30,7 +32,9 @@ export class UserUtils {
       isEmpty: true,
       id: "",
       str: "",
-      profileImage: ""
+      profileImage: "",
+      profileImageUrl: "",
+      hasCustomProfileImage: false
     };
   }
 
@@ -43,7 +47,9 @@ export class UserUtils {
       phoneNumber: business.phoneNumber,
       firstname: business.firstname,
       lastname: business.lastname,
-      profileImage: business.profileImage
+      profileImage: business.profileImage,
+      profileImageUrl: business.profileImageUrl,
+      hasCustomProfileImage: business.hasCustomProfileImage,
     };
   }
 }

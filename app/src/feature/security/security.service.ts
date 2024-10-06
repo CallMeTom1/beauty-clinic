@@ -34,6 +34,8 @@ import {response} from "express";
 import {Customer} from "../customer/data/model/customer.business";
 import {ResetPasswordPayload} from "./data/payload/user/reset-password.payload";
 import {ForgotPasswordPayload} from "./data/payload/user/forgot-password.payload";
+import {ModifyProfilePayload} from "./data/payload/user/modify-profile.payload";
+import {ModifyPasswordPayload} from "./data/payload/user/modify-password.payload";
 
 
 //todo réaliser tout les fetch dans ce service pour économiser les call api
@@ -58,6 +60,8 @@ export class SecurityService {
   public availableSlots$: WritableSignal<string[]> = signal([]);
   public customers$: WritableSignal<Customer[]> = signal([]);
 
+  public error$: WritableSignal<string | null> = signal(null);
+
 
   private getInitialAuthState(): boolean {
     const storedAuthState: string | null = localStorage.getItem(environment.LOCAL_STORAGE_AUTH);
@@ -66,7 +70,10 @@ export class SecurityService {
 
   public setAuthState(isAuth: boolean): void {
     this.isAuth$.set(isAuth);
+    console.log(isAuth)
+    console.log('ici');
     localStorage.setItem(environment.LOCAL_STORAGE_AUTH, JSON.stringify(isAuth));
+    console.log(localStorage.getItem(environment.LOCAL_STORAGE_AUTH));
   }
 
   private setupAuthChangeEffect(): void {
@@ -90,6 +97,14 @@ export class SecurityService {
       catchError(error => {
         console.error('Error during API call:', error);
         return throwError(error);
+      })
+    )
+  }
+
+  public modifyProfile(payload: ModifyProfilePayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.USER, payload).pipe(
+      tap((response: ApiResponse): void => {
+        this.me().subscribe()
       })
     )
   }
@@ -454,10 +469,19 @@ export class SecurityService {
     return this.api.post(ApiURI.SECURITY_SIGN_IN, payload)
       .pipe(
         tap((response: ApiResponse): void => {
-          if (response.result) {
+          console.log('dans signin')
+          console.log(payload);
+          if (response.code === 'api.security.user.user_not_found')
+          {
+            console.log('dans l erreur');
+            this.error$.set('error.wrong_password_or_mail');
+          }
+          else if (response.result)
+          {
             this.setAuthState(true);
             //sinon le home router se charge avant d'avoir récupérer l'image
             this.fetchProfile(this.isAuth$());
+            this.error$.set(null);
             this.router.navigate([AppNode.REDIRECT_TO_AUTHENTICATED]).then();
           }
         })
@@ -468,14 +492,38 @@ export class SecurityService {
     return this.api.post(ApiURI.SECURITY_SIGN_UP, payload)
       .pipe(
         tap((response: ApiResponse): void => {
-          if (response.result) {
-            this.setAuthState(true)
-            //sinon le home router se charge avant d'avoir récupérer l'image
+          this.error$.set(null);
+          if (response.code === 'api.security.user.user_already_exist') {
+            this.error$.set('error.email_already_used');
+          } else if (response.result) {
+            this.setAuthState(true);
             this.fetchProfile(this.isAuth$());
-            this.router.navigate([AppNode.REDIRECT_TO_AUTHENTICATED]).then();
+            // Réinitialiser l'erreur en cas de succès
+            this.error$.set(null);
+          } else {
+            // Gérer d'autres types d'erreurs spécifiques si nécessaire
+            this.error$.set('error.generic_error');
+          }
+        }),
+      );
+  }
+
+  logout(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.SIGN_OUT)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+            this.setAuthState(false)
+            this.account$.set(UserUtils.getEmpty());
+            localStorage.setItem(environment.LOCAL_STORAGE_ROLE, '');
+            this.navigate(AppRoutes.SIGNIN);
           }
         })
-      );
+      )
+  }
+
+  verifyEmail(token: string): Observable<ApiResponse> {
+    return this.api.get(ApiURI.VERIFY_EMAIL, {token})
   }
 
   initiateGoogleLogin(): void {
@@ -486,12 +534,6 @@ export class SecurityService {
     return this.api.get(ApiURI.ME);
   }
 
-  logout(): void {
-    this.setAuthState(false)
-    this.account$.set(UserUtils.getEmpty());
-    localStorage.setItem(environment.LOCAL_STORAGE_ROLE, '');
-    this.navigate(AppRoutes.SIGNIN);
-  }
 
   navigate(link: string) {
     this.router.navigate([link]).then();
@@ -508,6 +550,11 @@ export class SecurityService {
       );
   }
 
+  changePassword(payload: ModifyPasswordPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.CHANGE_PASSWORD, payload)
+
+  }
+
   forgotPassword(payload: ForgotPasswordPayload) {
     return this.api.post(ApiURI.FORGOT_PASSWORD, payload) // Assure-toi de bien passer le payload avec l'email
       .pipe(
@@ -521,6 +568,8 @@ export class SecurityService {
         })
       );
   }
+
+
 
 
   private readonly daysOfWeekOrder: DayOfWeekEnum[] = [

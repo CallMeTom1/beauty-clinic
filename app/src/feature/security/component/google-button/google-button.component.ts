@@ -1,30 +1,48 @@
-import { Component } from '@angular/core';
-import {environment} from "@env";
+import {
+  AfterViewInit,
+  Component, effect,
+  inject,
+} from '@angular/core';
+import { environment } from "@env";
 
 declare var google: any;
 
 @Component({
   selector: 'app-google-button',
-  standalone: true,
-  imports: [],
   templateUrl: './google-button.component.html',
-  styleUrl: './google-button.component.scss'
+  standalone: true,
+  styleUrls: ['./google-button.component.scss']
 })
-export class GoogleButtonComponent {
-  ngOnInit() {
-    // Initialiser Google Sign-In
+export class GoogleButtonComponent implements AfterViewInit {
+
+  constructor() {
+    effect(() => this.ngAfterViewInit());
+  }
+
+  ngAfterViewInit() {
+    // Initialiser Google Sign-In après que la vue soit prête
+    this.initializeGoogleSignIn();
+  }
+
+  initializeGoogleSignIn(): void {
     google.accounts.id.initialize({
       client_id: environment.GOOGLE_CLIENT,
       callback: this.handleCredentialResponse.bind(this),
       ux_mode: 'popup',
+      auto_select: false,
     });
 
     // Rendre le bouton Google Sign-In
     google.accounts.id.renderButton(
-      document.getElementById('google-signin-button'),
+      document.querySelector('.google-signin-button'),
       {
+        type: 'standard',
+        shape: 'square',
         theme: 'outline',
+        text: 'continue_with',
         size: 'large',
+        logo_alignment: 'left',
+        width: 350,
       }
     );
   }
@@ -32,7 +50,7 @@ export class GoogleButtonComponent {
   handleCredentialResponse(response: any) {
     console.log('Credential response received:', response);
 
-    // Send the credential to your backend server
+    // Envoyer le jeton JWT au serveur
     fetch('https://localhost:2024/api/account/google-signin', {
       method: 'POST',
       headers: {
@@ -40,18 +58,15 @@ export class GoogleButtonComponent {
       },
       body: JSON.stringify({ credential: response.credential })
     })
-      .then(res => {
+      .then(async res => {
         if (!res.ok) {
-          // If response is not OK, get the error message
-          return res.text().then(text => {
-            throw new Error(text);
-          });
+          const text = await res.text();
+          throw new Error(text);
         }
         return res.json();
       })
       .then(data => {
         console.log('Server response:', data);
-        // Handle successful authentication (e.g., redirect to dashboard)
       })
       .catch(error => {
         console.error('Error sending credential to server:', error);

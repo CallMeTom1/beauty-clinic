@@ -1,5 +1,5 @@
 import {catchError, map, Observable, of} from "rxjs";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {inject, Injectable} from "@angular/core";
 import {ApiResponse} from "../api.response";
 import {environment} from "@env";
@@ -12,9 +12,10 @@ export class ApiService {
   private readonly baseURL: string = environment.apiURL;
   private readonly paramIsMissingErrorCode: number = environment.PARAM_IS_MISSING;
   private readonly http: HttpClient = inject(HttpClient);
-  get(partURL: string): Observable<ApiResponse> {
-    return this.handle(this.http.get(`${this.baseURL}${partURL}`));
+  get(partURL: string, params?: HttpParams | { [param: string]: string | string[] }): Observable<ApiResponse> {
+    return this.handle(this.http.get(`${this.baseURL}${partURL}`, { params }));
   }
+
   post(partURL: string, payload: Payload): Observable<ApiResponse> {
     return this.handle(this.http.post(`${this.baseURL}${partURL}`, payload));
   }

@@ -13,7 +13,7 @@ export class Credential {
     @Column({nullable: true})
     password: string;
 
-    @Column({nullable: true, unique: true})
+    @Column({nullable: false, unique: true})
     mail: string;
 
     @Column({ nullable: true, unique: true })
@@ -24,6 +24,15 @@ export class Credential {
 
     @Column({default: true})
     active: boolean;
+
+    @Column({ default: false })
+    is_validated: boolean;
+
+    @Column({ nullable: true })
+    emailVerificationToken: string;
+
+    @Column({ nullable: true, type: 'timestamp' })
+    emailVerificationExpiresAt: Date;
 
     @Column({length: 25, nullable: false, default: Role.USER})
     role: Role;

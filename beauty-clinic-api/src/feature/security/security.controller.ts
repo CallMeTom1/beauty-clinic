@@ -1,4 +1,4 @@
-import {Body, Controller, Get, HttpCode, Post, Put, Req, Res, UseGuards,} from '@nestjs/common';
+import {Body, Controller, Get, HttpCode, Post, Put, Query, Req, Res, UseGuards,} from '@nestjs/common';
 import {ApiBearerAuth, ApiTags} from '@nestjs/swagger';
 import {Request, Response} from 'express';
 import {ApiCodeResponse} from '@common/api';
@@ -85,9 +85,9 @@ export class SecurityController {
         }
     }
 
-    @Post('revoke')
-    async revokeToken(@UserReq() request: UserRequest): Promise<void> {
-        await this.service.revokeToken(request.token);
+    @Get('signout')
+    async signout(@UserReq() request: UserRequest): Promise<void> {
+        await this.service.signout(request.token);
     }
 
     @Get('me')
@@ -95,10 +95,6 @@ export class SecurityController {
         return await this.service.userDetail(user.idUser, user.token);
     }
 
-    @UseGuards(FacebookGuard)
-    @Public()
-    @Get('facebook/google-login')
-    public loginFacebook(): void { }
 
     @Public()
     @Post('google-signin')
@@ -127,15 +123,23 @@ export class SecurityController {
     }
 
     //todo: forgot password
+    @Public()
     @Post('forgot-password')
     async forgotPassword(@Body() forgotPasswordPayload: ForgotPasswordPayload): Promise<void> {
         return this.service.forgotPassword(forgotPasswordPayload);
     }
 
     //todo: reset password
+    @Public()
     @Post('reset-password')
     async resetPassword(@Body() payload: ResetPasswordPayload): Promise<void> {
         return this.service.resetPassword(payload);
     }
+
+    @Get('verify-email')
+    async verifyEmail(@Query('token') token: string): Promise<any> {
+        return await this.service.verifyEmail(token);
+    }
+
 
 }

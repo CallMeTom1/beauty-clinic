@@ -1,12 +1,10 @@
 <section>
-  <h2>Test d'un champ de formulaire</h2>
+  <h2>Test d'un formulaire avec plusieurs champs</h2>
 
   <form [formGroup]="form" (ngSubmit)="submitForm()">
-    <div class="input">
-      <!-- Utilisation de app-floating-label-input pour le champ "Nom" avec la configuration -->
-      <app-floating-label-input-test [config]="nameConfig"></app-floating-label-input-test>
-    </div>
-
-    <button type="submit">Envoyer</button>
+    @for(config of fieldConfigs; track config.label){
+      <!-- Utilisation de app-floating-label-input-test pour chaque champ avec la configuration -->
+      <app-floating-label-input-test [config]="config"></app-floating-label-input-test>
+    }
   </form>
 </section>

@@ -1,5 +1,5 @@
 import {SecurityFormComponent, SecurityService, SignupPayload} from "@feature-security";
-import {Component, inject, signal, WritableSignal} from "@angular/core";
+import {Component, effect, EffectRef, inject, signal, WritableSignal} from "@angular/core";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {
   FloatingLabelInputComponent, FormcontrolSimpleConfig, FormError, handleFormError,
@@ -7,12 +7,16 @@ import {
   LabelWithParamDirective,
   LabelWithParamPipe
 } from "@shared-ui";
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
-import {AppRoutes} from "@shared-routes";
+import {AppNode, AppRoutes} from "@shared-routes";
 import {MailService} from "@feature-home";
 import {SignupForm} from "../../interface";
 import {GoogleButtonComponent} from "../../component/google-button/google-button.component";
+import {
+  FloatingLabelInputTestComponent
+} from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-sign-up-page',
@@ -28,13 +32,16 @@ import {GoogleButtonComponent} from "../../component/google-button/google-button
     SecurityFormComponent,
     NgOptimizedImage,
     GoogleButtonComponent,
+    FloatingLabelInputTestComponent,
+    FormsModule,
+    RouterLink,
   ],
   templateUrl: './sign-up-page.component.html',
   styleUrls: ['./sign-up-page.component.scss']
 })
 export class SignUpPageComponent {
 
-  private readonly securityService: SecurityService = inject(SecurityService);
+  protected readonly securityService: SecurityService = inject(SecurityService);
   private readonly mailService: MailService = inject(MailService);
   protected readonly translateService: TranslateService = inject(TranslateService);
 
@@ -52,7 +59,8 @@ export class SignUpPageComponent {
   protected already: string = 'security-feature-signup-already-account';
   protected connect: string = 'security-feature-signup-connect';
 
-  public formError$: WritableSignal<FormError[]> = signal([]);
+  public signupSuccess: boolean = false;
+  public successMessage: string = '';
 
   public formGroup: FormGroup<SignupForm> = new FormGroup<SignupForm>({
     mail: new FormControl(this.signUpPayload.mail || this.initialMail, [
@@ -70,28 +78,24 @@ export class SignUpPageComponent {
 
   public formControlConfigs: FormcontrolSimpleConfig[] = [
     {
-      label: this.translateService.instant('form.password.label'),
-      formControl: this.formGroup.get('password') as FormControl,
-      inputType: 'password',
-      placeholder: this.translateService.instant('form.password.placeholder')
-    },
-    {
       label: this.translateService.instant('form.mail.label'),
       formControl: this.formGroup.get('mail') as FormControl,
       inputType: 'email',
       placeholder: this.translateService.instant('form.mail.placeholder')
+    },
+    {
+      label: this.translateService.instant('form.password.label'),
+      formControl: this.formGroup.get('password') as FormControl,
+      inputType: 'password',
+      placeholder: this.translateService.instant('form.password.placeholder')
     }
   ];
 
-  constructor() {
-    handleFormError(this.formGroup, this.formError$);
-  }
 
-  public error(): FormError[] {
-    return this.formError$();
-  }
 
   onSubmit(): void {
+    this.securityService.error$.set(null);
+
     if (this.formGroup.valid) {
       const { password, mail } = this.formGroup.value;
 
@@ -99,9 +103,21 @@ export class SignUpPageComponent {
         password: password || '',
         mail: mail || ''
       };
+      this.securityService.SignUp(signUpPayload).subscribe({
+        next: () => {
+          if(!this.securityService.error$()){
+            // Mettre à jour l'état pour indiquer le succès
+            this.signupSuccess = true;
+            this.successMessage = 'Votre compte a été créé avec succès. Un email de validation vous a été envoyé.';
 
-      this.securityService.SignUp(signUpPayload).subscribe();
-
+            // Ajouter un délai avant la redirection
+            setTimeout(() => {
+              // Redirection après 5 secondes (5000 ms)
+              this.securityService.navigate(AppNode.HOME);
+            }, 5000);
+          }
+        }
+      });
     }
   }
 
