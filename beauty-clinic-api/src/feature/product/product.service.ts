@@ -12,7 +12,7 @@ import {
     AddCategoryToProductException,
     CreateProductException,
     DeleteProductException,
-    ProductNotFoundException, UnpublishProductException,
+    ProductNotFoundException, PublishProductException, UnpublishProductException,
     UpdateProductException, UpdateProductImageException
 } from "./product.exception";
 import {
@@ -20,16 +20,22 @@ import {
     UnpublishProductCategoryException
 } from "../product-category/product-category.exception";
 import {ulid} from "ulid";
+import {readFileSync} from "fs";
+import {join} from "path";
 
 @Injectable()
 export class ProductService {
+    private readonly defaultProductImage: Buffer;
+
     constructor(
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
 
         @InjectRepository(ProductCategory)
         private readonly categoryRepository: Repository<ProductCategory>,
-    ) {}
+    ) {
+        this.defaultProductImage = readFileSync(join(process.cwd(), 'src', 'feature', 'user', 'assets', 'default-profile.png'));
+    }
 
     // Créer un produit
     async create(payload: CreateProductPayload): Promise<Product> {
@@ -88,9 +94,9 @@ export class ProductService {
 
 
     // Mettre à jour un produit
-    async update(id: string, payload: UpdateProductPayload): Promise<Product> {
+    async update(payload: UpdateProductPayload): Promise<Product> {
         try{
-            const product = await this.findOne(id);
+            const product = await this.findOne(payload.id);
 
             if (payload.category_ids) {
                 // Utilisation de 'find' avec 'In' pour récupérer les catégories par leurs IDs
@@ -166,7 +172,7 @@ export class ProductService {
             category.isPublished = true;
             return this.productRepository.save(category);
         } catch (e) {
-            throw new PublishProductCategoryException();
+            throw new PublishProductException();
         }
     }
 
@@ -198,7 +204,7 @@ export class ProductService {
             }
 
             const allowedMimeTypes: string[] = ['image/jpeg', 'image/png'];
-            const allowedExtensions: string[] = ['.jpg', '.jpeg', '.png'];
+            const allowedExtensions: string[] = ['.jpg', '.jpeg', '.png', '.JPG'];
 
             if (!allowedMimeTypes.includes(file.mimetype) ||
                 !allowedExtensions.some(ext => file.originalname.endsWith(ext))) {

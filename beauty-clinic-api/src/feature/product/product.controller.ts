@@ -7,6 +7,10 @@ import {AddCategoryToProductPayload} from "./data/payload/add-category-to-produc
 import {FileInterceptor} from "@nestjs/platform-express";
 import {ApiBody, ApiConsumes, ApiTags} from "@nestjs/swagger";
 import {UploadProductImagePayload} from "./data/payload/upload-product-image.payload";
+import {Public, Roles} from "@common/config/metadata";
+import {Role} from "@feature/security/data";
+import {UpdateCategoryStatusPayload} from "../product-category/data/payload/update-category-status.payload";
+import {RemoveProductCategoryPayload} from "../product-category/data/payload/remove-product-category.payload";
 
 
 @ApiTags('products')
@@ -14,32 +18,48 @@ import {UploadProductImagePayload} from "./data/payload/upload-product-image.pay
 export class ProductController {
     constructor(private readonly productService: ProductService) {}
 
-    @Post()
-    async create(@Body() payload: CreateProductPayload): Promise<Product> {
-        return this.productService.create(payload);
-    }
-
+    @Roles(Role.ADMIN)
     @Get()
     async findAll(): Promise<Product[]> {
         return this.productService.findAll();
     }
 
-    @Get(':id')
-    async findOne(@Param('id') id: string): Promise<Product> {
-        return this.productService.findOne(id);
+    @Roles(Role.ADMIN)
+    @Post()
+    async create(@Body() payload: CreateProductPayload): Promise<Product> {
+        return this.productService.create(payload);
     }
 
-    @Patch(':id')
+    @Roles(Role.ADMIN)
+    @Patch()
     async update(
-        @Param('id') id: string,
         @Body() payload: UpdateProductPayload,
     ): Promise<Product> {
-        return this.productService.update(id, payload);
+        return this.productService.update(payload);
     }
 
-    @Delete(':id')
-    async remove(@Param('id') id: string): Promise<void> {
-        return this.productService.remove(id);
+    @Roles(Role.ADMIN)
+    @Delete()
+    async remove(@Body() payload: RemoveProductCategoryPayload): Promise<void> {
+        return this.productService.remove(payload.id);
+    }
+
+    @Roles(Role.ADMIN)
+    @Patch('publish')
+    async publishProduct(@Body() payload: UpdateCategoryStatusPayload): Promise<Product> {
+        return this.productService.publishProduct(payload.id);
+    }
+
+    @Roles(Role.ADMIN)
+    @Patch('unpublish')
+    async unpublishProduct(@Body() payload: UpdateCategoryStatusPayload): Promise<Product> {
+        return this.productService.unpublishProduct(payload.id);
+    }
+
+    @Public()
+    @Get('published')
+    async getPublishedproducts(): Promise<Product[]> {
+        return this.productService.findPublished();
     }
 
     @Post('add-category')
@@ -47,7 +67,8 @@ export class ProductController {
         return this.productService.addCategory(payload);
     }
 
-    @Post(':id/upload-image')
+    @Roles(Role.ADMIN)
+    @Post('upload-product-image')
     @UseInterceptors(FileInterceptor('productImage'))
     @ApiConsumes('multipart/form-data')
     @ApiBody({
@@ -55,9 +76,9 @@ export class ProductController {
         type: UploadProductImagePayload,
     })
     async uploadProductImage(
-        @Param('id') id: string,
+        @Body() payload: UploadProductImagePayload,
         @UploadedFile() file: Express.Multer.File,
     ): Promise<Product> {
-        return this.productService.updateProductImage(id, file);
+        return this.productService.updateProductImage(payload.productId, file);
     }
 }

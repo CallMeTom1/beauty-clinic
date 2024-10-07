@@ -28,7 +28,7 @@ export class ProductCategoryService {
 
     async create(categoryData: CreateProductCategoryPayload): Promise<ProductCategory> {
         try{
-            const newCategory = this.productCategoryRepository.create({
+            const newCategory: ProductCategory = this.productCategoryRepository.create({
                 product_category_id: ulid(),
                 name: categoryData.name,
             });
@@ -50,7 +50,7 @@ export class ProductCategoryService {
 
     async findOne(id: string): Promise<ProductCategory> {
         try{
-            const category = await this.productCategoryRepository.findOne({
+            const category: ProductCategory = await this.productCategoryRepository.findOne({
                 where: { product_category_id: id },
             });
             if (!category) {
@@ -114,37 +114,25 @@ export class ProductCategoryService {
         }
     }
 
-    async updateCategoryProductImage(categoryProductId: string, file: Express.Multer.File): Promise<any> {
+    async updateCategoryProductImage(categoryProductId: string, file: Express.Multer.File): Promise<ProductCategory> {
         try {
-            console.log('ici')
             const productCategory: ProductCategory = await this.findOne(categoryProductId);
-            console.log('ici 2')
-
             //const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-
             if (!file) {
                 throw new FileUploadException();
             }
-            console.log('ici 3')
-
             /*
             if (file.size > maxSizeInBytes) {
                 throw new FileUploadException();
             }
-
              */
-
             const allowedMimeTypes: string[] = ['image/jpeg', 'image/png'];
             const allowedExtensions: string[] = ['.jpg', '.jpeg', '.png', '.JPG'];
-
             if (!allowedMimeTypes.includes(file.mimetype) ||
                 !allowedExtensions.some(ext => file.originalname.endsWith(ext))) {
                 throw new InvalidFileTypeException();
             }
-            console.log('ici 4')
-
             productCategory.product_category_image = Buffer.from(file.buffer);
-            console.log('ici 5')
 
             return await this.productCategoryRepository.save(productCategory);
         } catch (e) {

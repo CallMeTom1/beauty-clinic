@@ -4,6 +4,12 @@ import {Cart} from "./data/model/cart.entity";
 import {Repository} from "typeorm";
 import {CartItem} from "./data/model/cart-item.entity";
 import {Product} from "../product/data/entity/product.entity";
+import {User} from "@feature/user/model";
+import {UserNotFoundException} from "@feature/security/security.exception";
+import {ulid} from "ulid";
+import {CreateCartException} from "./cart.exception";
+import {AddProductItemToCartPayload} from "./data/payload/add-product-item-to-cart.payload";
+import {ProductNotFoundException} from "../product/product.exception";
 
 @Injectable()
 export class CartService {
@@ -16,33 +22,55 @@ export class CartService {
 
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
+
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
     ) {}
 
+    async createCart(idUser: string): Promise<Cart>{
+        try{
+            const user: User = await this.userRepository.findOne({
+                where: {idUser: idUser}
+            })
+            if(!user){
+                throw new UserNotFoundException();
+            }
+
+            const newCart: Cart = this.cartRepository.create({
+                idCart : ulid(),
+                user : user
+            });
+
+            return await this.cartRepository.save(newCart);
+        }
+        catch(e){
+            throw new CreateCartException();
+        }
+    }
+
     // Ajouter un produit au panier
-    async addToCart(cartId: number, productId: string, quantity: number): Promise<Cart> {
-        // Corrige la méthode findOne pour chercher un panier par ID
-        const cart = await this.cartRepository.findOne({
-            where: { id: cartId },
+    async addToCart(payload: AddProductItemToCartPayload): Promise<Cart> {
+        const cart: Cart = await this.cartRepository.findOne({
+            where: { idCart: payload.cartId },
             relations: ['items', 'items.product'],
         });
 
-        // Corrige la méthode findOne pour chercher un produit par product_id
         const product = await this.productRepository.findOne({
-            where: { product_id: productId },
+            where: { product_id: payload.productId },
         });
 
         if (!product) {
-            throw new NotFoundException(`Product with id ${productId} not found`);
+            throw new ProductNotFoundException();
         }
 
-        let cartItem = cart.items.find(item => item.product.product_id === productId);
+        let cartItem = cart.items.find(item => item.product.product_id === payload.productId);
 
         if (cartItem) {
-            cartItem.quantity += quantity;
+            cartItem.quantity += payload.quantity;
         } else {
             cartItem = this.cartItemRepository.create({
                 product,
-                quantity,
+                quantity: payload.quantity,
                 price: product.price,  // Fixer le prix au moment de l'ajout
                 cart,
             });
@@ -52,11 +80,10 @@ export class CartService {
         return this.cartRepository.save(cart);
     }
 
-
     // Mettre à jour la quantité d'un produit dans le panier
-    async updateCartItem(cartId: number, productId: string, newQuantity: number): Promise<Cart> {
+    async updateCartItem(cartId: string, productId: string, newQuantity: number): Promise<Cart> {
         const cart = await this.cartRepository.findOne({
-            where: { id: cartId },
+            where: { idCart: cartId },
             relations: ['items', 'items.product'],
         });
 
@@ -73,9 +100,9 @@ export class CartService {
 
 
     // Supprimer un produit du panier
-    async removeFromCart(cartId: number, productId: string): Promise<Cart> {
+    async removeFromCart(cartId: string, productId: string): Promise<Cart> {
         const cart = await this.cartRepository.findOne({
-            where: { id: cartId },
+            where: { idCart: cartId },
             relations: ['items', 'items.product'],
         });
 
@@ -91,9 +118,9 @@ export class CartService {
     }
 
     // Récupérer un panier par ID
-    async getCart(cartId: number): Promise<Cart> {
+    async getCart(cartId: string): Promise<Cart> {
         return this.cartRepository.findOne({
-            where: { id: cartId },
+            where: { idCart: cartId },
             relations: ['items', 'items.product'],
         });
     }

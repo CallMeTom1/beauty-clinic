@@ -1,7 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import {IsString, IsNumber, IsOptional, IsNotEmpty} from 'class-validator';
 
 export class UpdateProductPayload {
+    @ApiProperty({
+        description: 'Unique identifier of the product category to update.',
+        example: 'cat_12345'
+    })
+    @IsString({ message: 'The id must be a string.' })
+    @IsNotEmpty({ message: 'The id field cannot be empty.' })
+    id: string;
+
     @ApiProperty({
         description: 'Name of the product.',
         example: 'Updated anti-aging cream',

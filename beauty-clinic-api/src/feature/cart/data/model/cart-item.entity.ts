@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, ManyToOne, Column, PrimaryColumn} from 'typeorm';
 import { Cart } from './cart.entity';
 import {Product} from "../../../product/data/entity/product.entity";
 
 @Entity()
 export class CartItem {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryColumn('varchar', {length:26})
+    idCartItem: string;
 
     @ManyToOne(() => Product)
     product: Product;

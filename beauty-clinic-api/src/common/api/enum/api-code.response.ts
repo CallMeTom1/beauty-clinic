@@ -119,6 +119,12 @@ export enum ApiCodeResponse {
     PRODUCT_NOT_FOUND = 'api.product.not.found',
     PRODUCT_PUBLISH_ERROR = 'api.product.publish.error',
     PRODUCT_UNPUBLISH_ERROR = 'api.product.unpublish.error',
-    PRODUCT_ADD_CATEGORY_ERROR = 'api.product.add-category.error'
+    PRODUCT_ADD_CATEGORY_ERROR = 'api.product.add-category.error',
+
+    //Cart
+    CART_CREATE_ERROR = 'api.cart.create.error',
+    CART_UPDATE_ERROR = 'api.cart.update.error',
+
+
 
 }

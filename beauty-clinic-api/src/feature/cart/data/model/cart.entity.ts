@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, OneToMany, OneToOne, Column, PrimaryColumn} from 'typeorm';
 import { CartItem } from './cart-item.entity';
 import {User} from "@feature/user/model";
 
 @Entity()
 export class Cart {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryColumn('varchar', {length:26})
+    idCart: string;
 
     @OneToMany(() => CartItem, (cartItem) => cartItem.cart, { cascade: true })
     items: CartItem[];

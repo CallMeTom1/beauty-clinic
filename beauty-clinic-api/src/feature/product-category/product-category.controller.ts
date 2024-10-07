@@ -17,9 +17,9 @@ import {UpdateCategoryStatusPayload} from "./data/payload/update-category-status
 export class ProductCategoryController {
     constructor(private readonly productCategoryService: ProductCategoryService) {}
 
-    @Public()
+    @Roles(Role.ADMIN)
     @Get()
-    async getAll(): Promise<ProductCategory[]>{
+    async findAll(): Promise<ProductCategory[]>{
         return this.productCategoryService.findAll();
     }
 
@@ -55,7 +55,7 @@ export class ProductCategoryController {
         return this.productCategoryService.unpublishCategory(payload.id);
     }
 
-    @Roles(Role.ADMIN)
+    @Public()
     @Get('published')
     async getPublishedCategories(): Promise<ProductCategory[]> {
         return this.productCategoryService.findPublished();
@@ -73,7 +73,6 @@ export class ProductCategoryController {
         @Body() payload: UploadCategoryProductImagePayload,
         @UploadedFile() file: Express.Multer.File,
     ): Promise<any> {
-        // Appeler le service en passant l'ID de la catégorie et le fichier
         return await this.productCategoryService.updateCategoryProductImage(payload.categoryProductId, file);
     }
 }
