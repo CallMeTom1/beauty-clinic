@@ -6,6 +6,14 @@ import {readFileSync} from "fs";
 import {join} from "path";
 import {User} from "@feature/user/model";
 import {FileUploadException, InvalidFileTypeException} from "@feature/security/security.exception";
+import {
+    CreateProductCategoryException, DeleteProductCategoryException,
+    ProductCategoryNotFoundException, PublishProductCategoryException, UnpublishProductCategoryException,
+    UpdateProductCategoryException, UpdateProductCategoryImageException
+} from "./product-category.exception";
+import {UpdateProductCategoryPayload} from "./data/payload/update-product-category.payload";
+import {CreateProductCategoryPayload} from "./data/payload/create-product-category.payload";
+import {ulid} from "ulid";
 
 @Injectable()
 export class ProductCategoryService {
@@ -18,64 +26,130 @@ export class ProductCategoryService {
         this.defaultCategoryProductImage = readFileSync(join(process.cwd(), 'src', 'feature', 'user', 'assets', 'default-profile.png'));
     }
 
-    async create(categoryData: Partial<ProductCategory>): Promise<ProductCategory> {
-        const newCategory = this.productCategoryRepository.create(categoryData);
-        return this.productCategoryRepository.save(newCategory);
+    async create(categoryData: CreateProductCategoryPayload): Promise<ProductCategory> {
+        try{
+            const newCategory = this.productCategoryRepository.create({
+                product_category_id: ulid(),
+                name: categoryData.name,
+            });
+            return this.productCategoryRepository.save(newCategory);
+        }
+        catch(e){
+            throw new CreateProductCategoryException();
+        }
     }
 
     async findAll(): Promise<ProductCategory[]> {
-        return this.productCategoryRepository.find();
+        try{
+            return this.productCategoryRepository.find();
+        }
+        catch(e){
+            throw new ProductCategoryNotFoundException();
+        }
     }
 
     async findOne(id: string): Promise<ProductCategory> {
-        const category = await this.productCategoryRepository.findOne({
-            where: { product_category_id: id },
-        });
-        if (!category) {
-            throw new NotFoundException(`Category with id ${id} not found`);
+        try{
+            const category = await this.productCategoryRepository.findOne({
+                where: { product_category_id: id },
+            });
+            if (!category) {
+                throw new NotFoundException(`Category with id ${id} not found`);
+            }
+            return category;
         }
-        return category;
+        catch(e){
+            throw new ProductCategoryNotFoundException();
+        }
     }
 
-    async update(id: string, updateData: Partial<ProductCategory>): Promise<ProductCategory> {
-        const category = await this.findOne(id);
-        Object.assign(category, updateData);
-        return this.productCategoryRepository.save(category);
+    async update(payload: UpdateProductCategoryPayload): Promise<ProductCategory> {
+        try{
+            const category = await this.findOne(payload.id);
+            Object.assign(category, payload);
+            return this.productCategoryRepository.save(category);
+        }
+        catch(e){
+            throw new UpdateProductCategoryException();
+        }
+
     }
 
     async remove(id: string): Promise<void> {
-        const category = await this.findOne(id);
-        await this.productCategoryRepository.remove(category);
+        try{
+            const category = await this.findOne(id);
+            await this.productCategoryRepository.remove(category);
+        }
+        catch (e){
+            throw new DeleteProductCategoryException();
+        }
+
+    }
+
+    async publishCategory(id: string): Promise<ProductCategory> {
+        try {
+            const category = await this.findOne(id);
+            category.isPublished = true;
+            return this.productCategoryRepository.save(category);
+        } catch (e) {
+            throw new PublishProductCategoryException();
+        }
+    }
+
+    async unpublishCategory(id: string): Promise<ProductCategory> {
+        try {
+            const category = await this.findOne(id);
+            category.isPublished = false;
+            return this.productCategoryRepository.save(category);
+        } catch (e) {
+            throw new UnpublishProductCategoryException();
+        }
+    }
+
+    async findPublished(): Promise<ProductCategory[]> {
+        try {
+            return this.productCategoryRepository.find({ where: { isPublished: true } });
+        } catch (e) {
+            throw new ProductCategoryNotFoundException();
+        }
     }
 
     async updateCategoryProductImage(categoryProductId: string, file: Express.Multer.File): Promise<any> {
-
-        const productCategory: ProductCategory = await this.findOne(categoryProductId);
-
-        const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-
-        if (file.size > maxSizeInBytes) {
-            throw new FileUploadException();
-        }
-
-        if (!file) {
-            throw new FileUploadException();
-        }
-
-        const allowedMimeTypes: string[] = ['image/jpeg', 'image/png'];
-        const allowedExtensions: string[] = ['.jpg', '.jpeg', '.png'];
-
-        if (!allowedMimeTypes.includes(file.mimetype) ||
-            !allowedExtensions.some(ext => file.originalname.endsWith(ext))) {
-            throw new InvalidFileTypeException();
-        }
-
-        productCategory.product_category_image = Buffer.from(file.buffer);
-
         try {
+            console.log('ici')
+            const productCategory: ProductCategory = await this.findOne(categoryProductId);
+            console.log('ici 2')
+
+            //const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+
+            if (!file) {
+                throw new FileUploadException();
+            }
+            console.log('ici 3')
+
+            /*
+            if (file.size > maxSizeInBytes) {
+                throw new FileUploadException();
+            }
+
+             */
+
+            const allowedMimeTypes: string[] = ['image/jpeg', 'image/png'];
+            const allowedExtensions: string[] = ['.jpg', '.jpeg', '.png', '.JPG'];
+
+            if (!allowedMimeTypes.includes(file.mimetype) ||
+                !allowedExtensions.some(ext => file.originalname.endsWith(ext))) {
+                throw new InvalidFileTypeException();
+            }
+            console.log('ici 4')
+
+            productCategory.product_category_image = Buffer.from(file.buffer);
+            console.log('ici 5')
+
             return await this.productCategoryRepository.save(productCategory);
-        } catch (error) {
-            throw new BadRequestException(error.message);
+        } catch (e) {
+            throw new UpdateProductCategoryImageException();
         }
     }
+
 }

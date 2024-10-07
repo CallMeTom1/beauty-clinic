@@ -24,6 +24,9 @@ export class Product {
     @Column('decimal', { nullable: true })
     promo_percentage: number;
 
+    @Column({ type: 'boolean', default: false })
+    isPublished: boolean;
+
     @ManyToMany(() => ProductCategory, productCategory => productCategory.products)
     @JoinTable()
     categories: ProductCategory[];

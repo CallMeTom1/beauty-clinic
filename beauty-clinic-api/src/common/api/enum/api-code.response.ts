@@ -102,5 +102,23 @@ export enum ApiCodeResponse {
     BUSINESSHOURS_OPEN_ERROR = 'api.business-hours.open_error',
     BUSINESSHOURS_CLOSE_ERROR = 'api.business-hours.open_error',
 
+    //Category-Product
+    CATEGORY_PRODUCT_CREATE_ERROR = 'api.category-product.create.error',
+    CATEGORY_PRODUCT_UPDATE_ERROR = 'api.category-product.update.error',
+    CATEGORY_PRODUCT_UPDATE_ERROR_IMAGE = 'api.category-product.image.update.error',
+    CATEGORY_PRODUCT_DELETE_ERROR = 'api.category-product.delete.error',
+    CATEGORY_PRODUCT_NOT_FOUND = 'api.category-product.not.found',
+    CATEGORY_PRODUCT_PUBLISH_ERROR = 'api.category-product.publish.error',
+    CATEGORY_PRODUCT_UNPUBLISH_ERROR = 'api.category-product.unpublish.error',
+
+    //Product
+    PRODUCT_CREATE_ERROR = 'api.product.create.error',
+    PRODUCT_UPDATE_ERROR = 'api.product.update.error',
+    PRODUCT_UPDATE_ERROR_IMAGE = 'api.product.image.update.error',
+    PRODUCT_DELETE_ERROR = 'api.product.delete.error',
+    PRODUCT_NOT_FOUND = 'api.product.not.found',
+    PRODUCT_PUBLISH_ERROR = 'api.product.publish.error',
+    PRODUCT_UNPUBLISH_ERROR = 'api.product.unpublish.error',
+    PRODUCT_ADD_CATEGORY_ERROR = 'api.product.add-category.error'
 
 }

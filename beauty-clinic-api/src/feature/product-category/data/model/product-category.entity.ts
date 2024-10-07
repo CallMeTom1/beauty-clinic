@@ -12,7 +12,9 @@ export class ProductCategory {
     @Column({ type: 'bytea', nullable: true })
     product_category_image: Buffer;
 
-    @ManyToMany(() => Product, product => product.categories)
-    products: Product[];
+    @Column({ type: 'boolean', default: false })
+    isPublished: boolean;
 
+    @ManyToMany(() => Product, product => product.categories, { nullable: true })
+    products: Product[];
 }
