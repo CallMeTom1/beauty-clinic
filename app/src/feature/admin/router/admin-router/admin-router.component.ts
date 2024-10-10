@@ -38,7 +38,7 @@ export class AdminRouterComponent {
 
   protected clinic_name: string = "admin-feature.admin-router.name"
   protected log_out: string = "admin-feature.admin-router.logout"
-  public isSidenavHidden: boolean = false;
+  public isSidenavHidden: boolean = true;
 
   constructor() {
     this.securityService.fetchProfile(this.securityService.isAuth$());

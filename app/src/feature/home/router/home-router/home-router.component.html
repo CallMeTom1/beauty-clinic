@@ -1,5 +1,5 @@
 <div class="main-content">
-
+  <app-top-nav-mobile></app-top-nav-mobile>
   <router-outlet></router-outlet>
 
   <div class="menu__nav">
@@ -9,23 +9,8 @@
           <i class="menu__icon {{item.icon}}"></i>
           <span class="menu__title">{{ item.title | translate }}</span>
         </li>
-        <li class="menu__profile z-index200">
-          <ng-container>
-            <app-user-navigation></app-user-navigation>
-          </ng-container>
-          <span class="menu__title z-index200">{{ 'Profile' | translate }}</span>
-        </li>
       </ul>
     </nav>
   </div>
 </div>
-<!--
-<div class="grid-overlay">
-  <div class="column"></div>
-  <div class="column"></div>
-  <div class="column"></div>
-  <div class="column"></div>
-  <div class="column"></div>
-  <div class="column"></div>
-</div>
--->
+

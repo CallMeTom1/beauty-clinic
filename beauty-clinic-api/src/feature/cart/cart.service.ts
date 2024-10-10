@@ -7,9 +7,16 @@ import {Product} from "../product/data/entity/product.entity";
 import {User} from "@feature/user/model";
 import {UserNotFoundException} from "@feature/security/security.exception";
 import {ulid} from "ulid";
-import {CreateCartException} from "./cart.exception";
-import {AddProductItemToCartPayload} from "./data/payload/add-product-item-to-cart.payload";
+import {
+    AddItemToCartException,
+    CartNotFoundException,
+    CreateCartException, RemoveCartException,
+    UpdateCartException
+} from "./cart.exception";
 import {ProductNotFoundException} from "../product/product.exception";
+import {UpdateCartItemPayload} from "./data/payload/update-cart-item.payload";
+import {RemoveCartItemPayload} from "./data/payload/remove-cart-item.payload";
+import {AddCartItemPayload} from "./data/payload/add-cart-item.payload";
 
 @Injectable()
 export class CartService {
@@ -49,80 +56,125 @@ export class CartService {
     }
 
     // Ajouter un produit au panier
-    async addToCart(payload: AddProductItemToCartPayload): Promise<Cart> {
-        const cart: Cart = await this.cartRepository.findOne({
-            where: { idCart: payload.cartId },
-            relations: ['items', 'items.product'],
-        });
-
-        const product = await this.productRepository.findOne({
-            where: { product_id: payload.productId },
-        });
-
-        if (!product) {
-            throw new ProductNotFoundException();
-        }
-
-        let cartItem = cart.items.find(item => item.product.product_id === payload.productId);
-
-        if (cartItem) {
-            cartItem.quantity += payload.quantity;
-        } else {
-            cartItem = this.cartItemRepository.create({
-                product,
-                quantity: payload.quantity,
-                price: product.price,  // Fixer le prix au moment de l'ajout
-                cart,
+    async addToCart(idUser: string, payload: AddCartItemPayload): Promise<Cart> {
+        try{
+            // Trouver directement le panier lié à l'utilisateur
+            const cart: Cart = await this.cartRepository.findOne({
+                where: { user: { idUser: idUser } },  // Accéder directement au panier via la relation avec l'utilisateur
+                relations: ['items', 'items.product'],
             });
-            cart.items.push(cartItem);
+
+            if (!cart) {
+                throw new CartNotFoundException();
+            }
+
+            const product: Product = await this.productRepository.findOne({
+                where: { product_id: payload.productId },
+            });
+
+            if (!product) {
+                throw new ProductNotFoundException();
+            }
+
+            let cartItem: CartItem = cart.items.find(item => item.product.product_id === payload.productId);
+
+            if (cartItem) {
+                // Si l'article existe déjà dans le panier, on met à jour la quantité
+                cartItem.quantity += payload.quantity;
+            } else {
+                // Sinon, on crée un nouvel article dans le panier
+                cartItem = this.cartItemRepository.create({
+                    product,
+                    quantity: payload.quantity,
+                    price: product.price,  // Fixer le prix au moment de l'ajout
+                    cart,
+                });
+                cart.items.push(cartItem);
+            }
+
+            // Sauvegarder les modifications du panier
+            return this.cartRepository.save(cart);
+        }
+        catch (e){
+            throw new AddItemToCartException()
         }
 
-        return this.cartRepository.save(cart);
     }
 
     // Mettre à jour la quantité d'un produit dans le panier
-    async updateCartItem(cartId: string, productId: string, newQuantity: number): Promise<Cart> {
-        const cart = await this.cartRepository.findOne({
-            where: { idCart: cartId },
-            relations: ['items', 'items.product'],
-        });
+    async updateCartItem(idUser: string, payload: UpdateCartItemPayload): Promise<Cart> {
+        try{
+            // Trouver directement le panier lié à l'utilisateur
+            const cart: Cart = await this.cartRepository.findOne({
+                where: { user: { idUser: idUser } },  // Accès direct via la relation avec l'utilisateur
+                relations: ['items', 'items.product'],
+            });
 
-        const cartItem = cart.items.find(item => item.product.product_id === productId);
+            if (!cart) {
+                throw new CartNotFoundException();
+            }
 
-        if (!cartItem) {
-            throw new NotFoundException(`Product with id ${productId} not found in cart`);
+            const cartItem: CartItem = cart.items.find(item => item.product.product_id === payload.productId);
+
+            if (!cartItem) {
+                throw new NotFoundException(`Product with id ${payload.productId} not found in cart`);
+            }
+
+            cartItem.quantity = payload.newQuantity;
+
+            return this.cartRepository.save(cart);
         }
-
-        cartItem.quantity = newQuantity;
-
-        return this.cartRepository.save(cart);
+        catch(e) {
+            throw new UpdateCartException();
+        }
     }
-
 
     // Supprimer un produit du panier
-    async removeFromCart(cartId: string, productId: string): Promise<Cart> {
-        const cart = await this.cartRepository.findOne({
-            where: { idCart: cartId },
-            relations: ['items', 'items.product'],
-        });
+    async removeFromCart(idUser: string, payload: RemoveCartItemPayload): Promise<Cart> {
+        try{
+            // Trouver directement le panier lié à l'utilisateur
+            const cart: Cart = await this.cartRepository.findOne({
+                where: { user: { idUser: idUser } },  // Accès direct via la relation avec l'utilisateur
+                relations: ['items', 'items.product'],
+            });
 
-        const cartItemIndex = cart.items.findIndex(item => item.product.product_id === productId);
+            if (!cart) {
+                throw new CartNotFoundException();
+            }
 
-        if (cartItemIndex === -1) {
-            throw new NotFoundException(`Product with id ${productId} not found in cart`);
+            const cartItemIndex: number = cart.items.findIndex(item => item.product.product_id === payload.productId);
+
+            if (cartItemIndex === -1) {
+                throw new NotFoundException(`Product with id ${payload.productId} not found in cart`);
+            }
+
+            cart.items.splice(cartItemIndex, 1);
+
+            return this.cartRepository.save(cart);
+
         }
-
-        cart.items.splice(cartItemIndex, 1);
-
-        return this.cartRepository.save(cart);
+        catch (e){
+            throw new RemoveCartException();
+        }
     }
 
-    // Récupérer un panier par ID
-    async getCart(cartId: string): Promise<Cart> {
-        return this.cartRepository.findOne({
-            where: { idCart: cartId },
-            relations: ['items', 'items.product'],
-        });
+    async getCart(idUser: string): Promise<Cart> {
+        try {
+            // Trouver directement le panier associé à l'utilisateur via la relation One-to-One
+            const cart: Cart = await this.cartRepository.findOne({
+                where: { user: { idUser: idUser } },  // Accès direct via la relation avec l'utilisateur
+                relations: ['items', 'items.product'],
+            });
+
+            // Vérifier si le panier existe
+            if (!cart) {
+                throw new NotFoundException('Cart not found for this user');
+            }
+
+            return cart;
+        } catch (e) {
+            throw new CartNotFoundException();
+        }
     }
 
 }

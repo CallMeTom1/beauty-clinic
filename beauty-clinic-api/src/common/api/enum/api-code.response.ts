@@ -123,7 +123,10 @@ export enum ApiCodeResponse {
 
     //Cart
     CART_CREATE_ERROR = 'api.cart.create.error',
+    CART_ADD_ITEM_ERROR = 'api.cart.add-item.error',
     CART_UPDATE_ERROR = 'api.cart.update.error',
+    CART_NOT_FOUND_ERROR = 'api.cart.not-found.error',
+    CART_REMOVE_ERROR = 'api.cart.remove.error',
 
 
 

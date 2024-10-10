@@ -1,0 +1,20 @@
+<div class="product-search">
+  <i class="fa fa-search search-icon"></i> <!-- Icône de loupe Font Awesome -->
+  <input
+    type="text"
+    placeholder="Chercher un produit..."
+    [(ngModel)]="searchTerm"
+    class="search-input"
+  />
+  @if(searchTerm){
+    <button (click)="clearSearch()">X</button>
+  }
+</div>
+
+<div class="product-list">
+  @for(product of filteredProducts; track product.product_id){
+    <div class="product-item">
+      <div class="product-name">{{ product.name }}</div>
+    </div>
+  }
+</div>

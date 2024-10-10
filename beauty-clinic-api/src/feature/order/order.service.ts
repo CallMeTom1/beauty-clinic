@@ -5,6 +5,8 @@ import {Order} from "./data/model/order.entity";
 import {OrderItem} from "./data/model/order-item.entity";
 import {Cart} from "../cart/data/model/cart.entity";
 import {User} from "@feature/user/model";
+import {UpdateOrderStatusPayload} from "./data/payload/update-order-status.payload";
+import {PaymentService} from "../payment/payment.service";
 
 
 @Injectable()
@@ -18,12 +20,19 @@ export class OrderService {
 
         @InjectRepository(Cart)
         private readonly cartRepository: Repository<Cart>,
+
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+
+        private readonly paymentService: PaymentService,  // Injection du service de paiement
+
     ) {}
 
-    // Transformer un panier en commande
-    async createOrderFromCart(cartId: number, user: User): Promise<Order> {
+
+    // Transformer un panier en commande et créer un paiement associé
+    async createOrderFromCart(cartId: string, idUser: string): Promise<Order> {
         const cart = await this.cartRepository.findOne({
-            where: { id: cartId },
+            where: { idCart: cartId },
             relations: ['items', 'items.product'],
         });
 
@@ -43,15 +52,23 @@ export class OrderService {
             return orderItem;
         });
 
+        const user: User = await this.userRepository.findOne({ where: { idUser: idUser } });
+
         const order = this.orderRepository.create({
             totalPrice,
-            status: 'pending', // Statut initial de la commande
+            status: 'pending',
             orderDate: new Date(),
-            user, // L'utilisateur est déjà fourni en paramètre
+            user,
             items: orderItems,
         });
 
-        return this.orderRepository.save(order);
+        // Sauvegarder la commande en base de données
+        const savedOrder = await this.orderRepository.save(order);
+
+        // Créer un paiement associé à la commande via le service de paiement
+        await this.paymentService.createPaymentIntent(totalPrice, 'usd', savedOrder.idOrder);
+
+        return savedOrder;
     }
 
 
@@ -65,16 +82,16 @@ export class OrderService {
 
 
     // Mettre à jour le statut d'une commande
-    async updateOrderStatus(orderId: number, status: string): Promise<Order> {
+    async updateOrderStatus(payload: UpdateOrderStatusPayload): Promise<Order> {
         const order = await this.orderRepository.findOne({
-            where: { id: orderId }, // Utilise 'where' pour trouver la commande par son ID
+            where: { idOrder: payload.idOrder }, // Utilise 'where' pour trouver la commande par son ID
         });
 
         if (!order) {
-            throw new NotFoundException(`Order with id ${orderId} not found`);
+            throw new NotFoundException(`Order with id ${payload.idOrder} not found`);
         }
 
-        order.status = status;
+        order.status = payload.status;
         return this.orderRepository.save(order);
     }
 

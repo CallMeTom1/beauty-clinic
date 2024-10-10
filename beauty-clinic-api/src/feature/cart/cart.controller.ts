@@ -2,40 +2,44 @@
 import { Controller, Post, Patch, Delete, Param, Body, Get } from '@nestjs/common';
 import { CartService } from './cart.service';
 import {ApiTags} from "@nestjs/swagger";
+import {UserReq, UserRequest} from "@common/config/metadata";
+import {Cart} from "./data/model/cart.entity";
+import {AddCartItemPayload} from "./data/payload/add-cart-item.payload";
+import {UpdateCartItemPayload} from "./data/payload/update-cart-item.payload";
+import {RemoveCartItemPayload} from "./data/payload/remove-cart-item.payload";
 
 @ApiTags('cart')
 @Controller('cart')
 export class CartController {
     constructor(private readonly cartService: CartService) {}
 
-    @Post(':cartId/add')
+    @Get()
+    async getCart(@UserReq() userReq: UserRequest): Promise<Cart> {
+        return this.cartService.getCart(userReq.idUser);
+    }
+
+    @Patch()
     async addToCart(
-        @Param('cartId') cartId: number,
-        @Body('productId') productId: string,
-        @Body('quantity') quantity: number,
-    ) {
-        return this.cartService.addToCart(cartId, productId, quantity);
+        @Body() payload: AddCartItemPayload,
+        @UserReq() userReq: UserRequest
+    ): Promise<Cart> {
+        return this.cartService.addToCart(userReq.idUser, payload);
     }
 
-    @Patch(':cartId/update')
+    @Patch('update')
     async updateCartItem(
-        @Param('cartId') cartId: number,
-        @Body('productId') productId: string,
-        @Body('quantity') quantity: number,
-    ) {
-        return this.cartService.updateCartItem(cartId, productId, quantity);
+        @Body() payload: UpdateCartItemPayload,
+        @UserReq() userReq: UserRequest
+    ): Promise<Cart> {
+        return this.cartService.updateCartItem(userReq.idUser, payload);
     }
 
-    @Delete(':cartId/remove')
+    @Delete()
     async removeFromCart(
-        @Param('cartId') cartId: number,
-        @Body('productId') productId: string,
-    ) {
-        return this.cartService.removeFromCart(cartId, productId);
+        @Body() payload: RemoveCartItemPayload,
+        @UserReq() userReq: UserRequest
+    ): Promise<Cart> {
+        return this.cartService.removeFromCart(userReq.idUser, payload);
     }
 
-    @Get(':cartId')
-    async getCart(@Param('cartId') cartId: number) {
-        return this.cartService.getCart(cartId);
-    }
 }

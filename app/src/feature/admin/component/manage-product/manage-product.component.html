@@ -1,0 +1,66 @@
+<div class="product-container">
+  <h2>Gérer les produits</h2>
+  <div class="add-product-button">
+    <button class="btn btn-primary" (click)="openCreateModal()">
+      {{'form.product.add.lable' | translate}}
+    </button>
+  </div>
+  <!-- Liste des produits affichés sous forme de cartes -->
+  <div class="product-list">
+    @for(product of securityService.Products$(); track product.product_id){
+      <app-product-category-selector [productId]="product.product_id"></app-product-category-selector>
+
+      <div class="card-header">
+        <label for="editImage-{{ product.product_id}}" class="image-upload-label">
+          <img [src]="getProductImage(product)" alt="{{ product.name }}" class="category-image" />
+          <input type="file" id="editImage-{{ product.product_id }}" (change)="onProductImageChange($event, product)" accept="image/*" hidden />
+        </label>
+        <h3>{{product.name}}</h3>
+        <p>{{product.description}}</p>
+        <p>{{product.quantity_stored}}</p>
+        <p>{{product.promo_percentage}}</p>
+        <p>{{product.price}}</p>
+      </div>
+      <div class="card-body">
+        <button (click)="openEditModal(product)" class="btn btn-secondary">{{ 'form.product.edit.label' | translate }}</button>
+
+        <div class="switch">
+          <label>{{ 'form.category.product.publish.label' | translate }}</label>
+          <input type="checkbox" [checked]="product.isPublished" (change)="togglePublishProduct(product)" />
+        </div>
+        <button (click)="openDeleteModal(product)" class="btn btn-danger">{{ 'form.category.product.delete.label' | translate }}</button>
+      </div>
+    }
+  </div>
+  @if(showDeleteModal){
+    <app-modal [title]="'form.product.delete.confirm.title' | translate" (close)="handleClose()">
+      <p>{{ 'form.category.product.delete.confirm.message' | translate }}: {{ currentProduct?.name }}</p>
+      <button (click)="deleteProduct()" class="btn btn-danger">{{ 'form.product.delete.confirm.button' | translate }}</button>
+      <button (click)="handleClose()" class="btn btn-secondary">{{ 'form.cancel.label' | translate }}</button>
+    </app-modal>
+  }
+  @if(showEditModal){
+    <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
+
+      <form [formGroup]="updateProductFormGroup" (ngSubmit)="onSubmitUpdateProduct()">
+        @for(input of updateProductFormControlConfigs; track input.label){
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <button type="submit" class="btn btn-secondary">{{ 'form.product.update.label' | translate }}</button>
+      </form>
+      <!-- Error form display -->
+    </app-modal>
+  }
+
+  @if(showCreateModal){
+    <app-modal [title]="modal_create_title | translate" (close)="handleClose()">
+      <form [formGroup]="createProductFormGroup" (ngSubmit)="onSubmitCreateProduct()">
+        @for(input of createProductFormControlConfigs; track input.label){
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <button type="submit" class="btn btn-primary">{{ 'form.product.add.label' | translate }}</button>
+      </form>
+    </app-modal>
+  }
+
+</div>

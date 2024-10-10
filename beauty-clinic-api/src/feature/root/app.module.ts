@@ -12,9 +12,13 @@ import {HolidayModule} from "../holiday/holiday.module";
 import {BusinessHoursModule} from "../business-hours/business-hours.module";
 import {ProductCategoryModule} from "../product-category/product-category.module";
 import {ProductModule} from "../product/product.module";
+import {CartModule} from "../cart/cart.module";
+import {OrderModule} from "../order/order.module";
+import {PaymentModule} from "../payment/payment.module";
 @Module({
   imports: [TypeOrmModule.forRoot(configManager.getTypeOrmConfig()), SecurityModule, UserModule, CareModule,
-    AppointmentModule, HolidayModule, BusinessHoursModule, ProductCategoryModule, ProductModule],
+    AppointmentModule, HolidayModule, BusinessHoursModule, ProductCategoryModule, ProductModule, CartModule, OrderModule,
+    PaymentModule],
   controllers: [],
   providers: [ {
     provide: APP_GUARD, useClass: JwtGuard

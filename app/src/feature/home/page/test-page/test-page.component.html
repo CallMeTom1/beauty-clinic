@@ -1,10 +1,6 @@
-<section>
-  <h2>Test d'un formulaire avec plusieurs champs</h2>
 
-  <form [formGroup]="form" (ngSubmit)="submitForm()">
-    @for(config of fieldConfigs; track config.label){
-      <!-- Utilisation de app-floating-label-input-test pour chaque champ avec la configuration -->
-      <app-floating-label-input-test [config]="config"></app-floating-label-input-test>
-    }
-  </form>
+<section>
+  @for(cat of this.categories; track cat.product_category_id){
+    <app-product-category-card [productCategory]="cat"></app-product-category-card>
+  }
 </section>

@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Param, Patch, Delete, UseInterceptors, UploadedFile} from '@nestjs/common';
+import {Controller, Get, Post, Body, Param, Patch, Delete, UseInterceptors, UploadedFile, Put} from '@nestjs/common';
 import { ProductCategoryService } from './product-category.service';
 import { ProductCategory } from './data/model/product-category.entity';
 import { CreateProductCategoryPayload } from './data/payload/create-product-category.payload';
@@ -30,7 +30,7 @@ export class ProductCategoryController {
     }
 
     @Roles(Role.ADMIN)
-    @Patch()
+    @Put()
     async update(
         @Body() payload: UpdateProductCategoryPayload,
     ): Promise<ProductCategory> {
@@ -44,13 +44,13 @@ export class ProductCategoryController {
     }
 
     @Roles(Role.ADMIN)
-    @Patch('publish')
+    @Put('publish')
     async publishCategory(@Body() payload: UpdateCategoryStatusPayload): Promise<ProductCategory> {
         return this.productCategoryService.publishCategory(payload.id);
     }
 
     @Roles(Role.ADMIN)
-    @Patch('unpublish')
+    @Put('unpublish')
     async unpublishCategory(@Body() payload: UpdateCategoryStatusPayload): Promise<ProductCategory> {
         return this.productCategoryService.unpublishCategory(payload.id);
     }

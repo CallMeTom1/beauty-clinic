@@ -10,9 +10,6 @@
 
 /* Variables de Thème */
 :root {
-  --column-width: 60px; /* Largeur d'une colonne */
-  --gutter-width: 20px; /* Largeur de la gouttière */
-  --container-width: calc((var(--column-width) * 12) + (var(--gutter-width) * 11)); /* Largeur totale du conteneur */
 
   --marquee-speed: 30s;
   --direction: scroll-left;
@@ -35,57 +32,14 @@
   --box-shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
   --box-shadow-dark: 0 4px 8px rgba(218, 211, 211, 0.3), 0 6px 20px rgba(255, 255, 255, 0.3);
 
-  --theme-buy-text-dark: #00ff00;
-  --theme-sell-text-dark: #ff0000;
-  --theme-buy-text-light: #008000;
-  --theme-sell-text-light: #ff4500;
-  /* Couleurs de survol */
-  --theme-nav-hover-bg-light: rgba(220, 219, 219, 0.5);
-  --theme-nav-hover-bg-dark: rgba(50, 50, 50, 0.5);
-
-  /* Couleurs des États */
-  --theme-error-clear: #F76D82;
-  --theme-error-clear-opacity: rgba(247, 109, 130, 0.5);
-  --theme-error-middle: #EC5564;
-  --theme-error-dark: #D94452;
-  --theme-success-clear: #62DDBD;
-  --theme-success-middle: #46CEAD;
-  --theme-success-dark: #35BB9B;
-  --theme-warning-clear: #FCD277;
-  --theme-warning-middle: #FECD57;
-  --theme-warning-dark: #F5BA45;
-  --theme-info-clear: #73B1F4;
-  --theme-info-middle: #5E9CEA;
-  --theme-info-dark: #4B89DA;
-
-  /* Autres Variables */
-  --var-security-input-height: 75px;
-  --var-side-menu-full-open: 250px;
-  --var-side-menu-minimal: 60px;
-  --var-header-height: 150px;
-  --var-header-background: #F8F9FA;
-  --transition-smooth: all ease 0.3s;
 }
 
 .overlay-grid {
   gap: var(--gutter-width); /* Espace entre les colonnes */
 }
 /* Définition de Base */
-body {
-  font-family: 'Roboto', sans-serif;
-  background: var(--theme-bg-primary);
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-  font-weight: 300;
-  font-size: 13px;
-  height: 100%;
-  color: var(--theme-primary);
-}
 
-html, body {
-  height: 100%;
-}
+
 
 @media screen and (max-width: 600px) {
   body {
@@ -99,7 +53,7 @@ body.light {
   --theme-bg-gradient: linear-gradient(45deg, rgb(245, 225, 210) 0%, rgb(225, 204, 191) 50%, rgb(206, 186, 175) 100%);
   --theme-bg-primary: #f8f9fa; /* Light gray background */
   --theme-bg-secondary: #ffffff; /* Pure white background */
-  --theme-text-primary: #212529; /* Nearly black text */
+  --theme-text-primary: #000000; /* Nearly black text */
   --theme-header-bg: #e9ecef; /* Light gray header */
   --theme-header-text: #212529; /* Nearly black text for header */
   --theme-border: #dee2e6; /* Light gray border */
@@ -194,206 +148,6 @@ body.dark {
   }
 }
 
-body.dark header {
-  background: var(--theme-bg-primary);
-}
-
-body.light header {
-  background: var(--theme-bg-primary);
-}
-
-/* Composants et Classes Utilitaires */
-.btn-area {
-  padding-top: 20px;
-  app-simple-button {
-    width: 300px;
-  }
-}
-
-.card-title {
-  font-family: 'Lexend-Light';
-  padding-bottom: 15px;
-  text-transform: uppercase;
-  color: var(--theme-secondary);
-}
-
-.card-desc {
-  color: var(--theme-primary);
-}
-
-.fc {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@media screen and (max-width: 600px) {
-  .wrapper {
-    width: 100%;
-    padding: 1rem;
-  }
-}
-
-.flex-center {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: flex-start;
-}
-/* Boutons de Navigation */
-body.light .btn-primary {
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Léger effet d'ombre pour donner du relief */
-  font-size: 14px;
-  font-family: 'Lato', sans-serif;
-  background-color: transparent; /* Fond clair */
-  color: var(--theme-text-primary); /* Texte sombre */
-  font-weight: bold;
-  border: 2px solid var(--theme-primary); /* Bordure légère */
-  padding: 5px 10px;
-  border-radius: 8px;
-  text-transform: uppercase;
-  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
-  white-space: nowrap; /* Empêche le texte de se plier */
-}
-
-body.light .btn-primary:hover {
-  background-color: var(--theme-primary); /* Fond plus foncé au survol */
-  color: white; /* Texte blanc au survol */
-  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-body.light .btn-secondary {
-  font-size: 14px;
-  font-family: 'Lato', sans-serif;
-  background-color: black;
-  color: var(--theme-bg-primary); /* Texte sombre */
-  border: 1px solid var(--theme-text-primary);
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: bold;
-  text-transform: uppercase;
-  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
-  white-space: nowrap; /* Empêche le texte de se plier */
-}
-
-body.light .btn-secondary:hover {
-  background-color: transparent;
-  color: var(--theme-text-primary);
-  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-body.dark .btn-primary {
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Léger effet d'ombre pour donner du relief */
-  font-family: 'Lato', sans-serif;
-  background-color: var(--theme-bg-secondary); /* Fond sombre */
-  color: var(--theme-text-primary); /* Texte clair */
-  border: 1px solid var(--theme-border); /* Bordure foncée */
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: bold;
-  text-transform: uppercase;
-  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
-  white-space: nowrap; /* Empêche le texte de se plier */
-}
-
-body.dark .btn-primary:hover {
-  background-color: var(--theme-button-hover-bg); /* Fond plus foncé au survol */
-  color: var(--theme-text-primary); /* Texte clair */
-  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-body.dark .btn-secondary {
-  font-family: 'Lato', sans-serif;
-  background-color: transparent; /* Fond transparent */
-  color: var(--theme-text-primary); /* Texte clair */
-  border: 1px solid var(--theme-border); /* Bordure foncée */
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: bold;
-  text-transform: uppercase;
-  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
-  white-space: nowrap; /* Empêche le texte de se plier */
-}
-
-body.dark .btn-secondary:hover {
-  background-color: var(--theme-bg-secondary); /* Fond plus sombre au survol */
-  color: var(--theme-text-primary); /* Texte clair */
-  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Style pour le thème clair */
-body.light .btn-ternary {
-  font-size: 14px;
-  font-family: 'Lato', sans-serif;
-  background-color: transparent; /* Fond transparent */
-  color: var(--theme-text-primary); /* Couleur du texte adaptée au thème clair */
-  font-weight: bold;
-  border: 1px solid var(--theme-primary); /* Bordure plus épaisse */
-  padding: 10px 20px;
-  border-radius: 8px; /* Coins très arrondis pour un look moderne */
-  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Léger effet d'ombre pour donner du relief */
-  height: 45px;
-  white-space: nowrap; /* Empêche le texte de se plier */
-}
-
-body.light .btn-ternary:hover {
-  background-color: var(--theme-primary); /* Fond rempli au survol */
-  color: white; /* Texte blanc pour le contraste */
-  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée au survol */
-}
-
-/* Style pour le thème sombre */
-body.dark .btn-ternary {
-  font-size: 16px;
-  font-family: 'Lato', sans-serif;
-  background-color: var(--theme-primary); /* Fond plein dès le départ pour un fort contraste avec le fond sombre */
-  color: white; /* Texte blanc */
-  font-weight: bold;
-  border: 2px solid var(--theme-primary); /* Bordure de la même couleur que le fond */
-  padding: 8px 16px;
-  border-radius: 30px;
-  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée pour le thème sombre */
-  white-space: nowrap; /* Empêche le texte de se plier */
-}
-
-body.dark .btn-ternary:hover {
-  background-color: transparent; /* Fond transparent au survol pour l'effet inverse */
-  color: var(--theme-primary); /* Texte devient coloré au survol */
-  transform: translateY(-3px); /* Légère élévation au survol */
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3); /* Ombre encore plus prononcée */
-}
-
-body.light .btn-5 {
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Léger effet d'ombre pour donner du relief */
-  font-size: 14px;
-  font-family: 'Lato', sans-serif;
-  background: radial-gradient(circle, rgb(215, 192, 171) 0%, rgba(239,223,208,1) 100%);
-  color: var(--theme-text-primary); /* Texte sombre */
-  font-weight: bold;
-  border: 2px solid var(--theme-primary); /* Bordure légère */
-  padding: 5px 10px;
-  border-radius: 8px;
-  text-transform: uppercase;
-  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease;
-  white-space: nowrap; /* Empêche le texte de se plier */
-}
-
-body.light .btn-5:hover {
-  background-color: transparent; /* Fond plus foncé au survol */
-  color: black; /* Texte blanc au survol */
-  transform: translateY(-3px); /* Légère élévation au survol pour un effet interactif */
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-
-
 /* Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 8px;
@@ -418,32 +172,6 @@ html {
 
 html, body {
   overflow-x: hidden;
-}
-
-
-.error-form {
-  transition: var(--transition-smooth);
-  transform: translateX(-50%);
-  flex-direction: column;
-  justify-content: space-around;
-  background: var(--theme-error-clear-opacity);
-  color: white;
-  overflow: hidden;
-  width: 400px;
-  min-height: 100px;
-  display: none;
-
-}
-
-.error-form.active {
-  display: flex;
-  transform: translateX(0%);
-  border: 1px solid var(--theme-dark-clear);
-  border-radius: 10px;
-  height: auto;
-  padding: 10px 10px 10px 10px;
-  font-size: 15px;
-  color: var(--theme-error-dark);
 }
 
 

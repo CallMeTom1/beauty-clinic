@@ -24,7 +24,31 @@ export enum ApiURI {
 
   CHANGE_PASSWORD = 'account/change-password',
   RESET_PASSWORD = 'account/reset-password',
-  FORGOT_PASSWORD = 'account/forgot-password'
+  FORGOT_PASSWORD = 'account/forgot-password',
 
+  //PRODUCTS
+  PRODUCTS = 'products',
+  PRODUCT_PUBLISH = 'products/publish',
+  PRODUCT_UNPUBLISH = 'products/unpublish',
+  PRODUCT_PUBLISHED = 'products/published',
+  PRODUCT_ADD_CATEGORY = 'products/add-category',
+  PRODUCT_UPLOAD_IMAGE = 'products/upload-product-image',
+
+  //PRODUCT CATEGORIES
+  PRODUCT_CATEGORIES = 'product-categories',
+  PRODUCT_CATEGORIES_PUBLISH = 'product-categories/publish',
+  PRODUCT_CATEGORIES_UNPUBLISH = 'product-categories/unpublish',
+  PRODUCT_CATEGORIES_PUBLISHED = 'product-categories/published',
+  PRODUCT_CATEGORIES_UPLOAD_IMAGE = 'product-categories/upload-category-product-image',
+
+  //CART
+  CART = 'cart',
+  CART_UPDATE_QUANTITY = 'cart/update',
+
+  //ORDERS
+  ORDERS = 'orders',
+
+  //PAYMENTS
+  PAYMENTS = 'payments',
 
 }

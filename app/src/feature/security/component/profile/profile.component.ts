@@ -22,6 +22,10 @@ export class ProfileComponent implements OnInit {
   protected securityService: SecurityService = inject(SecurityService);
   protected translateService: TranslateService = inject(TranslateService);
 
+  protected showUploadButton: boolean = false;
+  protected avatarAlt: string = 'security-feature-avatar-alt';
+  protected changeAvatar: string = 'security-feature-change-avatar';
+
   // Formulaire de profil
   public profileFormGroup: FormGroup = new FormGroup({
     firstname: new FormControl('', [
@@ -101,9 +105,7 @@ export class ProfileComponent implements OnInit {
     profileImage: new FormControl(null, Validators.required)
   });
 
-  protected showUploadButton: boolean = false;
-  protected avatarAlt: string = 'security-feature-avatar-alt';
-  protected changeAvatar: string = 'security-feature-change-avatar';
+
 
   constructor() {
     // Utilisation de 'effect' pour surveiller les changements sur 'account$'

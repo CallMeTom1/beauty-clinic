@@ -1,0 +1,10 @@
+<div class="category-selector">
+  @for(cat of productService.categories$(); track cat.product_category_id){
+    <div
+      [ngClass]="{'selected': isSelected(cat)}"
+      class="cat-bubble"
+      (click)="selectCategory(cat)">
+      <span>{{ cat.name }}</span>
+    </div>
+  }
+</div>

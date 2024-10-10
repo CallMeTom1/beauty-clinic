@@ -13,15 +13,13 @@ import {NgStyle} from "@angular/common";
 })
 export class UserAvatarComponent {
   @Input() alt: string = 'avatar';
-  @Input() width: string = '32px';
-  @Input() height: string = '32px';
+  @Input() width: string = '50px';
+  @Input() height: string = '50px';
 
   private securityService: SecurityService = inject(SecurityService);
 
   profileImage$: Signal<string> = computed(() => {
     const account = this.securityService.account$();
-    console.log(account.hasCustomProfileImage)
-    console.log(account.profileImage)
     if (account.profileImage && account.profileImage.length > 0) {
       // Si l'utilisateur a personnalisé son image de profil
       return `data:image/png;base64,${account.profileImage}`;

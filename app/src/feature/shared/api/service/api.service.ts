@@ -25,6 +25,9 @@ export class ApiService {
   delete(partURL: string, payload: Payload): Observable<ApiResponse> {
     return this.handle(this.http.delete(`${this.baseURL}${partURL}`, payload));
   }
+  patch(partURL: string, payload: Payload): Observable<ApiResponse> {
+    return this.handle(this.http.patch(`${this.baseURL}${partURL}`, payload));  // Ajout de la méthode patch
+  }
   private handle(obs: Observable<any>): Observable<ApiResponse> {
     return obs.pipe(
         map((response: Object) => this.successHandler(response)),

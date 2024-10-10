@@ -14,7 +14,8 @@ export enum AppNode {
     CONTACT=`contact`,
     BUSINESS_HOURS= `business-hours`,
     HOLIDAY= `holiday`,
-
+    CATEGORY_PRODUCT=`product-category`,
+    PRODUCT=`product`,
     APPOINTMENT= `appointment`,
 
     CUSTOMER= `customer`,
@@ -27,5 +28,6 @@ export enum AppNode {
     MANAGE_CUSTOMER= `admin/customer`,
     MANAGE_BUSINESS_HOURS= `admin/business-hours`,
     MANAGE_HOLIDAY= `admin/holiday`,
+    MANAGE_CATEGORY_PRODUCT=`admin/category-product`
 
 }

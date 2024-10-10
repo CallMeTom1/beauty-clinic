@@ -11,12 +11,6 @@ export class UploadProductImagePayload {
     @IsNotEmpty({ message: 'The categoryProductId cannot be empty.' })
     productId: string;
 
-    @ApiProperty({
-        description: 'The image file to be uploaded for the product.',
-        type: 'string',
-        format: 'binary',
-        example: 'file.png'
-    })
-    @IsNotEmpty({ message: 'The productImage file cannot be empty.' })
+    @ApiProperty({type: 'string', format: 'binary'})
     productImage: any;
 }

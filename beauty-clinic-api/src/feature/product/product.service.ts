@@ -40,21 +40,10 @@ export class ProductService {
     // Créer un produit
     async create(payload: CreateProductPayload): Promise<Product> {
         try {
-            const { category_ids, ...productData } = payload;
-
-            // Utilisation de 'find' avec 'In' pour récupérer les catégories par ID
-            const categories = await this.categoryRepository.find({
-                where: { product_category_id: In(category_ids) }
-            });
-
-            if (!categories.length) {
-                throw new NotFoundException('No valid categories found');
-            }
-
+            // Pas de traitement des categories ici
             const product = this.productRepository.create({
                 product_id: ulid(),
-                ...productData,
-                categories,
+                ...payload,
             });
 
             return this.productRepository.save(product);
@@ -93,27 +82,18 @@ export class ProductService {
     }
 
 
-    // Mettre à jour un produit
+    // Mettre à jour un produit sans gestion des catégories
     async update(payload: UpdateProductPayload): Promise<Product> {
-        try{
+        try {
             const product = await this.findOne(payload.id);
-
-            if (payload.category_ids) {
-                // Utilisation de 'find' avec 'In' pour récupérer les catégories par leurs IDs
-                product.categories = await this.categoryRepository.find({
-                    where: {product_category_id: In(payload.category_ids)}
-                });
-            }
 
             // Mise à jour des autres champs du produit avec Object.assign
             Object.assign(product, payload);
 
             return this.productRepository.save(product);
-        }
-        catch(e) {
+        } catch (e) {
             throw new UpdateProductException();
         }
-
     }
 
     // Supprimer un produit
@@ -196,27 +176,31 @@ export class ProductService {
 
     // Mettre à jour l'image d'un produit
     async updateProductImage(productId: string, file: Express.Multer.File): Promise<Product> {
-        try{
+        try {
+            console.log('File received in service:', file);
+            console.log('Product ID:', productId);
+
             const product = await this.findOne(productId);
 
             if (!file) {
                 throw new FileUploadException();
             }
 
+            // Vérifiez le type MIME du fichier
             const allowedMimeTypes: string[] = ['image/jpeg', 'image/png'];
-            const allowedExtensions: string[] = ['.jpg', '.jpeg', '.png', '.JPG'];
-
-            if (!allowedMimeTypes.includes(file.mimetype) ||
-                !allowedExtensions.some(ext => file.originalname.endsWith(ext))) {
+            if (!allowedMimeTypes.includes(file.mimetype)) {
                 throw new InvalidFileTypeException();
             }
 
-            product.product_image = Buffer.from(file.buffer);
+            // Encodage en base64
+            const base64Image = file.buffer.toString('base64');
+            product.product_image = `data:${file.mimetype};base64,${base64Image}`;
 
             return await this.productRepository.save(product);
-        }
-        catch (e){
+        } catch (e) {
+            console.error('Erreur dans le service lors de la mise à jour de l\'image', e);
             throw new UpdateProductImageException();
         }
     }
+
 }

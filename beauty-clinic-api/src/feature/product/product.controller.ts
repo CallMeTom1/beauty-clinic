@@ -1,4 +1,15 @@
-import {Controller, Get, Post, Patch, Delete, Body, Param, UploadedFile, UseInterceptors} from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Patch,
+    Delete,
+    Body,
+    Param,
+    UploadedFile,
+    UseInterceptors,
+    BadRequestException
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductPayload } from './data/payload/create-product.payload';
 import { UpdateProductPayload } from './data/payload/update-product.payload';
@@ -67,7 +78,7 @@ export class ProductController {
         return this.productService.addCategory(payload);
     }
 
-    @Roles(Role.ADMIN)
+
     @Post('upload-product-image')
     @UseInterceptors(FileInterceptor('productImage'))
     @ApiConsumes('multipart/form-data')
@@ -79,6 +90,11 @@ export class ProductController {
         @Body() payload: UploadProductImagePayload,
         @UploadedFile() file: Express.Multer.File,
     ): Promise<Product> {
+
+        if (!file) {
+            throw new BadRequestException('No file uploaded');
+        }
+
         return this.productService.updateProductImage(payload.productId, file);
     }
 }

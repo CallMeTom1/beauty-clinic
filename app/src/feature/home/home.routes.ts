@@ -1,6 +1,7 @@
 import { Routes } from "@angular/router";
 import {AppNode} from "@shared-routes";
 import {AdminGuard} from "./admin-role.guard";
+import {productRoutes} from "../product/product.routes";
 
 export const homeRoutes: Routes = [
   {
@@ -22,6 +23,11 @@ export const homeRoutes: Routes = [
         path: AppNode.CARE,
         loadChildren: () => import('../care/care.routes')
           .then(m => m.careRoutes),
+      },
+      {
+        path: AppNode.PRODUCT,
+        loadChildren: () => import('../product/product.routes')
+          .then(m => m.productRoutes),
       },
       {
         path: AppNode.CONTACT,

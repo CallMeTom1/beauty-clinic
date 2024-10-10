@@ -1,0 +1,61 @@
+<div class="category-container">
+  <h2>Gérer les catégories</h2>
+  <!-- Bouton pour ajouter une nouvelle catégorie -->
+  <div class="add-category-button">
+    <button (click)="openCreateModal()" class="btn btn-primary">
+      {{ 'form.category.product.add.label' | translate }}
+    </button>
+  </div>
+  <!-- Liste des catégories affichées sous forme de cartes -->
+  <div class="category-list">
+    @for(category of securityService.CategoryProducts$(); track category.product_category_id) {
+      <div class="card-header">
+        <label for="editImage-{{ category.product_category_id }}" class="image-upload-label">
+          <img [src]="getCategoryImage(category)" alt="{{ category.name }}" class="category-image" />
+          <input type="file" id="editImage-{{ category.product_category_id }}" (change)="onCategoryImageChange($event, category)" accept="image/*" hidden />
+        </label>
+        <h3>{{ category.name }}</h3>
+      </div>
+      <div class="card-body">
+        <button (click)="openEditModal(category)" class="btn btn-secondary">{{ 'form.category.product.edit.label' | translate }}</button>
+
+        <div class="switch">
+          <label>{{ 'form.category.product.publish.label' | translate }}</label>
+          <input type="checkbox" [checked]="category.isPublished" (change)="togglePublishCategory(category)" />
+        </div>
+        <button (click)="openDeleteModal(category)" class="btn btn-danger">{{ 'form.category.product.delete.label' | translate }}</button>
+      </div>
+    }
+  </div>
+  @if(showDeleteModal){
+    <app-modal [title]="'form.category.product.delete.confirm.title' | translate" (close)="handleClose()">
+      <p>{{ 'form.category.product.delete.confirm.message' | translate }}: {{ currentCategory?.name }}</p>
+      <button (click)="deleteCategory()" class="btn btn-danger">{{ 'form.category.product.delete.confirm.button' | translate }}</button>
+      <button (click)="handleClose()" class="btn btn-secondary">{{ 'form.cancel.label' | translate }}</button>
+    </app-modal>
+  }
+  @if(showEditModal){
+    <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
+
+      <form [formGroup]="updateCategoryProductFormGroup" (ngSubmit)="onSubmitUpdateCategory()">
+        @for(input of updateCategoryFormControlConfigs; track input.label){
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <button type="submit" class="btn btn-secondary">{{ 'form.category.product.update.label' | translate }}</button>
+      </form>
+      <!-- Error form display -->
+    </app-modal>
+  }
+
+  @if(showCreateModal){
+    <app-modal [title]="modal_create_title | translate" (close)="handleClose()">
+    <form [formGroup]="createCategoryProductFormGroup" (ngSubmit)="onSubmitCreateCategory()">
+      @for(input of createCategoryFormControlConfigs; track input.label){
+        <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+      }
+      <button type="submit" class="btn btn-primary">{{ 'form.category.product.add.label' | translate }}</button>
+    </form>
+    </app-modal>
+  }
+
+</div>

@@ -1,39 +1,36 @@
-:root {
-  --menu-height: 50px; /* Hauteur du menu */
-}
-
 .main-content {
   overflow-y: auto; /* Permet le défilement vertical */
   padding-bottom: 116px; /* Évite que le contenu ne soit caché derrière le menu */
 }
 
 .bottom-nav {
-  background: white;
-  padding: 16px 16px;
+  background: var(--theme-bg-primary);
   height: 64px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between; /* Centre les éléments horizontalement */
+  padding: 16px;
+  align-items: center; /* Centre les éléments verticalement */
   list-style-type: none;
-  margin: 0;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 
 }
 
 .bottom-nav li {
-  padding: 16px 16px;
+  padding: 16px 16px; /* Ajuste le padding pour mieux centrer */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
+  text-align: center; /* Centre le texte à l'intérieur de chaque élément */
 }
 
 .bottom-nav li.active {
   color: #007bff; /* Couleur du texte et icône pour l'élément actif */
+  text-decoration: underline;
 }
 
 .menu__icon {
@@ -48,34 +45,10 @@
   font-size: 11px;
 }
 
-.z-index200{
+.z-index200 {
   z-index: 200;
 }
 
 .menu__title.active {
   color: #007bff; /* Changement de couleur du texte lorsqu'actif */
-}
-
-.active {
-}
-
-.grid-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  pointer-events: none;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 16px;
-  box-sizing: border-box;
-}
-
-.grid-overlay .column {
-  flex-grow: 1;
-  margin: 0 8px;
-  background-color: rgba(0, 0, 0, 0.1);
-  height: 100%;
 }

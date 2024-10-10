@@ -1,0 +1,74 @@
+.top-nav-mobile {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 16px;
+  background: var(--theme-bg-primary); /* Fond */
+  top: 0;
+  z-index: 1000;
+  left: 0;
+  right: 0;
+  position: fixed;
+  /* Cette ligne réinitialise les marges globales */
+  /* Ajouter une grande marge en bas */
+
+}
+
+.top-nav-mobile * {
+  /* Remove any margin or padding from children elements inside the top-nav-mobile */
+  margin: 0;
+  padding: 0;
+}
+.left{
+  border-radius: 10px;
+  background: #dac6b3;
+  padding: 2px 2px;
+}
+
+.center{
+}
+.top-nav-mobile .left img {
+  width: 100%;
+  height: 100%;
+}
+
+.top-nav-mobile .center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.top-nav-mobile .center a {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--theme-text-primary);
+}
+
+.top-nav-mobile .welcome-text {
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  color: #8c8c8c;
+}
+
+.top-nav-mobile .clinic-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin-top: 3px;
+}
+
+.top-nav-mobile .right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.top-nav-mobile .right .notification-icon {
+  margin-right: 10px;
+}

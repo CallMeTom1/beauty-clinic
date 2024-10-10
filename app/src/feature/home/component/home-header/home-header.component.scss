@@ -1,67 +1,21 @@
-.home-header {
-  overflow: hidden;
-  height: 200px;
-  background: rgb(255, 229, 200);
-  background: linear-gradient(43deg, rgba(255, 229, 200, 1) 0%, rgba(255, 255, 255, 1) 49%, rgba(255, 229, 200, 1) 85%);
-  padding: 16px 16px 0 16px;
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  text-align: left;
+  margin-top: 70px;
+  border-radius: 15px;
+  max-width: 100%;
+  letter-spacing: 1px;
+}
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; // Séparer brand en haut et text_and_img en bas
-  align-items: flex-start;
+h1 span {
+  display: block;
+}
 
-  .home-header__brand {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
-
-    img {
-      width: 32px;
-      height: 48px;
-    }
-
-    .home-header__brand__name {
-      display: flex;
-      flex-direction: column;
-      font-family: 'Baskerville', serif;
-      font-size: 20px;
-      text-transform: capitalize;
-
-      span {
-        margin-bottom: -4px;
-      }
-
-      span:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  .home-header__text_and_img {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    width: 100%;
-
-    .home-header__text {
-      align-self: flex-start;
-      padding-top: 16px;
-      h1 {
-        font-family: 'Baskerville', serif;
-        font-weight: bold;
-        text-align: left;
-        font-size: 16px;
-      }
-    }
-
-    .home-header__img {
-      img {
-        width: 250px;
-        height: auto;
-      }
-    }
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 24px;
+    padding: 15px;
   }
 }

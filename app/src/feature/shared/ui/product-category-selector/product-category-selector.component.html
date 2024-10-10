@@ -1,0 +1,9 @@
+<form [formGroup]="categoryFormGroup">
+  <div *ngFor="let category of securityService.CategoryProducts$()">
+    <label>
+      <input type="checkbox" [value]="category.product_category_id" (change)="onCategoryChange($event, category.product_category_id)"
+             [checked]="isCategorySelected(category.product_category_id)">
+      {{ category.name }}
+    </label>
+  </div>
+</form>

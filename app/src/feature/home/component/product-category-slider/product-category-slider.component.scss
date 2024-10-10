@@ -1,0 +1,38 @@
+.products-category {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+
+  .products-category-top {
+    padding: 16px 16px 0 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    h3 {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .products-category-top-see-more {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      color: grey;
+      font-weight: bold;
+    }
+  }
+
+  .products-category-slider {
+    padding: 16px 0 0 16px;
+    display: flex;
+    flex-direction: row; // Affiche les cartes en ligne
+    overflow-x: auto; // Permet le défilement horizontal
+    overflow-y: hidden; // Évite le défilement vertical
+    gap: 16px; // Ajoute un espace entre les cartes
+    scroll-behavior: smooth; // Ajoute une transition fluide pour le défilement programmé
+
+  }
+}

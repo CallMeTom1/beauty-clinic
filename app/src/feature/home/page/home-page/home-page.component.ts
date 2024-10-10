@@ -19,6 +19,9 @@ import {CarouselLandingComponent} from "../../../shared/ui/carousel-landing/caro
 import {CareSliderComponent} from "../../component/care-slider/care-slider.component";
 import {PresentationComponent} from "../../component/presentation/presentation.component";
 import {SocialsAndThemeComponent} from "../../../shared/ui/socials-and-theme/socials-and-theme.component";
+import {
+  ProductCategorySliderComponent
+} from "../../component/product-category-slider/product-category-slider.component";
 
 @Component({
   selector: 'app-home-page',
@@ -38,6 +41,7 @@ import {SocialsAndThemeComponent} from "../../../shared/ui/socials-and-theme/soc
     CareSliderComponent,
     PresentationComponent,
     SocialsAndThemeComponent,
+    ProductCategorySliderComponent,
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'

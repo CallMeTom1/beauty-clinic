@@ -2,12 +2,15 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserService } from "@feature/user/user.service";
 import { User } from "@feature/user/model/entity/user.entity";
-import {UserController} from "@feature/user/user.controller";
+import { UserController } from "@feature/user/user.controller";
+import { CartModule } from "../cart/cart.module";
+import {Cart} from "../cart/data/model/cart.entity";  // Assurez-vous d'importer correctement CartModule
+
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User])
+        TypeOrmModule.forFeature([User, Cart]),
     ],
-    providers: [UserService],
+    providers: [UserService],  // Pas besoin de CartService ici
     exports: [UserService],
     controllers: [UserController]
 })

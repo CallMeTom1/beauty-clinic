@@ -1,0 +1,17 @@
+select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  color: blue;
+  background-color: var(--theme-bg-primary);
+  border: 1px solid var(--theme-border);
+  border-radius: 5px;
+  box-shadow: var(--box-shadow);
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}

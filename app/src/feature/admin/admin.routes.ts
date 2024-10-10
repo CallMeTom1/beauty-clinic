@@ -13,6 +13,16 @@ export const adminRoutes: Routes = [
           .then(c => c.AdminDashboardComponent),
       },
       {
+        path: AppNode.CATEGORY_PRODUCT,
+        loadComponent: () => import('./page/admin-product-category-page/admin-product-category-page.component')
+          .then(c => c.AdminProductCategoryPageComponent),
+      },
+      {
+        path: AppNode.PRODUCT,
+        loadComponent: () => import('./page/admin-product-page/admin-product-page.component')
+          .then(c => c.AdminProductPageComponent),
+      },
+      {
         path: AppNode.CARE,
         loadComponent: () => import('./page/manage-care-page/manage-care-page.component')
           .then(c => c.ManageCarePageComponent),

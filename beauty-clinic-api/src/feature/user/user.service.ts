@@ -1,4 +1,4 @@
-import {BadRequestException, Injectable, Logger} from "@nestjs/common";
+import {BadRequestException, forwardRef, Inject, Injectable, Logger} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {User} from "@feature/user/model/entity/user.entity";
@@ -13,6 +13,9 @@ import {
     UserNotFoundException
 } from "@feature/security/security.exception";
 import {ModifyUserPayload} from "@feature/user/model/payload/modify-user.payload";
+import {CartService} from "../cart/cart.service";
+import {Cart} from "../cart/data/model/cart.entity";
+import {CreateCartException} from "../cart/cart.exception";
 
 @Injectable()
 export class UserService {
@@ -20,15 +23,18 @@ export class UserService {
     private readonly defaultProfileImage: Buffer;
 
     constructor(
-        @InjectRepository(User) private readonly userRepository: Repository<User>
+        @InjectRepository(User) private readonly userRepository: Repository<User>,
+        @InjectRepository(Cart) private readonly cartRepository: Repository<Cart>,  // Injecter le CartRepository ici
+
     ) {
         this.defaultProfileImage = readFileSync(join(process.cwd(), 'src', 'feature', 'user', 'assets', 'default-profile.png'));
     }
 
     async createUser(payload: CreateUserInterface): Promise<User> {
         try {
+            const idUser: string = ulid()
             const newUser: User = this.userRepository.create({
-                idUser: ulid(),
+                idUser: idUser,
                 firstname: payload.firstname,
                 lastname: payload.lastname,
                 phoneNumber: payload.phoneNumber,
@@ -36,9 +42,30 @@ export class UserService {
                 profileImageUrl: payload.profileImageUrl
             });
 
-            return await this.userRepository.save(newUser);
+            const user: User = await this.userRepository.save(newUser);
+            await this.createCart(idUser);
+            return user;
         } catch (error) {
             throw new UserCreationException();
+        }
+    }
+
+    // Méthode déplacée pour créer un panier dans UserService
+    async createCart(idUser: string): Promise<Cart> {
+        try {
+            const user: User = await this.userRepository.findOne({ where: { idUser } });
+            if (!user) {
+                throw new UserNotFoundException();
+            }
+
+            const newCart: Cart = this.cartRepository.create({
+                idCart: ulid(),
+                user: user
+            });
+
+            return await this.cartRepository.save(newCart);
+        } catch (error) {
+            throw new CreateCartException();
         }
     }
 
@@ -84,7 +111,7 @@ export class UserService {
         }
 
         const allowedMimeTypes: string[] = ['image/jpeg', 'image/png'];
-        const allowedExtensions: string[] = ['.jpg', '.jpeg', '.png'];
+        const allowedExtensions: string[] = ['.jpg', '.jpeg', '.png', '.PNG'];
 
         if (!allowedMimeTypes.includes(file.mimetype) ||
             !allowedExtensions.some(ext => file.originalname.endsWith(ext))) {
@@ -113,9 +140,20 @@ export class UserService {
             throw new UserNotFoundException();
         }
 
+        // Mettre à jour uniquement les champs fournis dans le payload
         user.firstname = payload.firstname || user.firstname;
         user.lastname = payload.lastname || user.lastname;
         user.phoneNumber = payload.phoneNumber || user.phoneNumber;
+
+        // Mettre à jour l'adresse de livraison si elle est fournie
+        if (payload.shippingAddress) {
+            user.shippingAddress = { ...user.shippingAddress, ...payload.shippingAddress };
+        }
+
+        // Mettre à jour l'adresse de facturation si elle est fournie
+        if (payload.billingAddress) {
+            user.billingAddress = { ...user.billingAddress, ...payload.billingAddress };
+        }
 
         try {
             return await this.userRepository.save(user);
@@ -123,5 +161,6 @@ export class UserService {
             throw new BadRequestException(error.message);
         }
     }
+
 
 }

@@ -1,0 +1,25 @@
+<div class="product">
+  <div class="product-left">
+    <img [src]="getProductImage(product)" alt="{{ product.name }}" class="product-image" />
+    @if(product.promo_percentage > 0){
+      <span class="promo-badge">{{ product.promo_percentage }}% OFF</span>
+    }
+  </div>
+  <div class="product-right">
+    <h2>{{ product.name }}</h2>
+    <div class="product-right-bottom">
+      <div class="price-wrapper">
+        @if(product.promo_percentage > 0){
+          <span class="original-price">{{ product.price | currency }}</span>
+        }
+        @if(product.promo_percentage > 0){
+          <span class="discounted-price">{{ getDiscountedPrice(product) | currency }}</span>
+        }
+        @if(product.promo_percentage === 0){
+          <span class="normal-price">{{ product.price | currency }}</span>
+        }
+      </div>
+      <button> Ajouter au panier</button>
+    </div>
+  </div>
+</div>

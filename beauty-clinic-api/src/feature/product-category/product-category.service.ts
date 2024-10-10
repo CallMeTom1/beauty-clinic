@@ -117,27 +117,28 @@ export class ProductCategoryService {
     async updateCategoryProductImage(categoryProductId: string, file: Express.Multer.File): Promise<ProductCategory> {
         try {
             const productCategory: ProductCategory = await this.findOne(categoryProductId);
-            //const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+
             if (!file) {
                 throw new FileUploadException();
             }
-            /*
-            if (file.size > maxSizeInBytes) {
-                throw new FileUploadException();
-            }
-             */
+
             const allowedMimeTypes: string[] = ['image/jpeg', 'image/png'];
             const allowedExtensions: string[] = ['.jpg', '.jpeg', '.png', '.JPG'];
             if (!allowedMimeTypes.includes(file.mimetype) ||
                 !allowedExtensions.some(ext => file.originalname.endsWith(ext))) {
                 throw new InvalidFileTypeException();
             }
-            productCategory.product_category_image = Buffer.from(file.buffer);
+
+            // Encodage de l'image en base64
+            const base64Image = file.buffer.toString('base64');
+            // Stockage de l'image en base64, avec le format de mime type (data:image/png;base64,...)
+            productCategory.product_category_image = `data:${file.mimetype};base64,${base64Image}`;
 
             return await this.productCategoryRepository.save(productCategory);
         } catch (e) {
             throw new UpdateProductCategoryImageException();
         }
     }
+
 
 }

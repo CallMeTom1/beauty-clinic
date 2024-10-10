@@ -18,8 +18,8 @@ export class Product {
     @Column('int', { nullable: false })
     quantity_stored: number;
 
-    @Column({ type: 'bytea', nullable: true })
-    product_image: Buffer;
+    @Column({ type: 'text', nullable: true }) // Utilisation de 'text' pour stocker la chaîne encodée en base64
+    product_image: string;
 
     @Column('decimal', { nullable: true })
     promo_percentage: number;
@@ -27,7 +27,8 @@ export class Product {
     @Column({ type: 'boolean', default: false })
     isPublished: boolean;
 
-    @ManyToMany(() => ProductCategory, productCategory => productCategory.products)
+    @ManyToMany(() => ProductCategory, productCategory => productCategory.products, { nullable: true }) // Relation many-to-many avec possibilité d'absence de catégories
     @JoinTable()
-    categories: ProductCategory[];
+    categories: ProductCategory[]; // Peut être un tableau vide ou null
+
 }

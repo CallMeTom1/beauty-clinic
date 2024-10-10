@@ -6,6 +6,7 @@ import {Language} from "@shared-core";
 import {Title} from "@angular/platform-browser";
 import {OverlayComponent} from "../../shared/ui/overlay-grid/overlay.component";
 import {ThemeService} from "../../shared/ui/theme.service";
+import {SecurityService} from "@feature-security";
 
 @Component({ selector: 'component-root',
     standalone: true,
@@ -19,11 +20,12 @@ export class AppComponent implements OnInit {
   private titleService: Title = inject(Title);
   private themeService: ThemeService = inject(ThemeService);
   private title: string = 'Beauty Clinic By Françoise';
-
+  protected securityService = inject(SecurityService);
   ngOnInit(): void {
     this.titleService.setTitle(this.title);
     this.translate.setDefaultLang(Language.FR);
     this.translate.use(Language.FR);
     this.themeService.loadTheme();
+    this.securityService.fetchCategoryProducts().subscribe();
   }
 }

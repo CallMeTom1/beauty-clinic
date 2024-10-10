@@ -51,13 +51,13 @@ export class SecurityService {
 
     async userDetail(userId: string, token: string): Promise<{ user: UserDetails }> {
         const userDetails: User = await this.userService.findUserById(userId);
-        if(isNil(userDetails)){
+        if (isNil(userDetails)) {
             throw new UserNotFoundException();
         }
 
         const credentials: Credential = await this.getCredentialsByUserId(userId);
-        if(!credentials){
-            throw new CredentialNotFoundException()
+        if (!credentials) {
+            throw new CredentialNotFoundException();
         }
 
         return {
@@ -70,7 +70,27 @@ export class SecurityService {
                 lastname: userDetails.lastname,
                 phoneNumber: userDetails.phoneNumber,
                 profileImageUrl: userDetails.profileImageUrl,
-                hasCustomImage: userDetails.hasCustomProfileImage
+                hasCustomImage: userDetails.hasCustomProfileImage,
+                shippingAddress: userDetails.shippingAddress
+                    ? {
+                        road: userDetails.shippingAddress.road,
+                        nb: userDetails.shippingAddress.nb,
+                        cp: userDetails.shippingAddress.cp,
+                        town: userDetails.shippingAddress.town,
+                        country: userDetails.shippingAddress.country,
+                        complement: userDetails.shippingAddress.complement,
+                    }
+                    : null,
+                billingAddress: userDetails.billingAddress
+                    ? {
+                        road: userDetails.billingAddress.road,
+                        nb: userDetails.billingAddress.nb,
+                        cp: userDetails.billingAddress.cp,
+                        town: userDetails.billingAddress.town,
+                        country: userDetails.billingAddress.country,
+                        complement: userDetails.billingAddress.complement,
+                    }
+                    : null,
             }
         };
     }
@@ -157,8 +177,6 @@ export class SecurityService {
 
         await this.repository.save(credential);
     }
-
-
 
     async googleSignIn(idToken: string): Promise<Token> {
         try {
@@ -256,20 +274,6 @@ export class SecurityService {
         } catch (e) {
             throw new CredentialDeleteException();
         }
-    }
-
-    async promoteToModerator(userId: string): Promise<void> {
-        const credential: Credential = await this.repository.findOne({
-            where: { user: { idUser: userId } },
-            relations: ['user']
-        });
-
-        if (!credential) {
-            throw new UserNotFoundException();
-        }
-
-        credential.role = Role.MODO;
-        await this.repository.save(credential);
     }
 
     async getCredentialsByUserId(userId: string): Promise<Credential> {
@@ -375,6 +379,7 @@ export class SecurityService {
         await this.repository.save(credential);
     }
 
+    /*
     async changePasswordByUserId(userId: string, newPassword: string): Promise<void> {
         const credential: Credential = await this.getCredentialsByUserId(userId);
 
@@ -394,5 +399,7 @@ export class SecurityService {
         // Sauvegarde du nouveau mot de passe
         await this.repository.save(credential);
     }
+
+     */
 
 }

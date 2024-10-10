@@ -55,12 +55,4 @@ export class UpdateProductPayload {
     @IsOptional()
     promo_percentage?: number;
 
-    @ApiProperty({
-        description: 'Array of category IDs associated with the product.',
-        example: ['cat_12345', 'cat_67890'],
-        required: false
-    })
-    @IsString({ each: true, message: 'Each category ID must be a string.' })
-    @IsOptional()
-    category_ids?: string[];
 }

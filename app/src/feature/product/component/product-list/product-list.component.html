@@ -1,0 +1,3 @@
+@for(product of productService.productsToShow$(); track product.product_id){
+  <app-product-card [product]="product"></app-product-card>
+}

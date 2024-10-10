@@ -1,0 +1,6 @@
+<div class="category-card" (click)="navigateToCategory()">
+  <div class="category-image-container">
+    <img [src]="getCategoryImage()" [alt]="productCategory.name" class="category-image">
+  </div>
+  <h3 class="category-name">{{ productCategory.name }}</h3>
+</div>

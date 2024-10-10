@@ -36,6 +36,21 @@ import {ResetPasswordPayload} from "./data/payload/user/reset-password.payload";
 import {ForgotPasswordPayload} from "./data/payload/user/forgot-password.payload";
 import {ModifyProfilePayload} from "./data/payload/user/modify-profile.payload";
 import {ModifyPasswordPayload} from "./data/payload/user/modify-password.payload";
+import {CategoryProduct} from "./data/model/category-product/category-product.business";
+import {ProductCategoryUtils} from "./utils/product-category.utils";
+import {Product} from "./data/model/product/product.business";
+import {ProductUtils} from "./utils/product.utils";
+import {UpdateCategoryProductPayload} from "./data/payload/category-product/update-category-product.payload";
+import {CreateCategoryProductPayload} from "./data/payload/category-product/create-category-product.payload";
+import {ProductImagePayload} from "./data/payload/category-product/upload-category-product-image.payload";
+import {RemoveCategoryProductPayload} from "./data/payload/category-product/remove-category-product.payload";
+import {
+  UpdateCategoryProductStatusPayload
+} from "./data/payload/category-product/update-category-product-status.payload";
+import {CreateProductPayload} from "./data/payload/product/create-product.payload";
+import {UpdateProductPayload} from "./data/payload/product/update-product.payload";
+import {RemoveProductPayload} from "./data/payload/product/remove-product.payload";
+import {UpdateProductStatusPayload} from "./data/payload/product/update-product-status.payload";
 
 
 //todo réaliser tout les fetch dans ce service pour économiser les call api
@@ -60,6 +75,13 @@ export class SecurityService {
   public availableSlots$: WritableSignal<string[]> = signal([]);
   public customers$: WritableSignal<Customer[]> = signal([]);
 
+  public CategoryProducts$: WritableSignal<CategoryProduct[]> = signal([])
+  public CategoryProductsPublished$: WritableSignal<CategoryProduct[]> = signal([])
+
+  public Products$: WritableSignal<Product[]> = signal([])
+  public ProductsPublished$: WritableSignal<Product[]> = signal([])
+
+
   public error$: WritableSignal<string | null> = signal(null);
 
 
@@ -70,10 +92,7 @@ export class SecurityService {
 
   public setAuthState(isAuth: boolean): void {
     this.isAuth$.set(isAuth);
-    console.log(isAuth)
-    console.log('ici');
     localStorage.setItem(environment.LOCAL_STORAGE_AUTH, JSON.stringify(isAuth));
-    console.log(localStorage.getItem(environment.LOCAL_STORAGE_AUTH));
   }
 
   private setupAuthChangeEffect(): void {
@@ -89,7 +108,6 @@ export class SecurityService {
   public fetchCustomers(): Observable<ApiResponse> {
     return this.api.get(ApiURI.USER).pipe(
       tap((response: ApiResponse): void => {
-        console.log(response)
         if(response.result){
           this.customers$.set(response.data)
         }
@@ -101,19 +119,11 @@ export class SecurityService {
     )
   }
 
-  public modifyProfile(payload: ModifyProfilePayload): Observable<ApiResponse> {
-    return this.api.put(ApiURI.USER, payload).pipe(
-      tap((response: ApiResponse): void => {
-        this.me().subscribe()
-      })
-    )
-  }
 
-
+  //Appointment
   public fetchAppointments(): Observable<ApiResponse> {
     return this.api.get(ApiURI.APPOINTMENT).pipe(
       tap((response: ApiResponse): void => {
-        console.log('API response received:', response);
         if(response.result){
           this.appointment$.set(
             response.data.map((appointment: any) => ({
@@ -231,6 +241,7 @@ export class SecurityService {
   };
 
 
+  //Holiday and business-hours
   public fetchHolidays(): Observable<ApiResponse> {
     return this.api.get(ApiURI.HOLIDAY).pipe(
       tap((response: ApiResponse): void => {
@@ -274,8 +285,6 @@ export class SecurityService {
       })
     );
   }
-
-
 
   public createHolidayInterval(payload: CreateHolidayIntervalPayload): Observable<ApiResponse> {
     return this.api.post(ApiURI.HOLIDAY_INTERVAL, payload).pipe(
@@ -361,11 +370,12 @@ export class SecurityService {
     );
   }
 
+
+  //CARE
   public fetchCares(): Observable<ApiResponse> {
     console.log('fetchCares() called, making API call...');
     return this.api.get(ApiURI.CARE).pipe(
       tap((response: ApiResponse): void => {
-        console.log('API response received:', response);
         if (response.result) {
           console.log('API call successful, updating cares...');
           this.cares$.set(response.data);
@@ -382,12 +392,10 @@ export class SecurityService {
 
 
   public addCare(payload: AddCarePayload): Observable<ApiResponse> {
-    console.log('Payload sent to server:', payload); // Log du payload envoyé au serveur
 
     return this.api.post(ApiURI.ADD_CARE, payload)
       .pipe(
         tap((response: ApiResponse): void => {
-          console.log('Server response:', response); // Log de la réponse du serveur
 
           if (response.result) {
             console.log('Care successfully added, fetching updated cares...');
@@ -409,7 +417,6 @@ export class SecurityService {
     return this.api.put(ApiURI.CARE, payload)
       .pipe(
         tap((response: ApiResponse): void => {
-          console.log('Server response:', response); // Log de la réponse du serveur
 
           if (response.result) {
             console.log('Care successfully edited, fetching updated cares...');
@@ -436,8 +443,20 @@ export class SecurityService {
       )
   }
 
+  navigate(link: string) {
+    this.router.navigate([link]).then();
+  }
 
 
+
+  //ACCOUNT
+  public modifyProfile(payload: ModifyProfilePayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.USER, payload).pipe(
+      tap((response: ApiResponse): void => {
+        this.me().subscribe()
+      })
+    )
+  }
   fetchProfile(isAuth: boolean): false | Subscription {
     if (isAuth) {
       return this.me()
@@ -469,11 +488,9 @@ export class SecurityService {
     return this.api.post(ApiURI.SECURITY_SIGN_IN, payload)
       .pipe(
         tap((response: ApiResponse): void => {
-          console.log('dans signin')
           console.log(payload);
           if (response.code === 'api.security.user.user_not_found')
           {
-            console.log('dans l erreur');
             this.error$.set('error.wrong_password_or_mail');
           }
           else if (response.result)
@@ -534,11 +551,6 @@ export class SecurityService {
     return this.api.get(ApiURI.ME);
   }
 
-
-  navigate(link: string) {
-    this.router.navigate([link]).then();
-  }
-
   resetPassword(payload: ResetPasswordPayload) {
     return this.api.post(ApiURI.RESET_PASSWORD, payload)
       .pipe(
@@ -568,6 +580,117 @@ export class SecurityService {
         })
       );
   }
+
+
+
+  //CATEGORY PRODUCTS
+  fetchCategoryProducts(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.PRODUCT_CATEGORIES)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result && Array.isArray(response.data)) {
+            console.log('response', response.data)
+            this.CategoryProducts$.set(ProductCategoryUtils.fromDtos(response.data)); // Utiliser fromDtos pour les tableaux
+          }
+        })
+      );
+  }
+
+  fetchCategoryProductsPublished(): Observable<ApiResponse>{
+    return this.api.get(ApiURI.PRODUCT_CATEGORIES_PUBLISHED)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if(response.result){
+            this.CategoryProductsPublished$.set(ProductCategoryUtils.fromDtos(response.data));
+          }
+        })
+      )
+  }
+
+  createCategoryProduct(payload: CreateCategoryProductPayload): Observable<ApiResponse>{
+    return this.api.post(ApiURI.PRODUCT_CATEGORIES, payload)
+  }
+
+  updateCategoryProduct(payload: UpdateCategoryProductPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.PRODUCT_CATEGORIES, payload)
+  }
+
+  deleteCategoryProduct(payload: RemoveCategoryProductPayload): Observable<ApiResponse>{
+    return this.api.delete(ApiURI.PRODUCT_CATEGORIES, payload)
+  }
+
+  publishCategoryProduct(payload: UpdateCategoryProductStatusPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.PRODUCT_CATEGORIES_PUBLISH, payload)
+  }
+
+  unpublishCategoryProduct(payload: UpdateCategoryProductStatusPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.PRODUCT_CATEGORIES_UNPUBLISH, payload)
+  }
+
+  uploadCategoryProductImage(payload: any): Observable<ApiResponse> {
+    return this.api.post(ApiURI.PRODUCT_CATEGORIES_UPLOAD_IMAGE, payload)
+  }
+
+
+
+  //PRODUCTS
+  fetchProducts(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.PRODUCTS) // Corriger l'URL si c'est PRODUCTS et non PRODUCT_CATEGORIES
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result && Array.isArray(response.data)) {
+            this.Products$.set(ProductUtils.fromDtos(response.data)); // Utiliser fromDtos pour les tableaux
+          }
+        })
+      );
+  }
+
+  fetchProductsPublished(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.PRODUCT_PUBLISHED)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result && Array.isArray(response.data)) {
+            this.ProductsPublished$.set(ProductUtils.fromDtos(response.data)); // Utiliser fromDtos pour les tableaux
+          }
+        })
+      );
+  }
+
+
+  createProduct(payload: CreateProductPayload): Observable<ApiResponse>{
+    console.log('payload envoyé create product', payload)
+    return this.api.post(ApiURI.PRODUCTS, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if(response.result){
+            console.log(response)
+          }
+    })
+      )
+  }
+
+  updateProduct(payload: UpdateProductPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.PRODUCTS, payload)
+  }
+
+  deleteProduct(payload: RemoveProductPayload): Observable<ApiResponse>{
+    return this.api.delete(ApiURI.PRODUCTS, payload)
+  }
+
+  publishProduct(payload: UpdateProductStatusPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.PRODUCT_PUBLISH, payload)
+  }
+
+  unpublishProduct(payload: UpdateProductStatusPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.PRODUCT_UNPUBLISH, payload)
+  }
+
+  uploadProductImage(payload: FormData): Observable<ApiResponse> {
+    return this.api.post(ApiURI.PRODUCT_UPLOAD_IMAGE, payload);
+  }
+
+
+
 
 
 

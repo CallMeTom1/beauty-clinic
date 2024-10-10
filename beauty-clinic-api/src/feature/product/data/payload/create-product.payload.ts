@@ -43,10 +43,4 @@ export class CreateProductPayload {
     @IsOptional()
     promo_percentage?: number;
 
-    @ApiProperty({
-        description: 'Array of category IDs associated with the product.',
-        example: ['cat_12345', 'cat_67890']
-    })
-    @IsString({ each: true, message: 'Each category ID must be a string.' })
-    category_ids: string[];
 }
