@@ -51,6 +51,7 @@ import {CreateProductPayload} from "./data/payload/product/create-product.payloa
 import {UpdateProductPayload} from "./data/payload/product/update-product.payload";
 import {RemoveProductPayload} from "./data/payload/product/remove-product.payload";
 import {UpdateProductStatusPayload} from "./data/payload/product/update-product-status.payload";
+import {UpdateProductCategoryPayload} from "./data/payload/product/update-product-category.payload";
 
 
 //todo réaliser tout les fetch dans ce service pour économiser les call api
@@ -650,6 +651,7 @@ export class SecurityService {
       .pipe(
         tap((response: ApiResponse): void => {
           if (response.result && Array.isArray(response.data)) {
+            console.log('response product published', response.data)
             this.ProductsPublished$.set(ProductUtils.fromDtos(response.data)); // Utiliser fromDtos pour les tableaux
           }
         })
@@ -689,6 +691,19 @@ export class SecurityService {
     return this.api.post(ApiURI.PRODUCT_UPLOAD_IMAGE, payload);
   }
 
+  // Mettre à jour les catégories d'un produit
+  updateProductCategories(payload: UpdateProductCategoryPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.UPDATE_PRODUCT_CATEGORIES, payload) // Adapter l'URI
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+            console.log('Catégories mises à jour avec succès:', response.data);
+          } else {
+            console.log('Erreur lors de la mise à jour des catégories:', response.code);
+          }
+        })
+      );
+  }
 
 
 

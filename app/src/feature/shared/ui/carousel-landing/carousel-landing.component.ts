@@ -1,7 +1,7 @@
 import {Component, HostListener} from '@angular/core';
 import {NgForOf, NgIf} from "@angular/common";
 import {ButtonComponent} from "../button/button.component";
-
+//todo reparer bug
 @Component({
   selector: 'app-carousel-landing',
   standalone: true,
@@ -16,19 +16,16 @@ import {ButtonComponent} from "../button/button.component";
 export class CarouselLandingComponent {
   slides = [
     { title: 'Un diagnostique sur mesure gratuit',
-      content: 'Identifiez les soins parfaitement adaptés à votre peau et à votre style.\n' +
-        'Françoise, notre experte beauté, vous offre un entretien personnalisé pour révéler votre potentiel.',
-      button: { text: 'Réservez maintenant', action: () => this.reserve() }
+      content: 'Identifiez les soins parfaitement adaptés à votre peau et à votre style.\n',
+      button: { text: 'Découvrir', action: () => this.reserve() }
     },
-    { title: 'PROMO -50%',
-      content: 'Identifiez les soins parfaitement adaptés à votre peau et à votre style.\n' +
-        'Françoise, notre experte beauté, vous offre un entretien personnalisé pour révéler votre potentiel.',
-      button: { text: 'Réservez maintenant', action: () => this.reserve() }
+    { title: 'Découvrer les soins d epilations laser',
+      content: 'Identifiez les soins parfaitement adaptés à votre peau et à votre style.',
+      button: { text: 'Découvrir', action: () => this.reserve() }
     },
-    { title: 'TEST',
-      content: 'Identifiez les soins parfaitement adaptés à votre peau et à votre style.\n' +
-        'Françoise, notre experte beauté, vous offre un entretien personnalisé pour révéler votre potentiel.',
-      button: { text: 'Réservez maintenant', action: () => this.reserve() }
+    { title: 'PRODUITS EN PROMOTIONS',
+      content: 'Identifiez les soins parfaitement adaptés à votre peau et à votre style.',
+      button: { text: 'Découvrir', action: () => this.reserve() }
     },
   ];
 

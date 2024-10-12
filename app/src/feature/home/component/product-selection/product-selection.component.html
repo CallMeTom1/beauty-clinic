@@ -1,0 +1,7 @@
+<section class="care-selection">
+  <h3>Notre sélection de produits incoutournables</h3>
+  <h4>Commandez en ligne ou récupérer à l'institut</h4>
+  @for(product of securityService.ProductsPublished$(); track product.product_id){
+    <app-product-card [product]="product"></app-product-card>
+  }
+</section>

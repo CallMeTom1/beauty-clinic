@@ -1,8 +1,0 @@
-<div class="product-card" (click)="navigateToProduct()">
-  <img [src]="product.product_image" [alt]="product.name" class="product-image">
-  <div class="product-info">
-    <h3 class="product-name">{{ product.name }}</h3>
-    <p class="product-price">{{ product.price | currency:'EUR' }}</p>
-    <button class="add-to-cart-btn" (click)="addToCart($event)">Ajouter au panier</button>
-  </div>
-</div>

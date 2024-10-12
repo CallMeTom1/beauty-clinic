@@ -8,13 +8,15 @@ import {
     Param,
     UploadedFile,
     UseInterceptors,
-    BadRequestException
+    BadRequestException, Put
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductPayload } from './data/payload/create-product.payload';
 import { UpdateProductPayload } from './data/payload/update-product.payload';
 import {Product} from "./data/entity/product.entity";
-import {AddCategoryToProductPayload} from "./data/payload/add-category-to-product.payload";
+import {
+    UpdateProductCategoriesPayload
+} from "./data/payload/update-category-to-product.payload";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {ApiBody, ApiConsumes, ApiTags} from "@nestjs/swagger";
 import {UploadProductImagePayload} from "./data/payload/upload-product-image.payload";
@@ -55,14 +57,14 @@ export class ProductController {
         return this.productService.remove(payload.id);
     }
 
-    @Roles(Role.ADMIN)
-    @Patch('publish')
+    //@Roles(Role.ADMIN)
+    @Put('publish')
     async publishProduct(@Body() payload: UpdateCategoryStatusPayload): Promise<Product> {
         return this.productService.publishProduct(payload.id);
     }
 
-    @Roles(Role.ADMIN)
-    @Patch('unpublish')
+    //@Roles(Role.ADMIN)
+    @Put('unpublish')
     async unpublishProduct(@Body() payload: UpdateCategoryStatusPayload): Promise<Product> {
         return this.productService.unpublishProduct(payload.id);
     }
@@ -73,10 +75,12 @@ export class ProductController {
         return this.productService.findPublished();
     }
 
-    @Post('add-category')
-    async addCategory(@Body() payload: AddCategoryToProductPayload): Promise<Product> {
-        return this.productService.addCategory(payload);
+    @Public()
+    @Put('update-categories')
+    async updateProductCategories(@Body() payload: UpdateProductCategoriesPayload): Promise<Product> {
+        return this.productService.updateProductCategories(payload);
     }
+
 
 
     @Post('upload-product-image')

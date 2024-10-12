@@ -1,13 +1,14 @@
 import {Component, Input} from '@angular/core';
 import {Product} from "../../../security/data/model/product/product.business";
 import {CategoryProduct} from "../../../security/data/model/category-product/category-product.business";
-import {CurrencyPipe} from "@angular/common";
+import {CurrencyPipe, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
   imports: [
-    CurrencyPipe
+    CurrencyPipe,
+    NgIf
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss'
@@ -26,7 +27,13 @@ export class ProductCardComponent {
   }
 
   getDiscountedPrice(product: Product): number {
-    return product.price - (product.price * product.promo_percentage / 100);
+    if (typeof product.price === 'number' && typeof product.promo_percentage === 'number') {
+      return product.price - (product.price * product.promo_percentage / 100);
+    } else {
+      console.warn('Price or promo percentage is invalid for product:', product);
+      return product.price; // Retourne le prix normal en cas de problème
+    }
   }
+
 
 }

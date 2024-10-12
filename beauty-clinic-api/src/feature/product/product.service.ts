@@ -1,24 +1,23 @@
-import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {In, Repository} from 'typeorm';
 
 import {CreateProductPayload} from './data/payload/create-product.payload';
 import {UpdateProductPayload} from './data/payload/update-product.payload';
-import {AddCategoryToProductPayload} from './data/payload/add-category-to-product.payload';
+import {UpdateProductCategoriesPayload} from './data/payload/update-category-to-product.payload';
 import {Product} from './data/entity/product.entity';
 import {ProductCategory} from "../product-category/data/model/product-category.entity";
 import {FileUploadException, InvalidFileTypeException} from "@feature/security/security.exception";
 import {
-    AddCategoryToProductException,
     CreateProductException,
     DeleteProductException,
-    ProductNotFoundException, PublishProductException, UnpublishProductException,
-    UpdateProductException, UpdateProductImageException
+    ProductNotFoundException,
+    PublishProductException,
+    UnpublishProductException,
+    UpdateProductException,
+    UpdateProductImageException
 } from "./product.exception";
-import {
-    ProductCategoryNotFoundException, PublishProductCategoryException,
-    UnpublishProductCategoryException
-} from "../product-category/product-category.exception";
+import {ProductCategoryNotFoundException} from "../product-category/product-category.exception";
 import {ulid} from "ulid";
 import {readFileSync} from "fs";
 import {join} from "path";
@@ -124,27 +123,54 @@ export class ProductService {
         }
     }
 
+    // Récupérer plusieurs catégories par leurs IDs
+    async findCategoriesByIds(categoryIds: string[]): Promise<ProductCategory[]> {
+        try {
+            const categories = await this.categoryRepository.find({
+                where: { product_category_id: In(categoryIds) } // Utilisation de In pour trouver toutes les catégories dont les IDs sont dans la liste
+            });
 
-    // Ajouter une catégorie à un produit
-    async addCategory(payload: AddCategoryToProductPayload): Promise<Product> {
-        try{
-            const { product_id, category_id } = payload;
-
-            const product = await this.findOne(product_id);
-            const category = await this.findCategory(category_id);  // Utilise la méthode corrigée pour trouver la catégorie
-
-            if (!product.categories.some(cat => cat.product_category_id === category_id)) {
-                product.categories.push(category);
+            if (categories.length === 0) {
+                throw new NotFoundException(`No categories found for the provided IDs`);
             }
 
-            return this.productRepository.save(product);
+            return categories;
+        } catch (e) {
+            throw new ProductCategoryNotFoundException();
         }
-        catch(e){
-            throw new AddCategoryToProductException();
-        }
-
-
     }
+
+
+
+    // Ajouter une catégorie à un produit
+    // Ajouter ou mettre à jour les catégories associées à un produit
+    async updateProductCategories(payload: UpdateProductCategoriesPayload): Promise<Product> {
+        try {
+            const { product_id, category_ids } = payload;
+
+            // Trouver le produit
+            const product = await this.findOne(product_id);
+
+            if (!product) {
+                throw new Error('Product not found');
+            }
+
+            // Si la liste des catégories est vide, dissocier toutes les catégories du produit
+            if (!category_ids || category_ids.length === 0) {
+                product.categories = [];
+            } else {
+                // Récupérer toutes les catégories correspondantes à la liste des IDs fournis
+                // Associer ces catégories au produit
+                product.categories = await this.findCategoriesByIds(category_ids);
+            }
+
+            // Sauvegarder les changements dans la base de données
+            return await this.productRepository.save(product);
+        } catch (error) {
+            throw new Error('Failed to update product categories');
+        }
+    }
+
 
     async publishProduct(id: string): Promise<Product> {
         try {

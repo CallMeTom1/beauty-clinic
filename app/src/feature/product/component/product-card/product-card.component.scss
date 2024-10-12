@@ -1,47 +1,62 @@
 .product {
   display: flex;
+  flex-direction: column; /* Place tous les éléments en colonne */
   border: 1px solid #ddd;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 20px;
+  margin: 20px 20px;
   max-width: 400px;
-  background-color: #fff;
+  padding: 20px; /* Ajoutez du padding pour espacer les éléments du bord */
+
 }
 
-.product-left {
+.product-header {
   position: relative;
-  flex: 1;
-  img.product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .promo-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: #ff3860;
-    color: #fff;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-  }
+  width: 100%;
+  text-align: center;
 }
 
-.product-right {
-  flex: 2;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.product-icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 24px;
+  color: #000000; /* Couleur de l'icône */
+  background: rgba(204, 204, 204, 0.27);
+  padding: 10px 10px;
+  border-radius: 50%;
+}
 
-  h2 {
-    font-size: 1.5rem;
-    margin: 0 0 10px 0;
-    color: #333;
-  }
+img.product-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* Contient l'image sans la couper */
+  margin-top: 20px; /* Ajoutez un espace entre l'icône et l'image */
+}
+
+.promo-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff3860;
+  color: #fff;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.product h2 {
+  font-size: 1.5rem;
+  margin: 20px 0 10px;
+  color: #333;
+}
+
+.product h3 {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 10px;
 }
 
 .product-right-bottom {

@@ -1,11 +1,34 @@
-<nav class="top-nav-mobile">
-  <img class="left" src='./assets/icon/logo-beauty-clinic.svg' alt='clinic logo'>
+<nav class="top-nav">
+  <div class="left-menu">
+    <i (click)="menu()" class="fa-thin fa-bars"></i>
+    <ul>
+      <li [class.active]="activeMenuItem === 'home'" (click)="selectMenuItem('home')">Home</li>
+      <li [class.active]="activeMenuItem === 'soins'" (click)="selectMenuItem('soins')">Les soins</li>
+      <li [class.active]="activeMenuItem === 'produits'" (click)="selectMenuItem('produits')">Acheter des produits de beauté</li>
+      <li [class.active]="activeMenuItem === 'rendez-vous'" (click)="selectMenuItem('rendez-vous')">Prendre rendez-vous</li>
+    </ul>
+  </div>
+
+  @if(isMenuOpen) {
+    <div class="mobile-menu">
+      <ul>
+        <li [class.active]="activeMenuItem === 'home'" (click)="selectMenuItem('home')">Home</li>
+        <li [class.active]="activeMenuItem === 'soins'" (click)="selectMenuItem('soins')">Les soins</li>
+        <li [class.active]="activeMenuItem === 'produits'" (click)="selectMenuItem('produits')">Acheter des produits de beauté</li>
+        <li [class.active]="activeMenuItem === 'rendez-vous'" (click)="selectMenuItem('rendez-vous')">Prendre rendez-vous</li>
+        <li>Se créer un compte</li>
+        <li>Se connecter</li>
+        <li (click)="closeMenu()">X</li>
+      </ul>
+    </div>
+  }
+
   <div class="center">
     <a (click)="navigateHome()">
-      <span class="welcome-text">WELCOME</span>
-      <span class="clinic-name">IzzyBeauty</span>
+      <span class="clinic-name">IZZY BEAUTY</span>
     </a>
   </div>
+
   <div class="right">
     <app-user-navigation></app-user-navigation>
   </div>

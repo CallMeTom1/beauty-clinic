@@ -19,8 +19,9 @@ export class ProductCategorySliderComponent {
   protected categories: CategoryProduct[] = [];
 
   constructor() {
+    this.securityService.fetchCategoryProductsPublished().subscribe();
     effect(() => {
-      this.categories = this.securityService.CategoryProducts$(); // Réagit aux changements dans le signal
+      this.categories = this.securityService.CategoryProductsPublished$(); // Réagit aux changements dans le signal
       console.log('Categories updated:', this.categories); // Vérifiez dans la console
     });
   }

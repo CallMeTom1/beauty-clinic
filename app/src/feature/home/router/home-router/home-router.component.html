@@ -1,16 +1,4 @@
 <div class="main-content">
   <app-top-nav-mobile></app-top-nav-mobile>
   <router-outlet></router-outlet>
-
-  <div class="menu__nav">
-    <nav>
-      <ul class="bottom-nav">
-        <li *ngFor="let item of menu" (click)="navigate(item.link)" routerLinkActive="active" [routerLink]="item.link" [routerLinkActiveOptions]="{exact: true}">
-          <i class="menu__icon {{item.icon}}"></i>
-          <span class="menu__title">{{ item.title | translate }}</span>
-        </li>
-      </ul>
-    </nav>
-  </div>
 </div>
-

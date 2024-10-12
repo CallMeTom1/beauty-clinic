@@ -22,6 +22,7 @@ import {SocialsAndThemeComponent} from "../../../shared/ui/socials-and-theme/soc
 import {
   ProductCategorySliderComponent
 } from "../../component/product-category-slider/product-category-slider.component";
+import {ProductSelectionComponent} from "../../component/product-selection/product-selection.component";
 
 @Component({
   selector: 'app-home-page',
@@ -42,6 +43,7 @@ import {
     PresentationComponent,
     SocialsAndThemeComponent,
     ProductCategorySliderComponent,
+    ProductSelectionComponent,
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'

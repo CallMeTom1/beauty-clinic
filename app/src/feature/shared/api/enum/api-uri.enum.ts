@@ -33,6 +33,8 @@ export enum ApiURI {
   PRODUCT_PUBLISHED = 'products/published',
   PRODUCT_ADD_CATEGORY = 'products/add-category',
   PRODUCT_UPLOAD_IMAGE = 'products/upload-product-image',
+  UPDATE_PRODUCT_CATEGORIES = 'products/update-categories',
+
 
   //PRODUCT CATEGORIES
   PRODUCT_CATEGORIES = 'product-categories',
@@ -40,7 +42,6 @@ export enum ApiURI {
   PRODUCT_CATEGORIES_UNPUBLISH = 'product-categories/unpublish',
   PRODUCT_CATEGORIES_PUBLISHED = 'product-categories/published',
   PRODUCT_CATEGORIES_UPLOAD_IMAGE = 'product-categories/upload-category-product-image',
-
   //CART
   CART = 'cart',
   CART_UPDATE_QUANTITY = 'cart/update',

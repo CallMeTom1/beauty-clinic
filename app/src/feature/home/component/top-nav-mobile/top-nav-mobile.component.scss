@@ -1,74 +1,112 @@
-.top-nav-mobile {
+.top-nav {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background: var(--theme-bg-primary); /* Fond */
-  top: 0;
-  z-index: 1000;
-  left: 0;
-  right: 0;
+  background: transparent;
   position: fixed;
-  /* Cette ligne réinitialise les marges globales */
-  /* Ajouter une grande marge en bas */
-
-}
-
-.top-nav-mobile * {
-  /* Remove any margin or padding from children elements inside the top-nav-mobile */
-  margin: 0;
-  padding: 0;
-}
-.left{
-  border-radius: 10px;
-  background: #dac6b3;
-  padding: 2px 2px;
-}
-
-.center{
-}
-.top-nav-mobile .left img {
+  top: 0;
   width: 100%;
-  height: 100%;
-}
+  left: 0;  // Ajouté pour s'assurer que l'élément commence bien à gauche
+  right: 0; // Ajouté pour s'assurer que l'élément se termine bien à droite
+  z-index: 1000;
+  box-sizing: border-box; // Assurez-vous que le padding est bien inclus dans la largeur
 
-.top-nav-mobile .center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
+  .clinic-name{
+    color: black;
+  }
 
-.top-nav-mobile .center a {
-  text-decoration: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: var(--theme-text-primary);
-}
+  .left-menu, .mobile-menu {
+    ul {
+      li {
+        // ... (styles existants) ...
+        &.active {
+          font-weight: bold;
+          text-decoration: underline;
+          // Vous pouvez ajouter d'autres styles pour l'élément actif ici
+        }
+      }
+    }
+  }
 
-.top-nav-mobile .welcome-text {
-  font-size: 12px;
-  font-weight: 300;
-  letter-spacing: 1px;
-  color: #8c8c8c;
-}
+  .left-menu {
+    display: flex;
+    align-items: center;
 
-.top-nav-mobile .clinic-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #000;
-  margin-top: 3px;
-}
+    i {
+      z-index: 1000;
+      font-size: 24px;
+      cursor: pointer;
+    }
 
-.top-nav-mobile .right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
+    ul {
+      display: flex;
+      gap: 20px;
 
-.top-nav-mobile .right .notification-icon {
-  margin-right: 10px;
+      li {
+        list-style: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: 768px) {
+        display: none; // Cache le menu sur petits écrans
+      }
+    }
+  }
+
+  .mobile-menu {
+    background: var(--theme-bg-primary);
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        padding: 15px 0;
+        font-size: 18px;
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+
+      .close-menu {
+        align-self: flex-end;
+        font-size: 24px;
+        cursor: pointer;
+      }
+    }
+
+    @media screen and (min-width: 768px) {
+      display: none; // Cache le menu mobile sur grands écrans
+    }
+  }
+
+  .center {
+    text-align: center;
+    z-index: 1000;
+    flex-grow: 1; // Assure que le centre occupe l'espace restant entre le left et le right
+
+    .clinic-name {
+      font-size: var(--font-size-large);
+      font-weight: bold;
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+  }
 }

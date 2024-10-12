@@ -1,19 +1,23 @@
 @import 'assets/css/reset.css';
 @import 'assets/css/font.css';
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Prata&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 /* Variables de Thème */
 :root {
 
+  --font-size-small: 12px;
+  --font-size-medium: 16px;
+  --font-size-large: 20px;
+  --font-size-xlarge: 24px;
   --marquee-speed: 30s;
   --direction: scroll-left;
 
+  --theme-green: #265a4b;
   --theme-primary: #FFFFFF;
   --theme-secondary: #8C8C8C;
   --theme-black: #000000;
@@ -34,6 +38,11 @@
 
 }
 
+body{
+  font-family: 'Lora', sans-serif;
+
+}
+
 .overlay-grid {
   gap: var(--gutter-width); /* Espace entre les colonnes */
 }
@@ -42,9 +51,15 @@
 
 
 @media screen and (max-width: 600px) {
-  body {
-    margin: 16px;
+  :root {
+    --font-size-small: 12px;
+    --font-size-medium: 16px;
+    --font-size-large: 20px;
+    --font-size-xlarge: 24px;
   }
+  body {
+  }
+
 
 }
 
@@ -183,4 +198,45 @@ input[type="checkbox"] {
   margin: initial;
   padding: initial;
   border: initial;
+}
+
+
+button {
+  width: 140px;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+  font-size: var(--font-size-medium);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+button.primary {
+  background-color: #265a4b;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+button.primary:hover {
+  background-color: #333333;
+  transform: scale(1.05);
+}
+
+
+button.secondary {
+  background-color: transparent;
+  color: #1a1a1a;
+  border: 2px solid #1a1a1a;
+}
+
+button.secondary:hover {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+button.secondary:focus {
+  outline: none;
+  box-shadow: 0 0 5px 2px rgba(26, 26, 26, 0.5);
 }

@@ -4,6 +4,7 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import {NgForOf} from "@angular/common";
 import {SecurityService} from "@feature-security";
 import {Product} from "../../../security/data/model/product/product.business";
+import {UpdateProductCategoryPayload} from "../../../security/data/payload/product/update-product-category.payload";
 
 @Component({
   selector: 'app-product-category-selector',
@@ -54,12 +55,34 @@ export class ProductCategorySelectorComponent implements OnInit {
     // Mettre à jour le formulaire avec la nouvelle liste de catégories sélectionnées
     this.categoryFormGroup.get('categories')!.setValue(this.selectedCategories);
 
-    // Log pour afficher la liste des catégories sélectionnées à chaque changement
-    console.log('Catégories sélectionnées:', this.selectedCategories);
+    this.updateCategoriesOnServer();
+
   }
 
   isCategorySelected(categoryId: string): boolean {
     // Vérifier si une catégorie est déjà sélectionnée
     return this.selectedCategories.includes(categoryId);
+  }
+
+  updateCategoriesOnServer() {
+    const payload: UpdateProductCategoryPayload = {
+      product_id: this.productId,
+      category_ids: this.selectedCategories
+    };
+
+    console.log('payload', payload)
+
+    this.securityService.updateProductCategories(payload).subscribe({
+      next: (response) => {
+        if (response.result) {
+          console.log('Catégories mises à jour avec succès:', response.data);
+        } else {
+          console.error('Erreur lors de la mise à jour des catégories:', response.code);
+        }
+      },
+      error: (err) => {
+        console.error('Erreur lors de la communication avec le serveur:', err);
+      }
+    });
   }
 }
