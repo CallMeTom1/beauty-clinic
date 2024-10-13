@@ -1,0 +1,103 @@
+.cart-navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 32px;
+  width: 32px;
+  padding: 16px 16px;
+}
+
+.cart-icon {
+  font-size: 24px;
+  color: #000000;
+  border-radius: 50%;
+}
+
+.cart-dropdown {
+  position: absolute;
+  right: 100px;
+  top: 68px;
+  width: 250px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  z-index: 1000;
+  border-bottom: 4px solid var(--theme-green);
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-direction: column;
+
+  .price {
+    align-self: flex-end;
+  }
+}
+
+.cart-item-quant-price {
+  display: flex;
+  flex-direction: row;
+}
+
+.product-name {
+  color: var(--theme-green);
+  font-weight: bold;
+  font-size: var(--font-size-medium);
+}
+
+.separator {
+  height: 1px;
+  width: 100%;
+  background-color: #e0e0e0; /* Couleur grise pour le séparateur */
+  margin: 10px 0; /* Espace autour du séparateur */
+}
+
+.empty-message {
+  font-size: var(--font-size-medium);
+  color: var(--theme-green);
+  font-weight: bold;
+}
+
+.cart-total {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  font-weight: bold;
+  text-align: right;
+  margin-bottom: 8px;
+}
+
+button.secondary {
+  width: 100%;  /* Bouton prend toute la largeur du conteneur */
+  margin-top: 15px; /* Espace au-dessus du bouton */
+  padding: 10px;
+  background-color: #e0e0e0;
+  border: none;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.primary {
+  width: 100%;  /* Bouton prend toute la largeur du conteneur */
+  margin-top: 10px;  /* Espace entre les deux boutons */
+  padding: 10px;
+  background-color: var(--theme-green);
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.primary:hover {
+  background-color: darken(#265A4BFF, 10%);
+}
+
+button.secondary:hover {
+  background-color: #d0d0d0;
+}

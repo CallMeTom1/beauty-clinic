@@ -21,6 +21,8 @@ export enum AppNode {
     CUSTOMER= `customer`,
     FALL_BACK = '**',
 
+    CART= 'cart',
+
     //admin link
     MANAGE_CARE=`admin/care`,
     DASHBOARD= `admin`,

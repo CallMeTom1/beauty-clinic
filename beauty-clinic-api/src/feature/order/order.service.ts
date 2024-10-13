@@ -29,6 +29,7 @@ export class OrderService {
     ) {}
 
 
+    //todo modifier rajouter total avec le prix actuel du produit
     // Transformer un panier en commande et créer un paiement associé
     async createOrderFromCart(cartId: string, idUser: string): Promise<Order> {
         const cart = await this.cartRepository.findOne({
@@ -45,10 +46,8 @@ export class OrderService {
             const orderItem = this.orderItemRepository.create({
                 product: cartItem.product,
                 quantity: cartItem.quantity,
-                price: cartItem.price,
             });
 
-            totalPrice += cartItem.quantity * cartItem.price;
             return orderItem;
         });
 

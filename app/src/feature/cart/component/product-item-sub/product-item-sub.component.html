@@ -1,0 +1,26 @@
+<div class="cartItem">
+  <div class="top">
+    <img [src]="getImage(cartItem)" alt="{{cartItem.product.name}}" class="product-image" />
+    <span class="product-name">{{ cartItem.product.name }}</span>
+  </div>
+  <div class="separator-line"></div>
+  <div class="unit-price">
+    <span>Prix Unitaire</span>
+    <span>{{ cartItem.product.price | currency:'EUR' }}</span>
+  </div>
+  <div class="qty_and_bin">
+    <div class="quantity select">
+      <div class="plus-minus">
+        <button (click)="changeQuantity(cartItem, cartItem.quantity - 1)"
+                [disabled]="cartItem.quantity <= 1">-</button>
+        <span>{{ cartItem.quantity }}</span>
+        <button (click)="changeQuantity(cartItem, cartItem.quantity + 1)">+</button>
+      </div>
+    </div>
+    <i (click)="removeCartItem(cartItem)" class="fa-thin fa-trash-can"></i>
+  </div>
+  <div class="total">
+    <span>Total</span>
+    <span>{{ getTotal(cartItem) | currency:'EUR' }}</span>
+  </div>
+</div>

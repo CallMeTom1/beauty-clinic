@@ -1,0 +1,23 @@
+<div class="cart-navigation" (click)="toggleDropdown()">
+  <i class="fa-light fa-bag-shopping cart-icon"></i>
+  <div class="cart-dropdown" *ngIf="dropdownOpen">
+    <ng-container *ngIf="cartItems.length > 0; else emptyCart">
+      <div class="cart-item" *ngFor="let item of cartItems">
+        <div class="cart-item-quant-price">
+          <span>{{ item.quantity }} x <span class="product-name">{{ item.product.name }}</span> </span>
+          <span class="price">{{ item.product.price | currency:'EUR' }}</span>
+        </div>
+        <div class="separator"></div>
+      </div>
+      <div class="cart-total">
+        <span>Sous-Total:</span>
+        <span>{{ getTotalPrice() | currency:'EUR' }}</span>
+      </div>
+      <button class="secondary">VOIR MON PANIER</button>
+      <button class="primary">PAIEMENT</button>
+    </ng-container>
+    <ng-template #emptyCart>
+      <div class="empty-message">Mon panier est vide</div>
+    </ng-template>
+  </div>
+</div>

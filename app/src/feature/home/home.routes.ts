@@ -35,6 +35,11 @@ export const homeRoutes: Routes = [
           .then(c => c.ContactPageComponent),
       },
       {
+        path: AppNode.CART,
+        loadComponent: () => import('../cart/page/cart-page/cart-page.component')
+          .then(c => c.CartPageComponent),
+      },
+      {
         path: AppNode.ACCOUNT,
         loadChildren: () => import('../security/security.routes').then(m => m.securityRoutes)
       },

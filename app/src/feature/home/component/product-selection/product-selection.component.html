@@ -1,7 +1,16 @@
 <section class="care-selection">
-  <h3>Notre sélection de produits incoutournables</h3>
-  <h4>Commandez en ligne ou récupérer à l'institut</h4>
-  @for(product of securityService.ProductsPublished$(); track product.product_id){
-    <app-product-card [product]="product"></app-product-card>
-  }
+  <h3>Notre sélection de produits incontournables</h3>
+  <h4>Commandez en ligne ou récupérez à l'institut</h4>
+  <div class="slider-container">
+    <button class="nav-button prev" (click)="navigate(-1)">&#10094;</button>
+    <div class="slider-content">
+      <div class="product-wrapper" [style.transform]="'translateX(' + (-currentIndex * 100) + '%)'">
+        <div class="product" *ngFor="let product of products">
+          <app-product-card [product]="product"></app-product-card>
+        </div>
+      </div>
+    </div>
+    <button class="nav-button next" (click)="navigate(1)">&#10095;</button>
+  </div>
+  <button class="primary">TOUT VOIR</button>
 </section>

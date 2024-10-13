@@ -8,8 +8,7 @@ export class UpdateCartItemPayload {
     })
     @IsString({ message: 'The productId must be a string.' })
     @IsNotEmpty({ message: 'The productId cannot be empty.' })
-    @Matches(/^[0-9A-HJKMNP-TV-Z]{26}$/, { message: 'The productId must be a valid ULID.' })
-    productId: string;
+    cartItemId: string;
 
     @ApiProperty({
         description: 'The new quantity to set for the product in the cart.',

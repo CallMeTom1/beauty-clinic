@@ -1,23 +1,16 @@
 <div class="product">
   <div class="product-header">
-    <i class="fa-light fa-bag-shopping product-icon"></i>
+    <i (click)="addProductToCart(product)" class="fa-light fa-bag-shopping product-icon"></i>
     <img [src]="getProductImage(product)" alt="{{ product.name }}" class="product-image" />
     <span *ngIf="product.promo_percentage > 0" class="promo-badge">{{ product.promo_percentage }}% OFF</span>
   </div>
-  <h2>{{ product.name }}</h2>
-  <h3>{{ product.description }}</h3>
-  <div>
-    <p>{{ product.price | currency:'EUR':'symbol' }}</p>
-
-
-  <div class="product-right-bottom">
-    <div class="price-wrapper">
-      <!-- Affiche le prix barré seulement si promo_percentage > 0 -->
-      <span *ngIf="product.promo_percentage > 0" class="original-price">{{ product.price | currency }}</span>
-      <!-- Affiche le prix réduit seulement si promo_percentage > 0 -->
-      <span *ngIf="product.promo_percentage > 0" class="discounted-price">{{ getDiscountedPrice(product) | currency }}</span>
-      <!-- Affiche le prix normal si promo_percentage est égal à 0 -->
-      <span *ngIf="product.promo_percentage === 0" class="normal-price">{{ product.price | currency }}</span>
-    </div>
+  <div class="name_description">
+    <h2>{{ product.name }}</h2>
+    <h3>{{ product.description }}</h3>
+  </div>
+  <div class="price">
+    <!-- Si une promo est active, afficher le prix réduit -->
+    <p *ngIf="product.promo_percentage > 0" class="discounted-price">{{ getDiscountedPrice(product) | currency:'EUR':'symbol' }}</p>
+    <p [ngClass]="{'strikethrough': product.promo_percentage > 0}">{{ product.price | currency:'EUR':'symbol' }}</p>
   </div>
 </div>

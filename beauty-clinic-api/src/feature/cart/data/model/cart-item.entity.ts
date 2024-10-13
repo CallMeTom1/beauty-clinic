@@ -15,7 +15,5 @@ export class CartItem {
 
     @Column('int')
     quantity: number;
-
-    @Column('decimal')
-    price: number;  // Prix au moment où le produit a été ajouté
+    
 }

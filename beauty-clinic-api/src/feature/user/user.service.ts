@@ -21,6 +21,8 @@ import {CreateCartException} from "../cart/cart.exception";
 export class UserService {
 
     private readonly defaultProfileImage: Buffer;
+    private readonly logger = new Logger(UserService.name);
+
 
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
@@ -31,10 +33,13 @@ export class UserService {
     }
 
     async createUser(payload: CreateUserInterface): Promise<User> {
+        const idUser: string = ulid();
         try {
-            const idUser: string = ulid()
+            this.logger.log('Creating a new user...');
+
+            // Créer un nouvel utilisateur
             const newUser: User = this.userRepository.create({
-                idUser: idUser,
+                idUser,
                 firstname: payload.firstname,
                 lastname: payload.lastname,
                 phoneNumber: payload.phoneNumber,
@@ -42,32 +47,37 @@ export class UserService {
                 profileImageUrl: payload.profileImageUrl
             });
 
+            // Sauvegarder l'utilisateur dans la base de données
             const user: User = await this.userRepository.save(newUser);
-            await this.createCart(idUser);
-            return user;
-        } catch (error) {
-            throw new UserCreationException();
-        }
-    }
+            this.logger.log('User created successfully with ID:', idUser);
 
-    // Méthode déplacée pour créer un panier dans UserService
-    async createCart(idUser: string): Promise<Cart> {
-        try {
-            const user: User = await this.userRepository.findOne({ where: { idUser } });
-            if (!user) {
-                throw new UserNotFoundException();
-            }
-
+            // Créer un panier associé à l'utilisateur
             const newCart: Cart = this.cartRepository.create({
                 idCart: ulid(),
                 user: user
             });
 
-            return await this.cartRepository.save(newCart);
+            // Sauvegarder le panier dans la base de données
+            const cart: Cart = await this.cartRepository.save(newCart);
+            this.logger.log('Cart created successfully for user with ID:', idUser);
+
+            // Mettre à jour l'utilisateur avec le panier
+            user.cart = cart;
+            await this.userRepository.save(user);
+
+            return user;
         } catch (error) {
-            throw new CreateCartException();
+            this.logger.error('Error occurred while creating user:', error);
+            if (error instanceof UserCreationException) {
+                throw new UserCreationException();
+            } else {
+                throw new BadRequestException('An error occurred while creating the user.');
+            }
         }
     }
+
+
+
 
     /*
     async createUserFromSocial(username: string): Promise<User> {

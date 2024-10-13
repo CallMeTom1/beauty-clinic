@@ -52,6 +52,11 @@ import {UpdateProductPayload} from "./data/payload/product/update-product.payloa
 import {RemoveProductPayload} from "./data/payload/product/remove-product.payload";
 import {UpdateProductStatusPayload} from "./data/payload/product/update-product-status.payload";
 import {UpdateProductCategoryPayload} from "./data/payload/product/update-product-category.payload";
+import {Cart} from "./data/model/cart/cart.business";
+import {CartUtils} from "./utils/cart.utils";
+import {AddCartItemPayload} from "./data/payload/cart/add-cart-item.payload";
+import {RemoveCartItemPayload} from "./data/payload/cart/remove-cart-item.payload";
+import {UpdateCartItemPayload} from "./data/payload/cart/update-cart-item.payload";
 
 
 //todo réaliser tout les fetch dans ce service pour économiser les call api
@@ -82,8 +87,10 @@ export class SecurityService {
   public Products$: WritableSignal<Product[]> = signal([])
   public ProductsPublished$: WritableSignal<Product[]> = signal([])
 
+  public cart$: WritableSignal<Cart> = signal(CartUtils.getEmpty())
 
   public error$: WritableSignal<string | null> = signal(null);
+
 
 
   private getInitialAuthState(): boolean {
@@ -704,6 +711,63 @@ export class SecurityService {
         })
       );
   }
+
+  //Cart
+  fetchCart(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.CART)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+            this.cart$.set(response.data);
+          } else {
+            console.log('Erreur lors du fetch cart:', response.code);
+          }
+        })
+      );
+  }
+
+  addProductToCart(payload: AddCartItemPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.CART, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+            this.cart$.set(response.data);
+          } else {
+            console.log('Erreur lors de l ajout d un produit au panier:', response.code);
+          }
+        })
+      );
+  }
+
+  removeCartItem(payload: RemoveCartItemPayload): Observable<ApiResponse> {
+    return this.api.delete(ApiURI.CART, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+            this.cart$.set(response.data);
+          } else {
+            console.log('Erreur lors de removeCartItem:', response.code);
+          }
+        })
+      );
+  }
+
+  changeQuantity(payload: UpdateCartItemPayload): Observable<ApiResponse>{
+    return this.api.post(ApiURI.CART_UPDATE_QUANTITY, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+            this.cart$.set(response.data);
+          } else {
+            console.log('Erreur lors de changeQuantity:', response.code);
+          }
+        })
+      );
+  }
+
+
+
+
 
 
 

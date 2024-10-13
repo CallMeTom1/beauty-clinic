@@ -1,12 +1,14 @@
 import {Component, inject} from '@angular/core';
 import {SecurityService, UserNavigationComponent} from "@feature-security";
 import {AppNode} from "@shared-routes";
+import {CartNavigationComponent} from "../../../shared/ui/cart-navigation/cart-navigation.component";
 
 @Component({
   selector: 'app-top-nav-mobile',
   standalone: true,
   imports: [
-    UserNavigationComponent
+    UserNavigationComponent,
+    CartNavigationComponent
   ],
   templateUrl: './top-nav-mobile.component.html',
   styleUrl: './top-nav-mobile.component.scss'

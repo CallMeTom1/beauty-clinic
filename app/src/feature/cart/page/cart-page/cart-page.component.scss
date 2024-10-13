@@ -1,0 +1,115 @@
+.cart-page {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+    padding: 48px 64px;
+
+    h1 {
+      color: var(--theme-green);
+      font-size: var(--font-size-large);
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: var(--font-size-medium);
+      color: var(--text-color);
+    }
+  }
+
+  .cartItems {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .summary {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 24px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    h2 {
+      font-size: var(--font-size-medium);
+      color: var(--theme-green);
+      margin-bottom: 16px;
+    }
+
+    .separator-green {
+      height: 2px;
+      background-color: var(--theme-green);
+      margin-bottom: 16px;
+    }
+
+    .total, .shipping-fees, .tva-fees, .total-order {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: var(--font-size-small);
+
+      span:last-child {
+        font-weight: bold;
+      }
+    }
+
+    .total-order {
+      font-size: var(--font-size-medium);
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    button.primary {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--theme-green);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: var(--font-size-medium);
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+
+      &:hover {
+        background-color: darken(#265A4BFF, 10%);
+      }
+
+      i {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .cart-page {
+    .header {
+      padding: 32px 16px;
+    }
+
+    .summary {
+      max-width: 100%;
+    }
+  }
+}

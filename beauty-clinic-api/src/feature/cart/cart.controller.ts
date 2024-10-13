@@ -1,5 +1,5 @@
 
-import { Controller, Post, Patch, Delete, Param, Body, Get } from '@nestjs/common';
+import {Controller, Post, Patch, Delete, Param, Body, Get, Put} from '@nestjs/common';
 import { CartService } from './cart.service';
 import {ApiTags} from "@nestjs/swagger";
 import {UserReq, UserRequest} from "@common/config/metadata";
@@ -18,7 +18,7 @@ export class CartController {
         return this.cartService.getCart(userReq.idUser);
     }
 
-    @Patch()
+    @Put()
     async addToCart(
         @Body() payload: AddCartItemPayload,
         @UserReq() userReq: UserRequest
@@ -26,7 +26,7 @@ export class CartController {
         return this.cartService.addToCart(userReq.idUser, payload);
     }
 
-    @Patch('update')
+    @Put('quantity')
     async updateCartItem(
         @Body() payload: UpdateCartItemPayload,
         @UserReq() userReq: UserRequest

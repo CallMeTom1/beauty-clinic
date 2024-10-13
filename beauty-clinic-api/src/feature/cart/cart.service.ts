@@ -57,7 +57,7 @@ export class CartService {
 
     // Ajouter un produit au panier
     async addToCart(idUser: string, payload: AddCartItemPayload): Promise<Cart> {
-        try{
+        try {
             // Trouver directement le panier lié à l'utilisateur
             const cart: Cart = await this.cartRepository.findOne({
                 where: { user: { idUser: idUser } },  // Accéder directement au panier via la relation avec l'utilisateur
@@ -82,11 +82,11 @@ export class CartService {
                 // Si l'article existe déjà dans le panier, on met à jour la quantité
                 cartItem.quantity += payload.quantity;
             } else {
-                // Sinon, on crée un nouvel article dans le panier
+                // Sinon, on crée un nouvel article dans le panier avec un ID unique
                 cartItem = this.cartItemRepository.create({
+                    idCartItem: ulid(),  // Générer un UUID pour idCartItem
                     product,
                     quantity: payload.quantity,
-                    price: product.price,  // Fixer le prix au moment de l'ajout
                     cart,
                 });
                 cart.items.push(cartItem);
@@ -94,16 +94,15 @@ export class CartService {
 
             // Sauvegarder les modifications du panier
             return this.cartRepository.save(cart);
+        } catch (e) {
+            throw new AddItemToCartException();
         }
-        catch (e){
-            throw new AddItemToCartException()
-        }
-
     }
 
     // Mettre à jour la quantité d'un produit dans le panier
+    // Mettre à jour la quantité d'un produit dans le panier
     async updateCartItem(idUser: string, payload: UpdateCartItemPayload): Promise<Cart> {
-        try{
+        try {
             // Trouver directement le panier lié à l'utilisateur
             const cart: Cart = await this.cartRepository.findOne({
                 where: { user: { idUser: idUser } },  // Accès direct via la relation avec l'utilisateur
@@ -114,24 +113,28 @@ export class CartService {
                 throw new CartNotFoundException();
             }
 
-            const cartItem: CartItem = cart.items.find(item => item.product.product_id === payload.productId);
+            // Trouver l'élément dans le panier par son ID
+            const cartItem: CartItem = cart.items.find(item => item.idCartItem === payload.cartItemId);
 
             if (!cartItem) {
-                throw new NotFoundException(`Product with id ${payload.productId} not found in cart`);
+                throw new NotFoundException(`Cart item with id ${payload.cartItemId} not found`);
             }
 
+            // Mettre à jour la quantité de l'élément
             cartItem.quantity = payload.newQuantity;
 
+            // Sauvegarder les modifications du panier
             return this.cartRepository.save(cart);
-        }
-        catch(e) {
+        } catch (e) {
             throw new UpdateCartException();
         }
     }
 
+
+    // Supprimer un produit du panier
     // Supprimer un produit du panier
     async removeFromCart(idUser: string, payload: RemoveCartItemPayload): Promise<Cart> {
-        try{
+        try {
             // Trouver directement le panier lié à l'utilisateur
             const cart: Cart = await this.cartRepository.findOne({
                 where: { user: { idUser: idUser } },  // Accès direct via la relation avec l'utilisateur
@@ -142,21 +145,23 @@ export class CartService {
                 throw new CartNotFoundException();
             }
 
-            const cartItemIndex: number = cart.items.findIndex(item => item.product.product_id === payload.productId);
+            // Trouver l'index de l'élément dans le panier par son ID
+            const cartItemIndex: number = cart.items.findIndex(item => item.idCartItem === payload.cartItemId);
 
             if (cartItemIndex === -1) {
-                throw new NotFoundException(`Product with id ${payload.productId} not found in cart`);
+                throw new NotFoundException(`Cart item with id ${payload.cartItemId} not found`);
             }
 
+            // Supprimer l'élément du panier
             cart.items.splice(cartItemIndex, 1);
 
+            // Sauvegarder les modifications du panier
             return this.cartRepository.save(cart);
-
-        }
-        catch (e){
+        } catch (e) {
             throw new RemoveCartException();
         }
     }
+
 
     async getCart(idUser: string): Promise<Cart> {
         try {
