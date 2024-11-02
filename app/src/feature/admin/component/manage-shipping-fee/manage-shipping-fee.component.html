@@ -1,0 +1,45 @@
+<div class="shipping-fee-container">
+  <div class="shipping-fee-header">
+    <h2>{{ 'shipping_fee.title' | translate }}</h2>
+  </div>
+
+  <div class="shipping-fee-card">
+    <div class="current-config">
+      <h3>{{ 'shipping_fee.current_config' | translate }}</h3>
+      <div class="config-details">
+        <div class="config-item">
+          <label>{{ 'shipping_fee.amount.label' | translate }}</label>
+          <span>{{ securityService.shippingFees$().amount | customEuro }}</span>
+        </div>
+        <div class="config-item">
+          <label>{{ 'shipping_fee.free_threshold.label' | translate }}</label>
+          <span>{{ securityService.shippingFees$().freeShippingThreshold | customEuro }}</span>
+        </div>
+        <div class="config-item">
+          <label>{{ 'shipping_fee.description.label' | translate }}</label>
+          <span>{{ securityService.shippingFees$().description }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="actions-container">
+      <button class="primary" (click)="openEditModal()">
+        {{ 'shipping_fee.edit.button' | translate }}
+      </button>
+    </div>
+  </div>
+
+  @if(showEditModal) {
+    <app-modal [title]="'shipping_fee.edit.title' | translate" (close)="handleClose()">
+      <form [formGroup]="shippingFeeFormGroup" (ngSubmit)="onSubmitUpdateShippingFee()">
+        @for(input of shippingFeeFormControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!shippingFeeFormGroup.valid" type="submit" class="primary">
+            {{ 'form.update.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+</div>

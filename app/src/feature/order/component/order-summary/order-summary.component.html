@@ -1,0 +1,51 @@
+<div class="summary">
+  <h2>Résumé de la commande</h2>
+  <div class="separator-green"></div>
+
+  <div class="summary-section">
+    <div class="total">
+      <span>Total</span>
+      <span>{{calculatedTotal | currency:'EUR'}}</span>
+    </div>
+
+    <div class="shipping-fees" [ngClass]="{'free': isShippingFree}">
+      <span>
+        Frais de livraison
+        @if(isShippingFree) {
+          <span class="free-badge">Gratuit</span>
+        }
+      </span>
+      <span>{{getShippingAmount() | currency:'EUR'}}</span>
+    </div>
+
+    <div class="tva-fees">
+      <span>Total taxes (inclus dans le prix)</span>
+      <span>{{calculatedTvafees | currency:'EUR'}}</span>
+    </div>
+  </div>
+
+  <div class="separator-light"></div>
+
+  <div class="total-order">
+    <span class="total-label">Total commande</span>
+    <span class="total-amount">{{calculatedTotalOrder | currency:'EUR'}}</span>
+  </div>
+
+  @if(currentShippingFee && !isShippingFree) {
+    <div class="free-shipping-info">
+      Plus que {{currentShippingFee.freeShippingThreshold - calculatedTotal | currency:'EUR'}}
+      pour la livraison gratuite !
+    </div>
+  }
+  <app-apply-promo-code></app-apply-promo-code>
+
+
+  <div *ngIf="this.securityService.sucesMessage$()" class="alert alert-success">
+    <i class="fa-thin fa-badge-check"></i>
+    {{ this.securityService.sucesMessage$() }}
+  </div>
+
+  <div *ngIf="this.securityService.error$()" class="alert alert-danger">
+    {{ this.securityService.error$() }}
+  </div>
+</div>

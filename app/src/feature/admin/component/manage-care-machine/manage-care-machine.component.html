@@ -1,0 +1,84 @@
+<div class="machine-container">
+  <div class="machine-header">
+    <h2>{{ 'care.machine.title' | translate }}</h2>
+    <button class="primary" (click)="openCreateModal()">
+      {{ 'form.care_machine.add.label' | translate }}
+    </button>
+  </div>
+
+  <table class="machine-table">
+    <thead>
+    <tr>
+      <th>{{ 'table.header.name' | translate }}</th>
+      <th>{{ 'table.header.description' | translate }}</th>
+      <th>{{ 'table.header.actions' | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for(machine of securityService.careMachine$(); track machine.care_machine_id) {
+        <tr>
+          <td>{{ machine.name }}</td>
+          <td>{{ machine.description }}</td>
+          <td class="actions-cell">
+            <div class="actions-group">
+              <a (click)="openEditModal(machine)" class="action-link edit">
+                {{ 'action.edit' | translate }}
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="openDeleteModal(machine)" class="action-link delete">
+                {{ 'action.delete' | translate }}
+              </a>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if(showDeleteModal) {
+    <app-modal [title]="'form.care_machine.delete.confirm.title' | translate" (close)="handleClose()">
+      <div class="del-modal">
+        <h3>{{ 'form.care_machine.delete.confirm.message' | translate }}</h3>
+        <span>{{ currentMachine?.name }}</span>
+      </div>
+      <div class="modal-actions">
+        <button (click)="deleteMachine()" class="primary">
+          {{ 'form.care_machine.delete.confirm.button' | translate }}
+        </button>
+        <button (click)="handleClose()" class="primary">
+          {{ 'form.cancel.label' | translate }}
+        </button>
+      </div>
+    </app-modal>
+  }
+
+  @if(showEditModal) {
+    <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
+      <form [formGroup]="updateMachineFormGroup" (ngSubmit)="onSubmitUpdateMachine()">
+        @for(input of updateMachineFormControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!updateMachineFormGroup.valid" type="submit" class="primary">
+            {{ 'form.care_machine.update.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+
+  @if(showCreateModal) {
+    <app-modal [title]="modal_create_title | translate" (close)="handleClose()">
+      <form [formGroup]="createMachineFormGroup" (ngSubmit)="onSubmitCreateMachine()">
+        @for(input of createMachineFormControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!createMachineFormGroup.valid" type="submit" class="primary">
+            {{ 'form.care_machine.add.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+</div>

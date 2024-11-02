@@ -1,0 +1,23 @@
+<div class="category-dropdown">
+  <button (click)="toggleDropdown()" class="dropdown-toggle">
+    {{ 'care.zones.select' | translate }}
+    <span class="caret"></span>
+  </button>
+  <div class="dropdown-menu" [class.show]="isDropdownOpen">
+    <div class="dropdown-item" *ngFor="let zone of securityService.bodyZones$()">
+      <label>
+        <input type="checkbox"
+               [value]="zone.body_zone_id"
+               (change)="onZoneChange($event, zone.body_zone_id)"
+               [checked]="isZoneSelected(zone.body_zone_id)">
+        {{ zone.name }}
+      </label>
+    </div>
+  </div>
+</div>
+<div class="selected-categories">
+  <span *ngFor="let zoneId of selectedZones" class="category-tag">
+    {{ getZoneName(zoneId) }}
+    <button (click)="removeZone(zoneId)" class="remove-category">&times;</button>
+  </span>
+</div>

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsOptional, Length, Matches } from "class-validator";
+import { IsEmail, IsOptional, Matches } from "class-validator";
 import { ApiCodeResponse } from "@common/api";
 
 export class SignsocialPayload {
@@ -13,7 +13,4 @@ export class SignsocialPayload {
     @IsOptional()
     googleHash: string;
 
-    @ApiProperty({ description: 'Facebook OAuth hash' })
-    @IsOptional()
-    facebookHash: string;
 }

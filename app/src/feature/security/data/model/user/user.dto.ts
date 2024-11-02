@@ -1,13 +1,12 @@
+import {Address} from "./address.business";
+
 export interface UserDto {
   idUser: string;
-  username: string;
-  phoneNumber: string;
-  firstname: string;
-  lastname: string;
   role: string;
   token: string;
-  profileImage:string;
-  profileImageUrl: string;
-  hasCustomProfileImage: boolean;
+  mail: string;
+  firstname: string;
+  lastname: string;
+  phonenumber: string | null;
+  addresses: Address[];
 }
-

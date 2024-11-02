@@ -1,0 +1,107 @@
+<div class="promo-code-container">
+  <div class="promo-code-header">
+    <h2>Gérer les codes promotionnels</h2>
+    <button class="primary" (click)="openCreateModal()">
+      {{ 'form.promo_code.add.label' | translate }}
+    </button>
+  </div>
+
+  <table class="promo-code-table">
+    <thead>
+    <tr>
+      <th>{{ 'table.header.code' | translate }}</th>
+      <th>{{ 'table.header.percentage' | translate }}</th>
+      <th>{{ 'table.header.uses' | translate }}</th>
+      <th>{{ 'table.header.valid_from' | translate }}</th>
+      <th>{{ 'table.header.valid_to' | translate }}</th>
+      <th>{{ 'table.header.status' | translate }}</th>
+      <th>{{ 'table.header.actions' | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for(promo of securityService.promoCodes$(); track promo.promo_code_id) {
+        <tr [ngClass]="{'inactive': !promo.isActive}">
+          <td>{{ promo.code }}</td>
+          <td>{{ promo.percentage }}%</td>
+          <td>{{ promo.usedCount }} / {{ promo.maxUses }}</td>
+          <td>{{ promo.validFrom | date:'short' }}</td>
+          <td>{{ promo.validTo | date:'short' }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="{'active': promo.isActive}">
+              {{ promo.isActive ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <div class="actions-group">
+              <a (click)="openEditModal(promo)" class="action-link edit">
+                {{ 'form.edit.label' | translate }}
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="toggleStatus(promo)" class="action-link"
+                 [ngClass]="promo.isActive ? 'deactivate' : 'activate'">
+                {{ promo.isActive ? 'Désactiver' : 'Activer' }}
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="openDeleteModal(promo)" class="action-link delete">
+                {{ 'form.delete.label' | translate }}
+              </a>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if(showCreateModal) {
+    <app-modal [title]="modalTitle | translate" (close)="handleClose()">
+      <form [formGroup]="promoCodeForm" (ngSubmit)="onSubmitForm()">
+        @for(input of formControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!promoCodeForm.valid" type="submit" class="primary">
+            {{ submitButtonLabel | translate }}
+          </button>
+          <button type="button" (click)="handleClose()" class="secondary">
+            {{ 'form.cancel.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+
+  @if(showDeleteModal) {
+    <app-modal [title]="'form.promo_code.delete.confirm.title' | translate" (close)="handleClose()">
+      <div class="del-modal">
+        <h3>{{ 'form.promo_code.delete.confirm.message' | translate }}</h3>
+        <span>{{ currentPromoCode?.code }}</span>
+      </div>
+      <div class="modal-actions">
+        <button (click)="deletePromoCode()" class="primary">
+          {{ 'form.confirm.label' | translate }}
+        </button>
+        <button (click)="handleClose()" class="secondary">
+          {{ 'form.cancel.label' | translate }}
+        </button>
+      </div>
+    </app-modal>
+  }
+
+  @if(showEditModal) {
+    <app-modal [title]="modalTitle | translate" (close)="handleClose()">
+      <form [formGroup]="promoCodeForm" (ngSubmit)="onSubmitForm()">
+        @for(input of formControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!promoCodeForm.valid" type="submit" class="primary">
+            {{ submitButtonLabel | translate }}
+          </button>
+          <button type="button" (click)="handleClose()" class="secondary">
+            {{ 'form.cancel.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+</div>

@@ -1,6 +1,8 @@
+
 export interface CreateUserInterface {
-    firstname?: string;
-    lastname?: string;
+    username: string;
+    firstname: string;
+    lastname: string;
     phoneNumber?: string;
-    profileImageUrl?: string;
+    email: string;
 }

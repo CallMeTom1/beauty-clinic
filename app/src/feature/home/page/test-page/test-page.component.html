@@ -1,6 +1,4 @@
-
-<section>
-  @for(cat of this.categories; track cat.product_category_id){
-    <app-product-category-card [productCategory]="cat"></app-product-category-card>
-  }
-</section>
+<app-address-form
+  [formType]="'shipping'"
+  (addressSubmitted)="handleAddressSubmission($event)">
+</app-address-form>

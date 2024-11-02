@@ -1,31 +1,29 @@
+
+import * as bcrypt from 'bcryptjs';
+import * as crypto from 'crypto';
+import {MoreThan, Repository} from 'typeorm';
 import {BadRequestException, Injectable, UnauthorizedException} from "@nestjs/common";
+import {OAuth2Client} from "google-auth-library";
 import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
-import {TokenService} from "@feature/security/service/token.service"
-import {isNil} from "lodash";
-import {Builder} from "builder-pattern";
-import {ulid} from "ulid";
+import {TokenService} from "@feature/security/service/token.service";
 import {UserService} from "@feature/user/user.service";
-import {User} from "@feature/user/model/entity/user.entity";
-import {CreateUserInterface} from "@feature/user/model/payload/create-user.interface";
+import {MailService} from "@feature/security/service/mail.service";
+import {ResetTokenService} from "@feature/security/service/reset-token.service";
+import {isNil} from "lodash";
 import {
     CredentialDeleteException,
-    CredentialNotFoundException,
-    SignupException,
+    CredentialNotFoundException, SignupException,
     UserAlreadyExistException,
     UserNotFoundException
 } from "@feature/security/security.exception";
 import {Credential, Role, SignInPayload, SignupPayload, Token, UserDetails} from "@feature/security/data";
+import {CreateUserInterface, User} from "@feature/user/model";
 import {comparePassword, encryptPassword} from "@feature/security/service/utils";
-import {OAuth2Client} from "google-auth-library";
-import * as process from "node:process";
+import {Builder} from "builder-pattern";
+import {ulid} from "ulid";
 import {ChangePasswordPayload} from "@feature/security/data/payload/change-password.payload";
 import {ForgotPasswordPayload} from "@feature/security/data/payload/forgot-password.payload";
-import {MailService} from "@feature/security/service/mail.service";
 import {ResetPasswordPayload} from "@feature/security/data/payload/reset-password.payload";
-import * as bcrypt from 'bcryptjs';
-import * as crypto from 'crypto';
-import { MoreThan } from 'typeorm';
 
 @Injectable()
 export class SecurityService {
@@ -36,7 +34,9 @@ export class SecurityService {
         @InjectRepository(Credential) private readonly repository: Repository<Credential>,
         private readonly tokenService: TokenService,
         private readonly userService: UserService,
-        private readonly mailService: MailService
+        private readonly mailService: MailService,
+        private readonly resetTokenService: ResetTokenService
+
     ) {
         this.googleClient = new OAuth2Client(process.env.GOOGLE_ID_CLIENT);
     }
@@ -50,8 +50,11 @@ export class SecurityService {
     }
 
     async userDetail(userId: string, token: string): Promise<{ user: UserDetails }> {
-        const userDetails: User = await this.userService.findUserById(userId);
-        if (isNil(userDetails)) {
+        // Vérifier si le token existe toujours en base
+        await this.tokenService.verifyTokenExists(token);
+
+        const user: User = await this.userService.findUserById(userId);
+        if (isNil(user)) {
             throw new UserNotFoundException();
         }
 
@@ -62,41 +65,20 @@ export class SecurityService {
 
         return {
             user: {
-                idUser: userDetails.idUser,
+                idUser: user.idUser,
                 role: credentials.role,
                 token: token,
-                profileImage: userDetails.profileImage ? userDetails.profileImage.toString('base64') : null,
-                firstname: userDetails.firstname,
-                lastname: userDetails.lastname,
-                phoneNumber: userDetails.phoneNumber,
-                profileImageUrl: userDetails.profileImageUrl,
-                hasCustomImage: userDetails.hasCustomProfileImage,
-                shippingAddress: userDetails.shippingAddress
-                    ? {
-                        road: userDetails.shippingAddress.road,
-                        nb: userDetails.shippingAddress.nb,
-                        cp: userDetails.shippingAddress.cp,
-                        town: userDetails.shippingAddress.town,
-                        country: userDetails.shippingAddress.country,
-                        complement: userDetails.shippingAddress.complement,
-                    }
-                    : null,
-                billingAddress: userDetails.billingAddress
-                    ? {
-                        road: userDetails.billingAddress.road,
-                        nb: userDetails.billingAddress.nb,
-                        cp: userDetails.billingAddress.cp,
-                        town: userDetails.billingAddress.town,
-                        country: userDetails.billingAddress.country,
-                        complement: userDetails.billingAddress.complement,
-                    }
-                    : null,
+                mail: credentials.mail,
+                firstname: user.firstname || '',
+                lastname: user.lastname || '',
+                phonenumber: user.phoneNumber || '',
+                addresses: user.addresses || []
             }
         };
     }
 
     async signIn(payload: SignInPayload): Promise<Token | null> {
-        const credential : Credential | null = await this.repository.findOneBy({mail: payload.mail});
+        const credential: Credential | null = await this.repository.findOneBy({ mail: payload.mail });
         if (!credential || !await comparePassword(payload.password, credential.password)) {
             throw new UserNotFoundException();
         }
@@ -111,8 +93,10 @@ export class SecurityService {
 
         try {
             const createUserInterface: CreateUserInterface = {
-                firstname: '',
-                lastname: '',
+                username: payload.username,
+                firstname: payload.firstname,
+                lastname: payload.lastname,
+                email: payload.mail
             };
 
             const newUser: User = await this.userService.createUser(createUserInterface);
@@ -123,67 +107,28 @@ export class SecurityService {
                 .user(newUser)
                 .password(encryptedPassword)
                 .mail(payload.mail)
+                .role(Role.USER)
+                .active(true)
                 .build();
 
-            // Générer un token de vérification d'email unique
-            // Générer un jeton de vérification d'email unique
-            const emailVerificationToken = crypto.randomBytes(32).toString('hex');
-            const expiresAt = new Date();
-            expiresAt.setHours(expiresAt.getHours() + 24); // Le jeton expire dans 24 heures
-
-            newCredential.emailVerificationToken = emailVerificationToken;
-            newCredential.emailVerificationExpiresAt = expiresAt;
-
             await this.repository.save(newCredential);
-
-            // Générer un lien de vérification avec l'email
-            const verificationLink = `https://localhost:4200/account/verify-email?token=${encodeURIComponent(emailVerificationToken)}`;
-            await this.mailService.sendEmailVerificationEmail(newCredential.mail, verificationLink);
-
 
             return this.signIn({
                 mail: payload.mail,
                 password: payload.password,
                 googleHash: '',
-                facebookHash: '',
-                socialLogin: false,
             });
         } catch (e) {
+            console.error('Signup error:', e);
             throw new SignupException();
         }
     }
 
-    async verifyEmail(token: string): Promise<void> {
-        // Récupérer le Credential avec le token fourni
-        const credential = await this.repository.findOne({
-            where: {
-                emailVerificationToken: token
-            }
-        });
-
-        if (!credential) {
-            throw new BadRequestException('Token invalide ou expiré');
-        }
-
-        // Vérifier que le token n'est pas expiré
-        if (credential.emailVerificationExpiresAt < new Date()) {
-            throw new BadRequestException('Token expiré');
-        }
-
-        // Mettre à jour l'état de validation de l'email
-        credential.is_validated = true;
-        credential.emailVerificationToken = null;
-        credential.emailVerificationExpiresAt = null;
-
-        await this.repository.save(credential);
-    }
-
     async googleSignIn(idToken: string): Promise<Token> {
         try {
-            // Vérifier le jeton d'ID Google
             const ticket = await this.googleClient.verifyIdToken({
                 idToken: idToken,
-                audience: process.env.GOOGLE_ID_CLIENT, // Utilisez une variable d'environnement
+                audience: process.env.GOOGLE_ID_CLIENT,
             });
             const payload = ticket.getPayload();
 
@@ -191,49 +136,51 @@ export class SecurityService {
                 throw new UnauthorizedException('Échec de la récupération des informations utilisateur depuis le jeton Google.');
             }
 
-            // Valider les champs essentiels
             const { sub: googleId, email, given_name: firstname, family_name: lastname, picture, exp, aud, iss } = payload;
 
             if (!googleId || !email) {
                 throw new UnauthorizedException('Jeton Google invalide: informations utilisateur manquantes.');
             }
 
-            // Validation supplémentaire
             this.validateToken({ exp, aud, iss });
 
-            // Vérifier si l'utilisateur existe déjà
             let credential: Credential = await this.repository.findOne({
-                where: { googleHash: googleId },
-                relations: ['user'],
+                where: [
+                    { googleHash: googleId },
+                    { mail: email }
+                ],
+                relations: ['user', 'user.addresses'],
             });
 
             if (!credential) {
-                // Utiliser une transaction pour assurer l'atomicité
                 await this.repository.manager.transaction(async transactionalEntityManager => {
                     const newUser = new User();
                     newUser.idUser = ulid();
-                    newUser.firstname = firstname;
-                    newUser.lastname = lastname;
-                    newUser.profileImageUrl = picture;
+                    newUser.firstname = firstname || '';
+                    newUser.lastname = lastname || '';
+                    newUser.email = email;
+                    newUser.addresses = [];
 
                     const savedUser = await this.userService.createUser(newUser);
                     if (!savedUser) {
                         throw new Error('Échec de la sauvegarde du nouvel utilisateur.');
                     }
 
-                    // Créer de nouvelles informations d'identification
                     credential = new Credential();
                     credential.credential_id = ulid();
                     credential.user = savedUser;
                     credential.googleHash = googleId;
                     credential.mail = email;
                     credential.role = Role.USER;
+                    credential.active = true;
 
                     await transactionalEntityManager.save(credential);
                 });
+            } else if (!credential.googleHash) {
+                credential.googleHash = googleId;
+                await this.repository.save(credential);
             }
 
-            // Générer un jeton pour l'utilisateur
             return this.tokenService.getTokens(credential);
 
         } catch (error) {
@@ -263,6 +210,7 @@ export class SecurityService {
     }
 
     async signout(token: string): Promise<void> {
+        //supprimer le token en db pour ne plus être auth
         return this.tokenService.revokeToken(token);
     }
 
@@ -277,9 +225,9 @@ export class SecurityService {
     }
 
     async getCredentialsByUserId(userId: string): Promise<Credential> {
-        const credential: Credential = await this.repository.findOne({
+        const credential = await this.repository.findOne({
             where: { user: { idUser: userId } },
-            relations: ['user'],
+            relations: ['user', 'user.addresses']
         });
 
         if (!credential) {
@@ -314,92 +262,50 @@ export class SecurityService {
 
     async forgotPassword(payload: ForgotPasswordPayload): Promise<void> {
         try {
-            const { email } = payload;
+            const credential: Credential = await this.repository.findOne({
+                where: { mail: payload.email },
+                relations: ['user']
+            });
 
-            // Trouver l'utilisateur avec son email
-            const credential: Credential = await this.repository.findOneBy({ mail: email });
-
-            // Pour des raisons de sécurité, ne pas révéler si l'email n'existe pas
             if (!credential) {
-                // Facultatif : Introduire un délai pour atténuer les attaques par synchronisation
                 await new Promise((resolve) => setTimeout(resolve, 1000));
                 return;
             }
 
-            // Générer un token aléatoire sécurisé avec crypto
-            const resetToken = crypto.randomBytes(32).toString('hex');
+            // Créer un nouveau token de réinitialisation
+            const plainToken: string = await this.resetTokenService.createToken(credential);
 
-            // Hacher le token avec bcrypt avant de le stocker dans la base de données
-            const hashedToken = await bcrypt.hash(resetToken, 10);
-
-            // Définir l'heure d'expiration du token (par exemple, 1 heure à partir de maintenant)
-            const expiresAt = new Date();
-            expiresAt.setHours(expiresAt.getHours() + 1);
-
-            // Stocker le token haché et la date d'expiration dans les informations d'identification
-            credential.resetToken = hashedToken;
-            credential.resetTokenExpiresAt = expiresAt;
-
-            await this.repository.save(credential);
-
-            // Générer le lien de réinitialisation avec le token non haché
-            const resetLink = `https://localhost:4200/account/reset-password?token=${encodeURIComponent(resetToken)}`;
-
-            // Envoyer le lien de réinitialisation de mot de passe par email
+            const resetLink = `https://localhost:4200/account/reset-password?token=${encodeURIComponent(plainToken)}`;
             await this.mailService.sendPasswordResetEmail(credential.mail, resetLink);
-        } catch (e) {
-            // Facultativement, loguer l'erreur
-            console.error(e);
+        } catch (error) {
+            console.error('Error in forgotPassword:', error);
         }
     }
 
-    async resetPassword(payload: ResetPasswordPayload): Promise<void> {
-        // Rechercher l'utilisateur par le token non haché envoyé dans la requête
-        const credential = await this.repository.findOne({
-            where: {
-                resetTokenExpiresAt: MoreThan(new Date()) // Vérifie que le token n'a pas expiré
-            }
-        });
 
-        if (!credential) {
+    async resetPassword(payload: ResetPasswordPayload): Promise<void> {
+        const resetToken = await this.resetTokenService.findValidToken(payload.token);
+
+        if (!resetToken) {
             throw new BadRequestException('Invalid or expired token');
         }
 
-        // Comparer le token non haché avec le token haché dans la base de données
-        const isTokenValid = await bcrypt.compare(payload.token, credential.resetToken);
-        if (!isTokenValid) {
-            throw new BadRequestException('Invalid token');
-        }
-
-        // Hacher le nouveau mot de passe (avec bcrypt par exemple)
-        credential.password = await encryptPassword(payload.newPassword);
-        credential.resetToken = null;
-        credential.resetTokenExpiresAt = null;
-
-        await this.repository.save(credential);
-    }
-
-    /*
-    async changePasswordByUserId(userId: string, newPassword: string): Promise<void> {
-        const credential: Credential = await this.getCredentialsByUserId(userId);
+        // Récupérer les credentials complets avec toutes les relations nécessaires
+        const credential = await this.repository.findOne({
+            where: { credential_id: resetToken.credential.credential_id },
+            relations: ['user']
+        });
 
         if (!credential) {
-            throw new UserNotFoundException();
+            throw new BadRequestException('Credential not found');
         }
 
-        // Vérification que le nouveau mot de passe est différent de l'ancien
-        const isSamePassword: boolean = await comparePassword(newPassword, credential.password);
-        if (isSamePassword) {
-            throw new Error('Le nouveau mot de passe doit être différent de l\'ancien.');
-        }
-
-        // Hachage du nouveau mot de passe
-        credential.password = await encryptPassword(newPassword);
-
-        // Sauvegarde du nouveau mot de passe
+        // Mettre à jour le mot de passe
+        credential.password = await encryptPassword(payload.newPassword);
         await this.repository.save(credential);
-    }
 
-     */
+        // Invalider le token
+        await this.resetTokenService.invalidateToken(resetToken);
+    }
 
 }

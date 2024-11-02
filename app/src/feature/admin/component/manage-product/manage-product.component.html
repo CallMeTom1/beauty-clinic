@@ -1,66 +1,170 @@
 <div class="product-container">
-  <h2>Gérer les produits</h2>
-  <div class="add-product-button">
-    <button class="btn btn-primary" (click)="openCreateModal()">
-      {{'form.product.add.lable' | translate}}
+  <div class="product-header">
+    <h2>Gérer les produits</h2>
+    <button class="primary" (click)="openCreateModal()">
+      {{ 'form.product.add.label' | translate }}
     </button>
   </div>
-  <!-- Liste des produits affichés sous forme de cartes -->
-  <div class="product-list">
-    @for(product of securityService.Products$(); track product.product_id){
-      <app-product-category-selector [productId]="product.product_id"></app-product-category-selector>
 
-      <div class="card-header">
-        <label for="editImage-{{ product.product_id}}" class="image-upload-label">
-          <img [src]="getProductImage(product)" alt="{{ product.name }}" class="category-image" />
-          <input type="file" id="editImage-{{ product.product_id }}" (change)="onProductImageChange($event, product)" accept="image/*" hidden />
-        </label>
-        <h3>{{product.name}}</h3>
-        <p>{{product.description}}</p>
-        <p>{{product.quantity_stored}}</p>
-        <p>{{product.promo_percentage}}</p>
-        <p>{{product.price}}</p>
-      </div>
-      <div class="card-body">
-        <button (click)="openEditModal(product)" class="btn btn-secondary">{{ 'form.product.edit.label' | translate }}</button>
+  <table class="product-table">
+    <thead>
+    <tr>
+      <th>{{ 'table.header.image' | translate }}</th>
+      <th>{{ 'table.header.name' | translate }}</th>
+      <th>{{ 'table.header.description' | translate }}</th>
+      <th>{{ 'table.header.initial_price' | translate }}</th>
+      <th>{{ 'table.header.quantity' | translate }}</th>
+      <th>{{ 'table.header.min_quantity' | translate }}</th>
+      <th>{{ 'table.header.max_quantity' | translate }}</th>
+      <th>{{ 'table.header.promo' | translate }}</th>
+      <th>Actions promo</th>
+      <th>{{ 'table.header.categories' | translate }}</th>
+      <th>{{ 'table.header.actions' | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for(product of securityService.Products$(); track product.product_id) {
+        <tr>
+          <td>
+            <label for="editImage-{{ product.product_id }}" class="image-upload-label">
+              <img [src]="getProductImage(product)" alt="{{ product.name }}" class="product-image" />
+              <input type="file" id="editImage-{{ product.product_id }}" (change)="onProductImageChange($event, product)" accept="image/*" hidden />
+            </label>
+          </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.initial_price | customEuro }}</td>
+          <td>{{ product.quantity_stored }}</td>
+          <td>{{ product.minQuantity }}</td>
+          <td>{{ product.maxQuantity }}</td>
+          <td>
+            @if(product.is_promo) {
+              <div class="price-column">
+                <span class="original-price">{{ product.initial_price | customEuro }}</span>
+                <span class="discounted-price">{{ product.price_discounted | customEuro }}</span>
+                <span class="promo-badge">-{{ product.promo_percentage }}%</span>
+              </div>
+            } @else {
+              <span>Pas de promo</span>
+            }
+          </td>
+          <td>
+            <div class="promo-container">
+              <button class="action-button"
+                      [ngClass]="{'promo-active': product.is_promo}"
+                      (click)="togglePromoPopover(product)">
+                <i class="fa-light fa-tag"></i>
+                {{ product.is_promo ? 'Modifier promo' : 'Ajouter promo' }}
+              </button>
 
-        <div class="switch">
-          <label>{{ 'form.category.product.publish.label' | translate }}</label>
-          <input type="checkbox" [checked]="product.isPublished" (change)="togglePublishProduct(product)" />
-        </div>
-        <button (click)="openDeleteModal(product)" class="btn btn-danger">{{ 'form.category.product.delete.label' | translate }}</button>
-      </div>
-    }
-  </div>
+              @if(currentPromoProduct?.product_id === product.product_id) {
+                <div class="promo-popover">
+                  <div class="promo-content">
+                    <label>Pourcentage de réduction</label>
+                    <div class="promo-input">
+                      <input type="number"
+                             [value]="product.promo_percentage"
+                             (input)="onPromoPercentageChange($event)"
+                             min="0"
+                             max="100">
+                      <span>%</span>
+                    </div>
+                    <div class="promo-buttons">
+                      <button class="primary"
+                              (click)="applyPromotion(product)">
+                        Appliquer
+                      </button>
+                      @if(product.is_promo) {
+                        <button class="secondary"
+                                (click)="removePromotion(product)">
+                          Retirer
+                        </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </td>
+          <td>
+            <app-product-category-selector [productId]="product.product_id"></app-product-category-selector>
+          </td>
+          <td class="actions-cell">
+            <div class="actions-group">
+              <a (click)="openEditModal(product)" class="action-link edit">
+                {{ 'form.product.edit.label' | translate }}
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="togglePublishProduct(product)" class="action-link"
+                 [ngClass]="product.isPublished ? 'unpublish' : 'publish'">
+                {{ product.isPublished ? 'Dépublier' : 'Publier' }}
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="openDeleteModal(product)" class="action-link delete">
+                {{ 'form.product.delete.label' | translate }}
+              </a>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
   @if(showDeleteModal){
     <app-modal [title]="'form.product.delete.confirm.title' | translate" (close)="handleClose()">
-      <p>{{ 'form.category.product.delete.confirm.message' | translate }}: {{ currentProduct?.name }}</p>
-      <button (click)="deleteProduct()" class="btn btn-danger">{{ 'form.product.delete.confirm.button' | translate }}</button>
-      <button (click)="handleClose()" class="btn btn-secondary">{{ 'form.cancel.label' | translate }}</button>
+      <div class="del-modal">
+        <h3>{{ 'form.product.delete.confirm.message' | translate }} ?</h3>
+        <span>{{ currentProduct?.name }}</span>
+      </div>
+      <div class="modal-actions">
+        <button (click)="deleteProduct()" class="primary">
+          {{ 'form.product.delete.confirm.button' | translate }}
+        </button>
+        <button (click)="handleClose()" class="primary">
+          {{ 'form.cancel.label' | translate }}
+        </button>
+      </div>
     </app-modal>
   }
+
   @if(showEditModal){
     <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
-
       <form [formGroup]="updateProductFormGroup" (ngSubmit)="onSubmitUpdateProduct()">
         @for(input of updateProductFormControlConfigs; track input.label){
           <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
         }
-        <button type="submit" class="btn btn-secondary">{{ 'form.product.update.label' | translate }}</button>
+        <div class="modal-actions">
+          <button [disabled]="!updateProductFormGroup.valid" (click)="onSubmitUpdateProduct()" class="primary">
+            {{ 'form.product.update.label' | translate }}
+          </button>
+        </div>
       </form>
-      <!-- Error form display -->
     </app-modal>
   }
 
   @if(showCreateModal){
     <app-modal [title]="modal_create_title | translate" (close)="handleClose()">
-      <form [formGroup]="createProductFormGroup" (ngSubmit)="onSubmitCreateProduct()">
-        @for(input of createProductFormControlConfigs; track input.label){
-          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
-        }
-        <button type="submit" class="btn btn-primary">{{ 'form.product.add.label' | translate }}</button>
+      <form [formGroup]="createProductFormGroup" (ngSubmit)="onSubmitCreateProduct()" class="two-column-form">
+        <div class="form-fields">
+          <div class="form-column">
+            <!-- Première moitié des champs -->
+            @for(input of createProductFormControlConfigs.slice(0, Math.ceil(createProductFormControlConfigs.length/2)); track input.label){
+              <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+            }
+          </div>
+          <div class="form-column">
+            <!-- Deuxième moitié des champs -->
+            @for(input of createProductFormControlConfigs.slice(Math.ceil(createProductFormControlConfigs.length/2)); track input.label){
+              <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+            }
+          </div>
+        </div>
+        <div class="form-actions">
+          <button [disabled]="!createProductFormGroup.valid" (click)="onSubmitCreateProduct()" class="primary">
+            {{ 'form.product.add.label' | translate }}
+          </button>
+        </div>
       </form>
     </app-modal>
   }
-
 </div>

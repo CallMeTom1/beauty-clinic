@@ -10,11 +10,15 @@ import {
 import {EditBusinessHoursPayload} from "../../data/edit-business-hours.payload";
 import {DayOfWeekEnum} from "../../../business-hours/day-of-week.enum";
 import {BusinessHoursForm} from "../../../business-hours/business-hours.form";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {BusinessHours} from "../../../business-hours/data/model/business-hours.business";
 import {ModalComponent} from "../../../shared/ui/modal/modal/modal.component";
 import {BusinessStatus, BusinessStatusTranslations} from "./business-status.enum";
+import {
+  FloatingLabelInputTestComponent
+} from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
+import {NgClass} from "@angular/common";
 
 
 @Component({
@@ -24,7 +28,10 @@ import {BusinessStatus, BusinessStatusTranslations} from "./business-status.enum
     TranslateModule,
     ModalComponent,
     LabelWithParamComponent,
-    LabelWithParamPipe
+    LabelWithParamPipe,
+    ReactiveFormsModule,
+    FloatingLabelInputTestComponent,
+    NgClass
   ],
   templateUrl: './manage-business-hours.component.html',
   styleUrl: './manage-business-hours.component.scss'
@@ -37,6 +44,7 @@ export class ManageBusinessHoursComponent implements OnInit{
   protected showEditModal: boolean = false;
   public formError$: WritableSignal<FormError[]> = signal([]);
   private currentDayOfWeek: DayOfWeekEnum | null = null;
+  protected readonly col_actions: string = "admin-feature.admin.manage-business-hours.col_actions";
 
   protected readonly title: string =   "admin-feature.admin.manage-business-hours.title";
   protected readonly col_day: string =   "admin-feature.admin.manage-business-hours.col_day";
@@ -53,7 +61,9 @@ export class ManageBusinessHoursComponent implements OnInit{
   protected readonly open: string = 'admin-feature.admin.manage-business-hours.open';
   protected readonly close: string = 'admin-feature.admin.manage-business-hours.close';
 
-
+  protected transformDayOfWeek(day: DayOfWeekEnum): string {
+    return `business_hours.days.${day.toLowerCase()}`;
+  }
   private editBusinessHoursPayload: EditBusinessHoursPayload = {
     opening_time: '',
     closing_time: '',

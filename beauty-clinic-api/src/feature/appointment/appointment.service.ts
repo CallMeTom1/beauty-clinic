@@ -52,6 +52,7 @@ export class AppointmentService {
         private readonly userRepository: Repository<User>,
     ) {}
 
+    /*
     async createAppointmentAdminUserDoesNotExist(payload: CreateAppointmentAdminUserDoesNotExistPayload): Promise<void> {
         const { firstname, lastname, phoneNumber, care_id, start_time } = payload;
 
@@ -90,6 +91,8 @@ export class AppointmentService {
             throw new CreateAppointmentException();
         }
     }
+
+     */
 
     async updateAppointmentNote(payload: UpdateAppointmentNotePayload): Promise<Appointment> {
         const { appointment_id, note } = payload;
@@ -227,7 +230,10 @@ export class AppointmentService {
                     },
                     care: {
                         name: true, // Select only the name of the care
-                        price: true
+                        initial_price: true, // Select the initial price
+                        is_promo: true, // Select whether the care is on promotion
+                        promo_percentage: true, // Select the promotion percentage
+                        price_discounted: true // Select the discounted price
                     }
                 }
             });

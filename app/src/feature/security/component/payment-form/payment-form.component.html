@@ -1,0 +1,6 @@
+<div class="payment-form-container">
+
+  <div #paymentElement></div> <!-- Cet élément est monté avec Stripe -->
+
+  <button *ngIf="clientSecret" (click)="handlePayment()">Payer</button>
+</div>

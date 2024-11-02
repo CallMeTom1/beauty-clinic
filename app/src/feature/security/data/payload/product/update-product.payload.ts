@@ -1,8 +1,13 @@
 export interface UpdateProductPayload {
-  id: string;
+  product_id: string;
   name?: string;
   description?: string;
-  price?: number;
+  initial_price?: number;
   quantity_stored?: number;
+  minQuantity?: number;
+  maxQuantity?: number;
+  isPublished?: boolean;
+  category_ids?: string[];
+  is_promo?: boolean;
   promo_percentage?: number;
 }

@@ -1,46 +1,56 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import {IsString, IsNotEmpty, IsNumber, IsOptional, IsBoolean, IsArray} from 'class-validator';
 
 export class CreateProductPayload {
-    @ApiProperty({
-        description: 'Name of the product.',
-        example: 'Anti-aging cream'
-    })
-    @IsString({ message: 'The name must be a string.' })
-    @IsNotEmpty({ message: 'The name field cannot be empty.' })
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
     name: string;
 
-    @ApiProperty({
-        description: 'Description of the product.',
-        example: 'A cream that reduces the appearance of wrinkles.'
-    })
-    @IsString({ message: 'The description must be a string.' })
-    @IsNotEmpty({ message: 'The description field cannot be empty.' })
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
     description: string;
 
-    @ApiProperty({
-        description: 'Price of the product.',
-        example: 29.99
-    })
-    @IsNumber({}, { message: 'The price must be a number.' })
-    @IsNotEmpty({ message: 'The price field cannot be empty.' })
-    price: number;
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    initial_price: number;
 
-    @ApiProperty({
-        description: 'Quantity stored of the product.',
-        example: 100
-    })
-    @IsNumber({}, { message: 'The quantity_stored must be a number.' })
-    @IsNotEmpty({ message: 'The quantity_stored field cannot be empty.' })
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
     quantity_stored: number;
 
-    @ApiProperty({
-        description: 'Promo percentage for the product.',
-        example: 10,
-        required: false
-    })
-    @IsNumber({}, { message: 'The promo_percentage must be a number.' })
+    @ApiProperty()
+    @IsNumber()
     @IsOptional()
+    minQuantity?: number;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsNumber()
+    maxQuantity?: number;
+
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsBoolean()
+    isPublished?: boolean;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsBoolean()
+    isPromo?: boolean;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsNumber()
     promo_percentage?: number;
 
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsArray()
+    category_ids?: string[];
 }
+

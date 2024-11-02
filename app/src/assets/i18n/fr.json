@@ -1,18 +1,16 @@
 {
-
-
   "home-feature-nav-alt": "Logo de Coinify",
   "home-feature-nav-login-btn": "Se connecter",
-  "home-feature-nav-signup-btn":" S'inscrire",
+  "home-feature-nav-signup-btn": "S'inscrire",
   "home-feature-take-appointment-btn": "Réserver maintenant",
 
   "home-feature-header-top-title": "Soins d'exceptions",
-  "home-feature-header-home-title1":"Beauté et bien-être",
-  "home-feature-header-home-title2":"accessibles à",
-  "home-feature-header-home-title3":"chacun",
+  "home-feature-header-home-title1": "Beauté et bien-être",
+  "home-feature-header-home-title2": "accessibles à",
+  "home-feature-header-home-title3": "chacun",
 
   "home-feature-header-care-btn": "Découvrir les soins",
-  "home-feature-header-appointment-btn":"Réserver maintenant",
+  "home-feature-header-appointment-btn": "Réserver maintenant",
 
   "home-feature-presentation-up-title": "Pour vous sublimer",
   "home-feature-presentation-title": "Françoise",
@@ -22,18 +20,17 @@
 
   "home-feature-diag-title": "Diagnostique Gratuit",
   "home-feature-diag-text": "Françoise vous offre un diagnostic beauté personnalisé et gratuit pour cerner précisément vos besoins et vous proposer des soins sur mesure qui répondront parfaitement à vos attentes.",
-  "home-feature-diag-btn-text":"Reserver votre diagnostique",
-
+  "home-feature-diag-btn-text": "Réserver votre diagnostique",
 
   "home-feature-care-trend-title": "Soins en tendance",
-
-  "home-feature-care-all-btn-text": "Découvrir tout les soins",
+  "home-feature-care-all-btn-text": "Découvrir tous les soins",
 
   "common.nav.order": "Commandes",
   "common.nav.member": "Membres",
   "common.nav.home": "Accueil",
   "common.nav.care": "Soins",
   "common.nav.product": "Produits",
+
   "common.nav.cart": "Panier",
   "common.nav.appointment": "Rendez-vous",
   "common.nav.contact": "Contact",
@@ -42,16 +39,24 @@
   "common.nav.brand": "Coinify",
   "common.loader.message": "Chargement en cours",
   "common.empty": "-",
+
   "common.admin.nav.dashboard": "Dashboard",
-  "common.admin.nav.care": "Gérer les soins",
-  "common.admin.nav.appointment": "Gérer les rendez-vous",
-  "common.admin.nav.customer": "Gérer les clients",
-  "common.admin.nav.business-hours": "Gérer les heures d'ouvertures",
-  "common.admin.nav.holidays": "Gérer les jours de vacances",
+  "common.admin.nav.care": "Soins",
+  "common.admin.nav.product": "Produits",
+
+  "common.admin.nav.appointment": "Rendez-vous",
+  "common.admin.nav.customer": "Clients",
+  "common.admin.nav.business-hours": "Heures d'ouverture",
+  "common.admin.nav.holidays": "Jours de vacances",
+  "common.admin.nav.care-category": "Catégorie de Soins",
+  "common.admin.nav.product-category": "Catégorie de produits",
+  "common.admin.nav.order": "Commandes",
+  "common.admin.nav.clinic": "La clinique",
 
 
-  "admin-feature.admin-router.name": "Beauty Clinic By Françoise",
+  "admin-feature.admin-router.name": "IzzyBeauty",
   "admin-feature.admin-router.logout": "Se déconnecter",
+
   "admin-feature.admin.manage-care.title": "Gérer les soins",
   "admin-feature.admin.manage-care.add": "Ajouter un soin",
   "admin-feature.admin.modal.add.title": "Ajouter un soin",
@@ -67,17 +72,17 @@
   "admin-feature.admin.manage-care.column.edit": "Modifier",
   "admin-feature.admin.manage-care.column.delete": "Supprimer",
 
-  "admin-feature.admin.manage-business-hours.title": "Gérer les heures d'ouvertures et de fermetures",
+  "admin-feature.admin.manage-business-hours.title": "Gérer les heures d'ouverture et de fermeture",
   "admin-feature.admin.manage-business-hours.col_day": "Jour de la semaine",
   "admin-feature.admin.manage-business-hours.col_opening_time": "Heure d'ouverture",
   "admin-feature.admin.manage-business-hours.col_closing_time": "Heure de fermeture",
   "admin-feature.admin.manage-business-hours.col_is_open": "Ouvert / Fermé",
-  "admin-feature.admin.manage-business-hours.col_edit": "Modifier les heures d'ouvertures",
+  "admin-feature.admin.manage-business-hours.col_edit": "Modifier les heures d'ouverture",
   "admin-feature.admin.manage-business-hours.col_open": "Ouvrir la journée",
   "admin-feature.admin.manage-business-hours.col_close": "Fermer la journée",
   "admin-feature.admin.manage-business-hours.btn_open": "Ouvrir",
   "admin-feature.admin.manage-business-hours.btn_close": "Fermer",
-  "admin-feature.admin.manage-business-hours.modal_edit_title": "Editer les heures d'ouvertures et de fermetures pour cette journée",
+  "admin-feature.admin.manage-business-hours.modal_edit_title": "Éditer les heures d'ouverture et de fermeture",
   "admin-feature.admin.manage-business-hours.submit": "Confirmer",
   "admin-feature.admin.manage-business-hours.open": "Ouvert",
   "admin-feature.admin.manage-business-hours.close": "Fermé",
@@ -95,19 +100,7 @@
   "admin-feature.admin.manage-appointment.col_modifier_note": "Modifier la note",
   "admin-feature.admin.manage-appointment.col_confirmer": "Confirmer",
   "admin-feature.admin.manage-appointment.col_annuler": "Annuler",
-  "admin-feature.admin.manage-appointment.col_day": "Jour",
-  "admin-feature.admin.manage-appointment.col_opening_time": "Heure d'ouverture",
-  "admin-feature.admin.manage-appointment.col_closing_time": "Heure de fermeture",
-  "admin-feature.admin.manage-appointment.col_is_open": "Ouvert",
-  "admin-feature.admin.manage-appointment.col_edit": "Modifier",
-  "admin-feature.admin.manage-appointment.col_open": "Ouvrir",
-  "admin-feature.admin.manage-appointment.col_close": "Fermer",
-  "admin-feature.admin.manage-appointment.btn_open": "Ouvrir",
-  "admin-feature.admin.manage-appointment.btn_close": "Fermer",
-  "admin-feature.admin.manage-appointment.modal_edit_title": "Modifier le rendez-vous",
-  "admin-feature.admin.manage-appointment.submit": "Soumettre",
-  "admin-feature.admin.manage-appointment.open": "Ouvert",
-  "admin-feature.admin.manage-appointment.close": "Fermé",
+
   "appointment.form.category": "Catégorie",
   "appointment.form.select_category": "Sélectionnez une catégorie",
   "appointment.form.care": "Soin",
@@ -133,56 +126,38 @@
   "admin-feature.admin.manage-customer.col_phoneNumber": "Numéro de téléphone",
   "admin-feature.admin.manage-customer.col_id": "ID Client",
 
+  "care.form.name": "Nom du soin",
+  "care.form.enter_name": "Entrez le nom du soin",
+  "care.form.sessions": "Session",
+  "care.form.time_between": "Temps entre sessions",
+  "care.form.category": "Catégorie",
+  "care.form.duration": "Durée",
+  "care.form.price": "Prix",
+  "care.form.enter_price": "Entrez le prix",
+  "care.form.enter_duration": "Entrez la durée",
+  "care.form.enter_time_between": "Entrez le temps entre sessions",
+  "care.form.select_category": "Sélectionnez une catégorie",
+  "care.form.zone": "Zone",
+  "care.form.select_zone": "Sélectionnez une zone",
+  "care.form.machine": "Machine",
+  "care.form.select_machine": "Sélectionnez une machine",
 
+  "care.category.epilation": "Épilation",
+  "care.category.relaxation": "Relaxation",
+  "care.category.skincare": "Soins de la peau",
 
+  "care.zone.facial": "Visage",
+  "care.zone.fullbody": "Corps entier",
+  "care.zone.legs": "Jambes",
+  "care.zone.none": "Aucune",
 
-  "care": {
-    "form": {
-      "name": "Nom du soin",
-      "enter_name": "Entrez le nom du soin",
-      "sessions": "Session",
-      "time_between": "temps entre session",
-      "category": "Categorie",
-      "duration": "Durée",
-      "price": "Prix",
-      "enter_price": "Entrez le prix",
-      "enter_duration": "Entrez la durée",
-      "enter_time_between": "Entrez le temps entre session",
-      "select_category": "Sélectionnez une catégorie",
-      "zone": "Zone",
-      "select_zone": "Sélectionnez une zone",
-      "machine": "Machine",
-      "select_machine": "Sélectionner une machine"
-    },
-    "category": {
-      "epilation": "Epilation",
-      "relaxation": "Relaxation",
-      "skincare": "Skincare"
-    },
-    "zone": {
-      "facial": "Facial",
-      "fullbody": "Full Body",
-      "legs": "Legs",
-      "none": "None"
-    },
-    "machine": {
-      "lasermaxpro": "LaserMax Pro",
-      "hydrofacialjr": "HydroFacial Jr.",
-      "none": "None"
-    }
-  },
-
-  "business_hours": {
-    "form": {
-      "opening_time": "Heure d'ouverture",
-      "closing_time": "Heure de fermeture",
-      "is_open": "Ouvert / Fermé"
-    }
-  },
+  "business_hours.form.opening_time": "Heure d'ouverture",
+  "business_hours.form.closing_time": "Heure de fermeture",
+  "business_hours.form.is_open": "Ouvert / Fermé",
 
   "api.error.user-not-found": "L'utilisateur n'a pas été trouvé",
 
-  "security-feature.sign-up-page.more-than-18": "J'affirme avoir plus de 18 ans et d'avoir lu les conditions générales",
+  "security-feature.sign-up-page.more-than-18": "J'affirme avoir plus de 18 ans et avoir lu les conditions générales",
   "security-feature.sign-up-page.title": "Créez votre compte",
   "security-feature.sign-up-page.link-other-page": "Déjà inscrit?",
   "security-feature.sign-up-page.link-other-page-important": "Connexion",
@@ -193,78 +168,23 @@
   "security-feature.sign-in-page.title": "Connectez-vous à ",
   "security-feature.sign-in-page.label.username": "Identifiant",
   "security-feature.sign-in-page.label.password": "Mot de passe",
-  "security-feature.sign-in-page.error.password-maxlength": "Le mot de passe ne doit pas excéder les 25 caractères",
+  "security-feature.sign-in-page.error.password-maxlength": "Le mot de passe ne doit pas excéder 25 caractères",
   "security-feature.sign-in-page.error.password-minlength": "Le mot de passe doit comporter au moins 10 caractères",
-  "security-feature.sign-in-page.error.password-required": "Le Mot de passe est requis",
+  "security-feature.sign-in-page.error.password-required": "Le mot de passe est requis",
   "security-feature.sign-in-page.error.username-required": "L'identifiant est requis",
-  "security-feature.sign-in-page.error.username-maxlength": "L'identifiant ne doit pas excéder les 25 caractères",
+  "security-feature.sign-in-page.error.username-maxlength": "L'identifiant ne doit pas excéder 25 caractères",
   "security-feature.sign-in-page.error.confirmation-matching": "La confirmation ne correspond pas",
   "security-feature.sign-in-page.error.confirmation-required": "La confirmation est requise",
   "security-feature.sign-in-page.error.mail-minlength": "L'email doit comporter au moins 10 caractères",
   "security-feature.sign-in-page.error.mail-required": "L'email est requis",
   "security-feature.sign-in-page.error.mail-maxlength": "L'email ne doit pas excéder 25 caractères",
-  "security-feature.sign-in-page.error.mail-email": "Entrez une adresse mail valide",
-  "security-feature.sign-in-page.error.description": "{count, plural, =0{Vous n'avez pas d'erreur} one{Vous avez une erreur} other{Vous avez {count} erreurs}}.",
-
-  "security-feature.sign-up-page.error.username-required": "L'identifiant est requis",
-  "security-feature.sign-up-page.error.username-minlength": "L'identifiant doit comporter au moins 1 caractère",
-  "security-feature.sign-up-page.error.username-maxlength": "L'identifiant ne doit pas excéder 10 caractères",
-  "security-feature.sign-up-page.error.mail-required": "L'email est requis",
-  "security-feature.sign-up-page.error.mail-minlength": "L'email doit comporter au moins 5 caractères",
-  "security-feature.sign-up-page.error.mail-maxlength": "L'email ne doit pas excéder 25 caractères",
-  "security-feature.sign-up-page.error.mail-email": "Entrez une adresse email valide",
-  "security-feature.sign-up-page.error.password-required": "Le mot de passe est requis",
-  "security-feature.sign-up-page.error.password-minlength": "Le mot de passe doit comporter au moins 10 caractères",
-  "security-feature.sign-up-page.error.password-maxlength": "Le mot de passe ne doit pas excéder 25 caractères",
-  "security-feature.sign-up-page.error.phoneNumber-required": "Le numéro de téléphone est requis",
-  "security-feature.sign-up-page.error.phoneNumber-pattern": "Le numéro de téléphone doit contenir uniquement des chiffres",
-  "security-feature.sign-up-page.error.phoneNumber-minlength": "Le numéro de téléphone doit comporter au moins 10 chiffres",
-  "security-feature.sign-up-page.error.phoneNumber-maxlength": "Le numéro de téléphone ne doit pas excéder 15 chiffres",
-  "security-feature.sign-up-page.error.firstname-required": "Le prénom est requis",
-  "security-feature.sign-up-page.error.firstname-minlength": "Le prénom doit comporter au moins 1 caractère",
-  "security-feature.sign-up-page.error.firstname-maxlength": "Le prénom ne doit pas excéder 25 caractères",
-  "security-feature.sign-up-page.error.lastname-required": "Le nom de famille est requis",
-  "security-feature.sign-up-page.error.lastname-minlength": "Le nom de famille doit comporter au moins 1 caractère",
-  "security-feature.sign-up-page.error.lastname-maxlength": "Le nom de famille ne doit pas excéder 25 caractères",
-  "security-feature.sign-up-page.error.description": "{count, plural, =0{Vous n'avez pas d'erreur} one{Vous avez une erreur} other{Vous avez {count} erreurs}}.",
-
-
-
+  "security-feature.sign-in-page.error.mail-email": "Entrez une adresse e-mail valide",
 
   "security-feature-sign-up-page-title": "S'inscrire",
   "security-feature-sign-up-page-redirect": "Se connecter",
 
-  "security-feature.parameter-page.title": "Paramètre de {str}",
-  "security-feature.parameter-page.label.id": "Identifiant unique",
-  "security-feature.parameter-page.label.username": "Identifiant de connexion",
-  "security-feature.parameter-page.label.mail": "Email",
-  "security-feature.parameter-page.label.facebook-hash": "Compte facebook",
-  "security-feature.parameter-page.label.google-hash": "Compte google",
-  "security-feature.parameter-page.label.social-connected": "Compte lié",
-  "security-feature.parameter-page.label.facebook-hash-empty": "Aucun compte facebook associé",
-  "security-feature.parameter-page.label.google-hash-empty": "Aucun compte google associe",
-  "security-feature.parameter-page.btn.log-out": "Se déconnecter",
-
-  "security-feature-user-nav-alt": "Avatar image",
-  "security-feature-user-nav-profile": "Mon profil",
-  "security-feature-user-nav-logout": "Se déconnecter",
-
-
-  "security-feature-signin-title": "Se connecter",
-  "security-feature-signin-redirect": "S'inscrire",
-  "security-feature-signin-or": "OU",
-  "security-feature-signin-googleBtn": "Continuer avec Google",
-  "security-feature-signin-no-account": "Pas encore de compte ?",
-  "security-feature-signin-join-now": "Rejoignez Maintenant",
-
-
-  "security-feature-signup-or": "OU",
-  "security-feature-signup-googleBtn": "Continuer avec Google",
-  "security-feature-signup-already-account": "Vous avez déjà un compte?",
-  "security-feature-signup-connect": "Se connecter",
-
   "security-feature-profile-title": "Votre Profil",
-  "security-feature-avatar-alt": "Avatar image",
+  "security-feature-avatar-alt": "Image de profil",
   "security-feature-change-avatar": "Changer",
   "security-feature-personal-info-title": "Informations personnelles",
   "security-feature-full-name": "Nom complet",
@@ -278,224 +198,504 @@
   "security-feature-verification-pending": "Votre vérification est en cours de traitement",
   "security-feature-verification-rejected": "Votre vérification a été rejetée, veuillez réintroduire une demande",
   "security-feature-identity-verified": "Votre identité est vérifiée",
-  "security-feature-enter-valid-number": "Veuillez entrer un nombre valide",
-  "security-feature-no-file-chose": "Aucun fichier sélectionné",
-
-  "security-feature-form-title": "Se connecter",
-  "security-feature-form-redirect": "S'inscrire'",
-  "security-feature-form-email-label": "Adresse e-mail",
-  "security-feature-form-email-placeholder": "Entrez votre adresse e-mail",
-  "security-feature-form-password-label": "Mot de passe",
-  "security-feature-form-password-placeholder": "Entrez votre mot de passe",
-
-
 
   "care-feature-header-title": "Raffinement et soin",
   "care-feature-header-text": "Vivez l'expérience ultime de soin.",
   "care-feature-header-btn": "Réserver Maintenant",
 
-  "care-feautre-care-page-diagnostic": "Diagnostique gratuit",
-  "care-feautre-care-page-epilation": "Epilation",
-  "care-feature-care-page-title1": "Des Soins à la hauteur de vos espérances",
-  "care-feature-care-page-title2": "Explorez une gamme de soins esthétiques innovants, conçus pour sublimer votre beauté naturelle et répondre à vos besoins spécifiques.",
+  "contact.form.firstName": "Prénom",
+  "contact.form.enter_firstName": "Entrez votre prénom",
+  "contact.form.email": "Email",
+  "contact.form.enter_email": "Entrez votre email",
+  "contact.form.phoneNumber": "Numéro de téléphone",
+  "contact.form.enter_phoneNumber": "Entrez votre numéro de téléphone",
+  "contact.form.careCategory": "Catégorie de soin",
+  "contact.form.select_careCategory": "Sélectionnez une catégorie de soin",
+  "contact.form.message": "Message",
+  "contact.form.enter_message": "Entrez votre message",
 
-  "care-feature-care-page-diag-title": "Diagnostique esthétique gratuit",
-  "care-feature-care-page-epil-title": "Epilation laser femme & homme",
-
-
-  "care-feature-care-page-card": {
-    "title1": "Diagnostique esthétique gratuit",
-    "btnTxt1": "En savoir plus",
-    "title2": "Epilation laser femme & homme",
-    "title3": "Electrolyse",
-    "title4": "Epilation à la cire",
-    "title5": "Traitement anti-cellulite",
-    "title6": "Rajeunissement, lifting et contouring",
-    "title7": "Peeling",
-    "title8": "Traitement anti-âge"
-  },
-
-  "care-feature-page-epil-laser-header-btn": "Réserver maintenant",
-  "care-feature-page-epil-laser-header-title": "Epilation laser femme & homme",
-  "care-feature-page-epil-laser-header-sub": "IPL/Epil Expert 2.0",
-  "care-feature-page-epil-laser-header-text": "Réduction Permanente des Poils.\nOubliez les rasoirs. Fini la cire. Découvrez l'épilation laser de qualité médicale et profitez de la liberté d'être prêt à tout moment.",
-
-  "care-feature-page-epil-laser-resume": "Résumé du traitement",
-  "care-feature-page-epil-laser-title": "épilation laser femme & homme",
-  "care-feature-page-epil-laser-sub-title": "IPL/Epil Expert 2.0 pour Épilation Laser Femme & Homme\n",
-  "care-feature-page-epil-laser-title2": "Technologie Avancée pour un Résultat Optimal\n",
-  "care-feature-page-epil-laser-sub-title2": "Innovation Technique:",
-  "care-feature-page-epil-laser-text2": "Le système IPL/Epil Expert 2.0 intègre une technologie de pointe pour garantir une efficacité maximale. \nLa technologie de balayage continu permet une distribution homogène de l'énergie lumineuse, réduisant ainsi le risque de zones manquées ou de traitement inégal",
-  "care-feature-page-epil-laser-title3": "Épilation de Précision:",
-  "care-feature-page-epil-laser-text3": " Cette méthode assure une épilation ciblée et précise, permettant de traiter efficacement les zones délicates ou difficiles d'accès.\n",
-  "care-feature-page-epil-laser-title4": "Adapté à Tous les Types de Peau et de Poils\n",
-  "care-feature-page-epil-laser-title5": "Polyvalence du Traitement:",
-  "care-feature-page-epil-laser-text5": "Le système est conçu pour être efficace sur une vaste gamme de phototypes de peaux, des plus claires aux plus foncées, ainsi que sur différents types de poils, des plus fins aux plus épais.\n",
-  "care-feature-page-epil-laser-title6": "Personnalisation des Soins:",
-  "care-feature-page-epil-laser-text6": "Nous ajustons les paramètres du traitement en fonction des caractéristiques individuelles de chaque client, assurant ainsi un traitement personnalisé et optimal.\n",
-  "care-feature-page-epil-laser-title7": "Traitement Confortable et Sûr\n",
-  "care-feature-page-epil-laser-title8": "Minimisation de l'Inconfort:",
-  "care-feature-page-epil-laser-text8": "Grâce à l'échauffement contrôlé et précis, le traitement est généralement moins douloureux que les méthodes traditionnelles d'épilation laser.",
-  "care-feature-page-epil-laser-title9": "Sécurité Renforcée:",
-  "care-feature-page-epil-laser-text9": "Nous prenons toutes les mesures nécessaires pour garantir la sécurité de nos clients durant le traitement, minimisant les risques d'effets secondaires ou de complications.\nRésultats à Long Terme\n",
-  "care-feature-page-epil-laser-title10": "Efficacité Prouvée:",
-  "care-feature-page-epil-laser-text10": "Les clients observent généralement une réduction significative de la pilosité dès les premières séances, avec des résultats qui s'améliorent au fil des traitements.\nSuivi et Entretien: Nous proposons un suivi régulier et des séances d'entretien pour maintenir les résultats à long terme, en adaptant le plan de traitement aux besoins évolutifs de chaque client.",
-
-  "care-feature-page-epil-laser-avant": "Avant le traitement",
-  "care-feature-page-epil-laser-raser": "Rasez la zone 24 heures avant le traitement.",
-  "care-feature-page-epil-laser-retirez": "Retirez le déodorant ou d'autres produits cutanés avant le traitement.",
-  "care-feature-page-epil-laser-resultat": "Résultats du traitement",
-  "care-feature-page-epil-laser-general": "En général, 8 à 10 séances sont nécessaires pour une réduction substantielle des poils, et les séances de maintenance varient en fonction de la couleur, de l'épaisseur des poils, de la zone de traitement et du type de peau.",
-  "care-feature-page-epil-laser-apres": "Après le traitement",
-  "care-feature-page-epil-laser-maintenez": "Maintenez la peau au frais.",
-  "care-feature-page-epil-laser-appliquez": "Appliquez un produit apaisant.",
-  "care-feature-page-epil-laser-eviter": "Évitez la chaleur et l'exposition directe au soleil.",
-  "care-feature-page-epil-laser-rdv": "Prise de rendez-vous en ligne ou pas téléphone",
-
-  "care-feature-page-epil-laser-tarif": "tarifs",
-  "care-feature-page-epil-laser-coute":"combien ça coûte?",
-
-  "common.body.part-femme":"Femme",
-  "common.body.part-homme":"Homme",
-  "common.body.part-visage":"Visage",
-  "common.body.part-sourcil":"Inter-sourcilier",
-  "common.body.part-visage-complet":"Visage complet",
-  "common.body.part-corps":"Corps",
-  "common.body.part-cou":"Cou, nuque",
-  "common.body.part-aisselles":"Aisselles",
-  "common.body.part-aisselles-avant-bras":"Avant-bras",
-  "common.body.part-dos":"Dos entier",
-  "common.body.part-demies-jambes":"Demies-jambes",
-  "common.body.part-jambes-entieres":"Jambes entières",
-  "common.body.part-aisselles-demi-jambes":"Aisselles et demies-jambes",
-  "common.body.part-aisselles-jambes-completes":"Aisselles et jambes complètes",
-  "common.body.part-maillot-intégral-aisselles":"Maillot intégral et aisselles",
-  "common.body.part-corps-entier":"Corps entier",
-  "common.body.part-mise-en-forme-barbe":"Mise en forme de la barbe",
-  "common.body.part-barbe-entiere":"Barbe entière",
-  "common.body.part-haut-dos-epaule":"Visage complet",
-  "common.body.part-main-pied":"Mains, pieds",
-
-  "common.time.minute": "minutes",
-
-  "home-feature-title": "L'excellence au service de votre bien-être",
-  "home-feature-intro": "Découvrez la fusion de technologie de pointe et d'expertise esthétique chez Beauty Clinic By Françoise. Des soins sur mesure, de la cryolipolyse à l'épilation laser, conçus pour révéler votre beauté naturelle et unique.",
-  "home-intro-card": {
-    "title": "Carte d'introduction",
-    "description": "Ceci est une description de la carte d'introduction.",
-    "btnTxt": "Prendre Rendez-vous",
-
-    "title1": "Trouvez la clinique facilement",
-    "description1": "Consultez la carte pour l'itinéraire et laissez Françoise prendre soin de vous.",
-    "btnTxt1": "Trouver la clinique",
-
-    "title2": "Soins",
-    "description2": "Naviguer à travers une large variété de traitements disponnibles. Redevenez à l’aise et ayez confiance en vous à nouveau.",
-    "btnTxt2": "Découvrir les soins",
-
-    "title3": "Parlons",
-    "description3": "Dites-en plus à propos de vous et comment Françoise peut vous aider à accomplir vos objectifs beauté. Contactez Françoise.",
-    "btnTxt3": "Contacter"
-  },
-
-  "home-care-card": {
-    "title1": "Diagnostique esthétique gratuit",
-    "btnTxt1": "En savoir plus",
-    "title2": "Epilation ",
-    "title3": "Relâchement cutané",
-    "title4": "Traitement anti-cellulite",
-    "title5": "Rajeunissement,lifting et contouring",
-    "title6": "Peeling",
-    "title7": "Traitement anti-âge",
-    "title8": "Massage",
-    "title9": "Gommage"
-  },
-
-  "contact": {
-    "form": {
-      "firstName": "Prénom",
-      "enter_firstName": "Entrez votre prénom",
-      "email": "Email",
-      "enter_email": "Entrez votre email",
-      "phoneNumber": "Numéro de téléphone",
-      "enter_phoneNumber": "Entrez votre numéro de téléphone",
-      "careCategory": "Catégorie de soin",
-      "select_careCategory": "Sélectionnez une catégorie de soin",
-      "message": "Message",
-      "enter_message": "Entrez votre message"
-    }
-  },
-  "form.errors": {
-    "required": "Ce champ est requis.",
-    "minlength": "Ce champ doit comporter au moins { length } caractères.",
-    "email": "Veuillez entrer une adresse e-mail valide.",
-    "passwordMismatch": "Les mots de passe ne correspondent pas."
-  },
-  "care": {
-    "category": {
-      "epilation": "Épilation",
-      "relaxation": "Relaxation",
-      "skincare": "Soins de la peau"
-    }
-  },
-  "form": {
-    "username": {
-      "label": "Nom d'utilisateur",
-      "placeholder": "Entrez votre nom d'utilisateur"
-    },
-    "password": {
-      "label": "Mot de passe",
-      "placeholder": "Entrez votre mot de passe"
-    },
-    "mail": {
-      "label": "Adresse e-mail",
-      "placeholder": "Entrez votre adresse e-mail"
-    },
-    "phoneNumber": {
-      "label": "Numéro de téléphone",
-      "placeholder": "Entrez votre numéro de téléphone"
-    },
-    "firstname": {
-      "label": "Prénom",
-      "placeholder": "Entrez votre prénom"
-    },
-    "lastname": {
-      "label": "Nom de famille",
-      "placeholder": "Entrez votre nom de famille"
-    },
-    "errors": {
-      "required": "Ce champ est requis.",
-      "minlength": "Ce champ doit comporter au moins {minlength} caractères.",
-      "maxlength": "Ce champ doit comporter au maximum {maxlength} caractères.",
-      "email": "Veuillez entrer une adresse e-mail valide.",
-      "passwordMismatch": "Les mots de passe ne correspondent pas."
-    }
-  },
+  "form.errors.required": "Ce champ est requis.",
+  "form.errors.minlength": "Ce champ doit comporter au moins {length} caractères.",
+  "form.errors.maxlength": "Ce champ doit comporter au maximum {maxlength} caractères.",
+  "form.errors.email": "Veuillez entrer une adresse e-mail valide.",
+  "form.errors.passwordMismatch": "Les mots de passe ne correspondent pas.",
 
   "error.email_already_used": "L'email est déjà utilisé, veuillez réessayer",
   "error.generic_error": "Une erreur est survenue, veuillez réessayer ou contacter le support",
   "error.wrong_password_or_mail": "L'email ou le mot de passe est incorrect",
 
-  "form": {
-    "category": {
-      "product": {
-        "add.label": "Ajouter une catégorie",
-        "edit.label": "Modifier la catégorie",
-        "name.label": "Nom de la catégorie",
-        "image.label": "Image de la catégorie",
-        "publish.label": "Publier la catégorie",
-        "update.label": "Mettre à jour la catégorie"
-      }
-    }
-  },
-  "modal": {
-    "edit_category_title": "Modifier la catégorie de produit",
-    "create_category_title": "Créer une nouvelle catégorie de produit"
-  },
-  "errors": {
-    "form_validation": "Veuillez remplir correctement tous les champs.",
-    "image_upload": "Erreur lors du téléchargement de l'image, veuillez réessayer."
-  }
+  "modal.edit_category_title": "Modifier la catégorie de produit",
+  "modal.create_category_title": "Ajouter une catégorie",
 
+  "form.firstname.label": "Prénom",
+  "form.firstname.placeholder": "Entrez votre prénom",
+  "form.lastname.label": "Nom de famille",
+  "form.lastname.placeholder": "Entrez votre nom de famille",
+  "form.phoneNumber.label": "Numéro de téléphone",
+  "form.phoneNumber.placeholder": "Entrez votre numéro de téléphone",
+  "form.oldPassword.label": "Ancien mot de passe",
+  "form.oldPassword.placeholder": "Entrez votre ancien mot de passe",
+  "form.newPassword.label": "Nouveau mot de passe",
+  "form.newPassword.placeholder": "Entrez votre nouveau mot de passe",
+  "form.confirmPassword.label": "Confirmer le mot de passe",
+  "form.confirmPassword.placeholder": "Confirmez votre nouveau mot de passe",
+  "form.updatePassword": "Mettre à jour le mot de passe",
+  "form.updateProfile": "Mettre à jour le profil",
+  "form.address.road.label": "Rue",
+  "form.address.road.placeholder": "Entrez le nom de la rue",
+  "form.address.nb.label": "Numéro",
+  "form.address.nb.placeholder": "Entrez le numéro",
+  "form.address.cp.label": "Code postal",
+  "form.address.cp.placeholder": "Entrez le code postal",
+  "form.address.town.label": "Ville",
+  "form.address.town.placeholder": "Entrez le nom de la ville",
+  "form.address.country.label": "Pays",
+  "form.address.country.placeholder": "Entrez le nom du pays",
+  "form.address.complement.label": "Complément d'adresse",
+  "form.address.complement.placeholder": "Entrez le complément d'adresse",
+  "profile.changePassword": "Changer le mot de passe",
+  "category.product.add.label": "Ajouter une catégorie",
+  "category.product.edit.label": "Modifier la catégorie",
+  "form.category.product.published.label": "Publier la catégorie ?",
+  "category.product.name.label": "Nom de la catégorie",
+  "form.category.product.description.label": "Description de la catégorie",
+  "category.product.image.label": "Image de la catégorie",
+  "category.product.publish.label": "Publier la catégorie",
+  "category.product.update.label": "Mettre à jour la catégorie",
+  "form.category.product.name.label": "Nom de la catégorie",
+  "form.product.add.label": "Ajouter un produit",
+  "table.header.image": "Image",
+  "table.header.name": "Nom",
+  "table.header.description": "Description",
+  "table.header.quantity": "Quantité",
+  "table.header.promo": "Prix en promo",
+  "table.header.price": "Prix",
+  "table.header.categories": "Catégories",
+  "table.header.publish": "Publier",
+  "table.header.edit": "Modifier",
+  "table.header.delete": "Supprimer",
+  "table.header.actions": "Actions",
+  "table.header.initial_price": "Prix initial",
+  "table.header.min_quantity": "Quantité minimum achetable",
+  "table.header.max_quantity": "Quantité maximum achetable",
+  "form.product.publish.label": "Publier",
+  "form.product.edit.label": "Modifier",
+  "form.product.delete.label": "Supprimer",
+  "form.product.delete.confirm.title": "Confirmer la suppression",
+  "form.product.delete.confirm.message": "Êtes-vous sûr de vouloir supprimer le produit",
+  "form.product.delete.confirm.button": "Supprimer",
+  "form.cancel.label": "Annuler",
+  "form.product.update.label": "Mettre à jour",
+  "modal.edit.title": "Modifier le produit",
+  "modal.create.title": "Créer un nouveau produit",
+  "form.category.product.publish.label": "Publier une catégorie",
+  "form.category.product.edit.label": "Editer une catégorie",
+  "form.category.product.update.label": "Mettre à jour la catégorie",
+  "form.category.product.delete.label": "Supprimer une catégorie",
+  "form.category.product.add.label": "Ajouter une catégorie",
+  "form.category.create.name.placeholder": "Saisir un nom",
+  "form.category.create.description.placeholder": "Saisir une desription",
+  "form.category.product.delete.confirm.button": "Supprimer la catégorie",
+  "form.category.product.delete.confirm.message": "Etes-vous certains de vouloir supprimer la catégorie",
+  "form.category.product.delete.confirm.title": "Confirmation de la suppression",
+
+  "form.product.price.label": "Prix",
+  "form.product.quantity.label": "Quantité en stock",
+
+  "form.product.price.placeholder": "Entrez le prix",
+  "form.product.quantity.placeholder": "Entrez la quantité en stock",
+
+  "modal.edit.product.title": "Éditer un produit",
+  "modal.create.product.title": "Créer un produit",
+
+  "form.product.name.label": "Nom du produit",
+  "form.product.name.placeholder": "Entrez le nom du produit",
+
+  "form.product.description.label": "Description",
+  "form.product.description.placeholder": "Entrez la description du produit",
+
+  "form.product.initial_price.label": "Prix initial",
+  "form.product.initial_price.placeholder": "Entrez le prix du produit",
+
+  "form.product.quantity_stored.label": "Quantité en stock",
+  "form.product.quantity_stored.placeholder": "Entrez la quantité disponible",
+
+  "form.product.minQuantity.label": "Quantité minimum",
+  "form.product.minQuantity.placeholder": "Entrez la quantité minimum",
+
+  "form.product.maxQuantity.label": "Quantité maximum",
+  "form.product.maxQuantity.placeholder": "Entrez la quantité maximum",
+
+  "form.product.is_promo.label": "En promotion",
+
+  "form.product.promo_percentage.label": "Pourcentage de promotion",
+  "form.product.promo_percentage.placeholder": "Entrez le pourcentage de réduction",
+
+  "form.product.isPublished.label": "Publié",
+  "modal.create.promo_code.title": "Créer un code promotionnel",
+  "modal.edit.promo_code.title": "Modifier le code promotionnel",
+
+  "table.header.code": "Code",
+  "table.header.percentage": "Pourcentage",
+  "table.header.uses": "Utilisations",
+  "table.header.valid_from": "Valide du",
+  "table.header.valid_to": "Valide au",
+  "table.header.status": "Statut",
+
+  "form.promo_code.add.label": "Ajouter un code promo",
+  "form.promo_code.code.label": "Code",
+  "form.promo_code.code.placeholder": "Ex: SUMMER2024",
+  "form.promo_code.percentage.label": "Pourcentage de réduction",
+  "form.promo_code.percentage.placeholder": "Ex: 20",
+  "form.promo_code.max_uses.label": "Nombre maximum d'utilisations",
+  "form.promo_code.max_uses.placeholder": "Ex: 100",
+  "form.promo_code.valid_from.label": "Date de début",
+  "form.promo_code.valid_to.label": "Date de fin",
+  "form.promo_code.is_active.label": "Actif",
+
+  "form.edit.label": "Modifier",
+  "form.delete.label": "Supprimer",
+  "form.create.label": "Créer",
+  "form.update.label": "Mettre à jour",
+  "form.confirm.label": "Confirmer",
+
+  "form.promo_code.delete.confirm.title": "Supprimer le code promo",
+  "form.promo_code.delete.confirm.message": "Êtes-vous sûr de vouloir supprimer ce code promo ?",
+  "shipping_fee.edit.title": "Modifier les frais de livraison",
+
+  "shipping_fee.amount.label": "Frais de livraison",
+  "shipping_fee.free_threshold.label": "Livraison gratuite à partir de",
+  "shipping_fee.description.label": "Description",
+
+  "shipping_fee.edit.button": "Modifier la configuration",
+
+  "form.shipping_fee.description.label": "Description",
+  "form.shipping_fee.description.placeholder": "Ex: Frais de livraison standard",
+
+  "form.shipping_fee.amount.label": "Montant des frais",
+  "form.shipping_fee.amount.placeholder": "Ex: 4.99",
+  "shipping_fee.title": "Frais de livraison",
+  "shipping_fee.current_config": "Configuration actuelle",
+  "form.shipping_fee.free_shipping_threshold.label": "Seuil de gratuité",
+  "form.shipping_fee.free_shipping_threshold.placeholder": "Ex: 50",
+
+  "modal.edit_care_category_title": "Modifier la catégorie de soin",
+  "modal.create_care_category_title": "Créer une catégorie de soin",
+
+  "form.care_category.name.label": "Nom",
+  "form.care_category.description.label": "Description",
+  "form.care_category.published.label": "Publié",
+
+  "form.care_category.create.name.placeholder": "Nom de la catégorie",
+  "form.care_category.create.description.placeholder": "Description de la catégorie",
+
+  "form.care_category.add.label": "Ajouter une catégorie",
+  "form.care_category.update.label": "Mettre à jour",
+  "form.care_category.delete.confirm.button": "Supprimer",
+  "form.care_category.delete.confirm.title": "Supprimer la catégorie",
+  "form.care_category.delete.confirm.message": "Êtes-vous sûr de vouloir supprimer cette catégorie",
+  "action.edit": "Editer",
+  "action.publish": "Publier",
+  "action.unpublish": "Dépublier",
+  "action.delete": "Supprimer",
+  "modal.edit_care_sub_category_title": "Modifier la sous-catégorie de soin",
+  "modal.create_care_sub_category_title": "Créer une sous-catégorie de soin",
+  "form.care_sub_category.name.label": "Nom",
+  "form.care_sub_category.description.label": "Description",
+  "form.care_sub_category.published.label": "Publié",
+  "form.care_sub_category.create.name.placeholder": "Nom de la sous-catégorie",
+  "form.care_sub_category.create.description.placeholder": "Description de la sous-catégorie",
+  "form.care_sub_category.add.label": "Ajouter une sous-catégorie",
+  "form.care_sub_category.update.label": "Mettre à jour",
+  "form.care_sub_category.delete.confirm.button": "Supprimer",
+  "form.care_sub_category.delete.confirm.title": "Supprimer la sous-catégorie",
+  "form.care_sub_category.delete.confirm.message": "Êtes-vous sûr de vouloir supprimer cette sous-catégorie",
+  "modal.edit_body_zone_title": "Modifier la zone du corps",
+  "modal.create_body_zone_title": "Créer une zone du corps",
+  "form.body_zone.name.label": "Nom",
+  "form.body_zone.create.name.placeholder": "Nom de la zone du corps",
+  "form.body_zone.add.label": "Ajouter une zone du corps",
+  "form.body_zone.update.label": "Mettre à jour",
+  "form.body_zone.delete.confirm.title": "Supprimer la zone du corps",
+  "form.body_zone.delete.confirm.message": "Êtes-vous sûr de vouloir supprimer cette zone du corps",
+  "form.body_zone.delete.confirm.button": "Supprimer",
+  "promo_code": {
+    "title": "Code promotionnel",
+    "placeholder": "Entrez votre code promo",
+    "apply": "Appliquer",
+    "info": "Entrez un code promo valide pour bénéficier d'une réduction sur votre commande.",
+    "success": "Code promo appliqué avec succès",
+    "error": "Code promo invalide ou expiré"
+  },
+  "modal.edit.clinic.title": "Modifier les informations de la clinique",
+
+  "form.clinic.name.label": "Nom",
+  "form.clinic.name.placeholder": "Nom de la clinique",
+
+  "form.clinic.description.label": "Description",
+  "form.clinic.description.placeholder": "Description de la clinique",
+
+  "form.clinic.phone.label": "Téléphone",
+  "form.clinic.phone.placeholder": "Numéro de téléphone",
+
+  "form.clinic.email.label": "Email",
+  "form.clinic.email.placeholder": "Adresse email",
+
+  "form.clinic.social.facebook.label": "Facebook",
+  "form.clinic.social.facebook.placeholder": "Lien de la page Facebook",
+
+  "form.clinic.social.instagram.label": "Instagram",
+  "form.clinic.social.instagram.placeholder": "Lien du compte Instagram",
+
+  "form.clinic.social.tiktok.label": "TikTok",
+  "form.clinic.social.tiktok.placeholder": "Lien du compte TikTok",
+
+  "form.clinic.social.linkedin.label": "LinkedIn",
+  "form.clinic.social.linkedin.placeholder": "Lien du compte LinkedIn",
+
+  "form.clinic.address.road.label": "Rue",
+  "form.clinic.address.road.placeholder": "Nom de la rue",
+
+  "form.clinic.address.number.label": "Numéro",
+  "form.clinic.address.number.placeholder": "Numéro de rue",
+
+  "form.clinic.address.postal.label": "Code postal",
+  "form.clinic.address.postal.placeholder": "Code postal",
+
+  "form.clinic.address.town.label": "Ville",
+  "form.clinic.address.town.placeholder": "Nom de la ville",
+
+  "form.clinic.address.country.label": "Pays",
+  "form.clinic.address.country.placeholder": "Pays",
+
+  "form.clinic.address.complement.label": "Complément d'adresse",
+  "form.clinic.address.complement.placeholder": "Appartement, étage, etc.",
+
+  "form.clinic.update.label": "Mettre à jour",
+  "form.clinic.update.success": "Informations mises à jour avec succès",
+  "form.clinic.update.error": "Erreur lors de la mise à jour",
+
+  "clinic.header.title": "Gérer les informations de la clinique",
+  "clinic.header.edit": "Modifier les informations",
+
+  "clinic.info.contact": "Contact",
+  "clinic.info.address": "Adresse",
+  "clinic.info.social": "Réseaux sociaux",
+
+  "clinic.logo.upload.label": "Logo de la clinique",
+  "clinic.logo.upload.help": "Cliquez pour modifier le logo",
+  "clinic.logo.upload.success": "Logo mis à jour avec succès",
+  "clinic.logo.upload.error": "Erreur lors de la mise à jour du logo",
+
+  "errors.required": "Ce champ est requis",
+  "errors.email": "Veuillez entrer une adresse email valide",
+  "errors.url": "Veuillez entrer une URL valide",
+  "errors.minlength.name": "Le nom doit contenir au moins 1 caractère",
+  "errors.minlength.description": "La description doit contenir au moins 10 caractères",
+  "admin-feature.admin.manage-business-hours.col_actions": "Actions",
+
+  "business_hours.days.monday": "Lundi",
+  "business_hours.days.tuesday": "Mardi",
+  "business_hours.days.wednesday": "Mercredi",
+  "business_hours.days.thursday": "Jeudi",
+  "business_hours.days.friday": "Vendredi",
+  "business_hours.days.saturday": "Samedi",
+  "business_hours.days.sunday": "Dimanche",
+
+  "business_hours.actions.edit": "Modifier",
+  "business_hours.status.open": "Ouvert",
+  "business_hours.status.closed": "Fermé",
+
+  "admin-feature.admin.manage-holiday.title": "Gérer les jours fériés",
+  "admin-feature.admin.manage-holiday.add": "Ajouter un jour férié",
+  "admin-feature.admin.manage-holiday.column.date": "Date",
+  "admin-feature.admin.manage-holiday.column.actions": "Actions",
+  "admin-feature.admin.holiday.modal.add.title": "Ajouter un jour férié",
+
+  "form.holiday.date.label": "Date",
+  "form.holiday.date.placeholder": "Sélectionnez une date",
+  "form.holiday.add.label": "Ajouter",
+  "form.holiday.delete.label": "Supprimer",
+
+  "security-feature.form.error.description": "{count} erreur(s) dans le formulaire",
+  "security-feature.form.error.holiday_date-required": "La date est requise",
+  "security-feature.form.error.holiday_date-pattern": "Format de date invalide",
+  "admin-feature.admin.manage-holiday.add-interval": "Ajouter une période",
+  "admin-feature.admin.holiday.modal.add_interval.title": "Ajouter une période de vacances",
+
+  "form.holiday.interval.start_date.label": "Date de début",
+  "form.holiday.interval.start_date.placeholder": "Sélectionnez la date de début",
+  "form.holiday.interval.end_date.label": "Date de fin",
+  "form.holiday.interval.end_date.placeholder": "Sélectionnez la date de fin",
+  "form.holiday.interval.add.label": "Ajouter la période",
+
+  "security-feature.form.error.start_date-required": "La date de début est requise",
+  "security-feature.form.error.end_date-required": "La date de fin est requise",
+  "security-feature.form.error.start_date-pattern": "Format de date invalide",
+  "security-feature.form.error.end_date-pattern": "Format de date invalide",
+  "care.categories.select": "Sélectionner les catégories",
+  "care.categories.none": "Aucune catégorie sélectionnée",
+  "care.categories.selected": "Catégories sélectionnées",
+  "care.categories.add": "Ajouter une catégorie",
+  "care.categories.remove": "Retirer",
+  "care.subcategories.select": "Sélectionner les sous-catégories",
+  "care.subcategories.none": "Aucune sous-catégorie sélectionnée",
+  "care.subcategories.selected": "Sous-catégories sélectionnées",
+  "care.subcategories.add": "Ajouter une sous-catégorie",
+  "care.subcategories.remove": "Retirer",
+
+  "care.zones.select": "Sélectionner les zones du corps",
+  "care.zones.none": "Aucune zone sélectionnée",
+  "care.zones.selected": "Zones sélectionnées",
+  "care.zones.add": "Ajouter une zone",
+  "care.zones.remove": "Retirer",
+
+  "care.machine.title": "Gérer les machines de soin",
+  "table.header.associated_cares": "Soins associés",
+
+  "form.care_machine.name.label": "Nom de la machine",
+  "form.care_machine.description.label": "Description",
+  "form.care_machine.add.label": "Ajouter une machine",
+  "form.care_machine.update.label": "Mettre à jour",
+  "form.care_machine.create.name.placeholder": "Entrez le nom de la machine",
+  "form.care_machine.create.description.placeholder": "Entrez la description de la machine",
+
+  "modal.create_care_machine_title": "Ajouter une nouvelle machine",
+  "modal.edit_care_machine_title": "Modifier la machine",
+
+  "form.care_machine.delete.confirm.title": "Confirmer la suppression",
+  "form.care_machine.delete.confirm.message": "Êtes-vous sûr de vouloir supprimer cette machine ?",
+  "form.care_machine.delete.confirm.button": "Supprimer",
+
+  "table.header.sessions": "Sessions",
+  "table.header.duration": "Durée",
+  "table.header.time_between": "Temps entre sessions",
+  "table.header.machines": "Machines",
+  "table.header.sub_categories": "Sous-catégories",
+  "table.header.body_zones": "Zones du corps",
+
+  "form.care.name.label": "Nom",
+  "form.care.description.label": "Description",
+  "form.care.initial_price.label": "Prix initial",
+  "form.care.sessions.label": "Nombre de sessions",
+  "form.care.duration.label": "Durée",
+  "form.care.time_between.label": "Temps entre les sessions",
+  "form.care.is_promo.label": "En promotion",
+  "form.care.promo_percentage.label": "Pourcentage de réduction",
+  "form.care.isPublished.label": "Publié",
+
+  "form.care.name.placeholder": "Entrez le nom du soin",
+  "form.care.description.placeholder": "Entrez la description du soin",
+  "form.care.initial_price.placeholder": "Entrez le prix initial",
+  "form.care.sessions.placeholder": "Nombre de sessions",
+  "form.care.duration.placeholder": "Durée en minutes",
+  "form.care.time_between.placeholder": "Temps entre les sessions en minutes",
+  "form.care.promo_percentage.placeholder": "Pourcentage de réduction",
+
+  "form.care.machines.label": "Machines",
+  "form.care.categories.label": "Catégories",
+  "form.care.sub_categories.label": "Sous-catégories",
+  "form.care.body_zones.label": "Zones du corps",
+
+  "form.care.add.label": "Ajouter un soin",
+  "form.care.edit.label": "Modifier",
+  "form.care.delete.label": "Supprimer",
+  "form.care.create.label": "Créer",
+  "form.care.update.label": "Mettre à jour",
+
+  "form.care.create.title": "Créer un nouveau soin",
+  "form.care.edit.title": "Modifier le soin",
+  "form.care.delete.confirm.title": "Confirmer la suppression",
+  "form.care.delete.confirm.message": "Êtes-vous sûr de vouloir supprimer ce soin ?",
+  "form.care.delete.confirm.button": "Supprimer",
+
+  "form.error.required": "Ce champ est requis",
+  "form.error.minlength": "Longueur minimum : {{min}} caractères",
+  "form.error.maxlength": "Longueur maximum : {{max}} caractères",
+  "form.error.min": "Valeur minimum : {{min}}",
+  "form.error.pattern": "Format invalide",
+  "appointment.title": "Gérer les rendez-vous",
+  "appointment.add_new": "Nouveau rendez-vous",
+
+  "appointment.table.date": "Date",
+  "appointment.table.time": "Heure",
+  "appointment.table.client": "Client",
+  "appointment.table.service": "Service",
+  "appointment.table.duration": "Durée",
+  "appointment.table.price": "Prix",
+  "appointment.table.status": "Statut",
+  "appointment.table.actions": "Actions",
+
+  "appointment.status.CANCELED": "Annulé",
+  "appointment.status.CONFIRMED": "Confirmé",
+  "appointment.status.PENDING": "En attente",
+
+  "appointment.actions.edit_note": "Modifier la note",
+  "appointment.actions.confirm": "Confirmer",
+  "appointment.actions.cancel": "Annuler",
+
+  "appointment.no_appointments": "Aucun rendez-vous trouvé",
+
+  "appointment.modal.create.title": "Créer un nouveau rendez-vous",
+
+  "appointment.form.notes": "Notes",
+
+  "appointment.form.notes_placeholder": "Ajoutez des notes sur le rendez-vous",
+
+  "appointment.form.errors.required": "Ce champ est requis",
+  "appointment.form.errors.care_required": "Veuillez sélectionner un soin",
+  "appointment.form.errors.phone_number_pattern": "Numéro de téléphone invalide",
+  "appointment.form.errors.notes_required": "La note est requise",
+
+  "appointment.modal.edit_note.title": "Modifier la note",
+
+  "common.cancel": "Annuler",
+  "common.create": "Créer",
+  "common.save": "Enregistrer",
+  "page.orders.title": "Gestion des commandes",
+
+  "table.header.order.id": "ID Commande",
+  "table.header.order.date": "Date",
+  "table.header.order.client": "Client",
+  "table.header.order.shipping_address": "Adresse de livraison",
+  "table.header.order.total": "Total",
+  "table.header.order.status": "Statut",
+  "table.header.order.tracking": "N° de suivi",
+
+  "action.order.update_status": "Modifier statut",
+  "action.order.update_tracking": "N° suivi",
+  "action.cancel": "Annuler",
+  "action.confirm": "Confirmer",
+
+  "form.order.status.label": "Statut de la commande",
+  "form.order.status.placeholder": "Sélectionnez un statut",
+  "form.order.tracking.label": "Numéro de suivi",
+  "form.order.tracking.placeholder": "Entrez le numéro de suivi",
+
+  "modal.order.status.title": "Modifier le statut de la commande",
+  "modal.order.tracking.title": "Modifier le numéro de suivi",
+
+  "order.status.PENDING_PAYMENT": "En attente de paiement",
+  "order.status.PAYMENT_FAILED": "Échec du paiement",
+  "order.status.PENDING_SHIPPING": "En attente d'expédition",
+  "order.status.PROCESSING": "En cours de traitement",
+  "order.status.SHIPPED": "Expédié",
+  "order.status.DELIVERED": "Livré",
+  "order.status.CANCELLED": "Annulé",
+  "order.status.REFUNDED": "Remboursé",
+
+  "error.order.status.update": "Erreur lors de la mise à jour du statut",
+  "error.order.tracking.update": "Erreur lors de la mise à jour du numéro de suivi",
+  "error.order.load": "Erreur lors du chargement des commandes",
+
+  "success.order.status.update": "Statut mis à jour avec succès",
+  "success.order.tracking.update": "Numéro de suivi mis à jour avec succès",
+  "table.header.order.items": "Produits commandés",
+  "order.discount": "Réduction",
+  "order.shipping": "Frais de port",
+  "table.header.order.client.name": "Nom du client",
+  "calendar.year": "Année",
+  "calendar.week": "Semaine",
+  "calendar.today": "Aujourd'hui",
+  "page.appointments.title": "Agenda des soins"
 }
-

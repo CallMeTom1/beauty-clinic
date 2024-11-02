@@ -1,0 +1,89 @@
+<div class="category-container">
+  <div class="category-header">
+    <h2>Gérer les catégories de soin</h2>
+    <button class="primary" (click)="openCreateModal()">
+      {{ 'form.care_category.add.label' | translate }}
+    </button>
+  </div>
+
+  <table class="category-table">
+    <thead>
+    <tr>
+      <th>{{ 'table.header.name' | translate }}</th>
+      <th>Description</th>
+      <th>{{ 'table.header.actions' | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for(category of securityService.careCategories$(); track category.category_id) {
+        <tr>
+          <td>{{ category.name }}</td>
+          <td>{{ category.description }}</td>
+          <td class="actions-cell">
+            <div class="actions-group">
+              <a (click)="openEditModal(category)" class="action-link edit">
+                Editer
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="togglePublishCategory(category)" class="action-link"
+                 [ngClass]="category.isPublished ? 'unpublish' : 'publish'">
+                {{ category.isPublished ? 'Dépublier' : 'Publier' }}
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="openDeleteModal(category)" class="action-link delete">
+                Supprimer
+              </a>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if(showDeleteModal) {
+    <app-modal [title]="'form.care_category.delete.confirm.title' | translate" (close)="handleClose()">
+      <div class="del-modal">
+        <h3>{{ 'form.care_category.delete.confirm.message' | translate }} ?</h3>
+        <span>{{ currentCategory?.name }}</span>
+      </div>
+      <div class="modal-actions">
+        <button (click)="deleteCategory()" class="primary">
+          {{ 'form.care_category.delete.confirm.button' | translate }}
+        </button>
+        <button (click)="handleClose()" class="primary">
+          {{ 'form.cancel.label' | translate }}
+        </button>
+      </div>
+    </app-modal>
+  }
+
+  @if(showEditModal) {
+    <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
+      <form [formGroup]="updateCategoryFormGroup" (ngSubmit)="onSubmitUpdateCategory()">
+        @for(input of updateCategoryFormControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!updateCategoryFormGroup.valid" type="submit" class="primary">
+            {{ 'form.care_category.update.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+
+  @if(showCreateModal) {
+    <app-modal [title]="modal_create_title | translate" (close)="handleClose()">
+      <form [formGroup]="createCategoryFormGroup" (ngSubmit)="onSubmitCreateCategory()">
+        @for(input of createCategoryFormControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!createCategoryFormGroup.valid" type="submit" class="primary">
+            {{ 'form.care_category.add.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+</div>

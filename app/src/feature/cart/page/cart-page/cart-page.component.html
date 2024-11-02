@@ -1,32 +1,13 @@
 <div class="cart-page">
-  <div class="header">
-    <h1>Mon panier</h1>
-    <h2>Mettre à jour ma commande ou compléter le paiement</h2>
+  <div class="left">
+    <h1>Panier</h1>
+    <div class="cartItems">
+      @for(item of cartItems; track trackByCartItemId($index, item)){
+        <app-product-item-sub [cartItem]="item"></app-product-item-sub>
+      }
+    </div>
   </div>
-  <div class="cartItems">
-    @for(item of cartItems; track item.idCartItem){
-      <app-product-item-sub [cartItem]="item"></app-product-item-sub>
-    }
-  </div>
-  <div class="summary">
-    <h2>Résumé de la commande</h2>
-    <div class="separator-green"></div>
-    <div class="total">
-      <span>Total</span>
-      <span>{{calculatedTotal | currency:'EUR'}}</span>
-    </div>
-    <div class="shipping-fees">
-      <span>Estimation frais de livraison</span>
-      <span>{{shippingFees | currency:'EUR'}}</span>
-    </div>
-    <div class="tva-fees">
-      <span>Total taxes (inclus dans le prix)</span>
-      <span>{{calculatedTvafees | currency:'EUR'}}</span>
-    </div>
-    <div class="total-order">
-      <span>Total commande</span>
-      <span>{{calculatedTotalOrder | currency:'EUR'}}</span>
-    </div>
-    <button class="primary" (click)="onOrder()"><i class="fa-thin fa-shield-check"></i>COMMANDER</button>
+  <div class="right">
+    <app-summary-cart></app-summary-cart>
   </div>
 </div>

@@ -1,0 +1,13 @@
+<div class="confirm-payment-page">
+  <div class="left">
+    <app-order-confirmation-address
+      (addressesValidated)="onAddressesValidated($event)"
+      (proceedToPayment)="onProceedToPayment()">
+    </app-order-confirmation-address>
+  </div>
+  <div class="right">
+    <app-summary-cart [showConfirmButton]="false"></app-summary-cart>
+    <app-payment-form *ngIf="showPaymentForm"></app-payment-form>
+  </div>
+
+</div>

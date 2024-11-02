@@ -1,0 +1,81 @@
+.confirm-payment-page {
+  display: flex;
+  flex-direction: row;
+  width: 80vw;
+  gap: 32px;
+  .left{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .right{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .summary {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    h2 {
+      font-size: 24px;
+      color: var(--theme-green);
+      margin-bottom: 16px;
+    }
+
+    .separator-green {
+      height: 2px;
+      background-color: var(--theme-green);
+      margin-bottom: 16px;
+    }
+
+    .total, .shipping-fees, .tva-fees, .total-order {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 16px;
+
+      span:last-child {
+        font-weight: bold;
+      }
+    }
+
+    .total-order {
+      font-size: var(--font-size-medium);
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    button.primary {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--theme-green);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: var(--font-size-medium);
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+
+      &:hover {
+        background-color: darken(#265A4BFF, 10%);
+      }
+
+      i {
+        font-size: 18px;
+      }
+    }
+  }
+}

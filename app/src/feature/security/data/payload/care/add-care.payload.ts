@@ -1,13 +1,16 @@
 import {Payload} from "@shared-core";
 
-export interface AddCarePayload extends Payload {
+export interface CreateCarePayload extends Payload {
   name: string;
-  beauty_care_machine: string;
-  category: string;
-  zone: string;
-  sessions: number;
-  price: number;
-  duration: string;
-  time_between: string;
   description: string;
+  initial_price: number;
+  sessions: number;
+  duration: number;
+  time_between: number;
+  isPublished?: boolean;
+  promo_percentage?: number;
+  category_ids?: string[];
+  sub_category_ids?: string[];
+  body_zone_ids?: string[];
+  machine_ids?: string[];
 }

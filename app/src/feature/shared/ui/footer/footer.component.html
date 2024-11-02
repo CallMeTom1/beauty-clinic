@@ -1,39 +1,89 @@
-<script src="../../../home/component/home-header/home-header.component.ts"></script>
-<div class="footer-container">
-  <div class="top-container">
-    <div (click)="redirectHome()" class="logo-container">
-      <img [ngSrc]="logoSrc" [alt]="'alt' | translate" [width]="'150'" [height]="'150'">
+<footer class="site-footer">
+  <div class="footer-content">
+    <!-- Section Institut -->
+    <div class="footer-section">
+      <h3>L'Institut</h3>
+      <div class="address-info">
+        <i class="fas fa-map-marker-alt"></i>
+        <div class="address-details">
+          <p>123 Avenue des Soins</p>
+          <p>75000 Paris, France</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-phone"></i>
+        <a href="tel:+33123456789">01 23 45 67 89</a>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-envelope"></i>
+        <a href="mailto:contact@institut.fr">contact&#64;institut.fr</a>
+      </div>
     </div>
-    <app-contact-card></app-contact-card>
+
+    <!-- Section Horaires -->
+    <div class="footer-section">
+      <h3>Nos Horaires</h3>
+      <div class="schedule">
+        <div class="schedule-item">
+          <span>Lundi - Vendredi</span>
+          <span>9h - 19h</span>
+        </div>
+        <div class="schedule-item">
+          <span>Samedi</span>
+          <span>10h - 17h</span>
+        </div>
+        <div class="schedule-item">
+          <span>Dimanche</span>
+          <span>Fermé</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Navigation -->
+    <div class="footer-section">
+      <h3>Navigation</h3>
+      <ul class="footer-links">
+        <li><a routerLink="/soins">Nos Soins</a></li>
+        <li><a routerLink="/produits">Nos Produits</a></li>
+        <li><a routerLink="/rendez-vous">Prendre RDV</a></li>
+        <li><a routerLink="/carte-cadeau">Carte Cadeau</a></li>
+      </ul>
+    </div>
+
+    <!-- Section Social -->
+    <div class="footer-section">
+      <h3>Suivez-nous</h3>
+      <div class="social-links">
+        <a href="#" class="social-link">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="social-link">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="#" class="social-link">
+          <i class="fab fa-tiktok"></i>
+        </a>
+      </div>
+      <div class="newsletter">
+        <h4>Newsletter</h4>
+        <p>Recevez nos offres et actualités</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Votre email" aria-label="Email pour newsletter">
+          <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
   </div>
-  <div class="separator"></div>
-  <div class="bottom-footer">
-    <div class="col1">
-      <div class="title">
-        <h4>Naviguer</h4>
+
+  <!-- Sous-footer -->
+  <div class="sub-footer">
+    <div class="sub-footer-content">
+      <div class="legal-links">
+        <a routerLink="/mentions-legales">Mentions légales</a>
+        <a routerLink="/conditions-generales">CGV</a>
+        <a routerLink="/confidentialite">Politique de confidentialité</a>
       </div>
-      <span>Accueil</span>
-      <span>Soins</span>
-      <span>Contact</span>
-    </div>
-    <div class="col2">
-      <div class="title">
-        <h4>Heures d'ouverture</h4>
-      </div>
-      <span>Lundi : 09:00 - 19h00</span>
-      <span>Lundi : 09:00 - 19h00</span>
-      <span>Lundi : 09:00 - 19h00</span>
-      <span>Lundi : 09:00 - 19h00</span>
-      <span>Lundi : 09:00 - 19h00</span>
-      <span>Lundi : 09:00 - 19h00</span>
-      <span>Lundi : 09:00 - 19h00</span>
-    </div>
-    <div class="col3">
-      <div class="title">
-        Réserver maintenant
-      </div>
-      <span>Prenez rendez-vous pour une consultation afin d'évoquer vos préoccupations et découvrir les meilleurs soins disponibles.</span>
-      <button class="btn-primary">Réserver maintenant</button>
+      <p class="copyright">© 2024 L'Institut. Tous droits réservés</p>
     </div>
   </div>
-</div>
+</footer>

@@ -2,9 +2,14 @@ import {Component, effect, inject, OnInit} from '@angular/core';
 import {SecurityService} from "@feature-security";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {FormcontrolSimpleConfig, LabelWithParamComponent, LabelWithParamPipe} from "@shared-ui";
+import {
+  CustomEuroPipe,
+  FormcontrolSimpleConfig,
+  LabelWithParamComponent,
+  LabelWithParamPipe
+} from "@shared-ui";
 import {Product} from "../../../security/data/model/product/product.business";
-import {lastValueFrom} from 'rxjs';
+import {catchError, EMPTY, lastValueFrom, switchMap, tap} from 'rxjs';
 import {
   FloatingLabelInputTestComponent
 } from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
@@ -14,7 +19,7 @@ import {
 } from "../../../security/data/payload/product/remove-product.payload";
 import {CreateProductPayload} from "../../../security/data/payload/product/create-product.payload";
 import {CategoryProduct} from "../../../security/data/model/category-product/category-product.business";
-import {NgForOf} from "@angular/common";
+import {CurrencyPipe, NgClass, NgForOf} from "@angular/common";
 import {
   ProductCategorySelectorComponent
 } from "../../../shared/ui/product-category-selector/product-category-selector.component";
@@ -30,7 +35,10 @@ import {
     LabelWithParamPipe,
     ModalComponent,
     NgForOf,
-    ProductCategorySelectorComponent
+    ProductCategorySelectorComponent,
+    CurrencyPipe,
+    CustomEuroPipe,
+    NgClass
   ],
   templateUrl: './manage-product.component.html',
   styleUrl: './manage-product.component.scss'
@@ -41,11 +49,14 @@ export class ManageProductComponent implements OnInit {
   protected translateService: TranslateService = inject(TranslateService);
   public showEditModal = false;
   public showCreateModal = false;
-  protected modal_edit_title: string = 'Editer un produit';
-  protected modal_create_title: string = 'Créer un produit';
+  protected modal_edit_title: string = 'modal.edit.product.title';
+  protected modal_create_title: string = 'modal.create.product.title';
   public showDeleteModal = false;
   public currentProduct: Product | null = null;
   public categories: CategoryProduct[] | null = null
+  currentPromoProduct: Product | null = null;
+  temporaryPromoPercentage: number = 0;
+  protected readonly Math = Math;
 
   // Formulaire pour créer un produit
   public createProductFormGroup: FormGroup = new FormGroup({
@@ -59,21 +70,36 @@ export class ManageProductComponent implements OnInit {
       Validators.minLength(10),
       Validators.maxLength(500),
     ]),
-    price: new FormControl('', [
+    initial_price: new FormControl('', [
       Validators.required,
+      Validators.min(0),
       Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')
     ]),
     quantity_stored: new FormControl('', [
       Validators.required,
+      Validators.min(0),
+      Validators.pattern('^[0-9]*$')
+    ]),
+    minQuantity: new FormControl('', [
+      Validators.required,
       Validators.min(1),
       Validators.pattern('^[0-9]*$')
     ]),
+    maxQuantity: new FormControl('', [
+      Validators.required,
+      Validators.min(1),
+      Validators.pattern('^[0-9]*$')
+    ]),
+    is_promo: new FormControl(false),
     promo_percentage: new FormControl('', [
       Validators.min(0),
       Validators.max(100),
       Validators.pattern('^[0-9]*$')
-    ])
+    ]),
+    isPublished: new FormControl(false)
   });
+
+// Même structure pour updateProductFormGroup
 
   // Formulaire pour mettre à jour un produit
   public updateProductFormGroup: FormGroup = new FormGroup({
@@ -87,20 +113,33 @@ export class ManageProductComponent implements OnInit {
       Validators.minLength(10),
       Validators.maxLength(500),
     ]),
-    price: new FormControl('', [
+    initial_price: new FormControl('', [
       Validators.required,
+      Validators.min(0),
       Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')
     ]),
     quantity_stored: new FormControl('', [
       Validators.required,
+      Validators.min(0),
+      Validators.pattern('^[0-9]*$')
+    ]),
+    minQuantity: new FormControl('', [
+      Validators.required,
       Validators.min(1),
       Validators.pattern('^[0-9]*$')
     ]),
+    maxQuantity: new FormControl('', [
+      Validators.required,
+      Validators.min(1),
+      Validators.pattern('^[0-9]*$')
+    ]),
+    is_promo: new FormControl(false),
     promo_percentage: new FormControl('', [
       Validators.min(0),
       Validators.max(100),
       Validators.pattern('^[0-9]*$')
     ]),
+    isPublished: new FormControl(false)
   });
 
   // Formulaire pour gérer l'image de la catégorie de produit
@@ -108,36 +147,59 @@ export class ManageProductComponent implements OnInit {
     productImage: new FormControl(null, Validators.required)
   });
 
-  // Configurations de formulaires pour les produits
   public createProductFormControlConfigs: FormcontrolSimpleConfig[] = [
     {
       label: this.translateService.instant('form.product.name.label'),
       formControl: this.createProductFormGroup.get('name') as FormControl,
       inputType: 'text',
-      placeholder: ''
+      placeholder: this.translateService.instant('form.product.name.placeholder')
     },
     {
       label: this.translateService.instant('form.product.description.label'),
       formControl: this.createProductFormGroup.get('description') as FormControl,
       inputType: 'textarea',
-      placeholder: ''
+      placeholder: this.translateService.instant('form.product.description.placeholder')
     },
     {
-      label: this.translateService.instant('form.product.price.label'),
-      formControl: this.createProductFormGroup.get('price') as FormControl,
+      label: this.translateService.instant('form.product.initial_price.label'),
+      formControl: this.createProductFormGroup.get('initial_price') as FormControl,
       inputType: 'number',
-      placeholder: ''
+      placeholder: this.translateService.instant('form.product.initial_price.placeholder')
     },
     {
-      label: this.translateService.instant('form.product.quantity.label'),
+      label: this.translateService.instant('form.product.quantity_stored.label'),
       formControl: this.createProductFormGroup.get('quantity_stored') as FormControl,
       inputType: 'number',
+      placeholder: this.translateService.instant('form.product.quantity_stored.placeholder')
+    },
+    {
+      label: this.translateService.instant('form.product.minQuantity.label'),
+      formControl: this.createProductFormGroup.get('minQuantity') as FormControl,
+      inputType: 'number',
+      placeholder: this.translateService.instant('form.product.minQuantity.placeholder')
+    },
+    {
+      label: this.translateService.instant('form.product.maxQuantity.label'),
+      formControl: this.createProductFormGroup.get('maxQuantity') as FormControl,
+      inputType: 'number',
+      placeholder: this.translateService.instant('form.product.maxQuantity.placeholder')
+    },
+    {
+      label: this.translateService.instant('form.product.is_promo.label'),
+      formControl: this.createProductFormGroup.get('is_promo') as FormControl,
+      inputType: 'checkbox',
       placeholder: ''
     },
     {
       label: this.translateService.instant('form.product.promo_percentage.label'),
       formControl: this.createProductFormGroup.get('promo_percentage') as FormControl,
       inputType: 'number',
+      placeholder: this.translateService.instant('form.product.promo_percentage.placeholder')
+    },
+    {
+      label: this.translateService.instant('form.product.isPublished.label'),
+      formControl: this.createProductFormGroup.get('isPublished') as FormControl,
+      inputType: 'checkbox',
       placeholder: ''
     }
   ];
@@ -146,34 +208,58 @@ export class ManageProductComponent implements OnInit {
   public updateProductFormControlConfigs: FormcontrolSimpleConfig[] = [
     {
       label: this.translateService.instant('form.product.name.label'),
-      formControl: this.createProductFormGroup.get('name') as FormControl,
+      formControl: this.updateProductFormGroup.get('name') as FormControl,
       inputType: 'text',
       placeholder: ''
     },
     {
       label: this.translateService.instant('form.product.description.label'),
-      formControl: this.createProductFormGroup.get('description') as FormControl,
+      formControl: this.updateProductFormGroup.get('description') as FormControl,
       inputType: 'textarea',
       placeholder: ''
     },
     {
-      label: this.translateService.instant('form.product.price.label'),
-      formControl: this.createProductFormGroup.get('price') as FormControl,
+      label: this.translateService.instant('form.product.initial_price.label'),
+      formControl: this.updateProductFormGroup.get('initial_price') as FormControl,
       inputType: 'number',
       placeholder: ''
     },
     {
-      label: this.translateService.instant('form.product.quantity.label'),
-      formControl: this.createProductFormGroup.get('quantity_stored') as FormControl,
+      label: this.translateService.instant('form.product.quantity_stored.label'),
+      formControl: this.updateProductFormGroup.get('quantity_stored') as FormControl,
       inputType: 'number',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.product.minQuantity.label'),
+      formControl: this.updateProductFormGroup.get('minQuantity') as FormControl,
+      inputType: 'number',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.product.maxQuantity.label'),
+      formControl: this.updateProductFormGroup.get('maxQuantity') as FormControl,
+      inputType: 'number',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.product.is_promo.label'),
+      formControl: this.updateProductFormGroup.get('is_promo') as FormControl,
+      inputType: 'checkbox',
       placeholder: ''
     },
     {
       label: this.translateService.instant('form.product.promo_percentage.label'),
-      formControl: this.createProductFormGroup.get('promo_percentage') as FormControl,
+      formControl: this.updateProductFormGroup.get('promo_percentage') as FormControl,
       inputType: 'number',
       placeholder: ''
     },
+    {
+      label: this.translateService.instant('form.product.isPublished.label'),
+      formControl: this.updateProductFormGroup.get('isPublished') as FormControl,
+      inputType: 'checkbox',
+      placeholder: ''
+    }
   ];
 
 
@@ -199,9 +285,13 @@ export class ManageProductComponent implements OnInit {
     this.updateProductFormGroup.patchValue({
       name: product.name,
       description: product.description,
-      price: product.price,
+      initial_price: product.initial_price,
       quantity_stored: product.quantity_stored,
+      minQuantity: product.minQuantity,
+      maxQuantity: product.maxQuantity,
+      is_promo: product.is_promo,
       promo_percentage: product.promo_percentage,
+      isPublished: product.isPublished
     });
     this.showEditModal = true;
   }
@@ -224,8 +314,10 @@ export class ManageProductComponent implements OnInit {
 
   // Supprimer le produit sélectionné
   deleteProduct(): void {
+
     if (this.currentProduct && this.currentProduct.product_id) {
-      const payload: RemoveProductPayload = { id: this.currentProduct.product_id };
+      const payload: RemoveProductPayload = { product_id: this.currentProduct.product_id };
+      console.log('payload', payload);
 
       this.securityService.deleteProduct(payload).subscribe({
         next: (response) => {
@@ -244,17 +336,20 @@ export class ManageProductComponent implements OnInit {
 
   // Mettre à jour les valeurs du formulaire avec les données du produit sélectionné
   private updateFormWithProductData(product: Product): void {
-    this.currentProduct = product; // Stocker le produit sélectionné
+    this.currentProduct = product;
 
     this.updateProductFormGroup.patchValue({
       name: product.name,
       description: product.description,
-      price: product.price,
+      initial_price: product.initial_price,
       quantity_stored: product.quantity_stored,
+      minQuantity: product.minQuantity,
+      maxQuantity: product.maxQuantity,
+      is_promo: product.is_promo,
       promo_percentage: product.promo_percentage,
+      isPublished: product.isPublished
     });
 
-    // Mettre à jour les placeholders, en convertissant les valeurs numériques en chaînes
     this.updateProductFormControlConfigs = [
       {
         label: this.translateService.instant('form.product.name.label'),
@@ -269,23 +364,47 @@ export class ManageProductComponent implements OnInit {
         placeholder: product.description
       },
       {
-        label: this.translateService.instant('form.product.price.label'),
-        formControl: this.updateProductFormGroup.get('price') as FormControl,
+        label: this.translateService.instant('form.product.initial_price.label'),
+        formControl: this.updateProductFormGroup.get('initial_price') as FormControl,
         inputType: 'number',
-        placeholder: product.price.toString() // Convertir le nombre en string
+        placeholder: product.initial_price.toString()
       },
       {
-        label: this.translateService.instant('form.product.quantity.label'),
+        label: this.translateService.instant('form.product.quantity_stored.label'),
         formControl: this.updateProductFormGroup.get('quantity_stored') as FormControl,
         inputType: 'number',
-        placeholder: product.quantity_stored.toString() // Convertir le nombre en string
+        placeholder: product.quantity_stored.toString()
+      },
+      {
+        label: this.translateService.instant('form.product.minQuantity.label'),
+        formControl: this.updateProductFormGroup.get('minQuantity') as FormControl,
+        inputType: 'number',
+        placeholder: product.minQuantity.toString()
+      },
+      {
+        label: this.translateService.instant('form.product.maxQuantity.label'),
+        formControl: this.updateProductFormGroup.get('maxQuantity') as FormControl,
+        inputType: 'number',
+        placeholder: product.maxQuantity.toString()
+      },
+      {
+        label: this.translateService.instant('form.product.is_promo.label'),
+        formControl: this.updateProductFormGroup.get('is_promo') as FormControl,
+        inputType: 'checkbox',
+        placeholder: ''
       },
       {
         label: this.translateService.instant('form.product.promo_percentage.label'),
         formControl: this.updateProductFormGroup.get('promo_percentage') as FormControl,
         inputType: 'number',
-        placeholder: product.promo_percentage.toString() // Convertir le nombre en string
+        placeholder: product.promo_percentage.toString()
       },
+      {
+        label: this.translateService.instant('form.product.isPublished.label'),
+        formControl: this.updateProductFormGroup.get('isPublished') as FormControl,
+        inputType: 'checkbox',
+        placeholder: ''
+      }
     ];
   }
 
@@ -293,20 +412,23 @@ export class ManageProductComponent implements OnInit {
   // Soumettre le formulaire de création de produit
   onSubmitCreateProduct(): void {
     if (this.createProductFormGroup.valid) {
-      // Récupérer les valeurs et les convertir explicitement en nombres
       const payload: CreateProductPayload = {
-        name: this.createProductFormGroup.get('name')?.value,
-        description: this.createProductFormGroup.get('description')?.value,
-        price: parseFloat(this.createProductFormGroup.get('price')?.value), // Conversion en nombre flottant
-        quantity_stored: parseInt(this.createProductFormGroup.get('quantity_stored')?.value, 10), // Conversion en entier
-        promo_percentage: parseFloat(this.createProductFormGroup.get('promo_percentage')?.value), // Conversion en nombre flottant
+        name: this.createProductFormGroup.get('name')?.value || '',
+        description: this.createProductFormGroup.get('description')?.value || '',
+        initial_price: parseFloat(this.createProductFormGroup.get('initial_price')?.value),
+        quantity_stored: parseInt(this.createProductFormGroup.get('quantity_stored')?.value),
+        minQuantity: parseInt(this.createProductFormGroup.get('minQuantity')?.value),
+        maxQuantity: parseInt(this.createProductFormGroup.get('maxQuantity')?.value),
+        isPublished: this.createProductFormGroup.get('isPublished')?.value,
+        promo_percentage: parseFloat(this.createProductFormGroup.get('promo_percentage')?.value || '0')
       };
 
-      // Appeler le service pour créer le produit
+      console.log('payload create prod', payload)
+
       this.securityService.createProduct(payload).subscribe({
         next: (response) => {
-          console.log('Produit créé avec succès', response);
-          this.securityService.fetchProducts().subscribe(); // Rafraîchir la liste des produits
+          this.handleClose();
+          this.securityService.fetchProducts().subscribe();
         },
         error: (err) => {
           console.error('Erreur lors de la création du produit', err);
@@ -320,20 +442,24 @@ export class ManageProductComponent implements OnInit {
   // Soumettre le formulaire de mise à jour du produit
   onSubmitUpdateProduct(): void {
     if (this.updateProductFormGroup.valid && this.currentProduct) {
-      const category_ids = this.updateProductFormGroup.get('category_names')?.value || [];
       const payload = {
-        id: this.currentProduct.product_id, // Utiliser l'ID du produit sélectionné
+        product_id: this.currentProduct.product_id,
         name: this.updateProductFormGroup.get('name')?.value,
         description: this.updateProductFormGroup.get('description')?.value,
-        price: this.updateProductFormGroup.get('price')?.value,
-        quantity_stored: this.updateProductFormGroup.get('quantity_stored')?.value,
-        promo_percentage: this.updateProductFormGroup.get('promo_percentage')?.value,
+        initial_price: parseFloat(this.updateProductFormGroup.get('initial_price')?.value),
+        quantity_stored: parseInt(this.updateProductFormGroup.get('quantity_stored')?.value),
+        minQuantity: parseInt(this.updateProductFormGroup.get('minQuantity')?.value),
+        maxQuantity: parseInt(this.updateProductFormGroup.get('maxQuantity')?.value),
+        is_promo: this.updateProductFormGroup.get('is_promo')?.value,
+        promo_percentage: parseFloat(this.updateProductFormGroup.get('promo_percentage')?.value || '0'),
+        isPublished: this.updateProductFormGroup.get('isPublished')?.value
       };
 
       this.securityService.updateProduct(payload).subscribe({
         next: (response) => {
           console.log('Produit mis à jour avec succès', response);
-          this.securityService.fetchProducts().subscribe(); // Rafraîchir la liste des produits
+          this.handleClose();
+          this.securityService.fetchProducts().subscribe();
         },
         error: (err) => {
           console.error('Erreur lors de la mise à jour du produit', err);
@@ -375,32 +501,33 @@ export class ManageProductComponent implements OnInit {
   // Méthode pour publier ou dépublier un produit
   togglePublishProduct(product: Product): void {
     const payload = {
-      id: product.product_id
+      product_id: product.product_id,
+      isPublished: !product.isPublished // Inverse l'état actuel
     };
 
-    if (product.isPublished) {
-      // Si le produit est déjà publié, on le dépublie
-      this.securityService.unpublishProduct(payload).subscribe({
-        next: (response) => {
-          console.log('Produit dépublié avec succès', response);
-          this.securityService.fetchProducts().subscribe(); // Rafraîchir la liste des produits
-        },
-        error: (err) => {
-          console.error('Erreur lors de la dépublication du produit', err);
-        }
-      });
-    } else {
-      // Si le produit n'est pas publié, on le publie
-      this.securityService.publishProduct(payload).subscribe({
-        next: (response) => {
-          console.log('Produit publié avec succès', response);
-          this.securityService.fetchProducts().subscribe(); // Rafraîchir la liste des produits
-        },
-        error: (err) => {
-          console.error('Erreur lors de la publication du produit', err);
-        }
-      });
-    }
+    // Utilise une seule méthode updateProduct plutôt que deux méthodes différentes
+    this.securityService.updateProduct(payload)
+      .pipe(
+        // Si la mise à jour réussit, on enchaîne avec le rafraîchissement
+        tap((response) => {
+          console.log(
+            `Produit ${payload.isPublished ? 'publié' : 'dépublié'} avec succès`,
+            response
+          );
+        }),
+        // Enchaîne directement avec le rafraîchissement
+        switchMap(() => this.securityService.fetchProducts()),
+        // Gestion des erreurs
+        catchError((error) => {
+          console.error(
+            `Erreur lors de la ${payload.isPublished ? 'publication' : 'dépublication'} du produit`,
+            error
+          );
+          // Retourne un observable vide pour ne pas bloquer la chaîne
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   getProductImage(product: Product): string {
@@ -409,12 +536,63 @@ export class ManageProductComponent implements OnInit {
       return product.product_image;
     } else {
       // Si aucune image n'est disponible, on retourne une image par défaut
-      return './assets/default-category.png';
+      return './assets/default-product.png';
     }
   }
 
   getCategoryNamesControl(): FormControl {
     return this.createProductFormGroup.get('category_names') as FormControl;
+  }
+
+  togglePromoPopover(product: Product): void {
+    console.log('Toggle promo for product:', product); // Debug
+    if (this.currentPromoProduct?.product_id === product.product_id) {
+      this.currentPromoProduct = null;
+    } else {
+      this.currentPromoProduct = product;
+      this.temporaryPromoPercentage = product.promo_percentage || 0;
+    }
+  }
+
+  onPromoPercentageChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.temporaryPromoPercentage = parseInt(value) || 0;
+  }
+
+  applyPromotion(product: Product): void {
+    const payload = {
+      product_id: product.product_id,
+      is_promo: true,
+      promo_percentage: this.temporaryPromoPercentage
+    };
+
+    this.securityService.updateProduct(payload).subscribe({
+      next: () => {
+        this.currentPromoProduct = null;
+        this.securityService.fetchProducts().subscribe();
+      },
+      error: (err) => {
+        console.error('Erreur lors de l\'application de la promotion', err);
+      }
+    });
+  }
+
+  removePromotion(product: Product): void {
+    const payload = {
+      product_id: product.product_id,
+      is_promo: false,
+      promo_percentage: 0
+    };
+
+    this.securityService.updateProduct(payload).subscribe({
+      next: () => {
+        this.currentPromoProduct = null;
+        this.securityService.fetchProducts().subscribe();
+      },
+      error: (err) => {
+        console.error('Erreur lors de la suppression de la promotion', err);
+      }
+    });
   }
 
 

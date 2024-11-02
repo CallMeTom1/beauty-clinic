@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsBoolean, IsEmail } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsEmail } from 'class-validator';
 import { ApiCodeResponse } from '@common/api';
 
 export class SignInPayload {
@@ -18,13 +18,4 @@ export class SignInPayload {
     @IsString({ message: ApiCodeResponse.SIGNIN_PAYLOAD_GOOGLE_HASH_IS_NOT_STRING })
     googleHash?: string;
 
-    @ApiProperty({ description: 'Facebook OAuth hash', required: false })
-    @IsOptional()
-    @IsString({ message: ApiCodeResponse.SIGNIN_PAYLOAD_FACEBOOK_HASH_IS_NOT_STRING })
-    facebookHash?: string;
-
-    @ApiProperty({ description: 'Indicates if it is a social google-login' })
-    @IsOptional()
-    @IsBoolean({ message: ApiCodeResponse.SIGNIN_PAYLOAD_SOCIAL_LOGIN_IS_NOT_BOOLEAN })
-    socialLogin: boolean;
 }

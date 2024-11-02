@@ -1,16 +1,27 @@
-<div class="input" >
-  <label class="floating-label"
-         [class.fixed-label]="inputFocus || config.formControl.value.length > 0">{{ config.label }}</label>
-  <input class="floating-input"
-         [formControl]="config.formControl"
-         [type]="config.inputType"
-         [placeholder]="config.placeholder"
-         autocomplete="new-password"
-         (focus)="inputFocus=true"
-         (blur)="inputFocus=false"  >
-
+<div class="input" [ngClass]="{'checkbox-container': config.inputType === 'checkbox'}">
+  @if (config.inputType !== 'checkbox') {
+    <label class="floating-label"
+           [class.fixed-label]="inputFocus || config.formControl.value.length > 0">
+      {{ config.label }}
+    </label>
+    <input class="floating-input"
+           [formControl]="config.formControl"
+           [type]="config.inputType"
+           [placeholder]="config.placeholder"
+           autocomplete="new-password"
+           (focus)="inputFocus=true"
+           (blur)="inputFocus=false">
+  } @else {
+    <div class="checkbox-wrapper">
+      <input class="checkbox-input"
+             type="checkbox"
+             [formControl]="config.formControl"
+             [id]="'checkbox-' + config.label">
+      <label class="checkbox-label" [for]="'checkbox-' + config.label">
+        {{ config.label }}
+      </label>
+    </div>
+  }
 
   <app-form-error [control]="config.formControl"></app-form-error>
-
 </div>
-

@@ -1,0 +1,125 @@
+<div class="order-addresses">
+  <div class="shipping-address">
+    <div class="top">
+      <h2>Adresse de livraison</h2>
+      @if(isShippingAddressComplete()){
+        <button (click)="showShippingModifyForm()">Modifier l'adresse</button>
+      } @else {
+        <button (click)="showShippingAddForm()">Ajouter une adresse</button>
+      }
+    </div>
+    @if(isShippingAddressComplete()){
+      <div class="full-name">
+        <span>{{securityService.account$().firstname}} {{securityService.account$().lastname}}</span>
+      </div>
+      <div class="road-number">
+        <span>{{securityService.account$().shippingAddress?.road}}, {{securityService.account$().shippingAddress?.nb}}</span>
+      </div>
+      <div class="town-cp">
+        <span>{{securityService.account$().shippingAddress?.town}} {{securityService.account$().shippingAddress?.cp}}</span>
+      </div>
+      <span>{{securityService.account$().shippingAddress?.country}}</span>
+      <span>{{securityService.account$().phoneNumber}}</span>
+    } @else {
+      <p>Aucune adresse de livraison complète n'est enregistrée.</p>
+    }
+    @if(displayShippingAddForm){
+      <app-modal
+        (close)="closeShippingAddModal()"
+        (initiateSubmit)="handleAddressSubmission($event)"
+        title="Ajouter une adresse de livraison">
+        <app-address-form
+          [formType]="'shipping'"
+          [addOrUpdate]="'add'"
+          (addressSubmitted)="handleAddressSubmission($event)">
+        </app-address-form>
+      </app-modal>
+    }
+    @if(displayShippingModifyForm){
+      <app-modal
+        (close)="closeShippingModifyModal()"
+        (initiateSubmit)="handleAddressSubmission($event)"
+        title="Modifier l'adresse de livraison">
+        <app-address-form
+          [formType]="'shipping'"
+          [addOrUpdate]="'update'"
+          (addressSubmitted)="handleAddressSubmission($event)">
+        </app-address-form>
+      </app-modal>
+    }
+  </div>
+  <div class="billing-address">
+    <h2>Adresse de facturation</h2>
+    @if(isBillingAddressComplete()){
+      @if(isBillingSameAsShipping()){
+        <div class="billing-options">
+          <label>
+            <input type="checkbox"
+                   [checked]="isBillingSameAsShipping()"
+                   (change)="toggleBillingSameAsShipping()">
+            Identique à l'adresse de livraison
+          </label>
+        </div>
+      }
+      @if(!isBillingSameAsShipping()){
+        <div class="billing-details">
+          <div class="full-name">
+            <span>{{securityService.account$().firstname}} {{securityService.account$().lastname}}</span>
+          </div>
+          <div class="road-number">
+            <span>{{securityService.account$().billingAddress?.road}}, {{securityService.account$().billingAddress?.nb}}</span>
+          </div>
+          <div class="town-cp">
+            <span>{{securityService.account$().billingAddress?.town}} {{securityService.account$().billingAddress?.cp}}</span>
+          </div>
+          <span>{{securityService.account$().billingAddress?.country}}</span>
+          <span>{{securityService.account$().phoneNumber}}</span>
+          <button (click)="showBillingModifyForm()">Modifier</button>
+        </div>
+        <div class="billing-options">
+          <label>
+            <input type="checkbox"
+                   [checked]="isBillingSameAsShipping()"
+                   (change)="toggleBillingSameAsShipping()">
+            Identique à l'adresse de livraison
+          </label>
+        </div>
+      }
+    } @else {
+      <p>Aucune adresse de facturation complète n'est enregistrée.</p>
+      <button (click)="showBillingAddForm()">Ajouter une adresse de facturation</button>
+    }
+    @if(displayBillingAddForm){
+      <app-modal
+        (close)="closeBillingAddModal()"
+        (initiateSubmit)="handleAddressSubmission($event)"
+        title="Ajouter une adresse de facturation">
+        <app-address-form
+          [formType]="'billing'"
+          [addOrUpdate]="'add'"
+          (addressSubmitted)="handleAddressSubmission($event)">
+        </app-address-form>
+      </app-modal>
+    }
+    @if(displayBillingModifyForm){
+      <app-modal
+        (close)="closeBillingModifyModal()"
+        (initiateSubmit)="handleAddressSubmission($event)"
+        title="Modifier l'adresse de facturation">
+        <app-address-form
+          [formType]="'billing'"
+          [addOrUpdate]="'update'"
+          (addressSubmitted)="handleAddressSubmission($event)">
+        </app-address-form>
+      </app-modal>
+    }
+  </div>
+  <div class="validation-section">
+    <button
+      [disabled]="!isAddressesValid"
+      (click)="validateAndProceedToPayment()"
+      class="primary">
+      Valider et procéder au paiement
+    </button>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<div class="wishlist-navigation" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+  <div class="wishlist-trigger" (click)="navigateToWishlist()">
+    <i class="fa-light fa-heart wishlist-icon"></i>
+    @if(totalItems() > 0){
+      <span class="wishlist-count">{{totalItems()}}</span>
+    }
+  </div>
+
+  <div class="wishlist-dropdown" *ngIf="dropdownOpen()">
+    <div class="wishlist-header">
+      <h3>MA LISTE D'ENVIES ({{totalItems()}})</h3>
+    </div>
+
+    <ng-container *ngIf="!isWishlistEmpty(); else emptyWishlist">
+      <div class="wishlist-content">
+        <!-- Products Section -->
+        @if(hasProducts()){
+          <div class="section-header">
+            <h4>PRODUITS ({{validProducts().length}})</h4>
+          </div>
+          <div class="wishlist-items">
+            <div class="wishlist-item" *ngFor="let product of validProducts()">
+              <div class="item-image">
+                <img [src]="product.product_image" [alt]="product.name">
+              </div>
+              <div class="item-details">
+                <h4>{{ product.name }}</h4>
+                <div class="price-container">
+                  <ng-container *ngIf="product.is_promo; else normalPrice">
+                    <span class="original-price">{{ product.initial_price | currency:'EUR' }}</span>
+                    <span class="final-price promo">{{ product.price_discounted | currency:'EUR' }}</span>
+                  </ng-container>
+                  <ng-template #normalPrice>
+                    <span class="final-price">{{ product.initial_price | currency:'EUR' }}</span>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Cares Section -->
+        @if(hasCares()){
+          <div class="section-header">
+            <h4>SOINS ({{validCares().length}})</h4>
+          </div>
+          <div class="wishlist-items">
+            <div class="wishlist-item" *ngFor="let care of validCares()">
+              <div class="item-image care">
+                <i class="fa-light fa-spa"></i>
+              </div>
+              <div class="item-details">
+                <h4>{{ care.name }}</h4>
+                <div class="care-meta">
+                  <span class="duration">{{ formatDuration(care.duration) }}</span>
+                  <div class="price-container">
+                    <ng-container *ngIf="care.is_promo; else normalCarePrice">
+                      <span class="original-price">{{ care.initial_price | currency:'EUR' }}</span>
+                      <span class="final-price promo">{{ care.price_discounted | currency:'EUR' }}</span>
+                    </ng-container>
+                    <ng-template #normalCarePrice>
+                      <span class="final-price">{{ care.initial_price | currency:'EUR' }}</span>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="wishlist-footer">
+        <button class="view-wishlist" (click)="navigateToWishlist()">
+          Voir ma liste d'envies
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #emptyWishlist>
+      <div class="empty-wishlist">
+        <i class="fa-light fa-heart"></i>
+        <p>Votre liste d'envies est vide</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

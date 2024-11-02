@@ -15,10 +15,19 @@ import {ProductModule} from "../product/product.module";
 import {CartModule} from "../cart/cart.module";
 import {OrderModule} from "../order/order.module";
 import {PaymentModule} from "../payment/payment.module";
+import {CareCategoryModule} from "../care-category/care-category.module";
+import {CareSubCategoryModule} from "../care-sub-category/care-sub-category.module";
+import {BodyZoneModule} from "../body-zone/body-zone.module";
+import {PromoCodeModule} from "../promo-code/promo-code.module";
+import {CareMachineModule} from "../care-machine/care-machine.module";
+import {ReviewModule} from "../review/review.module";
+import {WishlistModule} from "../wish-list/wishlist.module";
+import {ClinicModule} from "../clinic/clinic.module";
 @Module({
   imports: [TypeOrmModule.forRoot(configManager.getTypeOrmConfig()), SecurityModule, UserModule, CareModule,
     AppointmentModule, HolidayModule, BusinessHoursModule, ProductCategoryModule, ProductModule, CartModule, OrderModule,
-    PaymentModule],
+    PaymentModule, CareCategoryModule, CareSubCategoryModule, BodyZoneModule, PromoCodeModule, CareMachineModule,
+    ReviewModule, WishlistModule, ClinicModule],
   controllers: [],
   providers: [ {
     provide: APP_GUARD, useClass: JwtGuard

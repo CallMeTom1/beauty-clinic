@@ -1,0 +1,23 @@
+<div class="machine-dropdown">
+  <button (click)="toggleDropdown()" class="dropdown-toggle">
+    {{ 'care.machines.select' | translate }}
+    <span class="caret"></span>
+  </button>
+  <div class="dropdown-menu" [class.show]="isDropdownOpen">
+    <div class="dropdown-item" *ngFor="let machine of securityService.careMachine$()">
+      <label>
+        <input type="checkbox"
+               [value]="machine.care_machine_id"
+               (change)="onMachineChange($event, machine.care_machine_id)"
+               [checked]="isMachineSelected(machine.care_machine_id)">
+        {{ machine.name }}
+      </label>
+    </div>
+  </div>
+</div>
+<div class="selected-machines">
+      <span *ngFor="let machineId of selectedMachines" class="machine-tag">
+        {{ getMachineName(machineId) }}
+        <button (click)="removeMachine(machineId)" class="remove-machine">&times;</button>
+      </span>
+</div>

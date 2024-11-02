@@ -1,69 +1,64 @@
 <div class="signin-page">
-  <div class="signin-page__header">
-    <img class="logo-image" [ngSrc]="logoSrc" [height]="height" [width]="width" [alt]="alt">
-    <h1>{{ brand }}</h1>
-  </div>
+  <div class="signin-container">
+    <div class="signin-page__header">
+      <img class="logo-image" [ngSrc]="logoSrc" [height]="height" [width]="width" [alt]="alt">
+      <h1>{{ brand }}</h1>
+    </div>
 
-  <!-- Phrase d'accroche -->
-  <p class="signin-page__intro">
-    Bienvenue à nouveau ! Connectez-vous pour continuer.
-  </p>
-
-  <h2>Connexion à votre compte</h2>
-
-  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-    <fieldset>
-      <!-- Boucle pour générer les champs du formulaire -->
-      @for(input of formControlConfigs; track input.formControl){
-        <ng-container>
-          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
-        </ng-container>
-      }
-    </fieldset>
-
-    <!-- Message d'erreur s'il y a lieu -->
-    @if(securityService.error$()){
-      <div class="error-message">
-        <i class="fa-thin fa-circle-exclamation"></i>
-        <em>{{ this.securityService.error$()! | translate }}</em>
-      </div>
-    }
-
-    <!-- Bouton de soumission -->
-    <button
-      type="submit"
-      class="signin-button"
-      [disabled]="!formGroup.valid">
-        <span>Se connecter</span>
-    </button>
-  </form>
-
-  <!-- Lien pour mot de passe oublié -->
-  <div class="forgot-password-link">
-    <a [routerLink]="['/account/forgot-password']">Mot de passe oublié ?</a>
-  </div>
-
-  <div class="or-separator">
-    <span></span>
-    <p>ou</p>
-    <span></span>
-  </div>
-
-  <ng-container class="google-signin-button-container">
-    <app-google-button></app-google-button>
-  </ng-container>
-
-  <!-- Lien pour créer un compte -->
-  <div class="signup-prompt">
-    <p>Vous n'avez pas encore de compte ? <a [routerLink]="['/account/signup']">Créer un compte</a></p>
-  </div>
-
-  <!-- Message pour les conditions d'utilisation et confidentialité -->
-  <div class="terms-message">
-    <p>
-      En vous connectant, vous acceptez nos
-      <a href="/terms" target="_blank">conditions d'utilisation</a> ainsi que notre
-      <a href="/privacy-policy" target="_blank">politique de confidentialité</a>.
+    <p class="signin-page__intro">
+      Bienvenue à nouveau ! Connectez-vous pour continuer.
     </p>
+
+    <h2>Connexion à votre compte</h2>
+
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <fieldset>
+        @for(input of formControlConfigs; track input.formControl){
+          <ng-container>
+            <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+          </ng-container>
+        }
+      </fieldset>
+
+      @if(securityService.error$()){
+        <div class="error-message">
+          <i class="fa-thin fa-circle-exclamation"></i>
+          <em>{{ this.securityService.error$()! | translate }}</em>
+        </div>
+      }
+
+      <button
+        type="submit"
+        class="signin-button"
+        [disabled]="!formGroup.valid">
+        <span>Se connecter</span>
+      </button>
+    </form>
+
+    <div class="forgot-password-link">
+      <a [routerLink]="['/account/forgot-password']">Mot de passe oublié ?</a>
+    </div>
+
+    <div class="or-separator">
+      <span></span>
+      <p>ou</p>
+      <span></span>
+    </div>
+
+    <ng-container class="google-signin-button-container">
+      <app-google-button></app-google-button>
+    </ng-container>
+
+    <div class="signup-prompt">
+      <p>Vous n'avez pas encore de compte ? <a [routerLink]="['/account/signup']">Créer un compte</a></p>
+    </div>
+
+    <div class="terms-message">
+      <p>
+        En vous connectant, vous acceptez nos
+        <a href="/terms" target="_blank">conditions d'utilisation</a> ainsi que notre
+        <a href="/privacy-policy" target="_blank">politique de confidentialité</a>.
+      </p>
+    </div>
   </div>
 </div>

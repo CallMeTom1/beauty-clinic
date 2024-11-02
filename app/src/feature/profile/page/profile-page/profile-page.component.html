@@ -1,0 +1,10 @@
+<section class="profile-cards">
+  <app-profile-card
+    *ngFor="let card of profileCards"
+    [title]="card.title"
+    [description]="card.description"
+    [icon]="card.icon"
+    [cardId]="card.id"
+    (cardClick)="onCardClick(card.id)">
+  </app-profile-card>
+</section>

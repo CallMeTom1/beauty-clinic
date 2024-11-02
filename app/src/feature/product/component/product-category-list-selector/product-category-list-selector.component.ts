@@ -15,12 +15,20 @@ import {ProductService} from "../../product.service";
 export class ProductCategoryListSelectorComponent {
   protected productService: ProductService = inject(ProductService);
 
-  selectCategory(cat: CategoryProduct) {
-    this.productService.categorySelected$.set(cat);
+  selectCategory(category: CategoryProduct | null) {
+    // Si on clique sur la catégorie déjà sélectionnée ou sur "Tous" quand aucune catégorie n'est sélectionnée
+    if (this.isSelected(category)) {
+      this.productService.categorySelected$.set(null); // Déselectionner
+    } else {
+      this.productService.categorySelected$.set(category); // Sélectionner nouvelle catégorie
+    }
   }
 
-  isSelected(cat: CategoryProduct): boolean {
-    return this.productService.categorySelected$() === cat;
+  isSelected(category: CategoryProduct | null): boolean {
+    const currentSelected = this.productService.categorySelected$();
+    if (!category && !currentSelected) return true;
+    if (!category || !currentSelected) return false;
+    return currentSelected.product_category_id === category.product_category_id;
   }
 
 }

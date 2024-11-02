@@ -1,10 +1,19 @@
 <div class="category-selector">
-  @for(cat of productService.categories$(); track cat.product_category_id){
+  <!-- Catégorie "Tous" -->
+  <div
+    class="cat-bubble"
+    [ngClass]="{'selected': !productService.categorySelected$()}"
+    (click)="selectCategory(null)">
+    <span>Tous les produits</span>
+  </div>
+
+  <!-- Autres catégories -->
+  @for(category of productService.categories$(); track category.product_category_id){
     <div
-      [ngClass]="{'selected': isSelected(cat)}"
       class="cat-bubble"
-      (click)="selectCategory(cat)">
-      <span>{{ cat.name }}</span>
+      [ngClass]="{'selected': isSelected(category)}"
+      (click)="selectCategory(category)">
+      <span>{{ category.name }}</span>
     </div>
   }
 </div>

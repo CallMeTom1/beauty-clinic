@@ -1,0 +1,110 @@
+.machine-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  min-width: 150px;
+  text-align: left;
+
+  .caret {
+    float: right;
+    margin-top: 8px;
+  }
+}
+
+.dropdown-menu {
+  display: none;
+  position: fixed;
+  background-color: #f9f9f9;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 10000;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    width: 100%;
+
+    input[type="checkbox"] {
+      margin: 0;
+    }
+  }
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
+}
+
+.selected-machines {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  position: relative;
+  z-index: 1;
+}
+
+.machine-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e0f2f1; // Couleur différente des catégories pour les distinguer
+  border-radius: 16px;
+  padding: 4px 8px 4px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+  gap: 4px;
+}
+
+.remove-machine {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  padding: 0 2px;
+  font-size: 14px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  min-height: 16px;
+
+  &:hover {
+    color: #666;
+  }
+}

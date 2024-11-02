@@ -8,59 +8,69 @@
       <th>{{col_day | translate}}</th>
       <th>{{col_opening_time | translate}}</th>
       <th>{{col_closing_time | translate}}</th>
-      <th> {{col_is_open | translate}}</th>
-      <th> {{col_edit | translate}}</th>
-      <th> {{col_open | translate}}</th>
-      <th> {{col_close | translate}}</th>
+      <th>{{col_is_open | translate}}</th>
+      <th>{{col_actions | translate}}</th>
     </tr>
     </thead>
     <tbody>
       @for(day of securityService.businessHours$(); track day.day_of_week){
         <tr>
-          <td>{{day.day_of_week}}</td>
+          <td>{{transformDayOfWeek(day.day_of_week) | translate}}</td>
           <td>{{day.opening_time}}</td>
           <td>{{day.closing_time}}</td>
-          <td>{{ day.is_open ? (open | translate) : (close | translate) }}</td>
           <td>
-            <button (click)="loadBusinessHoursDetails(day)">
-              <i class="fa-thin fa-pen-to-square"></i>
-            </button>
+            <span class="status-badge" [ngClass]="{'open': day.is_open, 'closed': !day.is_open}">
+              {{ day.is_open ? (open | translate) : (close | translate) }}
+            </span>
           </td>
-          <td>
-            <button (click)="onSubmitOpenBusinessHours(day.day_of_week)">
-              {{btn_open | translate}}
-            </button>
-          </td>
-          <td>
-            <button (click)="onSubmitCloseBusinessHours(day.day_of_week)">
-              {{btn_close | translate}}
-            </button>
+          <td class="actions-cell">
+            <div class="actions-group">
+              <a (click)="loadBusinessHoursDetails(day)" class="action-link edit">
+                {{ 'business_hours.actions.edit' | translate }}
+              </a>
+              <span class="action-separator">|</span>
+              @if(day.is_open) {
+                <a (click)="onSubmitCloseBusinessHours(day.day_of_week)" class="action-link close">
+                  {{ btn_close | translate }}
+                </a>
+              } @else {
+                <a (click)="onSubmitOpenBusinessHours(day.day_of_week)" class="action-link open">
+                  {{ btn_open | translate }}
+                </a>
+              }
+            </div>
           </td>
         </tr>
       }
     </tbody>
   </table>
+
   @if(showEditModal){
     <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
-      <!--
-      <app-form [formGroup]="formGroup" [title]="'title' | translate"
-                [config]="formControlConfigs">
-      </app-form>
-      -->
-      <!-- Submit and Cancel buttons -->
-      <div class="modal-footer">
-        <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>
-        <button type="submit" class="submit-btn" [disabled]="formGroup.invalid" (click)="onSubmitEditBusinessHours()">{{submit | translate}}</button>
-      </div>
-      <!-- Error form display -->
-      <div class="error-form" [class.active]="error().length > 0 && formGroup.touched">
-        @if(error().length > 0){
-          <p>{{ 'security-feature.sign-in-page.error.description' | labelWithParam:{count: error().length} }}</p>
+      <form [formGroup]="formGroup">
+        @for(config of formControlConfigs; track config.label) {
+          <app-floating-label-input-test [config]="config"></app-floating-label-input-test>
         }
-        @for(error of error(); track error){
-          <div>
-            <app-label-with-param [label]="'security-feature.sign-in-page.error.'+error.control+'-'+error.error"></app-label-with-param>
-          </div>
+        <div class="modal-actions">
+          <button class="cancel-btn" (click)="handleClose()">
+            {{ 'form.cancel.label' | translate }}
+          </button>
+          <button class="submit-btn"
+                  [disabled]="!formGroup.valid"
+                  (click)="onSubmitEditBusinessHours()">
+            {{ submit | translate }}
+          </button>
+        </div>
+      </form>
+      <div class="error-form" [class.active]="error().length > 0">
+        @if(error().length > 0){
+          <p>{{ 'security-feature.form.error.description' | labelWithParam:{count: error().length} }}</p>
+          @for(error of error(); track error){
+            <div>
+              <app-label-with-param [label]="'security-feature.form.error.'+error.control+'-'+error.error">
+              </app-label-with-param>
+            </div>
+          }
         }
       </div>
     </app-modal>

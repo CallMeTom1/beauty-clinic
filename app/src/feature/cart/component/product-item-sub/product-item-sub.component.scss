@@ -1,101 +1,196 @@
 .cartItem {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.left {
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.left .product-image {
+  max-width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+}
+
+.unit-price {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+
+  span:first-child {
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.price-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 14px;
+}
+
+.promo-price {
+  color: #e74c3c;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.regular-price {
+  color: var(--theme-green);
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.right {
+  width: 75%;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 400px;
-  width: 400px;
-  max-width: 400px;
-  padding: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 16px;
 }
 
 .top {
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap:4px;
-}
-
-.qty_and_bin{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-.top img {
-  height: 80px;
-  width: 80px;
-  object-fit: cover;
 }
 
 .product-name {
-  font-size: var(--font-size-medium);
-  color: var(--theme-green);
   font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #333;
 }
 
-.separator-line {
-  height: 1px;
-  background-color: #e0e0e0;
-  margin: 8px 0;
+.product-description {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.4;
 }
 
-.unit-price, .total {
+.bottom {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-
-
-.qty_and_bin {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  justify-content: space-between;
 }
 
-.quantity {
+.qty {
+  flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+
+.quantity.select {
+  display: flex;
+  align-items: center;
 }
 
 .plus-minus {
   display: flex;
   align-items: center;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #ddd;
   border-radius: 4px;
+  overflow: hidden;
+}
+
+.quantity-limits {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  display: block;
+}
+
+.plus-minus {
+  button {
+    &[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:not([disabled]):hover {
+      background-color: var(--theme-green);
+      color: white;
+    }
+  }
+}
+
+// Ajoutez un style pour le tooltip natif
+[title] {
+  position: relative;
+  cursor: help;
 }
 
 .plus-minus button {
-  background-color: #f5f5f5;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f8f8;
   border: none;
-  padding: 2px 6px;
-  font-size: 14px;
+  color: #333;
+  font-size: 16px;
   cursor: pointer;
-  line-height: 1;
+  transition: background-color 0.3s ease;
+}
+
+.plus-minus button:hover {
+  background-color: #e0e0e0;
 }
 
 .plus-minus button:disabled {
-  opacity: 0.5;
+  background-color: #f8f8f8;
+  color: #ccc;
   cursor: not-allowed;
 }
 
 .plus-minus span {
-  padding: 0 8px;
-  font-size: 14px;
+  margin: 0 16px;
+  font-size: 16px;
+  color: #333;
 }
 
-.fa-trash-can {
-  color: #ff4d4d;
-  font-size: 18px;
+.del-span {
+  text-transform: uppercase;
+  color: var(--theme-green);
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.fa-trash-can:hover {
-  color: #ff3333;
+.del-span:hover {
+  color: darken(#13332AFF, 10%);
+}
+
+.total {
+  flex: 1;
+  text-align: right;
+}
+
+.total span {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Ajout de styles pour s'adapter à la structure de la page de panier */
+.cart-page .left .cartItem:last-child {
+  border-bottom: none;
 }

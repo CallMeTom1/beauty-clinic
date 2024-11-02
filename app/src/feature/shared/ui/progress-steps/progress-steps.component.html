@@ -1,0 +1,11 @@
+<div class="steps">
+  @for(step of steps; track step.name; let last = $last; let index = $index) {
+    <div class="step" [ngClass]="{'completed': step.completed, 'current': step.completed && !steps[index + 1]?.completed}">
+      <div class="step-number">{{ index + 1 }}</div>
+      <div class="step-name">{{ step.name }}</div>
+      @if(!last) {
+        <div class="line" [ngClass]="{'completed': steps[index + 1].completed}"></div>
+      }
+    </div>
+  }
+</div>

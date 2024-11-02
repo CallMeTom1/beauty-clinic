@@ -4,6 +4,7 @@ import {AppNode} from "@shared-routes";
 import {TranslateModule} from "@ngx-translate/core";
 import {NgOptimizedImage} from "@angular/common";
 import {ContactCardComponent} from "../contact-card/contact-card.component";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-footer',
@@ -11,7 +12,8 @@ import {ContactCardComponent} from "../contact-card/contact-card.component";
   imports: [
     TranslateModule,
     NgOptimizedImage,
-    ContactCardComponent
+    ContactCardComponent,
+    RouterLink
   ],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss'

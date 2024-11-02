@@ -1,69 +1,69 @@
 <div class="signup-page">
-  <div class="signup-page__header">
-    <img class="logo-image" [ngSrc]="logoSrc" [height]="height" [width]="width" [alt]="alt">
-    <h1>{{brand}}</h1>
-  </div>
+  <div class="signup-container">
+    <div class="signup-page__header">
+      <img class="logo-image" [ngSrc]="logoSrc" [height]="height" [width]="width" [alt]="alt">
+      <h1>{{brand}}</h1>
+    </div>
 
-  <!-- Phrase d'accroche -->
-  <p class="signup-page__intro">
-    Des soins et des produits de beauté pour chacun.
-  </p>
-
-  <h2>Créer votre compte</h2>
-
-  <form (ngSubmit)="onSubmit()">
-    <fieldset>
-      @for(input of formControlConfigs; track input.label){
-        <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
-      }
-    </fieldset>
-
-    @if(this.securityService.error$()){
-      <div class="error-message">
-        <i class="fa-thin fa-circle-exclamation"></i>
-        <em>{{ this.securityService.error$()! | translate }}</em>
-      </div>
-    }
-
-    @if(signupSuccess){
-      <div class="success-message">
-        <h2>Inscription réussie !</h2>
-        <p>{{ successMessage }}</p>
-        <p>Vous serez redirigé vers la page d'accueil dans quelques instants.</p>
-      </div>
-    }
-
-
-    <button
-      type="submit"
-      class="signup-button"
-      [disabled]="!formGroup.valid">
-      Créer mon compte gratuitement
-    </button>
-
-  </form>
-
-  <div class="or-separator">
-    <span></span>
-    <p>ou</p>
-    <span></span>
-  </div>
-
-  <div class="google-signup-button-container">
-    <app-google-button></app-google-button>
-  </div>
-
-  <!-- Ligne ajoutée pour le lien "Se connecter" -->
-  <div class="signin-prompt">
-    <p>Vous avez déjà un compte ? <a [routerLink]="['/account/signin']">Se connecter</a></p>
-  </div>
-
-  <!-- Message pour les conditions d'utilisation et confidentialité -->
-  <div class="terms-message">
-    <p>
-      En confirmant la création de votre compte, vous acceptez nos
-      <a href="/terms" target="_blank">conditions et termes</a> ainsi que notre
-      <a href="/privacy-policy" target="_blank">politique de confidentialité</a>.
+    <p class="signup-page__intro">
+      Des soins et des produits de beauté pour chacun.
     </p>
+
+    <h2>Créer votre compte</h2>
+
+    <form (ngSubmit)="onSubmit()">
+      <fieldset>
+        @for(input of formControlConfigs; track input.label){
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+      </fieldset>
+
+      @if(this.securityService.error$()){
+        <div class="error-message">
+          <i class="fa-thin fa-circle-exclamation"></i>
+          <em>{{ this.securityService.error$()! | translate }}</em>
+        </div>
+      }
+
+      @if(signupSuccess){
+        <div class="success-message">
+          <i class="fa-thin fa-circle-check"></i>
+          <div class="success-content">
+            <h3>Inscription réussie !</h3>
+            <p>{{ successMessage }}</p>
+            <p>Vous serez redirigé vers la page d'accueil dans quelques instants.</p>
+          </div>
+        </div>
+      }
+
+      <button
+        type="submit"
+        class="signup-button"
+        [disabled]="!formGroup.valid">
+        Créer mon compte gratuitement
+      </button>
+    </form>
+
+    <div class="or-separator">
+      <span></span>
+      <p>ou</p>
+      <span></span>
+    </div>
+
+    <div class="google-signup-button-container">
+      <app-google-button></app-google-button>
+    </div>
+
+    <div class="signin-prompt">
+      <p>Vous avez déjà un compte ? <a [routerLink]="['/account/signin']">Se connecter</a></p>
+    </div>
+
+    <div class="terms-message">
+      <p>
+        En confirmant la création de votre compte, vous acceptez nos
+        <a href="/terms" target="_blank">conditions et termes</a> ainsi que notre
+        <a href="/privacy-policy" target="_blank">politique de confidentialité</a>.
+      </p>
+    </div>
   </div>
 </div>

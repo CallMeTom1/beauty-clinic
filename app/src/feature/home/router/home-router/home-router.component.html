@@ -1,4 +1,25 @@
 <div class="main-content">
-  <app-top-nav-mobile></app-top-nav-mobile>
+  <app-top-nav></app-top-nav>
   <router-outlet></router-outlet>
+  <app-modal
+    *ngIf="modalService.isOpen()"
+    [title]="'Connexion requise'"
+    (close)="closeAuthModal()">
+    <div class="auth-modal-content">
+      <p>Pour ajouter des articles à votre liste de souhaits, veuillez vous connecter ou créer un compte.</p>
+      <div class="button-container">
+        <button
+          class="login-btn"
+          (click)="navigateToLogin()">
+          Se connecter
+        </button>
+        <button
+          class="register-btn"
+          (click)="navigateToRegister()">
+          Créer un compte
+        </button>
+      </div>
+    </div>
+  </app-modal>
+  <app-footer></app-footer>
 </div>

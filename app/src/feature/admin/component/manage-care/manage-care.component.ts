@@ -1,18 +1,31 @@
-import { Component, inject, signal, WritableSignal } from '@angular/core';
-import { CurrencyPipe, NgForOf, NgIf } from "@angular/common";
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Care } from "../../../care/data/model/care.business";
-import { ModalComponent } from "../../../shared/ui/modal/modal/modal.component";
-import { CareForm } from "../../../care/care-form.interface";
-import {TranslateModule, TranslateService} from "@ngx-translate/core";
-import { FormcontrolSimpleConfig, FormError, handleFormError, LabelWithParamComponent, LabelWithParamPipe } from "@shared-ui";
-import { EditCarePayload } from "../../data/edit-care.payload";
-import {BeautyCareMachine, BeautyCareMachineTranslations} from "../../../care/enum/care-machine.enum";
-import {CareZone, CareZoneTranslations} from "../../../care/enum/care-zone.enum";
-import {CareCategory, CareCategoryTranslations} from "../../../care/enum/care-category.enum";
+import {Component, effect, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {CurrencyPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {SecurityService} from "@feature-security";
-import {AddCarePayload} from "../../../security/data/payload/care/add-care.payload";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
+import {
+  CustomEuroPipe,
+  FormcontrolSimpleConfig,
+  LabelWithParamComponent,
+  LabelWithParamPipe
+} from "@shared-ui";
+import {Care} from "../../../security/data/model/care/care.business";
+import {FloatingLabelInputTestComponent} from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
+import {ModalComponent} from "../../../shared/ui/modal/modal/modal.component";
+import {catchError, EMPTY, lastValueFrom, switchMap, tap} from "rxjs";
+import {CreateCarePayload} from "../../../security/data/payload/care/add-care.payload";
 import {DeleteCarePayload} from "../../../security/data/payload/care/delete-care.payload";
+import {EditCarePayload} from "../../data/edit-care.payload";
+import {UpdateCarePayload} from "../../../security/data/payload/care/edit-care.payload";
+import {UploadCareImagePayload} from "../../../security/data/payload/care/upload-care-image.payload";
+import {BodyZoneSelectorComponent} from "../../../shared/ui/care-body-zone-selector/care-body-zone-selector.component";
+import {
+  CareSubcategorySelectorComponent
+} from "../../../shared/ui/care-sub-category-selector/care-sub-category-selector.component";
+import {
+  CareCategorySelectorComponent
+} from "../../../shared/ui/care-category-selector/care-category-selector.component";
+import {CareMachineSelectorComponent} from "../../../shared/ui/care-machine-selector/care-machine-selector.component";
 
 @Component({
   selector: 'app-manage-care',
@@ -26,281 +39,572 @@ import {DeleteCarePayload} from "../../../security/data/payload/care/delete-care
     LabelWithParamComponent,
     LabelWithParamPipe,
     TranslateModule,
+    FloatingLabelInputTestComponent,
+    CustomEuroPipe,
+    NgClass,
+    BodyZoneSelectorComponent,
+    CareSubcategorySelectorComponent,
+    CareCategorySelectorComponent,
+    CareMachineSelectorComponent
   ],
   templateUrl: './manage-care.component.html',
-  styleUrls: ['./manage-care.component.scss']
+  styleUrl: './manage-care.component.scss'
 })
-export class ManageCareComponent {
-
-  protected showCreateModal: boolean = false;
-  protected showEditModal: boolean = false;
-  protected readonly title: string =   "admin-feature.admin.manage-care.title";
-  protected readonly add_care: string = "admin-feature.admin.manage-care.add";
-  protected readonly modal_add_title: string = "admin-feature.admin.modal.add.title";
-  protected readonly modal_edit_title: string ="admin-feature.admin.modal.edit.title";
-  protected readonly col_name : string = "admin-feature.admin.manage-care.column.name";
-  protected readonly col_zone : string = "admin-feature.admin.manage-care.column.zone";
-  protected readonly col_category : string = "admin-feature.admin.manage-care.column.category";
-  protected readonly col_machine : string = "admin-feature.admin.manage-care.column.machine";
-  protected readonly col_price : string = "admin-feature.admin.manage-care.column.price";
-  protected readonly col_duration : string = "admin-feature.admin.manage-care.column.duration";
-  protected readonly col_time_between : string = "admin-feature.admin.manage-care.column.time_between";
-  protected readonly col_edit : string = "admin-feature.admin.manage-care.column.edit";
-  protected readonly col_delete : string = "admin-feature.admin.manage-care.column.delete";
-  protected readonly col_sessions: string = "admin-feature.admin.manage-care.column.sessions";
-
-  private readonly translateService: TranslateService = inject(TranslateService);
+export class ManageCareComponent implements OnInit {
   protected readonly securityService: SecurityService = inject(SecurityService);
-  public formError$: WritableSignal<FormError[]> = signal([]);
-  private currentCareId: string | null = null;
+  protected readonly translateService: TranslateService = inject(TranslateService);
+  protected showEditModal = false;
+  protected showCreateModal = false;
+  protected showDeleteModal = false;
+  protected currentCare: Care | null = null;
+  protected readonly Math = Math;
+  private currentPromoPercentage: number = 0;
+  protected currentPromoCare: Care | null = null;
 
-  private editCarePayload: EditCarePayload = {
-    care_id: '',
-    name: '',
-    duration: '',
-    sessions: 0,
-    beauty_care_machine: '',
-    price: 0,
-    zone: '',
-    category: '',
-    time_between: '',
-    description: ''
-  };
 
-  public formGroup: FormGroup<CareForm> = new FormGroup<CareForm>({
-    name: new FormControl(this.editCarePayload.name, [Validators.required, Validators.minLength(10), Validators.maxLength(25)]),
-    sessions: new FormControl(this.editCarePayload.sessions, [Validators.required, Validators.min(1)]),
-    beauty_care_machine: new FormControl(this.editCarePayload.beauty_care_machine as BeautyCareMachine, [Validators.required]),
-    zone: new FormControl(this.editCarePayload.zone as CareZone, [Validators.required]),
-    duration: new FormControl(this.editCarePayload.duration, [Validators.required, Validators.minLength(10), Validators.maxLength(25)]),
-    category: new FormControl(this.editCarePayload.category as CareCategory, [Validators.required]),
-    price: new FormControl(this.editCarePayload.price, [Validators.required, Validators.min(0)]),
-    time_between: new FormControl(this.editCarePayload.time_between, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-    description: new FormControl(this.editCarePayload.description, [Validators.required, Validators.min(0)]),
-});
+  protected careImageForm: FormGroup = new FormGroup({
+    careImage: new FormControl(null, Validators.required)
+  });
 
-  public formControlConfigs: FormcontrolSimpleConfig[] = [
+  // Formulaire pour créer un soin
+  public createCareFormGroup: FormGroup = new FormGroup({
+    name: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(100)
+    ]),
+    description: new FormControl('', [
+      Validators.required,
+      Validators.minLength(10),
+      Validators.maxLength(500)
+    ]),
+    care_image: new FormControl(null),
+    initial_price: new FormControl('', [
+      Validators.required,
+      Validators.min(0),
+      Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')
+    ]),
+    sessions: new FormControl('', [
+      Validators.required,
+      Validators.min(1),
+      Validators.pattern('^[0-9]*$')
+    ]),
+    duration: new FormControl('', [
+      Validators.required,
+      Validators.min(1),
+      Validators.pattern('^[0-9]*$')
+    ]),
+    time_between: new FormControl('', [
+      Validators.pattern('^[0-9]*$')
+    ]),
+    is_promo: new FormControl(false),
+    promo_percentage: new FormControl('', [
+      Validators.min(0),
+      Validators.max(100),
+      Validators.pattern('^[0-9]*$')
+    ]),
+    isPublished: new FormControl(false),
+    machines: new FormControl([]),
+    categories: new FormControl([]),
+    subCategories: new FormControl([]),
+    bodyZones: new FormControl([])
+  });
+
+  // Formulaire pour mettre à jour un soin
+  public updateCareFormGroup: FormGroup = new FormGroup({
+    name: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(100)
+    ]),
+    description: new FormControl('', [
+      Validators.required,
+      Validators.minLength(10),
+      Validators.maxLength(500)
+    ]),
+    care_image: new FormControl(null),
+    initial_price: new FormControl('', [
+      Validators.required,
+      Validators.min(0),
+      Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')
+    ]),
+    sessions: new FormControl('', [
+      Validators.required,
+      Validators.min(1),
+      Validators.pattern('^[0-9]*$')
+    ]),
+    duration: new FormControl('', [
+      Validators.required,
+      Validators.min(1),
+      Validators.pattern('^[0-9]*$')
+    ]),
+    time_between: new FormControl('', [
+      Validators.pattern('^[0-9]*$')
+    ]),
+    is_promo: new FormControl(false),
+    promo_percentage: new FormControl('', [
+      Validators.min(0),
+      Validators.max(100),
+      Validators.pattern('^[0-9]*$')
+    ]),
+    isPublished: new FormControl(false),
+    machines: new FormControl([]),
+    categories: new FormControl([]),
+    subCategories: new FormControl([]),
+    bodyZones: new FormControl([])
+  });
+
+  public createCareFormControlConfigs: FormcontrolSimpleConfig[] = [
     {
-      label: 'care.form.name',
-      formControl: this.formGroup.get('name') as FormControl,
+      label: this.translateService.instant('form.care.name.label'),
+      formControl: this.createCareFormGroup.get('name') as FormControl,
       inputType: 'text',
-      placeholder: 'care.form.enter_name'
+      placeholder: this.translateService.instant('form.care.name.placeholder')
     },
     {
-      label: 'care.form.sessions',
-      formControl: this.formGroup.get('sessions') as FormControl,
+      label: this.translateService.instant('form.care.description.label'),
+      formControl: this.createCareFormGroup.get('description') as FormControl,
+      inputType: 'textarea',
+      placeholder: this.translateService.instant('form.care.description.placeholder')
+    },
+    {
+      label: this.translateService.instant('form.care.initial_price.label'),
+      formControl: this.createCareFormGroup.get('initial_price') as FormControl,
       inputType: 'number',
-      placeholder: 'care.form.enter_sessions'
+      placeholder: this.translateService.instant('form.care.initial_price.placeholder')
     },
     {
-      label: 'care.form.machine',
-      formControl: this.formGroup.get('beauty_care_machine') as FormControl,
-      inputType: 'select',
-      options: Object.values(BeautyCareMachine).map(machine => ({
-        value: machine,
-        label: this.getTranslatedMachine(machine)
-      })),
-      placeholder: 'care.form.select_machine'
-    },
-    {
-      label: 'care.form.zone',
-      formControl: this.formGroup.get('zone') as FormControl,
-      inputType: 'select',
-      options: Object.values(CareZone).map(zone => ({
-        value: zone,
-        label: this.getTranslatedZone(zone)
-      })),
-      placeholder: 'care.form.select_zone'
-    },
-    {
-      label: 'care.form.duration',
-      formControl: this.formGroup.get('duration') as FormControl,
-      inputType: 'text',
-      placeholder: 'care.form.enter_duration'
-    },
-    {
-      label: 'care.form.category',
-      formControl: this.formGroup.get('category') as FormControl,
-      inputType: 'select',
-      options: Object.values(CareCategory).map(category => ({
-        value: category, // valeur brute
-        label: this.getTranslatedCategory(category) // label traduit
-      })),
-      placeholder: 'care.form.select_category'
-    },
-    {
-      label: 'care.form.price',
-      formControl: this.formGroup.get('price') as FormControl,
+      label: this.translateService.instant('form.care.sessions.label'),
+      formControl: this.createCareFormGroup.get('sessions') as FormControl,
       inputType: 'number',
-      placeholder: 'care.form.enter_price'
+      placeholder: this.translateService.instant('form.care.sessions.placeholder')
     },
     {
-      label: 'care.form.time_between',
-      formControl: this.formGroup.get('time_between') as FormControl,
-      inputType: 'text',
-      placeholder: 'care.form.enter_time_between'
+      label: this.translateService.instant('form.care.duration.label'),
+      formControl: this.createCareFormGroup.get('duration') as FormControl,
+      inputType: 'number',
+      placeholder: this.translateService.instant('form.care.duration.placeholder')
     },
     {
-      label: 'care.form.description',
-      formControl: this.formGroup.get('description') as FormControl,
-      inputType: 'text',
-      placeholder: 'care.form.enter_description'
+      label: this.translateService.instant('form.care.time_between.label'),
+      formControl: this.createCareFormGroup.get('time_between') as FormControl,
+      inputType: 'number',
+      placeholder: this.translateService.instant('form.care.time_between.placeholder')
+    },
+    {
+      label: this.translateService.instant('form.care.is_promo.label'),
+      formControl: this.createCareFormGroup.get('is_promo') as FormControl,
+      inputType: 'checkbox',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.care.promo_percentage.label'),
+      formControl: this.createCareFormGroup.get('promo_percentage') as FormControl,
+      inputType: 'number',
+      placeholder: this.translateService.instant('form.care.promo_percentage.placeholder')
+    },
+    {
+      label: this.translateService.instant('form.care.isPublished.label'),
+      formControl: this.createCareFormGroup.get('isPublished') as FormControl,
+      inputType: 'checkbox',
+      placeholder: ''
     }
-  ].map(item => ({
-    ...item,
-    label: this.translateService.instant(item.label),
-    placeholder: this.translateService.instant(item.placeholder),
-    options: item.options ? item.options.map(option => ({
-      value: option.value,
-      label: this.translateService.instant(option.label)
-    })) : []
-  }));
+  ];
 
+  public updateCareFormControlConfigs: FormcontrolSimpleConfig[] = [
+    {
+      label: this.translateService.instant('form.care.name.label'),
+      formControl: this.createCareFormGroup.get('name') as FormControl,
+      inputType: 'text',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.care.description.label'),
+      formControl: this.createCareFormGroup.get('description') as FormControl,
+      inputType: 'textarea',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.care.initial_price.label'),
+      formControl: this.createCareFormGroup.get('initial_price') as FormControl,
+      inputType: 'number',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.care.sessions.label'),
+      formControl: this.createCareFormGroup.get('sessions') as FormControl,
+      inputType: 'number',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.care.duration.label'),
+      formControl: this.createCareFormGroup.get('duration') as FormControl,
+      inputType: 'number',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.care.time_between.label'),
+      formControl: this.createCareFormGroup.get('time_between') as FormControl,
+      inputType: 'number',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.care.is_promo.label'),
+      formControl: this.createCareFormGroup.get('is_promo') as FormControl,
+      inputType: 'checkbox',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.care.promo_percentage.label'),
+      formControl: this.createCareFormGroup.get('promo_percentage') as FormControl,
+      inputType: 'number',
+      placeholder: ''
+    },
+    {
+      label: this.translateService.instant('form.care.isPublished.label'),
+      formControl: this.createCareFormGroup.get('isPublished') as FormControl,
+      inputType: 'checkbox',
+      placeholder: ''
+    }
+  ];
 
   constructor() {
-    this.securityService.fetchCares().subscribe();
-    handleFormError(this.formGroup, this.formError$);
-  }
-
-  public error(): FormError[] {
-    return this.formError$();
-  }
-
-  onSubmitCreateCare() {
-    if (this.formGroup.valid) {
-      const formValue = this.formGroup.value;
-      const createdCare: AddCarePayload = {
-        name: formValue.name ?? '',
-        beauty_care_machine: formValue.beauty_care_machine ?? '',
-        category: formValue.category ?? '',
-        zone: formValue.zone ?? '',
-        sessions: formValue.sessions ?? 0,
-        price: formValue.price ?? 0,
-        duration: formValue.duration ?? '',
-        time_between: formValue.time_between ?? '',
-        description: formValue.description ?? ''
-      };
-
-      this.securityService.addCare(createdCare).subscribe()
-      console.log('Updated Care Data:', createdCare);
-
-      this.showCreateModal = false;
-    } else {
-      console.error('Form is invalid');
-    }
-  }
-
-  onSubmitEditCare() {
-    if (this.formGroup.valid && this.currentCareId) { // Assurez-vous que currentCareId est défini
-      const formValue = this.formGroup.value;
-      const updatedCare: EditCarePayload = {
-        care_id: this.currentCareId, // Utilise l'ID du soin en cours de modification
-        name: formValue.name ?? '',
-        beauty_care_machine: formValue.beauty_care_machine ?? '',
-        category: formValue.category ?? '',
-        zone: formValue.zone ?? '',
-        sessions: formValue.sessions ?? 0,
-        price: formValue.price ?? 0,
-        duration: formValue.duration ?? '',
-        time_between: formValue.time_between ?? '',
-        description: formValue.description ?? ''
-      };
-
-      this.securityService.editCare(updatedCare).subscribe(response => {
-        console.log('Updated Care Data:', updatedCare);
-        this.handleCareUpdate(updatedCare); // Mets à jour la liste des soins
-      });
-
-      this.showEditModal = false;
-    } else {
-      console.error('Form is invalid or care_id is missing');
-    }
-  }
-
-  handleClose(): void {
-    this.showCreateModal = false;
-    this.showEditModal = false;
-  }
-
-  loadCareDetails(care: Care): void {
-    this.currentCareId = care.care_id; // Stocke l'ID du soin en cours de modification
-
-    this.formGroup.reset({
-      name: care.name,
-      sessions: care.sessions,
-      beauty_care_machine: care.beauty_care_machine,
-      zone: care.zone,
-      duration: care.duration,
-      category: care.category,
-      price: care.price,
-      time_between: care.time_between
+    effect(() => {
+      const cares: Care[] = this.securityService.cares$();
+      if (cares.length > 0) {
+        this.updateFormWithCareData(cares[0]);
+      }
     });
+
+  }
+
+  ngOnInit() {
+    this.securityService.fetchCares().subscribe()
+  }
+
+  openEditModal(care: Care): void {
+    this.currentCare = care;
+    this.updateCareFormGroup.patchValue({
+      name: care.name,
+      description: care.description,
+      initial_price: care.initial_price,
+      sessions: care.sessions,
+      duration: care.duration,
+      time_between: care.time_between,
+      is_promo: care.is_promo,
+      promo_percentage: care.promo_percentage,
+      isPublished: care.isPublished,
+      machines: care.machines,
+      categories: care.categories,
+      subCategories: care.subCategories,
+      bodyZones: care.bodyZones
+    });
+    this.currentPromoPercentage = care.promo_percentage || 0;
     this.showEditModal = true;
   }
 
-  sortColumn: string = '';
-  sortAscending: boolean = true;
-
-  toggleSort(column: string): void {
-    if (this.sortColumn === column) {
-      this.sortAscending = !this.sortAscending;
-    } else {
-      this.sortAscending = true;
-      this.sortColumn = column;
-    }
-    this.sortCares();
+  openCreateModal(): void {
+    this.showCreateModal = true;
   }
 
-  private sortCares(): void {
-    const sortedCares = [...this.securityService.cares$()].sort((a, b) => {
-      const valA = a[this.sortColumn as keyof Care];
-      const valB = b[this.sortColumn as keyof Care];
+  openDeleteModal(care: Care): void {
+    this.currentCare = care;
+    this.showDeleteModal = true;
+  }
 
-      if (valA! < valB!) {
-        return this.sortAscending ? -1 : 1;
-      }
-      if (valA! > valB!) {
-        return this.sortAscending ? 1 : -1;
-      }
-      return 0;
+  handleClose(): void {
+    this.showEditModal = false;
+    this.showCreateModal = false;
+    this.showDeleteModal = false;
+    this.showDeleteModal = false;
+  }
+
+  private updateFormWithCareData(care: Care): void {
+    this.currentCare = care;
+    this.updateCareFormGroup.patchValue({
+      name: care.name,
+      description: care.description,
+      initial_price: care.initial_price,
+      sessions: care.sessions,
+      duration: care.duration,
+      time_between: care.time_between,
+      is_promo: care.is_promo,
+      promo_percentage: care.promo_percentage,
+      isPublished: care.isPublished,
+      machines: care.machines,
+      categories: care.categories,
+      subCategories: care.subCategories,
+      bodyZones: care.bodyZones
     });
 
-    this.securityService.cares$.set(sortedCares);
+    this.updateCareFormControlConfigs = [
+      {
+        label: this.translateService.instant('form.care.name.label'),
+        formControl: this.updateCareFormGroup.get('name') as FormControl,
+        inputType: 'text',
+        placeholder: ''
+      },
+      {
+        label: this.translateService.instant('form.care.description.label'),
+        formControl: this.updateCareFormGroup.get('description') as FormControl,
+        inputType: 'textarea',
+        placeholder: ''
+      },
+      {
+        label: this.translateService.instant('form.care.initial_price.label'),
+        formControl: this.updateCareFormGroup.get('initial_price') as FormControl,
+        inputType: 'number',
+        placeholder: ''
+      },
+      {
+        label: this.translateService.instant('form.care.sessions.label'),
+        formControl: this.updateCareFormGroup.get('sessions') as FormControl,
+        inputType: 'number',
+        placeholder: ''
+      },
+      {
+        label: this.translateService.instant('form.care.duration.label'),
+        formControl: this.updateCareFormGroup.get('duration') as FormControl,
+        inputType: 'number',
+        placeholder: ''
+      },
+      {
+        label: this.translateService.instant('form.care.time_between.label'),
+        formControl: this.updateCareFormGroup.get('time_between') as FormControl,
+        inputType: 'number',
+        placeholder: ''
+      },
+      {
+        label: this.translateService.instant('form.care.is_promo.label'),
+        formControl: this.updateCareFormGroup.get('is_promo') as FormControl,
+        inputType: 'checkbox',
+        placeholder: ''
+      },
+      {
+        label: this.translateService.instant('form.care.promo_percentage.label'),
+        formControl: this.updateCareFormGroup.get('promo_percentage') as FormControl,
+        inputType: 'number',
+        placeholder: ''
+      },
+      {
+        label: this.translateService.instant('form.care.isPublished.label'),
+        formControl: this.updateCareFormGroup.get('isPublished') as FormControl,
+        inputType: 'checkbox',
+        placeholder: ''
+      }
+    ];
   }
 
-  deleteCare(care: Care): void {
-    const payload: DeleteCarePayload = { care_id: care.care_id }; // Assurez-vous d'utiliser `care_id` et non `care.id`
-    this.securityService.deleteCare(payload).subscribe(
-      () => {
-        console.log(`Care with ID ${care.care_id} deleted successfully.`);
-        // Mettez à jour la liste des soins après suppression
+  onSubmitCreateCare(): void {
+    if (this.createCareFormGroup.valid) {
+      const formValue = this.createCareFormGroup.value;
+      const payload: CreateCarePayload = {
+        name: formValue.name,
+        description: formValue.description,
+        initial_price: Number(formValue.initial_price),
+        sessions: Number(formValue.sessions),
+        duration: Number(formValue.duration),
+        time_between: Number(formValue.time_between || 0), // Conversion en number obligatoire
+        isPublished: Boolean(formValue.isPublished),
+        promo_percentage: formValue.is_promo ? Number(formValue.promo_percentage) : undefined,
+        machine_ids: (formValue.machines || []).map((m: any) => m.care_machine_id),
+        category_ids: (formValue.categories || []).map((c: any) => c.category_id),
+        sub_category_ids: (formValue.subCategories || []).map((sc: any) => sc.sub_category_id),
+        body_zone_ids: (formValue.bodyZones || []).map((bz: any) => bz.body_zone_id)
+      };
+
+      this.securityService.addCare(payload).subscribe({
+        next: () => {
+          this.handleClose();
+          this.securityService.fetchCares().subscribe();
+        },
+        error: (err) => console.error('Erreur lors de la création du soin', err)
+      });
+    }
+  }
+
+  onSubmitUpdateCare(): void {
+    if (this.updateCareFormGroup.valid && this.currentCare) {
+      const formValue = this.updateCareFormGroup.value;
+      const payload: UpdateCarePayload = {
+        care_id: this.currentCare.care_id,
+        name: formValue.name,
+        description: formValue.description,
+        initial_price: Number(formValue.initial_price),
+        sessions: Number(formValue.sessions),
+        duration: Number(formValue.duration),
+        time_between: formValue.time_between ? Number(formValue.time_between) : undefined,
+        isPublished: Boolean(formValue.isPublished),
+        is_promo: Boolean(formValue.is_promo),
+        promo_percentage: formValue.is_promo ? Number(formValue.promo_percentage) : undefined,
+        machine_ids: (formValue.machines || []).map((m: any) => m.care_machine_id),
+        category_ids: (formValue.categories || []).map((c: any) => c.category_id),
+        sub_category_ids: (formValue.subCategories || []).map((sc: any) => sc.sub_category_id),
+        body_zone_ids: (formValue.bodyZones || []).map((bz: any) => bz.body_zone_id)
+      };
+
+      this.securityService.editCare(payload).subscribe({
+        next: () => {
+          this.handleClose();
+          this.securityService.fetchCares().subscribe();
+        },
+        error: (err) => console.error('Erreur lors de la mise à jour du soin', err)
+      });
+    }
+  }
+
+  deleteCare(): void {
+    if (this.currentCare) {
+      const payload: DeleteCarePayload = { care_id: this.currentCare.care_id };
+
+      this.securityService.deleteCare(payload).subscribe({
+        next: () => {
+          this.handleClose();
+          this.securityService.fetchCares().subscribe();
+        },
+        error: (err) => console.error('Erreur lors de la suppression du soin', err)
+      });
+    }
+  }
+
+  // Gestion des images
+  async onCareImageChange(event: Event, care: Care): Promise<void> {
+    const file: File | undefined = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.careImageForm.patchValue({
+        careImage: file
+      });
+      await this.uploadCareImage(care);
+    }
+  }
+
+  async uploadCareImage(care: Care): Promise<void> {
+    if (this.careImageForm.valid) {
+      const formData: FormData = new FormData();
+      const careImage = this.careImageForm.get('careImage')?.value;
+
+      if (careImage) {
+        formData.append('careId', care.care_id);
+        formData.append('careImage', careImage)
+
+        try {
+          await lastValueFrom(this.securityService.uploadCareImage(formData));
+        } catch (error) {
+          console.error('Erreur lors du téléchargement de l\'image', error);
+        }
+      }
+    }
+  }
+
+  // Gestion des promotions
+  onPromoPercentageChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.currentPromoPercentage = parseInt(value, 10) || 0;
+  }
+
+  applyPromotion(care: Care): void {
+    const payload: UpdateCarePayload = {
+      care_id: care.care_id,
+      is_promo: true,
+      promo_percentage: this.currentPromoPercentage
+    };
+
+    this.securityService.editCare(payload).subscribe({
+      next: () => {
         this.securityService.fetchCares().subscribe();
       },
-      error => {
-        console.error('Error deleting care:', error);
-      }
-    );
+      error: (err) => console.error('Erreur lors de l\'application de la promotion', err)
+    });
   }
 
+  removePromotion(care: Care): void {
+    const payload: UpdateCarePayload = {
+      care_id: care.care_id,
+      is_promo: false,
+      promo_percentage: undefined
+    };
 
-  handleCareUpdate(updatedCare: Care): void {
-    const cares: Care[] = [...this.securityService.cares$()];
-    const index: number = cares.findIndex(c => c.care_id === updatedCare.care_id);
-    if (index > -1) {
-      cares[index] = updatedCare;
-      this.securityService.cares$.set(cares);
+    this.securityService.editCare(payload).subscribe({
+      next: () => {
+        this.securityService.fetchCares().subscribe();
+      },
+      error: (err) => console.error('Erreur lors de la suppression de la promotion', err)
+    });
+  }
+
+  // Méthode pour publier/dépublier un soin
+  togglePublishCare(care: Care): void {
+    const payload: UpdateCarePayload = {
+      care_id: care.care_id,
+      isPublished: !care.isPublished
+    };
+
+    this.securityService.editCare(payload)
+      .pipe(
+        tap(() => console.log(`Soin ${payload.isPublished ? 'publié' : 'dépublié'} avec succès`)),
+        switchMap(() => this.securityService.fetchCares()),
+        catchError((error) => {
+          console.error(`Erreur lors de la ${payload.isPublished ? 'publication' : 'dépublication'} du soin`, error);
+          return EMPTY;
+        })
+      )
+      .subscribe();
+  }
+
+  togglePromoPopover(care: Care): void {
+    if (this.currentPromoCare?.care_id === care.care_id) {
+      this.currentPromoCare = null;
+    } else {
+      this.currentPromoCare = care;
+      this.currentPromoPercentage = care.promo_percentage || 0;
     }
-    this.showEditModal = false;
   }
 
-  getTranslatedCategory(category: CareCategory): string {
-    return this.translateService.instant(CareCategoryTranslations[category]);
+
+  // Méthodes utilitaires
+  formatDuration(minutes: number): string {
+    if (minutes >= 60) {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      return remainingMinutes > 0
+        ? `${hours}h${remainingMinutes}min`
+        : `${hours}h`;
+    }
+    return `${minutes}min`;
   }
-  getTranslatedZone(zone: CareZone): string {
-    return this.translateService.instant(CareZoneTranslations[zone]);
+
+  getCareImage(care: Care): string {
+    return care.care_image || './assets/default-care.png';
   }
-  getTranslatedMachine(machine: BeautyCareMachine): string {
-    return this.translateService.instant(BeautyCareMachineTranslations[machine]);
+
+  // Gestion des erreurs de formulaire
+  getFormErrorMessage(control: string, formGroup: FormGroup): string {
+    const ctrl = formGroup.get(control);
+    if (!ctrl) return '';
+
+    if (ctrl.hasError('required')) {
+      return this.translateService.instant('form.error.required');
+    }
+    if (ctrl.hasError('minlength')) {
+      return this.translateService.instant('form.error.minlength', {
+        min: ctrl.errors?.['minlength'].requiredLength
+      });
+    }
+    if (ctrl.hasError('maxlength')) {
+      return this.translateService.instant('form.error.maxlength', {
+        max: ctrl.errors?.['maxlength'].requiredLength
+      });
+    }
+    if (ctrl.hasError('min')) {
+      return this.translateService.instant('form.error.min', {
+        min: ctrl.errors?.['min'].min
+      });
+    }
+    if (ctrl.hasError('pattern')) {
+      return this.translateService.instant('form.error.pattern');
+    }
+    return '';
   }
+
 
 }

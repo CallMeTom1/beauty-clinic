@@ -9,7 +9,9 @@ import {AppNode, AppRoutes} from "@shared-routes";
 import {FooterComponent} from "../../../shared/ui/footer/footer.component";
 import {ThemeService} from "../../../shared/ui/theme.service";
 import {SocialsAndThemeComponent} from "../../../shared/ui/socials-and-theme/socials-and-theme.component";
-import {TopNavMobileComponent} from "../../component/top-nav-mobile/top-nav-mobile.component";
+import {TopNavComponent} from "../../component/top-nav/top-nav.component";
+import {ModalComponent} from "../../../shared/ui/modal/modal/modal.component";
+import {ModalService} from "../../../shared/ui/modal.service";
 
 @Component({
   selector: 'app-home-router',
@@ -28,11 +30,28 @@ import {TopNavMobileComponent} from "../../component/top-nav-mobile/top-nav-mobi
     FooterComponent,
     SocialsAndThemeComponent,
     NgForOf,
-    TopNavMobileComponent,
-    NgIf
+    TopNavComponent,
+    NgIf,
+    ModalComponent
   ],
   styleUrl: './home-router.component.scss'
 })
 export class HomeRouterComponent {
+  protected readonly modalService = inject(ModalService);
+  protected readonly securityService = inject(SecurityService);
+
+  closeAuthModal(): void {
+    this.modalService.closeModal();
+  }
+
+  navigateToLogin(): void {
+    this.closeAuthModal();
+    this.securityService.navigate('/connexion');
+  }
+
+  navigateToRegister(): void {
+    this.closeAuthModal();
+    this.securityService.navigate('/inscription');
+  }
 
 }

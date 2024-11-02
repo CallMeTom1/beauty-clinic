@@ -4,8 +4,10 @@ export enum ApiCodeResponse {
     NO_TOKEN_FOUNDED = 'api.security.token.no_token_founded',
     TOKEN_EXPIRED = 'api.security.token.token_expired',
     TOKEN_GEN_ERROR = 'api.security.token.token_gen_error',
+    TOKEN_REVOKE_ERROR = 'api.security.token.revoke_error',
     TOKEN_REFRESH_ERROR = 'api.security.token.token_refresh_error',
     TOKEN_ISNOT_STRING_ERROR = 'api.security.token.is_not_string_error',
+    TOKEN_NOT_FOUND = 'api.security.token.not_found',
 
     // User authentication and authorization errors
     SIGNUP_ERROR = 'api.security.user.signup_error',
@@ -30,6 +32,11 @@ export enum ApiCodeResponse {
     SIGNIN_PAYLOAD_MAIL_IS_NOT_VALID= 'api.signin.payload.mail.is_not_valid',
     SIGNIN_PAYLOAD_PASSWORD_IS_EMPTY= 'api.signin.payload.password.is_empty',
     SIGNIN_PAYLOAD_PASSWORD_IS_NOT_STRING= 'api.signin.payload.password.is_not_string',
+
+    PAYLOAD_TOKEN_IS_EMPTY= 'api.payload.token.is_empty',
+    PAYLOAD_PASSWORD_IS_EMPTY= 'api.payload.password.is_empty',
+
+
     SIGNIN_PAYLOAD_GOOGLE_HASH_IS_NOT_STRING= 'api.signin.payload.google_hash.is_not_string',
     SIGNIN_PAYLOAD_FACEBOOK_HASH_IS_NOT_STRING= 'api.signin.payload.facebook_hash.is_not_string',
     SIGNIN_PAYLOAD_SOCIAL_LOGIN_IS_NOT_BOOLEAN= 'api.signin.payload.social_login.is_not_boolean',
@@ -128,6 +135,42 @@ export enum ApiCodeResponse {
     CART_NOT_FOUND_ERROR = 'api.cart.not-found.error',
     CART_REMOVE_ERROR = 'api.cart.remove.error',
 
+    ADDRESS_FIRSTNAME_EMPTY = 'api.address.payload.firstname.empty',
+    ADDRESS_FIRSTNAME_LENGTH = 'api.address.payload.firstname.length_invalid',
+    ADDRESS_FIRSTNAME_INVALID = 'api.address.payload.firstname.invalid_characters',
 
+    ADDRESS_LASTNAME_EMPTY = 'api.address.payload.lastname.empty',
+    ADDRESS_LASTNAME_LENGTH = 'api.address.payload.lastname.length_invalid',
+    ADDRESS_LASTNAME_INVALID = 'api.address.payload.lastname.invalid_characters',
+
+    ADDRESS_ROAD_EMPTY = 'api.address.payload.road.empty',
+    ADDRESS_ROAD_LENGTH = 'api.address.payload.road.length_invalid',
+    ADDRESS_ROAD_INVALID = 'api.address.payload.road.invalid_characters',
+
+    ADDRESS_NUMBER_EMPTY = 'api.address.payload.number.empty',
+    ADDRESS_NUMBER_LENGTH = 'api.address.payload.number.length_invalid',
+    ADDRESS_NUMBER_INVALID = 'api.address.payload.number.invalid_characters',
+
+    ADDRESS_POSTAL_CODE_EMPTY = 'api.address.payload.postal_code.empty',
+    ADDRESS_POSTAL_CODE_LENGTH = 'api.address.payload.postal_code.length_invalid',
+    ADDRESS_POSTAL_CODE_INVALID = 'api.address.payload.postal_code.invalid_characters',
+
+    ADDRESS_TOWN_EMPTY = 'api.address.payload.town.empty',
+    ADDRESS_TOWN_LENGTH = 'api.address.payload.town.length_invalid',
+    ADDRESS_TOWN_INVALID = 'api.address.payload.town.invalid_characters',
+
+    ADDRESS_COUNTRY_EMPTY = 'api.address.payload.country.empty',
+    ADDRESS_COUNTRY_LENGTH = 'api.address.payload.country.length_invalid',
+    ADDRESS_COUNTRY_INVALID = 'api.address.payload.country.invalid_characters',
+
+    ADDRESS_LABEL_EMPTY = 'api.address.payload.label.empty',
+    ADDRESS_LABEL_LENGTH = 'api.address.payload.label.length_invalid',
+    ADDRESS_LABEL_INVALID = 'api.address.payload.label.invalid_characters',
+
+    ADDRESS_NOT_FOUND = 'api.address.not_found',
+    ADDRESS_CREATE_ERROR = 'api.address.create.error',
+    ADDRESS_UPDATE_ERROR = 'api.address.update.error',
+    ADDRESS_DELETE_ERROR = 'api.address.delete.error',
+    ADDRESS_UNAUTHORIZED = 'api.address.unauthorized'
 
 }

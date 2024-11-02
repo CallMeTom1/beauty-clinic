@@ -1,9 +1,13 @@
 import {Business} from "@shared-core";
 import {CartItem} from "./cart-item.business";
+import {User} from "../user";
+import {PromotionalCode} from "../promotional-code/promotional-code.business";
 
+// Cart
 export interface Cart extends Business {
   idCart: string;
   items: CartItem[];
-  totalPrice?: number;  // Optionnel : Peut être calculé côté serveur
-  status?: string;      // Optionnel : Peut indiquer l'état actuel du panier (ex: "en cours")
+  userId: string;
+  promoCode: PromotionalCode;
+  discountAmount?: number;
 }

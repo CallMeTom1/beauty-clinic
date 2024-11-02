@@ -68,9 +68,21 @@ export class UserAlreadyExistException extends ApiException {
     }
 }
 
+export class TokenRevokedException extends  ApiException {
+    constructor() {
+        super(ApiCodeResponse.TOKEN_REVOKE_ERROR, 500);
+    }
+}
+
 export class TokenGenerationException extends ApiException {
     constructor() {
         super(ApiCodeResponse.TOKEN_GEN_ERROR, 500);
+    }
+}
+
+export class TokenNotFoundException extends ApiException {
+    constructor() {
+        super(ApiCodeResponse.TOKEN_NOT_FOUND, 500);
     }
 }
 

@@ -1,9 +1,23 @@
-<form [formGroup]="categoryFormGroup">
-  <div *ngFor="let category of securityService.CategoryProducts$()">
-    <label>
-      <input type="checkbox" [value]="category.product_category_id" (change)="onCategoryChange($event, category.product_category_id)"
-             [checked]="isCategorySelected(category.product_category_id)">
-      {{ category.name }}
-    </label>
+<div class="category-dropdown">
+  <button (click)="toggleDropdown()" class="dropdown-toggle">
+    Select categories
+    <span class="caret"></span>
+  </button>
+  <div class="dropdown-menu" [class.show]="isDropdownOpen">
+    <div class="dropdown-item" *ngFor="let category of securityService.CategoryProducts$()">
+      <label>
+        <input type="checkbox"
+               [value]="category.product_category_id"
+               (change)="onCategoryChange($event, category.product_category_id)"
+               [checked]="isCategorySelected(category.product_category_id)">
+        {{ category.name }}
+      </label>
+    </div>
   </div>
-</form>
+</div>
+<div class="selected-categories">
+  <span *ngFor="let categoryId of selectedCategories" class="category-tag">
+    {{ getCategoryName(categoryId) }}
+    <button (click)="removeCategory(categoryId)" class="remove-category">&times;</button>
+  </span>
+</div>

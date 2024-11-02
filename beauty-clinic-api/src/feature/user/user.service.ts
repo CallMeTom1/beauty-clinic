@@ -1,176 +1,167 @@
-import {BadRequestException, forwardRef, Inject, Injectable, Logger} from "@nestjs/common";
+import {BadRequestException, Injectable, Logger, NotFoundException, UnauthorizedException} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {User} from "@feature/user/model/entity/user.entity";
 import {ulid} from "ulid";
 import {UserCreationException} from "@feature/user/exception/user.exception";
-import {join} from 'path';
-import {readFileSync} from 'fs';
 import {CreateUserInterface} from "@feature/user/model/payload/create-user.interface";
 import {
-    FileUploadException,
-    InvalidFileTypeException,
     UserNotFoundException
 } from "@feature/security/security.exception";
 import {ModifyUserPayload} from "@feature/user/model/payload/modify-user.payload";
-import {CartService} from "../cart/cart.service";
 import {Cart} from "../cart/data/model/cart.entity";
-import {CreateCartException} from "../cart/cart.exception";
+import {Address} from "@common/model/address.entity";
+import {ModifyAddressPayload} from "@feature/user/model/payload/modify-address.payload";
+import {AddAddressPayload} from "@feature/user/model/payload/add-address.payload";
 
 @Injectable()
 export class UserService {
-
-    private readonly defaultProfileImage: Buffer;
     private readonly logger = new Logger(UserService.name);
-
 
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
-        @InjectRepository(Cart) private readonly cartRepository: Repository<Cart>,  // Injecter le CartRepository ici
-
-    ) {
-        this.defaultProfileImage = readFileSync(join(process.cwd(), 'src', 'feature', 'user', 'assets', 'default-profile.png'));
-    }
+        @InjectRepository(Cart) private readonly cartRepository: Repository<Cart>,
+        @InjectRepository(Address) private readonly addressRepository: Repository<Address>,
+    ) {}
 
     async createUser(payload: CreateUserInterface): Promise<User> {
         const idUser: string = ulid();
         try {
             this.logger.log('Creating a new user...');
 
-            // Créer un nouvel utilisateur
             const newUser: User = this.userRepository.create({
                 idUser,
                 firstname: payload.firstname,
                 lastname: payload.lastname,
                 phoneNumber: payload.phoneNumber,
-                profileImage: this.defaultProfileImage,
-                profileImageUrl: payload.profileImageUrl
+                email: payload.email,
+                addresses: []
             });
 
-            // Sauvegarder l'utilisateur dans la base de données
             const user: User = await this.userRepository.save(newUser);
             this.logger.log('User created successfully with ID:', idUser);
 
-            // Créer un panier associé à l'utilisateur
-            const newCart: Cart = this.cartRepository.create({
-                idCart: ulid(),
-                user: user
-            });
-
-            // Sauvegarder le panier dans la base de données
-            const cart: Cart = await this.cartRepository.save(newCart);
+            const cart: Cart = await this.cartRepository.save(
+                this.cartRepository.create({
+                    idCart: ulid(),
+                    user: user
+                })
+            );
             this.logger.log('Cart created successfully for user with ID:', idUser);
 
-            // Mettre à jour l'utilisateur avec le panier
             user.cart = cart;
-            await this.userRepository.save(user);
-
-            return user;
+            return await this.userRepository.save(user);
         } catch (error) {
             this.logger.error('Error occurred while creating user:', error);
-            if (error instanceof UserCreationException) {
-                throw new UserCreationException();
-            } else {
-                throw new BadRequestException('An error occurred while creating the user.');
-            }
+            throw error instanceof UserCreationException ? error : new BadRequestException('An error occurred while creating the user.');
         }
     }
-
-
-
-
-    /*
-    async createUserFromSocial(username: string): Promise<User> {
-        try {
-            const newUser: User = this.userRepository.create({
-                idUser: ulid(),
-                username,
-                profileImage: this.defaultProfileImage
-            });
-
-            return this.userRepository.save(newUser);
-        } catch (error) {
-            throw new UserCreationException();
-        }
-    }
-
-
-    */
-
-    async findAllUsersWithoutProfileImage(): Promise<Omit<User, 'profileImage'>[]> {
-        return this.userRepository.find({
-            select: ['idUser', 'firstname', 'lastname', 'phoneNumber']  // Exclude profileImage
-        });
-    }
-
 
     async findUserById(idUser: string): Promise<User> {
-        const user: User = await this.userRepository.findOne({ where: { idUser } });
+        const user = await this.userRepository.findOne({
+            where: { idUser },
+            relations: ['addresses', 'cart', 'orders'],
+        });
+
         if (!user) {
             throw new UserNotFoundException();
         }
         return user;
     }
 
-    async updateUserProfileImage(userId: string, file: Express.Multer.File): Promise<any> {
-
-        const user: User = await this.findUserById(userId);
-
-        if (!file) {
-            throw new FileUploadException();
-        }
-
-        const allowedMimeTypes: string[] = ['image/jpeg', 'image/png'];
-        const allowedExtensions: string[] = ['.jpg', '.jpeg', '.png', '.PNG'];
-
-        if (!allowedMimeTypes.includes(file.mimetype) ||
-            !allowedExtensions.some(ext => file.originalname.endsWith(ext))) {
-            throw new InvalidFileTypeException();
-        }
-
-        user.profileImage = Buffer.from(file.buffer);
-        user.hasCustomProfileImage = true;
-
-        try {
-            return await this.userRepository.save(user);
-        } catch (error) {
-            throw new BadRequestException(error.message);
-        }
-    }
-
-
-    async findOne(userId: string): Promise<User> {
-        return this.userRepository.findOne({ where: { idUser: userId }, relations: ['wallets', 'wallets.assets'] });
-    }
-
     async modifyUser(userId: string, payload: ModifyUserPayload): Promise<User> {
-        const user: User = await this.findUserById(userId);
+        const user = await this.findUserById(userId);
 
-        if (!user) {
-            throw new UserNotFoundException();
-        }
+        if (payload.firstname) user.firstname = payload.firstname;
+        if (payload.lastname) user.lastname = payload.lastname;
+        if (payload.phoneNumber) user.phoneNumber = payload.phoneNumber;
 
-        // Mettre à jour uniquement les champs fournis dans le payload
-        user.firstname = payload.firstname || user.firstname;
-        user.lastname = payload.lastname || user.lastname;
-        user.phoneNumber = payload.phoneNumber || user.phoneNumber;
-
-        // Mettre à jour l'adresse de livraison si elle est fournie
-        if (payload.shippingAddress) {
-            user.shippingAddress = { ...user.shippingAddress, ...payload.shippingAddress };
-        }
-
-        // Mettre à jour l'adresse de facturation si elle est fournie
-        if (payload.billingAddress) {
-            user.billingAddress = { ...user.billingAddress, ...payload.billingAddress };
-        }
-
-        try {
-            return await this.userRepository.save(user);
-        } catch (error) {
-            throw new BadRequestException(error.message);
-        }
+        return this.userRepository.save(user);
     }
 
+    async addAddress(userId: string, payload: AddAddressPayload): Promise<Address> {
+        const user = await this.findUserById(userId);
 
+        const newAddress = this.addressRepository.create({
+            address_id: ulid(),
+            ...payload
+        });
+
+        if (payload.isDefault) {
+            if (payload.isShippingAddress) {
+                await this.resetDefaultAddresses(user.addresses, true, false);
+            }
+            if (payload.isBillingAddress) {
+                await this.resetDefaultAddresses(user.addresses, false, true);
+            }
+        }
+
+        const savedAddress = await this.addressRepository.save(newAddress);
+        user.addresses = [...user.addresses, savedAddress];
+        await this.userRepository.save(user);
+
+        return savedAddress;
+    }
+
+    async modifyAddress(userId: string, payload: ModifyAddressPayload): Promise<Address> {
+        const user = await this.findUserById(userId);
+        const address = user.addresses.find(addr => addr.address_id === payload.addressId);
+
+        if (!address) {
+            throw new NotFoundException('Address not found');
+        }
+
+        const { addressId, ...addressData } = payload;
+
+        if (payload.isDefault) {
+            if (payload.isShippingAddress) {
+                await this.resetDefaultAddresses(user.addresses, true, false, addressId);
+            }
+            if (payload.isBillingAddress) {
+                await this.resetDefaultAddresses(user.addresses, false, true, addressId);
+            }
+        }
+
+        const updatedAddress = {
+            ...address,
+            ...addressData
+        };
+
+        return this.addressRepository.save(updatedAddress);
+    }
+
+    async deleteAddress(userId: string, addressId: string): Promise<void> {
+        const user = await this.findUserById(userId);
+        const address = user.addresses.find(addr => addr.address_id === addressId);
+
+        if (!address) {
+            throw new NotFoundException('Address not found');
+        }
+
+        user.addresses = user.addresses.filter(addr => addr.address_id !== addressId);
+        await this.userRepository.save(user);
+        await this.addressRepository.remove(address);
+    }
+
+    private async resetDefaultAddresses(
+        addresses: Address[],
+        isShipping: boolean,
+        isBilling: boolean,
+        excludeId?: string
+    ): Promise<void> {
+        const addressesToUpdate = addresses.filter(addr =>
+            ((isShipping && addr.isShippingAddress) || (isBilling && addr.isBillingAddress)) &&
+            addr.isDefault &&
+            addr.address_id !== excludeId
+        );
+
+        if (addressesToUpdate.length > 0) {
+            await Promise.all(
+                addressesToUpdate.map(addr => {
+                    addr.isDefault = false;
+                    return this.addressRepository.save(addr);
+                })
+            );
+        }
+    }
 }

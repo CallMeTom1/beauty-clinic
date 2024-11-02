@@ -1,6 +1,7 @@
-import { Entity, PrimaryColumn, OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import {Entity, PrimaryColumn, OneToMany, OneToOne, JoinColumn, Column, ManyToOne} from 'typeorm';
 import { CartItem } from './cart-item.entity';
 import { User } from "@feature/user/model";
+import {PromoCode} from "../../../promo-code/data/model/promo-code.entity";
 
 @Entity()
 export class Cart {
@@ -14,5 +15,11 @@ export class Cart {
     @JoinColumn()
     user: User;
 
-    // Autres champs comme "totalPrice" ou "status" si nécessaire
+    @ManyToOne(() => PromoCode, { nullable: true })
+    @JoinColumn()
+    promoCode: PromoCode | null;
+
+    @Column('decimal', { precision: 10, scale: 2, nullable: true })
+    discountAmount: number;
+
 }

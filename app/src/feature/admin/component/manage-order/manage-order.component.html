@@ -1,0 +1,121 @@
+<div class="product-container">
+  <div class="product-header">
+    <h2>{{ 'page.orders.title' | translate }}</h2>
+  </div>
+
+  <div class="product-table-container">
+    <table class="product-table">
+      <thead>
+      <tr>
+        <th>{{ 'table.header.order.id' | translate }}</th>
+        <th>{{ 'table.header.order.date' | translate }}</th>
+        <th>{{ 'table.header.order.client.name' | translate }}</th>
+        <th>{{ 'table.header.order.items' | translate }}</th>
+        <th>{{ 'table.header.order.shipping_address' | translate }}</th>
+        <th>{{ 'table.header.order.total' | translate }}</th>
+        <th>{{ 'table.header.order.status' | translate }}</th>
+        <th>{{ 'table.header.order.tracking' | translate }}</th>
+        <th>{{ 'table.header.actions' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let order of orders">
+        <td class="product-id-cell">{{ order.idOrder }}</td>
+        <td>{{ formatDate(order.orderDate) }}</td>
+        <td>{{ order.user.firstname }} {{ order.user.lastname }}</td>
+        <td class="order-items-cell">
+          <div class="order-items-list">
+            <div *ngFor="let item of order.items" class="order-item">
+              <div class="order-item-details">
+                <span class="order-item-name">{{ item.product.name }}</span>
+                <span class="order-item-quantity">x{{ item.quantity }}</span>
+              </div>
+              <span class="order-item-price">{{ formatPrice(item.price * item.quantity) }}</span>
+            </div>
+            <div *ngIf="order.discountAmount" class="order-discount">
+              <span class="order-discount-label">{{ 'order.discount' | translate }}</span>
+              <span class="order-discount-amount">-{{ formatPrice(order.discountAmount) }}</span>
+            </div>
+            <div class="order-shipping">
+              <span class="order-shipping-label">{{ 'order.shipping' | translate }}</span>
+              <span class="order-shipping-amount">{{ formatPrice(order.shippingFee) }}</span>
+            </div>
+          </div>
+        </td>
+        <td class="product-address-cell">
+          <div class="order-address" [title]="formatAddress(order.shippingAddress)">
+            <p class="order-address-line">{{ order.shippingAddress.nb }} {{ order.shippingAddress.road }}</p>
+            <p class="order-address-line">{{ order.shippingAddress.cp }} {{ order.shippingAddress.town }}</p>
+            <p class="order-address-line">{{ order.shippingAddress.country }}</p>
+            <p *ngIf="order.shippingAddress.complement" class="order-address-complement">
+              {{ order.shippingAddress.complement }}
+            </p>
+          </div>
+        </td>
+        <td class="order-price-cell">{{ formatPrice(order.totalPriceWithShipping) }}</td>
+        <td>
+            <span class="order-status-badge" [ngClass]="getStatusClass(order.status)">
+              {{ statusLabels[order.status] }}
+            </span>
+        </td>
+        <td class="order-tracking-cell">{{ order.trackingNumber || '-' }}</td>
+        <td class="actions-cell">
+          <div class="actions-group">
+            <a class="action-link edit" (click)="openStatusModal(order)">
+              {{ 'action.order.update_status' | translate }}
+            </a>
+            <span class="action-separator">|</span>
+            <a class="action-link publish" (click)="openTrackingModal(order)">
+              {{ 'action.order.update_tracking' | translate }}
+            </a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal Statut -->
+  <app-modal
+    *ngIf="showStatusModal"
+    [title]="'modal.order.status.title' | translate"
+    (close)="handleClose()">
+    <form [formGroup]="statusForm" (ngSubmit)="updateStatus()" class="two-column-form">
+      <div class="form-fields">
+        <div class="form-column">
+          <app-floating-label-input-test [config]="statusFormConfig"></app-floating-label-input-test>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="secondary" (click)="handleClose()">
+          {{ 'action.cancel' | translate }}
+        </button>
+        <button type="submit" class="primary" [disabled]="!statusForm.valid">
+          {{ 'action.confirm' | translate }}
+        </button>
+      </div>
+    </form>
+  </app-modal>
+
+  <!-- Modal Numéro de suivi -->
+  <app-modal
+    *ngIf="showTrackingModal"
+    [title]="'modal.order.tracking.title' | translate"
+    (close)="handleClose()">
+    <form [formGroup]="trackingForm" (ngSubmit)="updateTrackingNumber()" class="two-column-form">
+      <div class="form-fields">
+        <div class="form-column">
+          <app-floating-label-input-test [config]="trackingFormConfig"></app-floating-label-input-test>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="secondary" (click)="handleClose()">
+          {{ 'action.cancel' | translate }}
+        </button>
+        <button type="submit" class="primary" [disabled]="!trackingForm.valid">
+          {{ 'action.confirm' | translate }}
+        </button>
+      </div>
+    </form>
+  </app-modal>
+</div>

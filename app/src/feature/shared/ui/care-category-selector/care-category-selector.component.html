@@ -1,0 +1,23 @@
+<div class="category-dropdown">
+  <button (click)="toggleDropdown()" class="dropdown-toggle">
+    {{ 'care.categories.select' | translate }}
+    <span class="caret"></span>
+  </button>
+  <div class="dropdown-menu" [class.show]="isDropdownOpen">
+    <div class="dropdown-item" *ngFor="let category of securityService.careCategories$()">
+      <label>
+        <input type="checkbox"
+               [value]="category.category_id"
+               (change)="onCategoryChange($event, category.category_id)"
+               [checked]="isCategorySelected(category.category_id)">
+        {{ category.name }}
+      </label>
+    </div>
+  </div>
+</div>
+<div class="selected-categories">
+  <span *ngFor="let categoryId of selectedCategories" class="category-tag">
+    {{ getCategoryName(categoryId) }}
+    <button (click)="removeCategory(categoryId)" class="remove-category">&times;</button>
+  </span>
+</div>

@@ -33,6 +33,16 @@ export const adminRoutes: Routes = [
           .then(c => c.ManageAppointmentPageComponent),
       },
       {
+        path: AppNode.ORDER,
+        loadComponent: () => import('./page/manage-order-page/manage-order-page.component')
+          .then(c => c.ManageOrderPageComponent),
+      },
+      {
+        path: AppNode.CLINIC,
+        loadComponent: () => import('./page/manage-clinic-page/manage-clinic-page.component')
+          .then(c => c.ManageClinicPageComponent),
+      },
+      {
         path: AppNode.BUSINESS_HOURS,
         loadComponent: () => import('./page/manage-business-hours-page/manage-business-hours-page.component')
           .then(c => c.ManageBusinessHoursPageComponent),

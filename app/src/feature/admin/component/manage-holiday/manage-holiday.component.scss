@@ -1,110 +1,340 @@
 .manage-holiday-container {
-  display: flex;
-  flex-direction: column;
+  width: 80vw;
+  margin: 0 auto;
   padding: 20px;
-  background: var(--theme-bg-primary);
+  overflow-x: auto;
+  background: white;
+}
 
-  .manage-holiday-top {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
+.manage-holiday-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 
-    h2 {
-      font-size: 24px;
-      font-weight: bold;
-    }
+  h2 {
+    font-size: 36px;
+    font-weight: bold;
+  }
 
-    .add-holiday-btn button {
+  .add-holiday-btn {
+    button {
+      padding: 10px 20px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
       display: flex;
       align-items: center;
-      background-color: var(--theme-button-bg);
-      color: var(--theme-primary);
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
+      gap: 8px;
+
+      &:hover {
+        background-color: darken(#2196F3, 10%);
+      }
 
       i {
-        margin-right: 8px;
+        font-size: 1.1em;
       }
+    }
+  }
+}
+
+.manage-holiday-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken(#f2f2f2, 5%);
+    }
+
+    &:after {
+      content: '↕';
+      margin-left: 5px;
+      opacity: 0.5;
+    }
+  }
+
+  td {
+    button {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      margin: 0 auto;
+
+      &:hover {
+        background: rgba(244, 67, 54, 0.1);
+      }
+
+      i {
+        color: #F44336;
+        font-size: 1.1em;
+      }
+    }
+  }
+}
+
+// Modal styles
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+
+  button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+    border: none;
+
+    &.submit-btn {
+      background-color: #2196F3;
+      color: white;
+
+      &:hover {
+        background-color: darken(#2196F3, 10%);
+      }
+
+      &:active {
+        background-color: darken(#2196F3, 15%);
+      }
+
+      &:disabled {
+        background-color: lighten(#2196F3, 20%);
+        cursor: not-allowed;
+      }
+    }
+
+    &.cancel-btn {
+      background-color: #6c757d;
+      color: white;
+
+      &:hover {
+        background-color: darken(#6c757d, 10%);
+      }
+
+      &:active {
+        background-color: darken(#6c757d, 15%);
+      }
+    }
+  }
+}
+
+.error-form {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+
+  &.active {
+    display: block;
+  }
+
+  p {
+    margin: 0 0 8px 0;
+    font-weight: 500;
+  }
+
+  div {
+    font-size: 14px;
+    margin-top: 4px;
+  }
+}
+
+// Form styles
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 16px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+// Responsive styles
+@media screen and (max-width: 1024px) {
+  .manage-holiday-container {
+    width: 90vw;
+  }
+
+  .manage-holiday-table {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .manage-holiday-container {
+    width: 95vw;
+    padding: 10px;
+  }
+
+  .manage-holiday-top {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+
+    h2 {
+      font-size: 28px;
     }
   }
 
   .manage-holiday-table {
-    border: 1px solid var(--theme-secondary);
-    width: 100%;
-    border-collapse: collapse;
-    background-color: var(--theme-bg-secondary);
-    border-radius: 8px;
+    font-size: 12px;
 
     th, td {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
+      padding: 8px;
     }
-
-    th {
-      background-color: var(--theme-primary-light);
-      color: var(--theme-text-light);
-      cursor: pointer;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
-    td {
-      background-color: var(--theme-bg-primary);
-      color: var(--theme-text-primary);
-
-      button {
-        background: none;
-        border: none;
-        cursor: pointer;
-
-        i {
-          font-size: 20px;
-          color: var(--theme-primary);
-          &:hover {
-            color: var(--theme-accent-color);
-          }
-        }
-      }
-    }
-  }
-
-  .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
 
     button {
-      padding: 10px 16px;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .cancel-btn {
-      background-color: var(--theme-secondary);
-      color: var(--theme-primary);
-
-      &:hover {
-        background-color: var(--theme-secondary-dark);
-      }
-    }
-
-    .submit-btn {
-      background-color: var(--theme-button-bg);
-      color: var(--theme-primary);
-
-      &:hover {
-        background-color: var(--theme-primary-dark);
-      }
+      padding: 6px 10px;
+      font-size: 12px;
     }
   }
+}
 
-  .error-form {
-    margin-top: 10px;
-    color: var(--theme-error);
+
+.actions-cell {
+  white-space: nowrap;
+  padding: 12px 20px;
+}
+
+.actions-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.action-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  position: relative;
+  padding: 4px 0;
+  font-weight: 500;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  &.delete {
+    color: #F44336;
+    &:hover {
+      color: darken(#F44336, 15%);
+    }
+  }
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.holiday-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+
+    i {
+      font-size: 1.1em;
+    }
+
+    &.primary {
+      background-color: #2196F3;
+      color: white;
+
+      &:hover {
+        background-color: darken(#2196F3, 10%);
+      }
+    }
+
+    &.secondary {
+      background-color: #4CAF50;
+      color: white;
+
+      &:hover {
+        background-color: darken(#4CAF50, 10%);
+      }
+    }
   }
 }

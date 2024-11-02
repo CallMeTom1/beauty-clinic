@@ -1,0 +1,111 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <h2>{{ 'page.appointments.title' | translate }}</h2>
+
+    <div class="calendar-controls">
+      <!-- Sélection de l'année -->
+      <div class="year-selector">
+        <button
+          *ngFor="let year of years"
+          [class.active]="year === selectedYear"
+          class="year-btn"
+          (click)="changeYear(year)">
+          {{ year }}
+        </button>
+      </div>
+
+      <!-- Navigation des semaines -->
+      <div class="calendar-navigation">
+        <button class="nav-btn" (click)="previousWeek()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <span class="current-week">
+          {{ formatDateWithYear(currentWeek[0]) }} - {{ formatDateWithYear(currentWeek[currentWeek.length-1]) }}
+        </span>
+        <button class="nav-btn" (click)="nextWeek()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="calendar-grid">
+    <!-- En-têtes des jours -->
+    <div class="calendar-row header">
+      <div class="time-column">{{ 'calendar.time' | translate }}</div>
+      <div class="day-column" *ngFor="let day of currentWeek">
+        {{ formatDate(day) }}
+      </div>
+    </div>
+
+    <!-- Créneaux horaires -->
+    <div class="calendar-body">
+      <div class="calendar-row" *ngFor="let time of timeSlots">
+        <div class="time-column">{{ time }}</div>
+        <div class="day-column" *ngFor="let day of currentWeek">
+          <div class="appointments-container">
+            <div
+              *ngFor="let appointment of getAppointmentsForSlot(day, time)"
+              class="appointment-card"
+              [ngClass]="getAppointmentStatus(appointment.status)"
+              (click)="openAppointmentDetails(appointment)">
+              <div class="appointment-header">
+                <span class="appointment-time">
+                  {{ appointment.start_time | date:'HH:mm' }}
+                </span>
+                <span class="appointment-duration">
+                  ({{ appointment.care.duration }}min)
+                </span>
+              </div>
+              <div class="appointment-info">
+                <div class="client-info">
+                  {{ appointment.user.firstname }} {{ appointment.user.lastname }}
+                </div>
+                <div class="care-info">
+                  {{ appointment.care.name }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de détails du rendez-vous -->
+  <app-modal
+    *ngIf="showAppointmentModal && selectedAppointment"
+    [title]="'modal.appointment.details.title' | translate"
+    (close)="handleClose()">
+    <div class="appointment-details">
+      <div class="detail-group">
+        <h3>{{ 'appointment.client' | translate }}</h3>
+        <p>{{ selectedAppointment.user.firstname }} {{ selectedAppointment.user.lastname }}</p>
+        <p>{{ selectedAppointment.user.phoneNumber }}</p>
+      </div>
+
+      <div class="detail-group">
+        <h3>{{ 'appointment.care' | translate }}</h3>
+        <p>{{ selectedAppointment.care.name }}</p>
+        <p>{{ 'appointment.duration' | translate }}: {{ selectedAppointment.care.duration }}min</p>
+        @if(selectedAppointment.care.price_discounted){
+          <p>{{ 'appointment.price' | translate }}: {{ selectedAppointment.care.price_discounted | currency:'EUR' }}</p>
+        } @else {
+          <p>{{ 'appointment.price' | translate }}: {{ selectedAppointment.care.initial_price | currency:'EUR' }}</p>
+        }
+      </div>
+
+      <div class="detail-group">
+        <h3>{{ 'appointment.notes' | translate }}</h3>
+        <p>{{ selectedAppointment.notes || ('appointment.no_notes' | translate) }}</p>
+      </div>
+
+      <div class="detail-group">
+        <h3>{{ 'appointment.status' | translate }}</h3>
+        <span class="appointment-status" [ngClass]="getAppointmentStatus(selectedAppointment.status)">
+          {{ 'appointment.status.' + selectedAppointment.status | translate }}
+        </span>
+      </div>
+    </div>
+  </app-modal>
+</div>

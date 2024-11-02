@@ -1,16 +1,25 @@
-export class ModifyUserPayload {
-    firstname?: string;
-    lastname?: string;
-    phoneNumber?: string;
-    shippingAddress?: Partial<AddressPayload>;
-    billingAddress?: Partial<AddressPayload>;
-}
+import { ApiProperty } from '@nestjs/swagger';
 
-export class AddressPayload {
-    road?: string;
-    nb?: string;
-    cp?: string;
-    town?: string;
-    country?: string;
-    complement?: string;
+export class ModifyUserPayload {
+    @ApiProperty({
+        description: "Prénom de l'utilisateur",
+        example: "John",
+        required: false
+    })
+    firstname?: string;
+
+    @ApiProperty({
+        description: "Nom de famille de l'utilisateur",
+        example: "Doe",
+        required: false
+    })
+    lastname?: string;
+
+    @ApiProperty({
+        description: "Numéro de téléphone de l'utilisateur",
+        example: "+33123456789",
+        required: false
+    })
+    phoneNumber?: string;
+
 }

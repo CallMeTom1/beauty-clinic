@@ -1,0 +1,63 @@
+.order-addresses{
+  display: flex;
+  flex-direction: column;
+  gap:32px;
+  justify-content: flex-start;
+
+
+  .shipping-address{
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-medium);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    gap: 8px;
+
+    h2{
+      font-size: var(--font-size-large);
+      color: var(--theme-green)
+    }
+    .top{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    button {
+      text-decoration: underline;
+      text-transform: initial;
+    }
+  }
+
+  .billing-address{
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-medium);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    gap: 8px;
+
+    h2{
+      font-size: var(--font-size-large);
+      color: var(--theme-green)
+    }
+    .top{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    button {
+      text-decoration: underline;
+      text-transform: initial;
+    }
+    .modify{
+      border: 1px solid #e0e0e0;
+      padding: 8px;
+      border-radius: 8px;
+
+    }
+  }
+}

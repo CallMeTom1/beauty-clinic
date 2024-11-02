@@ -9,10 +9,11 @@ import {compute} from "three/examples/jsm/nodes/gpgpu/ComputeNode";
   providedIn: 'root'
 })
 export class ProductService {
-
   protected securityService: SecurityService = inject(SecurityService);
 
-  public categorySelected$ :WritableSignal<CategoryProduct | null> = signal(null);
+  // Signals existants
+  public categorySelected$: WritableSignal<CategoryProduct | null> = signal(null);
+  public searchTerm$: WritableSignal<string> = signal('');
 
   public categories$: Signal<CategoryProduct[]> = computed(
     () => this.securityService.CategoryProductsPublished$()
@@ -22,27 +23,46 @@ export class ProductService {
     () => this.securityService.ProductsPublished$()
   );
 
-  // Signal pour les produits à afficher, en fonction de la catégorie sélectionnée
-  public productsToShow$: Signal<Product[]> = computed(
-    () => {
-      const selectedCategory = this.categorySelected$();
-      const allProducts = this.products$();
+  // Signal modifié pour prendre en compte la recherche
+  public productsToShow$: Signal<Product[]> = computed(() => {
+    const selectedCategory = this.categorySelected$();
+    const searchTerm = this.searchTerm$().toLowerCase().trim();
+    const allProducts = this.products$();
 
-      // Si aucune catégorie sélectionnée, retourner tous les produits publiés
-      if (!selectedCategory) {
-        return allProducts;
-      }
+    let filteredProducts = allProducts;
 
-      // Filtrer les produits par la catégorie sélectionnée
-      return allProducts.filter(product =>
-        product.categories.some(category => category.product_category_id === selectedCategory.product_category_id)
+    // Filtrer par catégorie si sélectionnée
+    if (selectedCategory) {
+      filteredProducts = filteredProducts.filter(product =>
+        product.categories.some(category =>
+          category.product_category_id === selectedCategory.product_category_id
+        )
       );
     }
-  );
+
+    // Filtrer par terme de recherche si présent
+    if (searchTerm) {
+      filteredProducts = filteredProducts.filter(product =>
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.description.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    return filteredProducts;
+  });
 
   constructor() {
-    this.securityService.fetchProductsPublished().subscribe()
+    this.securityService.fetchProductsPublished().subscribe();
     this.securityService.fetchCategoryProductsPublished().subscribe();
-
   }
+
+  // Méthodes pour gérer la recherche
+  setSearchTerm(term: string) {
+    this.searchTerm$.set(term);
+    if (term.trim()) {
+      this.categorySelected$.set(null); // Réinitialiser la catégorie si on recherche
+    }
+  }
+
+
 }

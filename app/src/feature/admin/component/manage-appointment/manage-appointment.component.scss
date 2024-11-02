@@ -1,188 +1,357 @@
-.manage-appointment-container {
-  display: flex;
-  gap: 10px;
-  flex-direction: column;
+.appointment-container {
+  width: 80vw;
+  margin: 0 auto;
   padding: 20px;
-  height: 100vh;
-  background: var(--theme-bg-primary);
-  overflow: hidden;
+  overflow-x: auto;
+  background: white;
 
-  .manage-appointment-top {
+  .appointment-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
 
     h2 {
-      margin: 0;
-      font-size: 24px;
+      font-size: 36px;
       font-weight: bold;
     }
 
-    .add-appointment-btn button {
+    .primary-button {
       display: flex;
       align-items: center;
-      background-color: var(--theme-button-bg);
-      color: var(--theme-primary);
+      gap: 8px;
+      padding: 10px 20px;
+      background: #2196F3;
+      color: white;
       border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: darken(#2196F3, 10%);
+      }
 
       i {
-        margin-right: 8px;
+        font-size: 14px;
       }
     }
   }
 
-  .manage-appointment-table {
-    border: 1px solid var(--theme-secondary);
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 0 -24px;
+    padding: 0 24px;
+  }
+
+  .appointment-table {
     width: 100%;
-    border-collapse: collapse;
-    background-color: var(--theme-bg-secondary);
-    border-radius: 8px;
-    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
 
     th, td {
-      text-align: left;
       padding: 12px;
-      border-bottom: 1px solid #ddd;
+      border: 1px solid #ddd;
+      text-align: left;
+      vertical-align: middle;
     }
 
     th {
-      background-color: var(--theme-primary-light);
+      background-color: #f2f2f2;
       font-weight: bold;
-      color: var(--theme-text-light);
-      cursor: pointer;
+      position: sticky;
+      top: 0;
+      z-index: 10;
 
-      &:hover {
-        text-decoration: underline;
+      &.sortable-header {
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        &:hover {
+          background: darken(#f2f2f2, 5%);
+        }
+
+        i {
+          font-size: 12px;
+          opacity: 0.6;
+        }
       }
     }
 
-    td {
-      background-color: var(--theme-bg-primary);
-      color: var(--theme-text-primary);
-    }
-
-    td button {
-      background: none;
-      border: none;
-      cursor: pointer;
-
-      i {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-        color: var(--theme-primary);
-
-        &:hover {
-          color: var(--theme-accent-color);
+    tr {
+      &.canceled-row {
+        background-color: #fff5f5;
+        td {
+          color: #e53e3e;
         }
       }
 
-      .fa-pen-to-square {
-        color: var(--theme-edit-icon-color);
+      &.confirmed-row {
+        background-color: #f0fff4;
+        td {
+          color: #38a169;
+        }
       }
 
-      .fa-trash {
-        color: var(--theme-delete-icon-color);
+      &.pending-row {
+        background-color: #fffaf0;
+        td {
+          color: #dd6b20;
+        }
+      }
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+    }
+
+    .price-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+
+      .discounted-price {
+        color: #e74c3c;
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+
+      .original-price {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 0.9em;
+      }
+    }
+
+    .notes-cell {
+      max-width: 200px;
+
+      .note-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .note-text {
+          flex: 1;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .icon-button {
+          padding: 4px;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          color: #666;
+          transition: color 0.2s ease;
+
+          &:hover {
+            color: #2196F3;
+          }
+        }
+      }
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+      text-transform: uppercase;
+
+      &.CANCELED {
+        background-color: #fed7d7;
+        color: #c53030;
+      }
+
+      &.CONFIRMED {
+        background-color: #c6f6d5;
+        color: #2f855a;
+      }
+
+      &.PENDING {
+        background-color: #feebc8;
+        color: #c05621;
+      }
+    }
+
+    .actions-cell {
+      white-space: nowrap;
+      padding: 12px 20px;
+
+      .actions-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+
+        .action-button {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 12px;
+          border-radius: 4px;
+          font-size: 13px;
+          border: none;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &.confirm {
+            background-color: #48bb78;
+            color: white;
+
+            &:hover {
+              background-color: darken(#48bb78, 10%);
+            }
+          }
+
+          &.cancel {
+            background-color: #f56565;
+            color: white;
+
+            &:hover {
+              background-color: darken(#f56565, 10%);
+            }
+          }
+        }
       }
     }
   }
 
-  app-modal {
+  // Styles pour les modals
+  .create-appointment-modal,
+  .edit-note-modal {
     .form-group {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
 
-      label {
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: var(--theme-primary);
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #333;
+
+        &.required:after {
+          content: '*';
+          color: #e53e3e;
+          margin-left: 4px;
+        }
       }
 
-      input {
-        padding: 10px;
-        border: 1px solid var(--theme-dark-clear);
+      .form-select,
+      .form-input,
+      .form-textarea {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
         border-radius: 4px;
         font-size: 14px;
-        background-color: var(--theme-bg-primary);
-        color: var(--theme-text-primary);
+        transition: border-color 0.2s ease;
 
         &:focus {
-          border-color: var(--theme-accent-color);
           outline: none;
+          border-color: #2196F3;
         }
+
+        &.invalid {
+          border-color: #e53e3e;
+        }
+      }
+
+      .form-textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .form-error {
+        margin-top: 4px;
+        color: #e53e3e;
+        font-size: 12px;
       }
     }
 
     .modal-footer {
       display: flex;
       justify-content: flex-end;
-      margin-top: 20px;
-      gap: 10px;
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
 
-      button {
-        padding: 10px 16px;
+      .button {
+        padding: 8px 16px;
         border-radius: 4px;
-        border: none;
+        font-weight: 500;
         cursor: pointer;
-        font-size: 14px;
-        transition: background-color 0.3s;
-      }
+        transition: all 0.2s ease;
+        min-width: 100px;
+        border: none;
 
-      &:disabled {
-        background-color: var(--theme-disabled-bg);
-        color: var(--theme-disabled-text);
-        cursor: not-allowed;
-        opacity: 0.6;
-      }
+        &.primary {
+          background-color: #2196F3;
+          color: white;
 
-      .cancel-btn {
-        background-color: var(--theme-secondary);
-        color: var(--theme-primary);
+          &:hover:not(:disabled) {
+            background-color: darken(#2196F3, 10%);
+          }
 
-        &:hover {
-          background-color: var(--theme-secondary-dark);
+          &:disabled {
+            background-color: lighten(#2196F3, 20%);
+            cursor: not-allowed;
+          }
         }
 
-        &:disabled {
-          background-color: var(--theme-disabled-bg);
-          color: var(--theme-disabled-text);
-          cursor: not-allowed;
-        }
-      }
+        &.secondary {
+          background-color: #6c757d;
+          color: white;
 
-      .submit-btn {
-        background-color: var(--theme-button-bg);
-        color: var(--theme-primary);
-
-        &:hover {
-          background-color: var(--theme-primary-dark);
-        }
-
-        &:disabled {
-          background-color: var(--theme-disabled-bg);
-          color: var(--theme-disabled-text);
-          cursor: not-allowed;
+          &:hover {
+            background-color: darken(#6c757d, 10%);
+          }
         }
       }
     }
+  }
+}
 
-    .error-form {
-      margin-top: 10px;
-      color: var(--theme-error);
+// Media queries
+@media screen and (max-width: 1024px) {
+  .appointment-container {
+    width: 95vw;
+
+    .appointment-table {
       font-size: 14px;
+    }
+  }
+}
 
-      &.active {
-        display: block;
+@media screen and (max-width: 768px) {
+  .appointment-container {
+    width: 100%;
+    padding: 10px;
+
+    .appointment-header {
+      h2 {
+        font-size: 24px;
+      }
+    }
+
+    .appointment-table {
+      font-size: 12px;
+
+      th, td {
+        padding: 8px;
       }
 
-      & > div {
-        margin-top: 5px;
-        font-size: 12px;
+      .actions-group {
+        flex-direction: column;
+        gap: 8px;
       }
     }
   }

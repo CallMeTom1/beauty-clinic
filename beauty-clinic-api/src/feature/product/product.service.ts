@@ -1,10 +1,8 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {In, Repository} from 'typeorm';
-
 import {CreateProductPayload} from './data/payload/create-product.payload';
 import {UpdateProductPayload} from './data/payload/update-product.payload';
-import {UpdateProductCategoriesPayload} from './data/payload/update-category-to-product.payload';
 import {Product} from './data/entity/product.entity';
 import {ProductCategory} from "../product-category/data/model/product-category.entity";
 import {FileUploadException, InvalidFileTypeException} from "@feature/security/security.exception";
@@ -12,8 +10,7 @@ import {
     CreateProductException,
     DeleteProductException,
     ProductNotFoundException,
-    PublishProductException,
-    UnpublishProductException,
+
     UpdateProductException,
     UpdateProductImageException
 } from "./product.exception";
@@ -24,7 +21,7 @@ import {join} from "path";
 
 @Injectable()
 export class ProductService {
-    private readonly defaultProductImage: Buffer;
+    private readonly defaultProductImage: string;
 
     constructor(
         @InjectRepository(Product)
@@ -33,20 +30,42 @@ export class ProductService {
         @InjectRepository(ProductCategory)
         private readonly categoryRepository: Repository<ProductCategory>,
     ) {
-        this.defaultProductImage = readFileSync(join(process.cwd(), 'src', 'feature', 'user', 'assets', 'default-profile.png'));
+        // Lire et encoder l'image par défaut en base64 lors de l'initialisation du service
+        const defaultImageBuffer = readFileSync(join(process.cwd(), 'src', 'feature', 'product', 'assets', 'default-product.png'));
+        this.defaultProductImage = `data:image/png;base64,${defaultImageBuffer.toString('base64')}`;
     }
 
     // Créer un produit
     async create(payload: CreateProductPayload): Promise<Product> {
         try {
-            // Pas de traitement des categories ici
+            // Check if a product with the same name already exists
+            const existingProduct = await this.productRepository.findOne({
+                where: { name: payload.name }
+            });
+
+            if (existingProduct) {
+                throw new ConflictException(`A product with the name "${payload.name}" already exists`);
+            }
+
+            // Calculate discounted price if product is on promotion
+            const priceDiscounted = payload.promo_percentage
+                ? payload.initial_price * (1 - payload.promo_percentage / 100)
+                : null;
+
             const product = this.productRepository.create({
                 product_id: ulid(),
                 ...payload,
+                is_promo: !!payload.promo_percentage,
+                price_discounted: priceDiscounted,
+                product_image: this.defaultProductImage,
+                created: new Date()
             });
 
-            return this.productRepository.save(product);
-        } catch (e) {
+            return await this.productRepository.save(product);
+        } catch (error) {
+            if (error instanceof ConflictException) {
+                throw error;
+            }
             throw new CreateProductException();
         }
     }
@@ -54,7 +73,7 @@ export class ProductService {
     // Récupérer tous les produits
     async findAll(): Promise<Product[]> {
         try{
-            return this.productRepository.find({ relations: ['categories'] });
+            return this.productRepository.find({ relations: ['categories', 'reviews', 'reviews.user'] });
 
         }
         catch(e){
@@ -67,7 +86,7 @@ export class ProductService {
         try{
             const product = await this.productRepository.findOne({
                 where: { product_id: id }, // Utilise 'where' pour préciser la condition de recherche
-                relations: ['categories'],
+                relations: ['categories', 'reviews', 'reviews.user'],
             });
 
             if (!product) {
@@ -80,17 +99,60 @@ export class ProductService {
         }
     }
 
-
     // Mettre à jour un produit sans gestion des catégories
     async update(payload: UpdateProductPayload): Promise<Product> {
         try {
-            const product = await this.findOne(payload.id);
+            const product = await this.findOne(payload.product_id);
 
-            // Mise à jour des autres champs du produit avec Object.assign
-            Object.assign(product, payload);
+            // Mise à jour des champs de base
+            if (payload.name !== undefined) product.name = payload.name;
+            if (payload.description !== undefined) product.description = payload.description;
+            if (payload.initial_price !== undefined) product.initial_price = payload.initial_price;
+            if (payload.quantity_stored !== undefined) product.quantity_stored = payload.quantity_stored;
+            if (payload.maxQuantity !== undefined) product.maxQuantity = payload.maxQuantity;
+            if (payload.minQuantity !== undefined) product.minQuantity = payload.minQuantity;
+            if (payload.isPublished !== undefined) product.isPublished = payload.isPublished;
 
-            return this.productRepository.save(product);
-        } catch (e) {
+            // Gestion des catégories avec support explicite pour le tableau vide
+            if (payload.category_ids !== undefined) {
+                if (payload.category_ids.length === 0) {
+                    // Si le tableau est vide, on supprime toutes les catégories
+                    product.categories = [];
+                } else {
+                    // Sinon, on cherche et assigne les catégories
+                    try {
+                        product.categories = await this.findCategoriesByIds(payload.category_ids);
+                    } catch (e) {
+                        if (e instanceof ProductCategoryNotFoundException) {
+                            // Si aucune catégorie n'est trouvée, on met un tableau vide
+                            product.categories = [];
+                        } else {
+                            throw e;
+                        }
+                    }
+                }
+            }
+
+            // Gestion des promotions
+            if (payload.is_promo !== undefined) {
+                product.is_promo = payload.is_promo;
+                if (payload.is_promo && payload.promo_percentage !== undefined) {
+                    product.promo_percentage = payload.promo_percentage;
+                    product.price_discounted = product.initial_price * (1 - payload.promo_percentage / 100);
+                } else {
+                    product.promo_percentage = null;
+                    product.price_discounted = null;
+                }
+            }
+
+            product.updated = new Date();
+            return await this.productRepository.save(product);
+
+        } catch (error) {
+            if (error instanceof ProductCategoryNotFoundException) {
+                // Propager l'erreur spécifique aux catégories si nécessaire
+                throw error;
+            }
             throw new UpdateProductException();
         }
     }
@@ -106,95 +168,32 @@ export class ProductService {
         }
     }
 
-    // Récupérer une catégorie de produit par ID
-    async findCategory(id: string): Promise<ProductCategory> {
-        try{
-            const category = await this.categoryRepository.findOne({
-                where: { product_category_id: id }, // Utilise 'where' pour préciser la condition de recherche
-            });
-
-            if (!category) {
-                throw new NotFoundException(`Category with id ${id} not found`);
-            }
-            return category;
-        }
-        catch(e){
-            throw new ProductCategoryNotFoundException();
-        }
-    }
-
     // Récupérer plusieurs catégories par leurs IDs
     async findCategoriesByIds(categoryIds: string[]): Promise<ProductCategory[]> {
+        // Si le tableau est vide, retourner directement un tableau vide
+        if (!categoryIds || categoryIds.length === 0) {
+            return [];
+        }
+
         try {
             const categories = await this.categoryRepository.find({
-                where: { product_category_id: In(categoryIds) } // Utilisation de In pour trouver toutes les catégories dont les IDs sont dans la liste
+                where: { product_category_id: In(categoryIds) }
             });
 
-            if (categories.length === 0) {
-                throw new NotFoundException(`No categories found for the provided IDs`);
-            }
-
+            // On ne lance plus d'erreur si aucune catégorie n'est trouvée
             return categories;
+
         } catch (e) {
             throw new ProductCategoryNotFoundException();
-        }
-    }
-
-
-
-    // Ajouter une catégorie à un produit
-    // Ajouter ou mettre à jour les catégories associées à un produit
-    async updateProductCategories(payload: UpdateProductCategoriesPayload): Promise<Product> {
-        try {
-            const { product_id, category_ids } = payload;
-
-            // Trouver le produit
-            const product = await this.findOne(product_id);
-
-            if (!product) {
-                throw new Error('Product not found');
-            }
-
-            // Si la liste des catégories est vide, dissocier toutes les catégories du produit
-            if (!category_ids || category_ids.length === 0) {
-                product.categories = [];
-            } else {
-                // Récupérer toutes les catégories correspondantes à la liste des IDs fournis
-                // Associer ces catégories au produit
-                product.categories = await this.findCategoriesByIds(category_ids);
-            }
-
-            // Sauvegarder les changements dans la base de données
-            return await this.productRepository.save(product);
-        } catch (error) {
-            throw new Error('Failed to update product categories');
-        }
-    }
-
-
-    async publishProduct(id: string): Promise<Product> {
-        try {
-            const category = await this.findOne(id);
-            category.isPublished = true;
-            return this.productRepository.save(category);
-        } catch (e) {
-            throw new PublishProductException();
-        }
-    }
-
-    async unpublishProduct(id: string): Promise<Product> {
-        try {
-            const category = await this.findOne(id);
-            category.isPublished = false;
-            return this.productRepository.save(category);
-        } catch (e) {
-            throw new UnpublishProductException();
         }
     }
 
     async findPublished(): Promise<Product[]> {
         try {
-            return this.productRepository.find({ where: { isPublished: true } });
+            return this.productRepository.find({
+                where: { isPublished: true },
+                relations: ['categories', 'reviews', 'reviews.user']
+            });
         } catch (e) {
             throw new ProductNotFoundException();
         }
@@ -206,7 +205,7 @@ export class ProductService {
             console.log('File received in service:', file);
             console.log('Product ID:', productId);
 
-            const product = await this.findOne(productId);
+            const product: Product = await this.findOne(productId);
 
             if (!file) {
                 throw new FileUploadException();
@@ -226,6 +225,17 @@ export class ProductService {
         } catch (e) {
             console.error('Erreur dans le service lors de la mise à jour de l\'image', e);
             throw new UpdateProductImageException();
+        }
+    }
+
+    async getActivePromotions(): Promise<Product[]> {
+        try {
+            return await this.productRepository.find({
+                where: { is_promo: true },
+                relations: ['categories', 'reviews', 'reviews.user']
+            });
+        } catch (error) {
+            throw new ProductNotFoundException();
         }
     }
 

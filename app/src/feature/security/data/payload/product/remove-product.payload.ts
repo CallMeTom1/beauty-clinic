@@ -1,3 +1,3 @@
 export interface RemoveProductPayload {
-  id:string;
+  product_id:string;
 }

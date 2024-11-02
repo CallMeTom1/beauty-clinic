@@ -1,0 +1,133 @@
+.summary {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--theme-text-primary);
+    margin-bottom: 16px;
+  }
+}
+
+.separator-green {
+  height: 2px;
+  background-color: var(--theme-green);
+  margin: 16px 0;
+}
+
+.separator-light {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 16px 0;
+}
+
+.summary-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.total,
+.shipping-fees,
+.tva-fees {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--theme-text-secondary);
+  font-size: 15px;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.shipping-fees {
+  &.free {
+    color: var(--theme-text-disabled);
+    text-decoration: line-through;
+  }
+}
+
+.total-order {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding: 16px 0;
+
+  .total-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--theme-text-primary);
+  }
+
+  .total-amount {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--theme-green);
+  }
+}
+
+.free-badge {
+  background-color: var(--theme-green);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.free-shipping-info {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+  color: #856404;
+  text-align: center;
+  font-size: 14px;
+}
+
+.alert {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+
+  &.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  &.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  i {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary {
+    padding: 16px;
+  }
+
+  .total-order {
+    .total-amount {
+      font-size: 20px;
+    }
+  }
+}

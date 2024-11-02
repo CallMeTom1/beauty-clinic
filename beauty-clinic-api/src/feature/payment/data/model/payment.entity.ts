@@ -1,32 +1,39 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, PrimaryColumn} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, PrimaryColumn, JoinColumn, OneToOne} from 'typeorm';
 import {Order} from "../../../order/data/model/order.entity";
+import {User} from "@feature/user/model";
 
 @Entity()
 export class Payment {
-    @PrimaryColumn('varchar', {length:26})
+    @PrimaryColumn('varchar', { length: 26 })
     idPayment: string;
 
     @Column('varchar')
     stripePaymentIntentId: string;
 
-    @Column('decimal')
+    @Column('decimal', { precision: 10, scale: 2 })
     amount: number;
 
-    @Column('decimal', { default: 0 })
-    refundedAmount: number;  // Montant remboursé partiellement ou totalement
+    @Column('decimal', { precision: 10, scale: 2, default: 0 })
+    refundedAmount: number;
 
-    @Column('varchar')
+    @Column('varchar', { length: 3 })
     currency: string;
 
-    @Column('varchar')
-    status: string;  // Statut du paiement (ex: succeeded, pending, refunded)
+    @Column('varchar', { length: 20 })
+    status: string;
 
     @Column('timestamp')
     paymentDate: Date;
 
     @Column('timestamp', { nullable: true })
-    refundDate: Date;  // Date du remboursement si elle existe
+    refundDate: Date;
 
-    @ManyToOne(() => Order, (order) => order.payments)  // Relation Many-to-One avec Order
+    @ManyToOne(() => Order, (order) => order.payments, { nullable: true })
+    @JoinColumn({ name: 'orderId' })
     order: Order;
+
+
+    @ManyToOne(() => User, (user) => user.payments)
+    @JoinColumn({ name: 'userId' })
+    user: User;
 }

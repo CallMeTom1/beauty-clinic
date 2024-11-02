@@ -4,14 +4,15 @@ import { UserService } from "@feature/user/user.service";
 import { User } from "@feature/user/model/entity/user.entity";
 import { UserController } from "@feature/user/user.controller";
 import { CartModule } from "../cart/cart.module";
-import {Cart} from "../cart/data/model/cart.entity";  // Assurez-vous d'importer correctement CartModule
+import {Cart} from "../cart/data/model/cart.entity";
+import {Address} from "@common/model/address.entity";  // Assurez-vous d'importer correctement CartModule
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, Cart]),
+        TypeOrmModule.forFeature([User, Cart, Address]),
     ],
     providers: [UserService],  // Pas besoin de CartService ici
-    exports: [UserService],
+    exports: [UserService, TypeOrmModule.forFeature([User])],
     controllers: [UserController]
 })
 export class UserModule {}

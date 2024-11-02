@@ -8,7 +8,7 @@ export class ProductCategoryUtils {
     return dtos.map(dto => ({
       product_category_id: dto.product_category_id,
       name: dto.name,
-      product_category_image: dto.product_category_image,
+      description: dto.description,
       isPublished: dto.isPublished
     }));
   }
@@ -18,7 +18,7 @@ export class ProductCategoryUtils {
     return [{
       product_category_id: '',
       name: '',
-      product_category_image: '',
+      description: '',
       isPublished: false
     }]
   }
@@ -27,7 +27,7 @@ export class ProductCategoryUtils {
     return {
       product_category_id: '',
       name: '',
-      product_category_image: '',
+      description: '',
       isPublished: false
     }
   }
@@ -36,7 +36,6 @@ export class ProductCategoryUtils {
     return {
       product_category_id: categoryProduct.product_category_id,
       name: categoryProduct.name,
-      product_category_image: categoryProduct.product_category_image,
       isPublished: categoryProduct.isPublished
     }
   }

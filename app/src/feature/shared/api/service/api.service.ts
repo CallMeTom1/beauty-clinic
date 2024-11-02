@@ -16,13 +16,13 @@ export class ApiService {
     return this.handle(this.http.get(`${this.baseURL}${partURL}`, { params }));
   }
 
-  post(partURL: string, payload: Payload): Observable<ApiResponse> {
+  post(partURL: string, payload?: Payload): Observable<ApiResponse> {
     return this.handle(this.http.post(`${this.baseURL}${partURL}`, payload));
   }
   put(partURL: string, payload: Payload): Observable<ApiResponse> {
     return this.handle(this.http.put(`${this.baseURL}${partURL}`, payload));
   }
-  delete(partURL: string, payload: Payload): Observable<ApiResponse> {
+  delete(partURL: string, payload?: Payload): Observable<ApiResponse> {
     return this.handle(this.http.delete(`${this.baseURL}${partURL}`, payload));
   }
   patch(partURL: string, payload: Payload): Observable<ApiResponse> {

@@ -1,9 +1,12 @@
-import {Component, inject, Input} from '@angular/core';
+import {Component, computed, inject, Input, Signal} from '@angular/core';
 import {Product} from "../../../security/data/model/product/product.business";
 import {CategoryProduct} from "../../../security/data/model/category-product/category-product.business";
-import {CurrencyPipe, NgClass, NgIf} from "@angular/common";
+import {CurrencyPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {SecurityService} from "@feature-security";
 import {AddCartItemPayload} from "../../../security/data/payload/cart/add-cart-item.payload";
+import {RemoveFromWishlistPayload} from "../../../security/data/payload/wishlist/remowe-from-wishlist.payload";
+import {AddToWishlistPayload} from "../../../security/data/payload/wishlist/add-to-wishlist.payload";
+import {WishlistButtonComponent} from "../../../shared/ui/wishlist-button/wishlist-button.component";
 
 @Component({
   selector: 'app-product-card',
@@ -11,7 +14,9 @@ import {AddCartItemPayload} from "../../../security/data/payload/cart/add-cart-i
   imports: [
     CurrencyPipe,
     NgIf,
-    NgClass
+    NgClass,
+    NgForOf,
+    WishlistButtonComponent
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss'
@@ -20,11 +25,21 @@ export class ProductCardComponent {
   @Input() product!: Product;
   protected readonly securityService: SecurityService = inject(SecurityService);
 
+  getAverageRating(): number {
+    if (!this.product.reviews || this.product.reviews.length === 0) return 0;
+    const sum = this.product.reviews.reduce((acc, review) => acc + review.rating, 0);
+    return sum / this.product.reviews.length;
+  }
+
+  getStarsArray(): number[] {
+    const rating = this.getAverageRating();
+    return Array(5).fill(0).map((_, index) => index < rating ? 1 : 0);
+  }
+
   addProductToCart(product: Product): void {
-    // Utilisation de product_id à la place de id
     const payload: AddCartItemPayload = {
-      productId: product.product_id!,  // Utilisation de product_id ici
-      quantity: 1  // Vous pouvez permettre de choisir la quantité
+      productId: product.product_id!,
+      quantity: 1
     };
     this.securityService.addProductToCart(payload).subscribe({
       next: () => {
@@ -36,25 +51,24 @@ export class ProductCardComponent {
     });
   }
 
-
   getProductImage(product: Product): string {
     if (product.product_image && typeof product.product_image === 'string') {
-      // Si l'image est déjà encodée en base64, on la retourne directement
       return product.product_image;
-    } else {
-      // Si aucune image n'est disponible, on retourne une image par défaut
-      return './assets/default-category.png';
     }
+    return './assets/default-product.png';
   }
 
-  getDiscountedPrice(product: Product): number {
-    if (typeof product.price === 'number' && typeof product.promo_percentage === 'number') {
-      return product.price - (product.price * product.promo_percentage / 100);
-    } else {
-      console.warn('Price or promo percentage is invalid for product:', product);
-      return product.price; // Retourne le prix normal en cas de problème
-    }
+  navigateToDetail(): void {
+    const formattedName = this.formatProductName(this.product.name);
+    this.securityService.navigate(`/produits/${formattedName}`);
   }
 
+  private formatProductName(name: string): string {
+    return name.toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  }
 
 }

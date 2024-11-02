@@ -1,11 +1,11 @@
 /* Style pour le conteneur des messages d'erreur */
 .error-message {
-  margin-top: 2px;
   color: var(--theme-error-color); /* Couleur rouge pour les erreurs */
   font-style: italic; /* Texte en italique */
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 5px; /* Espace entre l'icône et le texte */
+  margin-bottom: 16px;
 }
 
 /* Style de l'icône Font Awesome */

@@ -1,9 +1,10 @@
-import {ApiProperty} from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
+import {OrderStatus} from "../../order-status.enum";
 
 export class UpdateOrderStatusPayload {
     @ApiProperty()
     idOrder: string;
 
-    @ApiProperty()
-    status: string;
+    @ApiProperty({ enum: OrderStatus })
+    status: OrderStatus;
 }

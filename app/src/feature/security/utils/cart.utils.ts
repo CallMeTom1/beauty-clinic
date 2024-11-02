@@ -2,33 +2,20 @@ import {CartDto} from "../data/model/cart/cart.dto";
 import {Cart} from "../data/model/cart/cart.business";
 import {CartItem} from "../data/model/cart/cart-item.business";
 import {CartItemDto} from "../data/model/cart/cart-item.dto";
+import {PromoCodeUtils} from "./promo-code.utils";
+import {UserUtils} from "@feature-security";
 
 export class CartUtils {
 
-  public static fromDtos(dtos: CartDto[]): Cart[] {
-    return dtos.map(dto => ({
-      idCart: dto.idCart,
-      items: dto.items.map(itemDto => CartUtils.cartItemFromDto(itemDto)),
-      totalPrice: dto.totalPrice,
-      status: dto.status
-    }));
-  }
+
 
   public static getEmpty(): Cart {
     return {
       idCart: '',
       items: [],
-      totalPrice: 0,
-      status: 'empty'
-    };
-  }
-
-  public static toDto(business: Cart): CartDto {
-    return {
-      idCart: business.idCart,
-      items: business.items.map(item => CartUtils.cartItemToDto(item)),
-      totalPrice: business.totalPrice,
-      status: business.status
+      userId: '',
+      promoCode: PromoCodeUtils.getEmpty(),
+      discountAmount: 0,
     };
   }
 

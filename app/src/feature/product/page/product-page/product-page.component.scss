@@ -1,3 +1,213 @@
+
 .product-page {
-  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  max-width: 1400px;
+  min-height: 100vh; // Pour s'assurer que la page prend toute la hauteur
+  margin: 0 auto;
+  padding: 150px 24px 64px;
+
+  .header-content {
+    flex: 0 0 auto; // Empêche le header de rétrécir
+    margin-bottom: 32px;
+  }
+
+  .head {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    gap: 32px;
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      color: #333;
+      position: relative;
+      margin: 0;
+      white-space: nowrap; // Empêche le titre de se couper
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: #E8B4B8;
+        border-radius: 2px;
+      }
+    }
+
+    app-product-search {
+      flex: 1;
+      max-width: 500px;
+    }
+  }
+
+  app-product-category-list-selector {
+    display: block;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+
+  .products-container {
+    flex: 1; // Permet au container de produits de prendre l'espace restant
+  }
+
+  app-product-list {
+    display: block;
+  }
+}
+
+.auth-modal-content {
+  text-align: center;
+  padding: 32px;
+
+  p {
+    font-size: 1.1rem;
+    color: var(--theme-text-primary);
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    button {
+      min-width: 160px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      @media (max-width: 480px) {
+        width: 100%;
+      }
+    }
+
+    .login-btn {
+      background-color: var(--theme-green);
+      color: white;
+      border: none;
+
+      &:hover {
+        background-color: darken(#265a4b, 5%);
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .register-btn {
+      background-color: white;
+      color: var(--theme-green);
+      border: 2px solid var(--theme-green);
+
+      &:hover {
+        background-color: rgba(38, 90, 75, 0.05);
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
+// Animation pour le contenu
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-modal-content {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+// Style pour le texte d'explication
+.auth-modal-content p {
+  position: relative;
+  padding-bottom: 16px;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background-color: var(--theme-border);
+  }
+}
+
+// Media queries for responsiveness
+@media (max-width: 1024px) {
+  .product-page {
+    padding: 120px 20px 48px;
+
+    .head {
+      h1 {
+        font-size: 28px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .product-page {
+    padding: 100px 16px 32px;
+
+    .head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 32px;
+
+      h1 {
+        font-size: 24px;
+        width: 100%;
+      }
+
+      app-product-search {
+        width: 100%;
+        max-width: none;
+      }
+    }
+
+    app-product-category-list-selector {
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .product-page {
+    .head {
+      h1 {
+        font-size: 22px;
+      }
+    }
+  }
 }

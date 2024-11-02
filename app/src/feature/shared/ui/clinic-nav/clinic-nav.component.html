@@ -1,0 +1,51 @@
+<div class="location-nav" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+  <div class="location-trigger">
+    <i class="fas fa-location-dot"></i>
+    <span>LA CLINIQUE</span>
+  </div>
+
+  <div class="location-dropdown" [class.active]="isDropdownOpen">
+    <div class="dropdown-content">
+      <!-- Colonne Trouver la clinique -->
+      <div class="dropdown-column">
+        <h3>Trouver la clinique</h3>
+        <div class="address-info">
+          <i class="fas fa-map-marker-alt"></i>
+          <div class="address-details">
+            <p>123 Avenue des Soins</p>
+            <p>75000 Paris, France</p>
+          </div>
+        </div>
+        <a href="https://maps.google.com" target="_blank" class="map-link">
+          <i class="fas fa-directions"></i>
+          Voir sur Google Maps
+        </a>
+      </div>
+
+      <!-- Colonne Contacter la clinique -->
+      <div class="dropdown-column">
+        <h3>Contacter la clinique</h3>
+
+        <div class="contact-info">
+          <div class="phone-info">
+            <i class="fas fa-phone"></i>
+            <a href="tel:+33123456789">01 23 45 67 89</a>
+          </div>
+
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+          </div>
+
+          <div class="opening-hours">
+            <h4>Horaires d'ouverture :</h4>
+            <p>Lundi - Vendredi : 9h - 19h</p>
+            <p>Samedi : 10h - 17h</p>
+            <p>Dimanche : Fermé</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

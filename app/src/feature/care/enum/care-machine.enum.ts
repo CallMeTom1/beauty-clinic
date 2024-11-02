@@ -5,7 +5,7 @@ export enum BeautyCareMachine {
 }
 
 export const BeautyCareMachineTranslations = {
-  [BeautyCareMachine.LaserMaxPro]: 'care.machine.lasermaxpro',
-  [BeautyCareMachine.HydroFacialJr]: 'care.machine.hydrofacialjr',
-  [BeautyCareMachine.None]: 'care.machine.none'
+  [BeautyCareMachine.LaserMaxPro]: 'care.care-machine.lasermaxpro',
+  [BeautyCareMachine.HydroFacialJr]: 'care.care-machine.hydrofacialjr',
+  [BeautyCareMachine.None]: 'care.care-machine.none'
 };

@@ -1,0 +1,58 @@
+@if (product(); as product) {
+  <div class="product-detail">
+    <div class="product-gallery">
+      <div class="main-image">
+        <img [src]="product?.product_image" [alt]="product?.name">
+      </div>
+    </div>
+
+    <div class="product-info">
+      <div class="product-header">
+        <h1>{{ product?.name }}</h1>
+        <div class="price-container">
+          @if(product?.is_promo) {
+            <span class="original-price">{{ product?.initial_price | currency:'EUR' }}</span>
+            <span class="promo-price">{{ product?.price_discounted | currency:'EUR' }}</span>
+            <span class="discount-badge">-{{ product?.promo_percentage }}%</span>
+          } @else {
+            <span class="regular-price">{{ product?.initial_price | currency:'EUR' }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="product-description">
+        <p>{{ product?.description }}</p>
+      </div>
+
+      <div class="actions">
+        <div class="quantity-selector">
+          <button (click)="decrementQuantity()" [disabled]="quantity() <= 1">-</button>
+          <span>{{ quantity() }}</span>
+          <button (click)="incrementQuantity()"
+                  [disabled]="quantity() >= (product?.quantity_stored || 0)">+</button>
+        </div>
+
+        <button class="add-to-cart"
+                (click)="addToCart()"
+                [disabled]="!product?.quantity_stored">
+          Ajouter au panier
+        </button>
+
+        <app-wishlist-button [productId]="product.product_id" [inProductCard]="false"></app-wishlist-button>
+      </div>
+
+      @if(product?.quantity_stored === 0) {
+        <div class="stock-warning">
+          Produit temporairement en rupture de stock
+        </div>
+      }
+    </div>
+    <app-product-reviews [product]="product"></app-product-reviews>
+
+  </div>
+} @else {
+  <div class="loading-state">
+    Chargement du produit...
+  </div>
+}
+<app-product-selection></app-product-selection>

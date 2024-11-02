@@ -1,7 +1,7 @@
 import {Business} from "@shared-core";
 import {AppointmentStatus} from "../../appointment-status.enum";
-import {UserDetail} from "./user.detail";
-import {CareDetail} from "./care.detail";
+import {Care} from "../../../security/data/model/care/care.business";
+import {User} from "../../../security/data/model/user";
 
 export interface Appointment extends Business {
   appointment_id: string;
@@ -11,7 +11,7 @@ export interface Appointment extends Business {
   end_time?: string;     // 'YYYY-MM-DD HH:mm:ss' format
   status: AppointmentStatus;
   notes?: string;
-  userDetail?: UserDetail;
-  careDetail?: CareDetail;
+  user: User;
+  care: Care;
 
 }

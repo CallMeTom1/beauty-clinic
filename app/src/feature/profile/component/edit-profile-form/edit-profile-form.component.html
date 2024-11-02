@@ -1,0 +1,21 @@
+<section class="profile-section">
+  <h1>Profile</h1>
+  <form (ngSubmit)="onSubmitProfile()" class="form-container">
+    <fieldset>
+      @for(input of profileFormControlConfigs; track input.label) {
+        <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+      }
+    </fieldset>
+
+    @if(this.securityService.error$()) {
+      <div class="error-message">
+        <i class="fa-thin fa-circle-exclamation"></i>
+        <em>{{ this.securityService.error$()! | translate }}</em>
+      </div>
+    }
+
+    <button type="submit" class="primary" [disabled]="!profileFormGroup.valid">
+      {{ 'form.updateProfile' | translate }}
+    </button>
+  </form>
+</section>

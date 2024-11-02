@@ -27,7 +27,8 @@ export class AuthInterceptor implements HttpInterceptor {
       `${environment.apiURL}account/signin`,
       `${environment.apiURL}account/signup`,
       `${environment.apiURL}account/refresh`,
-      `${environment.apiURL}topics`
+      `${environment.apiURL}topics`,
+      `${environment.apiURL}products`
     ];
 
     const isPublicRoute = (url: string) => publicRoutes.includes(url) || !url.startsWith(environment.apiURL);

@@ -1,16 +1,39 @@
-<div class="product">
+<div class="product" (click)="navigateToDetail()">
   <div class="product-header">
-    <i (click)="addProductToCart(product)" class="fa-light fa-bag-shopping product-icon"></i>
+    <app-wishlist-button [productId]="product.product_id!"></app-wishlist-button>
     <img [src]="getProductImage(product)" alt="{{ product.name }}" class="product-image" />
-    <span *ngIf="product.promo_percentage > 0" class="promo-badge">{{ product.promo_percentage }}% OFF</span>
+    <span *ngIf="product.is_promo" class="promo-badge">- {{ product.promo_percentage }}%</span>
   </div>
-  <div class="name_description">
-    <h2>{{ product.name }}</h2>
-    <h3>{{ product.description }}</h3>
-  </div>
-  <div class="price">
-    <!-- Si une promo est active, afficher le prix réduit -->
-    <p *ngIf="product.promo_percentage > 0" class="discounted-price">{{ getDiscountedPrice(product) | currency:'EUR':'symbol' }}</p>
-    <p [ngClass]="{'strikethrough': product.promo_percentage > 0}">{{ product.price | currency:'EUR':'symbol' }}</p>
+
+  <div class="product-content">
+    <div class="product-info">
+      <h2 class="product-name">{{ product.name }}</h2>
+      <p class="description">{{ product.description }}</p>
+      <div class="rating-container">
+        <div class="stars">
+          <i *ngFor="let star of getStarsArray()"
+             class="fas fa-star"
+             [ngClass]="{'filled': star === 1}">
+          </i>
+        </div>
+        <span class="review-count">({{ product.reviews?.length || 0 }})</span>
+      </div>
+    </div>
+
+    <div class="bottom-content">
+      <div class="price-container">
+        <ng-container *ngIf="product.is_promo; else normalPrice">
+          <span class="original-price">{{ product.initial_price | currency:'EUR':'symbol' }}</span>
+          <span class="promo-price">{{ product.price_discounted | currency:'EUR':'symbol' }}</span>
+        </ng-container>
+        <ng-template #normalPrice>
+          <span class="regular-price">{{ product.initial_price | currency:'EUR':'symbol' }}</span>
+        </ng-template>
+      </div>
+
+      <button (click)="addProductToCart(product); $event.stopPropagation()" class="add-to-cart-btn">
+        <span>Ajouter au panier</span>
+      </button>
+    </div>
   </div>
 </div>

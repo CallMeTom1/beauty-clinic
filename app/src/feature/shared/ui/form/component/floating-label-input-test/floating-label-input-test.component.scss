@@ -2,37 +2,66 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  &.checkbox-container {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 8px;
+  }
 
   .floating-label {
-    font-size: 14px;
-    color: var(--theme-primary); /* Couleur du label */
-    transition: all 0.2s ease-in-out;
+    font-size: 0.9rem;
+    color: var(--theme-text-secondary);
+    font-weight: 500;
+    transform-origin: left;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .floating-input {
     width: 100%;
-    padding: 10px;
-    font-size: 16px; /* Taille du texte de l'input */
-    background: transparent;
-    color: var(--theme-input-text); /* Couleur du texte dans l'input */
-    border: 2px solid var(--theme-secondary); /* Bordure par défaut */
-    border-radius: 10px;
-  }
+    padding: 12px 16px;
+    font-size: 1rem;
+    background: var(--theme-input-bg, transparent);
+    color: var(--theme-text-primary);
+    border: 2px solid var(--theme-border);
+    border-radius: 8px;
+    transition: all 0.2s ease;
 
-  /* Effet de focus: La bordure devient plus épaisse et change de couleur */
-  .floating-input:focus {
-    border-color: var(--theme-primary); /* Change la couleur de la bordure au focus */
-    border-width: 2px; /* Épaissit la bordure */
-    outline: none; /* Supprime l'effet de contour par défaut du navigateur */
-  }
+    &:hover {
+      border-color: var(--theme-border-hover);
+    }
 
-  /* Placeholder en focus */
-  .floating-input::placeholder {
-    color: var(--theme-placeholder-color); /* Couleur du placeholder */
-    opacity: 0.7;
+    &:focus {
+      border-color: var(--theme-primary);
+      box-shadow: 0 0 0 3px var(--theme-primary-transparent);
+      outline: none;
+    }
+
+    &::placeholder {
+      color: var(--theme-placeholder);
+      opacity: 0.6;
+    }
   }
 
 }
 
 
+// Pour les champs requis
+.input.required .floating-label::after {
+  content: '*';
+  color: var(--theme-error);
+  margin-left: 4px;
+}
+
+// État d'erreur
+.input.error {
+  .floating-input {
+    border-color: var(--theme-error);
+  }
+
+  .floating-label {
+    color: var(--theme-error);
+  }
+}

@@ -1,101 +1,216 @@
 <div class="manage-care-container">
-  <div class="manage-care-top">
-    <h2>{{title | translate}}</h2>
-    <div class="add-care-btn">
-      <button (click)="showCreateModal = true">
-        <i class="fas fa-plus"></i> {{ add_care | translate }}
-      </button>
-    </div>
+  <div class="manage-care-header">
+    <h2>{{ 'admin-feature.admin.manage-care.title' | translate }}</h2>
+    <button class="primary" (click)="openCreateModal()">
+      {{ 'form.care.add.label' | translate }}
+    </button>
   </div>
+
   <table class="manage-care-table">
     <thead>
-      <tr>
-        <th (click)="toggleSort('name')">{{ col_name | translate }}</th>
-        <th (click)="toggleSort('zone')">{{col_zone | translate}}</th>
-        <th (click)="toggleSort('category')">{{col_category | translate}}</th>
-        <th (click)="toggleSort('machine')">{{col_machine | translate}}</th>
-        <th (click)="toggleSort('sessions')">{{col_sessions | translate}}</th>
-        <th (click)="toggleSort('price')">{{col_price | translate}}</th>
-        <th (click)="toggleSort('duration')">{{col_duration | translate}}</th>
-        <th (click)="toggleSort('time_between')">{{col_time_between | translate}}</th>
-        <th>{{ col_edit | translate }}</th>
-        <th>{{col_delete | translate}}</th>
-      </tr>
+    <tr>
+      <th>{{ 'table.header.image' | translate }}</th>
+      <th>{{ 'table.header.name' | translate }}</th>
+      <th>{{ 'table.header.description' | translate }}</th>
+      <th>{{ 'table.header.initial_price' | translate }}</th>
+      <th>{{ 'table.header.sessions' | translate }}</th>
+      <th>{{ 'table.header.duration' | translate }}</th>
+      <th>{{ 'table.header.time_between' | translate }}</th>
+      <th>{{ 'table.header.promo' | translate }}</th>
+      <th>Actions promo</th>
+      <th>{{ 'table.header.machines' | translate }}</th>
+      <th>{{ 'table.header.categories' | translate }}</th>
+      <th>{{ 'table.header.sub_categories' | translate }}</th>
+      <th>{{ 'table.header.body_zones' | translate }}</th>
+      <th>{{ 'table.header.actions' | translate }}</th>
+    </tr>
     </thead>
     <tbody>
-      @for(care of securityService.cares$(); track care.care_id){
+      @for(care of securityService.cares$(); track care.care_id) {
         <tr>
-          <td>{{ care.name }}</td>
-          <td>{{ care.zone }}</td>
-          <td>{{ care.category }}</td>
-          <td>{{ care.beauty_care_machine }}</td>
-          <td>{{ care.sessions }}</td>
-          <td>{{ care.price | currency }}</td>
-          <td>{{ care.duration }}</td>
-          <td>{{ care.time_between }}</td>
+          <!-- Les cellules restent les mêmes jusqu'à la colonne promo -->
           <td>
-            <button (click)="loadCareDetails(care)">
-              <i class="fa-thin fa-pen-to-square"></i>
-            </button>
+            <label [for]="'editImage-' + care.care_id" class="image-upload-label">
+              <img [src]="getCareImage(care)" [alt]="care.name" class="care-image" />
+              <input
+                type="file"
+                [id]="'editImage-' + care.care_id"
+                (change)="onCareImageChange($event, care)"
+                accept="image/*"
+                hidden
+              />
+            </label>
+          </td>
+          <td>{{ care.name }}</td>
+          <td>{{ care.description }}</td>
+          <td>{{ care.initial_price | customEuro }}</td>
+          <td>{{ care.sessions }}</td>
+          <td>{{ formatDuration(care.duration) }}</td>
+          <td>{{ care.time_between ? formatDuration(care.time_between) : '-' }}</td>
+          <!-- Colonne Prix Promo -->
+          <td>
+            @if(care.is_promo) {
+              <div class="price-column">
+                <span class="original-price">{{ care.initial_price | customEuro }}</span>
+                <span class="discounted-price">{{ care.price_discounted ?? 'pas de promo' | customEuro }}</span>
+                <span class="promo-badge">-{{ care.promo_percentage }}%</span>
+              </div>
+            } @else {
+              <span>{{ care.initial_price | customEuro }}</span>
+            }
+          </td>
+          <!-- Colonne Actions Promo -->
+          <td>
+            <div class="promo-container">
+              <button class="action-button"
+                      [ngClass]="{'promo-active': care.is_promo}"
+                      (click)="togglePromoPopover(care)">
+                <i class="fa-light fa-tag"></i>
+                {{ care.is_promo ? 'Modifier promo' : 'Ajouter promo' }}
+              </button>
+
+              @if(currentPromoCare?.care_id === care.care_id) {
+                <div class="promo-popover">
+                  <div class="promo-content">
+                    <label>Pourcentage de réduction</label>
+                    <div class="promo-input">
+                      <input type="number"
+                             [value]="care.promo_percentage"
+                             (input)="onPromoPercentageChange($event)"
+                             min="0"
+                             max="100">
+                      <span>%</span>
+                    </div>
+                    <div class="promo-buttons">
+                      <button class="primary"
+                              (click)="applyPromotion(care)">
+                        Appliquer
+                      </button>
+                      @if(care.is_promo) {
+                        <button class="secondary"
+                                (click)="removePromotion(care)">
+                          Retirer
+                        </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </td>
+          <!-- Machines -->
+          <td>
+            <app-care-machine-selector [careId]="care.care_id"></app-care-machine-selector>
+          </td>
+          <!-- Catégories -->
+          <td>
+            <app-care-category-selector [careId]="care.care_id"></app-care-category-selector>
+          </td>
+          <!-- Sous-catégories -->
+          <td>
+            <app-care-sub-category-selector [careId]="care.care_id"></app-care-sub-category-selector>
           </td>
           <td>
-            <button (click)="deleteCare(care)">
-              <i class="fa-thin fa-trash"></i>
-            </button>
+            <app-care-body-zone-selector [careId]="care.care_id"></app-care-body-zone-selector>
+          </td>
+          <!-- Actions -->
+          <td class="actions-cell">
+            <div class="actions-group">
+              <a (click)="openEditModal(care)" class="action-link edit">
+                {{ 'form.care.edit.label' | translate }}
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="togglePublishCare(care)" class="action-link"
+                 [ngClass]="care.isPublished ? 'unpublish' : 'publish'">
+                {{ care.isPublished ? 'Dépublier' : 'Publier' }}
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="openDeleteModal(care)" class="action-link delete">
+                {{ 'form.care.delete.label' | translate }}
+              </a>
+            </div>
           </td>
         </tr>
       }
     </tbody>
   </table>
-  @if(showEditModal){
 
-    <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
-      <!--
-      <app-form [formGroup]="formGroup" [title]="'title' | translate"
-                [config]="formControlConfigs">
-      </app-form>
-      -->
-      <!-- Submit and Cancel buttons -->
-      <div class="modal-footer">
-        <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>
-        <button type="submit" class="submit-btn" [disabled]="formGroup.invalid" (click)="onSubmitEditCare()">Submit</button>
+  <!-- Modal de suppression -->
+  @if(showDeleteModal){
+    <app-modal [title]="'form.care.delete.confirm.title' | translate" (close)="handleClose()">
+      <div class="del-modal">
+        <h3>{{ 'form.care.delete.confirm.message' | translate }}</h3>
+        <span>{{ currentCare?.name }}</span>
       </div>
-      <!-- Error form display -->
-      <div class="error-form" [class.active]="error().length > 0 && formGroup.touched">
-        @if(error().length > 0){
-          <p>{{ 'security-feature.sign-in-page.error.description' | labelWithParam:{count: error().length} }}</p>
-        }
-        @for(error of error(); track error){
-          <div>
-            <app-label-with-param [label]="'security-feature.sign-in-page.error.'+error.control+'-'+error.error"></app-label-with-param>
-          </div>
-        }
+      <div class="modal-actions">
+        <button (click)="deleteCare()" class="primary">
+          {{ 'form.care.delete.confirm.button' | translate }}
+        </button>
+        <button (click)="handleClose()" class="secondary">
+          {{ 'form.cancel.label' | translate }}
+        </button>
       </div>
     </app-modal>
   }
+
+  <!-- Modal de modification -->
+  @if(showEditModal){
+    <app-modal [title]="'form.care.edit.title' | translate" (close)="handleClose()">
+      <form [formGroup]="updateCareFormGroup" (ngSubmit)="onSubmitUpdateCare()" class="care-form">
+        @for(input of updateCareFormControlConfigs; track input.label){
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button
+            type="submit"
+            class="primary"
+            [disabled]="!updateCareFormGroup.valid"
+          >
+            {{ 'form.care.update.label' | translate }}
+          </button>
+          <button
+            type="button"
+            class="secondary"
+            (click)="handleClose()"
+          >
+            {{ 'form.cancel.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+
+  <!-- Modal de création -->
   @if(showCreateModal){
-
-    <app-modal [title]="modal_add_title | translate" (close)="handleClose()">
-      <!--
-      <app-form [formGroup]="formGroup" [title]="'title' | translate"
-                [config]="formControlConfigs">
-      </app-form>
-      -->
-      <div class="modal-footer">
-        <button type="button" class="cancel-btn" (click)="handleClose()">Cancel</button>
-        <button type="submit" class="submit-btn" [disabled]="formGroup.invalid" (click)="onSubmitCreateCare()">Submit</button>
-      </div>
-
-      <div class="error-form" [class.active]="error().length > 0 && formGroup.touched">
-        @if(error().length > 0){
-          <p>{{ 'security-feature.sign-in-page.error.description' | labelWithParam:{count: error().length} }}</p>
-        }
-        @for(error of error(); track error){
-          <div>
-            <app-label-with-param [label]="'security-feature.sign-in-page.error.'+error.control+'-'+error.error"></app-label-with-param>
+    <app-modal [title]="'form.care.create.title' | translate" (close)="handleClose()">
+      <form [formGroup]="createCareFormGroup" (ngSubmit)="onSubmitCreateCare()" class="two-column-form">
+        <div class="form-fields">
+          <div class="form-column">
+            <!-- Tous les champs de base -->
+            @for(input of createCareFormControlConfigs; track input.label){
+              <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+            }
           </div>
-        }
-      </div>
+        </div>
+
+        <!-- Actions du formulaire -->
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="primary"
+            [disabled]="!createCareFormGroup.valid"
+          >
+            {{ 'form.care.create.label' | translate }}
+          </button>
+          <button
+            type="button"
+            class="secondary"
+            (click)="handleClose()"
+          >
+            {{ 'form.cancel.label' | translate }}
+          </button>
+        </div>
+      </form>
     </app-modal>
   }
 </div>

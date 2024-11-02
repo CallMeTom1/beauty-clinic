@@ -1,7 +1,19 @@
 <div class="avatar" [ngStyle]="{'width': width, 'height': height}">
-  <!-- Afficher l'image si elle est disponible -->
-  <img *ngIf="profileImage$()" [src]="profileImage$()" [alt]="alt" [style.width]="'100%'" [style.height]="'100%'">
+  <!-- Afficher l'image de profil si elle est disponible -->
+  <img *ngIf="securityService.account$().profileImage"
+       [src]="'data:image/png;base64,' + securityService.account$().profileImage"
+       [alt]="alt"
+       [style.width]="'100%'"
+       [style.height]="'100%'">
 
-  <!-- Afficher l'icône par défaut si aucune image n'est disponible -->
-  <i *ngIf="!profileImage$()" class="fa-thin fa-circle-user"></i>
+  <!-- Afficher l'image URL si elle est disponible -->
+  <img *ngIf="!profile.profileImage && profile.profileImageUrl"
+       [src]="profile.profileImageUrl"
+       [alt]="alt"
+       [style.width]="'100%'"
+       [style.height]="'100%'">
+
+  <!-- Afficher une icône par défaut si aucune image n'est disponible -->
+  <i *ngIf="!profile.profileImage && !profile.profileImageUrl"
+     class="fa-thin fa-circle-user"></i>
 </div>

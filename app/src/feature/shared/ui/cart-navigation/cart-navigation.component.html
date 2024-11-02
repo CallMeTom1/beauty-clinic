@@ -1,23 +1,65 @@
-<div class="cart-navigation" (click)="toggleDropdown()">
-  <i class="fa-light fa-bag-shopping cart-icon"></i>
-  <div class="cart-dropdown" *ngIf="dropdownOpen">
-    <ng-container *ngIf="cartItems.length > 0; else emptyCart">
-      <div class="cart-item" *ngFor="let item of cartItems">
-        <div class="cart-item-quant-price">
-          <span>{{ item.quantity }} x <span class="product-name">{{ item.product.name }}</span> </span>
-          <span class="price">{{ item.product.price | currency:'EUR' }}</span>
+<div class="cart-navigation" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+  <div class="cart-trigger" (click)="navigateCart()">
+    <i class="fa-light fa-bag-shopping cart-icon"></i>
+    @if(cartItems.length > 0){
+      <span class="cart-count">{{cartItems.length}}</span>
+    }
+  </div>
+
+  <div class="cart-dropdown" [class.show]="dropdownOpen" *ngIf="dropdownOpen">
+    <div class="cart-header">
+      <h3>MON PANIER ({{cartItems.length}})</h3>
+      @if(productAddedDetected) {
+        <div class="success-message">
+          <i class="fa-solid fa-check"></i>
+          <span>Produit ajouté au panier</span>
         </div>
-        <div class="separator"></div>
+      }
+    </div>
+
+    <ng-container *ngIf="cartItems.length > 0; else emptyCart">
+      <div class="cart-items">
+        <div class="cart-item" *ngFor="let item of cartItems">
+          <div class="item-image">
+            <img [src]="item.product.product_image" [alt]="item.product.name">
+          </div>
+          <div class="item-details">
+            <h4>{{ item.product.name }}</h4>
+            <div class="item-meta">
+              <span class="quantity">Quantité: {{ item.quantity }}</span>
+              <div class="price-container">
+                <ng-container *ngIf="item.product.is_promo; else normalPrice">
+                  <span class="original-price">{{ item.product.initial_price | currency:'EUR' }}</span>
+                  <span class="final-price promo">{{ item.product.price_discounted | currency:'EUR' }}</span>
+                </ng-container>
+                <ng-template #normalPrice>
+                  <span class="final-price">{{ item.product.initial_price | currency:'EUR' }}</span>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="cart-total">
-        <span>Sous-Total:</span>
-        <span>{{ getTotalPrice() | currency:'EUR' }}</span>
+
+      <div class="cart-footer">
+        <div class="total">
+          <span>Total estimé</span>
+          <span class="total-amount">{{ getTotalPrice() | currency:'EUR' }}</span>
+        </div>
+        <button class="view-cart" (click)="navigateCart()">
+          Voir mon panier
+        </button>
+        <button class="checkout">
+          Procéder au paiement
+        </button>
       </div>
-      <button class="secondary">VOIR MON PANIER</button>
-      <button class="primary">PAIEMENT</button>
     </ng-container>
+
     <ng-template #emptyCart>
-      <div class="empty-message">Mon panier est vide</div>
+      <div class="empty-cart">
+        <i class="fa-light fa-bag-shopping"></i>
+        <p>Votre panier est vide</p>
+      </div>
     </ng-template>
   </div>
 </div>

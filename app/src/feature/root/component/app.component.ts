@@ -26,6 +26,5 @@ export class AppComponent implements OnInit {
     this.translate.setDefaultLang(Language.FR);
     this.translate.use(Language.FR);
     this.themeService.loadTheme();
-    this.securityService.fetchCategoryProducts().subscribe();
   }
 }

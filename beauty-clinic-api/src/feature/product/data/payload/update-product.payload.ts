@@ -1,58 +1,66 @@
-import { ApiProperty } from '@nestjs/swagger';
-import {IsString, IsNumber, IsOptional, IsNotEmpty} from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger";
+import {IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min} from "class-validator";
+import {Transform} from "class-transformer";
 
 export class UpdateProductPayload {
-    @ApiProperty({
-        description: 'Unique identifier of the product category to update.',
-        example: 'cat_12345'
-    })
-    @IsString({ message: 'The id must be a string.' })
-    @IsNotEmpty({ message: 'The id field cannot be empty.' })
-    id: string;
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    product_id: string;
 
-    @ApiProperty({
-        description: 'Name of the product.',
-        example: 'Updated anti-aging cream',
-        required: false
-    })
-    @IsString({ message: 'The name must be a string.' })
+    @ApiProperty({ required: false })
     @IsOptional()
+    @IsString()
     name?: string;
 
-    @ApiProperty({
-        description: 'Description of the product.',
-        example: 'Updated description for the product.',
-        required: false
-    })
-    @IsString({ message: 'The description must be a string.' })
+    @ApiProperty({ required: false })
     @IsOptional()
+    @IsString()
     description?: string;
 
-    @ApiProperty({
-        description: 'Price of the product.',
-        example: 29.99,
-        required: false
-    })
-    @IsNumber({}, { message: 'The price must be a number.' })
+    @ApiProperty({ required: false })
     @IsOptional()
-    price?: number;
+    @IsNumber()
+    initial_price?: number;
 
-    @ApiProperty({
-        description: 'Quantity stored of the product.',
-        example: 100,
-        required: false
-    })
-    @IsNumber({}, { message: 'The quantity_stored must be a number.' })
+    @ApiProperty({ required: false })
     @IsOptional()
+    @IsNumber()
     quantity_stored?: number;
 
-    @ApiProperty({
-        description: 'Promo percentage for the product.',
-        example: 10,
-        required: false
-    })
-    @IsNumber({}, { message: 'The promo_percentage must be a number.' })
+    @ApiProperty()
+    @IsNumber()
     @IsOptional()
-    promo_percentage?: number;
+    minQuantity?: number;
 
+    @ApiProperty()
+    @IsOptional()
+    @IsNumber()
+    maxQuantity?: number;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsBoolean()
+    isPublished?: boolean;
+
+    @ApiProperty({ required: false, type: [String], description: 'Array of category IDs. Send empty array to remove all categories.' })
+    @IsOptional()
+    @IsArray()
+    @Transform(({ value }) => {
+        // Assure que la valeur est toujours un tableau, même si vide
+        return Array.isArray(value) ? value : [];
+    })
+    category_ids?: string[];
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsBoolean()
+    is_promo?: boolean;
+
+    @ApiProperty({ required: false, minimum: 0, maximum: 100 })
+    @IsOptional()
+    @IsNumber()
+    @Min(0)
+    @Max(100)
+    promo_percentage?: number;
 }

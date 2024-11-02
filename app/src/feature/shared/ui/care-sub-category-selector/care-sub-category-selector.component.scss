@@ -1,0 +1,145 @@
+.category-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  min-width: 150px;
+  text-align: left;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .caret {
+    margin-left: 8px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid currentColor;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &:hover {
+    border-color: #2196F3;
+    background-color: rgba(33, 150, 243, 0.05);
+  }
+}
+
+.dropdown-menu {
+  display: none;
+  position: fixed;
+  background-color: #fff;
+  min-width: 200px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 10000;
+  margin-top: 4px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+
+    &:hover {
+      background: #666;
+    }
+  }
+
+  &.show {
+    display: block;
+  }
+}
+
+.dropdown-item {
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 14px;
+    color: #333;
+
+    input[type="checkbox"] {
+      margin: 0;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #2196F3;
+      border-radius: 3px;
+
+      &:checked {
+        background-color: #2196F3;
+        border-color: #2196F3;
+      }
+    }
+  }
+
+  &:hover {
+    background-color: rgba(33, 150, 243, 0.05);
+  }
+}
+
+.selected-categories {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e3f2fd;
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+  gap: 6px;
+  color: #1976d2;
+  border: 1px solid #90caf9;
+
+  .remove-category {
+    background: none;
+    border: none;
+    color: #1976d2;
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    min-height: 16px;
+    margin-left: 4px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(25, 118, 210, 0.1);
+    }
+  }
+}

@@ -23,12 +23,4 @@ export class PaymentController {
         return this.paymentService.getPaymentsForOrder(orderId);
     }
 
-    @Post('test-payment')
-    async createAndConfirmPayment(
-        @Body('amount') amount: number,
-        @Body('currency') currency: string,
-        @Body('orderId') orderId: string,
-    ) {
-        return this.paymentService.createAndConfirmPayment(amount, currency, orderId);
-    }
 }

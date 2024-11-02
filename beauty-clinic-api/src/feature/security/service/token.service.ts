@@ -5,7 +5,11 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigKey, configManager } from '@common/config';
 import { Builder } from 'builder-pattern';
 import {ulid} from "ulid";
-import {TokenGenerationException, UserNotFoundException} from "@feature/security/security.exception";
+import {
+    TokenGenerationException, TokenNotFoundException,
+    TokenRevokedException,
+    UserNotFoundException
+} from "@feature/security/security.exception";
 import {Role, Token} from "@feature/security/data";
 import {Credential} from "@feature/security/data";
 
@@ -14,6 +18,18 @@ export class TokenService {
     constructor(@InjectRepository(Token) private readonly repository: Repository<Token>,
                 @InjectRepository(Credential) private readonly credentialRepository: Repository<Credential>,
                 private jwtService: JwtService) {
+    }
+
+    async verifyTokenExists(tokenString: string): Promise<boolean> {
+        const tokenEntity = await this.repository.findOne({
+            where: { token: tokenString }
+        });
+
+        if (!tokenEntity) {
+            throw new TokenRevokedException();
+        }
+
+        return true;
     }
 
     async getTokens(credential: Credential): Promise<any> {
@@ -67,11 +83,11 @@ export class TokenService {
     }
 
     async revokeToken(token: string): Promise<void> {
-        // Recherche du token dans la base de données
-        const tokenEntity = await this.repository.findOne({ where: { token: token } });
+        const tokenEntity = await this.repository.findOne({
+            where: { token: token }
+        });
 
         if (tokenEntity) {
-            // Suppression ou marquage comme révoqué
             await this.repository.remove(tokenEntity);
         }
     }
@@ -84,8 +100,11 @@ export class TokenService {
 
     async refresh(tokenString: string): Promise<Token> {
         if (typeof tokenString !== 'string' || tokenString.trim() === '') {
-            throw new UserNotFoundException();
+            throw new TokenNotFoundException();
         }
+
+        // Vérifier si le token existe en base
+        await this.verifyTokenExists(tokenString);
 
         try {
             const decoded = await this.jwtService.verify(tokenString, {
@@ -93,16 +112,26 @@ export class TokenService {
                 ignoreExpiration: true
             });
 
-            const credential: Credential = await this.credentialRepository.findOneBy({ credential_id: decoded.sub });
+            const credential: Credential = await this.credentialRepository.findOneBy({
+                credential_id: decoded.sub
+            });
+
             if (!credential) {
                 throw new UserNotFoundException();
             }
 
+            // Révoquer l'ancien token
+            await this.revokeToken(tokenString);
+
+            // Générer un nouveau token
             return await this.getTokens(credential);
         } catch (e) {
-            if(e instanceof UserNotFoundException)
+            if (e instanceof TokenRevokedException) {
+                throw new TokenRevokedException();
+            }
+            if (e instanceof UserNotFoundException) {
                 throw new UserNotFoundException();
-
+            }
             throw new TokenGenerationException();
         }
     }

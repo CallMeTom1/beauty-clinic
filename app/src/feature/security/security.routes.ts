@@ -18,8 +18,13 @@ export const securityRoutes: Routes = [
   },
   {
     path: AppNode.PROFILE,
-    loadComponent: () => import('./page/profile-page/profile-page.component')
-      .then(c => c.ProfilePageComponent),
+    loadChildren: () => import('../profile/profile.routes')
+      .then(c => c.ProfileRoutes),
+  },
+  {
+    path: 'my-orders',
+    loadComponent: () => import('./page/order-list-page/order-list-page.component')
+      .then(c => c.OrderListPageComponent),
   },
   {
     path:'verify-email',

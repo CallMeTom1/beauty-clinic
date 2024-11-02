@@ -1,3 +1,14 @@
-@for(product of productService.productsToShow$(); track product.product_id){
-  <app-product-card [product]="product"></app-product-card>
-}
+<div class="products-container">
+  @if(productService.productsToShow$().length > 0) {
+    <div class="products-grid">
+      @for(product of productService.productsToShow$(); track product.product_id) {
+        <app-product-card [product]="product" />
+      }
+    </div>
+  } @else {
+    <div class="no-results">
+      <i class="fa-light fa-face-frown"></i>
+      <p>Aucun produit ne correspond à votre recherche</p>
+    </div>
+  }
+</div>

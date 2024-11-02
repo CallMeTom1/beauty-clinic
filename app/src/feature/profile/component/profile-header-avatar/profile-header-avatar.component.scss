@@ -1,0 +1,83 @@
+.profile-section {
+  background-color: #e8f5e9;
+  padding-top: 80px;
+  padding-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 40vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+
+}
+
+.section-title {
+  text-align: center;
+  color: var(--theme-green);
+  font-size: var(--font-size-xlarge);
+  font-weight: bold;
+}
+
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.firstname-lastname{
+  text-align: center;
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  color: var(--theme-green);
+}
+.avatar-wrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin-bottom: 1rem;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-icon:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.edit-icon i {
+  color: #2e7d32;
+}
+
+.upload-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.upload-button:hover {
+  background-color: #45a049;
+}
+
+.upload-button i {
+  margin-right: 0.5rem;
+}

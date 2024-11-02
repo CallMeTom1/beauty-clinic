@@ -1,6 +1,38 @@
 <div class="product-page">
-  <h1> Les produits de beauté</h1>
-  <app-product-search></app-product-search>
-  <app-product-category-list-selector></app-product-category-list-selector>
-  <app-product-list></app-product-list>
+  <div class="sticky-header">
+    <div class="header-content">
+      <div class="head">
+        <h1>Les produits de beauté</h1>
+        <app-product-search></app-product-search>
+      </div>
+      <app-product-category-list-selector></app-product-category-list-selector>
+    </div>
+  </div>
+
+  <div class="products-container">
+    <app-product-list></app-product-list>
+  </div>
+
+  <!-- Debug info -->
+  <div style="position: fixed; bottom: 10px; left: 10px; background: white; padding: 10px; z-index: 9999;">
+    Modal is open: {{ modalService.isOpen() }}
+    Modal type: {{ modalService.type() }}
+  </div>
+
+  <app-modal
+    *ngIf="modalService.isOpen()"
+    [title]="'Connexion requise'"
+    (close)="closeAuthModal()">
+    <div class="auth-modal-content">
+      <p>Pour ajouter des articles à votre liste de souhaits, veuillez vous connecter ou créer un compte.</p>
+      <div class="button-container">
+        <button class="login-btn" (click)="navigateToLogin()">
+          Se connecter
+        </button>
+        <button class="register-btn" (click)="navigateToRegister()">
+          Créer un compte
+        </button>
+      </div>
+    </div>
+  </app-modal>
 </div>

@@ -1,99 +1,141 @@
-/* Reset global margins and paddings */
-
-
-/* Pour la vidéo de fond qui prend tout l'écran */
-.intro-video-wrapper {
-  position: fixed; /* Changed from relative to fixed */
-  top: 0;
-  left: 0;
-  width: 100vw; /* Use viewport width */
-  height: 100vh;
-  overflow: hidden;
-  transition: opacity 0.5s ease-out;
-  opacity: 1;
-  z-index: 2000; /* Assurez-vous que l'intro est au-dessus du reste */
-}
-
-.intro-video-wrapper.fade-out {
-  opacity: 0;
-}
-
-.background-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Assure que la vidéo couvre tout l'écran */
-  z-index: 1;
-}
-.overlay-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  color: #fff;
-  z-index: 2;
-  text-align: center;
-  padding-top: 10vh; /* Ajustez selon vos besoins */
-}
-
-.brand-logo {
-  width: 150px; /* Ajustez selon la taille de votre logo */
-  height: auto;
-  margin-bottom: 20px;
-}
-
-.brand-name {
-  font-size: 3rem;
-  margin-bottom: 20px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.tagline {
-  font-size: 1.2rem;
-  margin-bottom: 40px;
-  max-width: 80%;
-  line-height: 1.5;
-}
-
-.continue-button {
-  padding: 12px 30px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  border: 2px solid #fff;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.continue-button:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-
-.overlay-content > * {
-  animation: fadeIn 1s ease-out forwards;
-}
-
-.brand-logo { animation-delay: 0.2s; }
-.brand-name { animation-delay: 0.4s; }
-.tagline { animation-delay: 0.6s; }
-.continue-button { animation-delay: 0.8s; }
 
 /* Contenu principal après la vidéo */
 /* Contenu principal après la vidéo */
 .main-content {
-
+  max-width: 1400px;
+  padding: 0 32px;
 }
 
+@media screen and (max-width: 1200px) {
+  .main-content {
+    padding: 0 0;
+    width: 100vw;
+  }
+
+}
+.auth-modal-content {
+  text-align: center;
+  padding: 32px;
+
+  p {
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 32px;
+    position: relative;
+    padding-bottom: 24px;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background-color: #E8B4B8;
+      opacity: 0.5;
+    }
+  }
+}
+
+.button-container {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  button {
+    min-width: 160px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    @media (max-width: 480px) {
+      width: 100%;
+    }
+  }
+
+  .login-btn {
+    background-color: #E8B4B8;
+    color: black;
+    border: none;
+
+    &:hover {
+      background-color: darken(#E8B4B8, 5%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(232, 180, 184, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .register-btn {
+    background-color: white;
+    color: #333;
+    border: 2px solid #E8B4B8;
+
+    &:hover {
+      background-color: rgba(232, 180, 184, 0.05);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(232, 180, 184, 0.1);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+// Animation pour le contenu
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-modal-content {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+// Modifications du style du modal lui-même pour correspondre au thème
+::ng-deep {
+  .modal-content {
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .modal-header {
+    background-color: #FAFAFA;
+    border-bottom: 1px solid rgba(232, 180, 184, 0.2);
+
+    h2 {
+      color: #333;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .close-button {
+      color: #666;
+
+      &:hover {
+        color: #E8B4B8;
+      }
+    }
+  }
+}

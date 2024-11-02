@@ -1,0 +1,61 @@
+.profile-card {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  background-color: var(--theme-green);
+  border-radius: 50%;
+  margin-right: 16px;
+}
+
+.left i {
+  font-size: 24px;
+  color: #ffffff;
+}
+
+.right {
+  flex: 1;
+}
+
+h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--theme-green);
+  margin-bottom: 4px;
+}
+
+h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #666666;
+}
+
+@media (max-width: 480px) {
+  .profile-card {
+    gap: 32px;
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .left {
+    margin-right: 0;
+    margin-bottom: 12px;
+  }
+}

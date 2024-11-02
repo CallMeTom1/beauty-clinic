@@ -1,0 +1,90 @@
+<!-- manage-care-sub-category.component.html -->
+<div class="category-container">
+  <div class="category-header">
+    <h2>Gérer les sous-catégories de soin</h2>
+    <button class="primary" (click)="openCreateModal()">
+      {{ 'form.care_sub_category.add.label' | translate }}
+    </button>
+  </div>
+
+  <table class="category-table">
+    <thead>
+    <tr>
+      <th>{{ 'table.header.name' | translate }}</th>
+      <th>Description</th>
+      <th>{{ 'table.header.actions' | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for(subCategory of securityService.careSubCategories$(); track subCategory.sub_category_id) {
+        <tr>
+          <td>{{ subCategory.name }}</td>
+          <td>{{ subCategory.description }}</td>
+          <td class="actions-cell">
+            <div class="actions-group">
+              <a (click)="openEditModal(subCategory)" class="action-link edit">
+                Editer
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="togglePublishSubCategory(subCategory)" class="action-link"
+                 [ngClass]="subCategory.isPublished ? 'unpublish' : 'publish'">
+                {{ subCategory.isPublished ? 'Dépublier' : 'Publier' }}
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="openDeleteModal(subCategory)" class="action-link delete">
+                Supprimer
+              </a>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if(showDeleteModal) {
+    <app-modal [title]="'form.care_sub_category.delete.confirm.title' | translate" (close)="handleClose()">
+      <div class="del-modal">
+        <h3>{{ 'form.care_sub_category.delete.confirm.message' | translate }} ?</h3>
+        <span>{{ currentSubCategory?.name }}</span>
+      </div>
+      <div class="modal-actions">
+        <button (click)="deleteSubCategory()" class="primary">
+          {{ 'form.care_sub_category.delete.confirm.button' | translate }}
+        </button>
+        <button (click)="handleClose()" class="primary">
+          {{ 'form.cancel.label' | translate }}
+        </button>
+      </div>
+    </app-modal>
+  }
+
+  @if(showEditModal) {
+    <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
+      <form [formGroup]="updateSubCategoryFormGroup" (ngSubmit)="onSubmitUpdateSubCategory()">
+        @for(input of updateSubCategoryFormControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!updateSubCategoryFormGroup.valid" type="submit" class="primary">
+            {{ 'form.care_sub_category.update.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+
+  @if(showCreateModal) {
+    <app-modal [title]="modal_create_title | translate" (close)="handleClose()">
+      <form [formGroup]="createSubCategoryFormGroup" (ngSubmit)="onSubmitCreateSubCategory()">
+        @for(input of createSubCategoryFormControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!createSubCategoryFormGroup.valid" type="submit" class="primary">
+            {{ 'form.care_sub_category.add.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+</div>

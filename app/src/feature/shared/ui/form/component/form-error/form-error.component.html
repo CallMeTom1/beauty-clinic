@@ -1,24 +1,17 @@
-@if(control && control.errors && (control.dirty || control.touched)){
-  <div>
-    @for(errorKey of getErrorKeys(control.errors); track errorKey){
-      <div class="error-message">
-        <i class="fa-thin fa-circle-exclamation"></i>
-        @if(control.errors[errorKey]?.requiredLength){
-          <em>
-            {{ 'form.errors.' + errorKey | translate:{minlength: control.errors[errorKey]?.requiredLength} }}
-          </em>
-        }
-        @if(control.errors[errorKey]?.maxLength){
-          <em>
-            {{ 'form.errors.' + errorKey | translate:{maxlength: control.errors[errorKey]?.maxLength} }}
-          </em>
-        }
-        @if(!control.errors[errorKey]?.requiredLength && !control.errors[errorKey]?.maxLength){
-          <em>
-            {{ 'form.errors.' + errorKey | translate }}
-          </em>
-        }
-      </div>
-    }
+<div *ngIf="control && control.errors && (control.dirty || control.touched)">
+  <div *ngFor="let error of getErrorKeys()">
+    <div class="error-message">
+      <i class="fa-thin fa-circle-exclamation"></i>
+
+      <!-- Gestion des erreurs avec paramètres (comme minlength, maxlength) -->
+      <em *ngIf="error.params">
+        {{ 'form.errors.' + error.key | translate : error.params }}
+      </em>
+
+      <!-- Gestion des erreurs sans paramètres -->
+      <em *ngIf="!error.params">
+        {{ 'form.errors.' + error.key | translate  }}
+      </em>
+    </div>
   </div>
-}
+</div>

@@ -1,0 +1,123 @@
+<div class="summary">
+  <!-- Section code promo -->
+  <div class="promo-code-section">
+    <h3>{{ 'promo_code.title' | translate }}</h3>
+    @if(cart?.discountAmount && cart?.promoCode) {
+      <!-- Code promo actif -->
+      <div class="active-promo">
+        <div class="promo-info-applied">
+          <!-- Nom du code promo -->
+          <div class="promo-name">{{ promoName }}</div>
+          <!-- Détails de la réduction -->
+          <div class="promo-details">
+            <span class="promo-percentage">-{{ discountPercentage }}%</span>
+            <span class="promo-amount">
+          (-{{ discountAmount | currency:'EUR' }})
+        </span>
+          </div>
+          <!-- Date de validité -->
+          <div class="promo-validity">
+            Valable jusqu'au {{ cart?.promoCode?.validTo | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
+        <button
+          type="button"
+          class="remove-button"
+          [class.loading]="loading"
+          [disabled]="loading"
+          (click)="removePromoCode()"
+        >
+          <i class="fa-light fa-xmark"></i>
+        </button>
+      </div>
+    } @else {
+      <!-- Formulaire d'application de code promo -->
+      <form [formGroup]="promoCodeForm" (ngSubmit)="applyPromoCode()" class="promo-code-form">
+        <div class="input-group">
+          <input
+            type="text"
+            formControlName="code"
+            [placeholder]="'promo_code.placeholder' | translate"
+            class="promo-input"
+            [class.loading]="loading"
+            [disabled]="loading"
+          >
+          <button
+            type="submit"
+            [disabled]="!promoCodeForm.valid || loading"
+            class="apply-button"
+          >
+            @if(loading) {
+              <i class="fa-light fa-spinner fa-spin"></i>
+            } @else {
+              {{ 'promo_code.apply' | translate }}
+            }
+          </button>
+        </div>
+        <small class="promo-info">{{ 'promo_code.info' | translate }}</small>
+      </form>
+    }
+  </div>
+  <div class="recap-section">
+    <!-- Résumé du panier -->
+    <h2>Récapitulatif</h2>
+    <div class="total">
+      <span>Sous-total TTC</span>
+      <span>{{calculatedSubTotal | currency:'EUR'}}</span>
+    </div>
+
+    @if(discountAmount > 0) {
+      <div class="promo-discount">
+        <span>Réduction</span>
+        <span class="discount-amount">-{{discountAmount | currency:'EUR'}}</span>
+      </div>
+    }
+
+    <div class="shipping-fees">
+      <span>Livraison</span>
+      <span>{{getShippingAmount() | currency:'EUR'}}</span>
+    </div>
+
+    @if(remainingForFreeShipping > 0) {
+      <div class="free-shipping-alert">
+        Plus que {{remainingForFreeShipping | currency:'EUR'}} pour la livraison gratuite !
+      </div>
+    }
+
+    @if(isShippingFree) {
+      <div class="free-shipping-badge">
+        Livraison gratuite
+      </div>
+    }
+
+    <div class="total-order">
+      <div class="left">
+        <span>Total</span>
+        <span class="tva-included">Prix TTC</span>
+      </div>
+      <div class="right">
+        <span class="final-total">{{getTotalOrder() | currency:'EUR'}}</span>
+      </div>
+    </div>
+
+    @if(showConfirmButton) {
+      <button class="primary" (click)="confirmCart()">
+        Valider mon panier
+      </button>
+    }
+
+    <div class="secure">
+      <i class="fa-thin fa-shield-check"></i>
+      <span>paiement sécurisé</span>
+    </div>
+
+    <div *ngIf="securityService.sucesMessage$()" class="alert alert-success">
+      <i class="fa-thin fa-badge-check"></i>
+      {{ securityService.sucesMessage$() }}
+    </div>
+
+    <div *ngIf="securityService.error$()" class="alert alert-danger">
+      {{ securityService.error$() }}
+    </div>
+  </div>
+</div>

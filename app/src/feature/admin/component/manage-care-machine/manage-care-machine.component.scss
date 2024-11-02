@@ -1,0 +1,288 @@
+.machine-container {
+  width: 80vw;
+  margin: 0 auto;
+  padding: 20px;
+  overflow-x: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.machine-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+
+  h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+
+  button.primary {
+    padding: 10px 20px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+
+    i {
+      font-size: 1.1em;
+    }
+
+    &:hover {
+      background-color: darken(#2196F3, 10%);
+    }
+  }
+}
+
+.machine-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 20px;
+
+  th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    color: #333;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    white-space: nowrap;
+  }
+
+  td {
+    background-color: white;
+    transition: background-color 0.2s ease;
+  }
+
+  tr:hover td {
+    background-color: #f8f9fa;
+  }
+
+  .care-count {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: 500;
+  }
+}
+
+.actions-cell {
+  white-space: nowrap;
+  padding: 12px 20px;
+}
+
+.actions-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.action-separator {
+  color: #ccc;
+  font-weight: 300;
+  user-select: none;
+}
+
+.action-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  position: relative;
+  padding: 4px 0;
+  font-weight: 500;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  &.edit {
+    color: #2196F3;
+    &:hover {
+      color: darken(#2196F3, 15%);
+    }
+  }
+
+  &.delete {
+    color: #F44336;
+    &:hover {
+      color: darken(#F44336, 15%);
+    }
+  }
+}
+
+// Modal styles
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+
+  button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+    border: none;
+
+    &.primary {
+      background-color: #2196F3;
+      color: white;
+
+      &:hover {
+        background-color: darken(#2196F3, 10%);
+      }
+
+      &:disabled {
+        background-color: lighten(#2196F3, 20%);
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.del-modal {
+  text-align: center;
+  padding: 20px;
+
+  h3 {
+    color: #333;
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+
+  span {
+    color: #666;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 24px;
+  }
+}
+
+// Form styles
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+}
+
+// Responsive styles
+@media screen and (max-width: 1024px) {
+  .machine-container {
+    width: 90vw;
+  }
+
+  .machine-table {
+    font-size: 14px;
+  }
+
+  .action-link {
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .machine-container {
+    width: 95vw;
+    padding: 15px;
+  }
+
+  .machine-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+
+    h2 {
+      font-size: 28px;
+    }
+
+    button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .machine-table {
+    th, td {
+      padding: 8px;
+    }
+  }
+
+  .actions-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .action-separator {
+    display: none;
+  }
+
+  .care-count {
+    font-size: 0.8em;
+    padding: 3px 6px;
+  }
+}
+
+// Animation for modal transitions
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content {
+  animation: fadeIn 0.3s ease-out;
+}

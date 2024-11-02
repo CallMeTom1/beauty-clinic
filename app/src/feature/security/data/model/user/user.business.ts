@@ -1,14 +1,12 @@
-import { Business } from "@shared-core";
+import {Address} from "./address.business";
 
-export interface User extends Business {
+export interface User {
   idUser: string;
   role: string;
   token: string;
-  username: string;
-  phoneNumber: string;
+  mail: string;
   firstname: string;
   lastname: string;
-  profileImage: string;
-  profileImageUrl: string;
-  hasCustomProfileImage: boolean;
+  phonenumber: string | null;
+  addresses: Address[];
 }

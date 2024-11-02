@@ -1,6 +1,7 @@
-import {Component, computed, inject, Input, Signal} from '@angular/core';
-import {SecurityService} from "@feature-security";
+import {Component, computed, effect, inject, Input, Signal} from '@angular/core';
+import {SecurityService, UserUtils} from "@feature-security";
 import {NgIf, NgStyle} from "@angular/common";
+import {User} from "../../../security/data/model/user";
 
 @Component({
   selector: 'app-user-avatar',
@@ -17,19 +18,14 @@ export class UserAvatarComponent {
   @Input() width: string = '32px';
   @Input() height: string = '32px';
 
-  private securityService: SecurityService = inject(SecurityService);
+  protected securityService: SecurityService = inject(SecurityService);
+  protected profile: User = UserUtils.getEmpty();
 
-  profileImage$: Signal<string | null> = computed(() => {
-    const account = this.securityService.account$();
-    if (account.profileImage && account.profileImage.length > 0) {
-      // Si l'utilisateur a personnalisé son image de profil
-      return `data:image/png;base64,${account.profileImage}`;
-    } else if (account.profileImageUrl) {
-      // Sinon, utiliser l'image Google
-      return account.profileImageUrl;
-    } else {
-      // Sinon, utiliser null pour indiquer qu'il n'y a pas d'image
-      return null;
-    }
-  });
+  constructor() {
+    effect(() => {
+      this.profile = this.securityService.account$()
+    });
+  }
+
+
 }

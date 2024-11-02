@@ -29,12 +29,16 @@ export class AdminRouterComponent {
   protected securityService: SecurityService = inject(SecurityService);
   protected sideNav: AdminSideNav[] = [
     { title: 'common.admin.nav.dashboard', icon: 'fa-home', link: AppNode.DASHBOARD },
+    { title: 'common.admin.nav.clinic', icon: 'fa-thin fa-business-time', link: AppNode.MANAGE_CLINIC },
+    { title: 'common.admin.nav.product', icon: 'fa-hand-holding-heart', link: AppNode.MANAGE_PRODUCT },
+    { title: 'common.admin.nav.order', icon: 'fa-thin fa-boxes-stacked', link: AppNode.MANAGE_ORDER },
     { title: 'common.admin.nav.care', icon: 'fa-hand-holding-heart', link: AppNode.MANAGE_CARE },
     { title: 'common.admin.nav.appointment', icon: 'fa-calendar-check', link: AppNode.MANAGE_APPOINTMENT },
-    { title: 'common.admin.nav.customer', icon: 'fa-users', link: AppNode.MANAGE_CUSTOMER },
-    { title: 'common.admin.nav.business-hours', icon: 'fa-thin fa-clock', link: AppNode.MANAGE_BUSINESS_HOURS },
-    { title: 'common.admin.nav.holidays', icon: 'fa-thin fa-face-smile-relaxed', link: AppNode.MANAGE_HOLIDAY },
+    { title: 'common.admin.nav.customer', icon: 'fa-users', link: AppNode.MANAGE_CUSTOMER }
   ];
+  /*
+  <i class="fa-thin fa-boxes-stacked"></i>
+   */
 
   protected clinic_name: string = "admin-feature.admin-router.name"
   protected log_out: string = "admin-feature.admin-router.logout"

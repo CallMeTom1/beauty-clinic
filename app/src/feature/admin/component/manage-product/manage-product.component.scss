@@ -1,192 +1,468 @@
-// Variables
-$primary-color: #007bff;
-$secondary-color: #6c757d;
-$background-color: #f8f9fa;
-$text-color: #333;
-$border-color: #dee2e6;
-$shadow-color: rgba(0, 0, 0, 0.1);
+.product-container {
+  width: 80vw;
+  margin: 0 auto;
+  padding: 20px;
+  overflow-x: auto;
+  background: white;
+}
 
-// Mixins
-@mixin flex-center {
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  h2{
+    font-size: 36px;
+    font-weight: bold;
+  }
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+// Style pour le formulaire
+.two-column-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.form-fields {
+  display: flex;
+  gap: 24px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.form-column {
+  flex: 1;
+  min-width: 0; // Pour éviter le débordement
+}
+
+.form-actions {
+  margin-top: 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--theme-border);
+  background: var(--theme-bg-primary);
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+// Media query pour le responsive
+@media (max-width: 768px) {
+  .form-fields {
+    flex-direction: column;
+  }
+
+  .modal-content {
+    height: 90vh;
+  }
+}
+.product-table th,
+.product-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.product-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.product-table td:first-child {
+  width: 200px;
+}
+
+.product-image-container {
+  width: 200px;
+  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  border-radius: 4px;
 }
 
-@mixin button-style {
-  padding: 0.5rem 1rem;
+.product-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.image-upload-label {
+  cursor: pointer;
+  display: inline-block;
+  transition: opacity 0.3s ease;
+}
+
+.image-upload-label:hover {
+  opacity: 0.8;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  padding: 8px 15px;
+  margin: 5px;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-// Base styles
-.product-container {
-  padding: 1rem;
-  background-color: $background-color;
-
-  h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
+.btn-primary {
+  background-color: #007bff;
+  color: white;
 }
 
-.add-product-button {
-  margin-bottom: 1rem;
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
 
-  button {
-    @include button-style;
-    background-color: $primary-color;
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+// Styles pour les prix
+.price-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 0.9em;
+}
+
+.discounted-price {
+  color: #e74c3c;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.promo-badge {
+  background-color: #e74c3c;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+// Styles pour le bouton et popover de promo
+.action-button {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+
+  &.promo-active {
+    background: #e74c3c;
     color: white;
-    width: 100%;
+    border-color: #e74c3c;
 
     &:hover {
-      background-color: darken($primary-color, 10%);
+      background: darken(#e74c3c, 10%);
+    }
+  }
+
+  i {
+    font-size: 1.1em;
+  }
+}
+
+// Conteneur des actions
+.actions-cell {
+  white-space: nowrap;
+  padding: 12px 20px;
+}
+
+.actions-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.action-separator {
+  color: #ccc;
+  font-weight: 300;
+  user-select: none;
+}
+
+// Styles de base pour les liens d'action
+.action-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  position: relative;
+  padding: 4px 0;
+  font-weight: 500;
+
+  // Animation de soulignement
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  // Style pour éditer
+  &.edit {
+    color: #2196F3;
+
+    &:hover {
+      color: darken(#2196F3, 15%);
+    }
+
+    &:active {
+      color: darken(#2196F3, 25%);
+    }
+  }
+
+  // Style pour supprimer
+  &.delete {
+    color: #F44336;
+
+    &:hover {
+      color: darken(#F44336, 15%);
+    }
+
+    &:active {
+      color: darken(#F44336, 25%);
+    }
+  }
+
+  // Style pour publier
+  &.publish {
+    color: #4CAF50;
+
+    &:hover {
+      color: darken(#4CAF50, 15%);
+    }
+
+    &:active {
+      color: darken(#4CAF50, 25%);
+    }
+  }
+
+  // Style pour dépublier
+  &.unpublish {
+    color: #FF9800;
+
+    &:hover {
+      color: darken(#FF9800, 15%);
+    }
+
+    &:active {
+      color: darken(#FF9800, 25%);
+    }
+  }
+
+  // État désactivé
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// Style des boutons de modal
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+
+  button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+    border: none;
+
+    &.primary {
+      background-color: #2196F3;
+      color: white;
+
+      &:hover {
+        background-color: darken(#2196F3, 10%);
+      }
+
+      &:active {
+        background-color: darken(#2196F3, 15%);
+      }
+
+      &:disabled {
+        background-color: lighten(#2196F3, 20%);
+        cursor: not-allowed;
+      }
+    }
+
+    &.secondary {
+      background-color: #6c757d;
+      color: white;
+
+      &:hover {
+        background-color: darken(#6c757d, 10%);
+      }
+
+      &:active {
+        background-color: darken(#6c757d, 15%);
+      }
+
+      &:disabled {
+        background-color: lighten(#6c757d, 20%);
+        cursor: not-allowed;
+      }
     }
   }
 }
 
-.product-list {
-  display: grid;
-  gap: 1rem;
+// Modal de confirmation de suppression
+.del-modal {
+  text-align: center;
+  padding: 20px;
 
-  .card-header {
-    background-color: white;
-    border: 1px solid $border-color;
-    border-radius: 0.25rem;
-    overflow: hidden;
-
-    .image-upload-label {
-      display: block;
-      cursor: pointer;
-
-      img {
-        width: 100%;
-        height: 150px;
-        object-fit: cover;
-      }
-    }
-
-    h3 {
-      padding: 0.5rem;
-      margin: 0;
-      font-size: 1rem;
-      text-align: center;
-    }
-
-    p {
-      font-size: 0.9rem;
-      text-align: center;
-      margin: 0.25rem 0;
-    }
+  h3 {
+    color: #333;
+    margin-bottom: 12px;
+    font-size: 18px;
   }
 
-  .card-body {
-    padding: 0.5rem;
-    @include flex-center;
+  span {
+    color: #666;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 24px;
+  }
+}
+
+.promo-popover {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 16px;
+  z-index: 1000;
+  min-width: 250px;
+
+  .promo-content {
+    display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 12px;
 
-    button {
-      @include button-style;
-      background-color: $secondary-color;
-      color: white;
-      width: 100%;
-
-      &:hover {
-        background-color: darken($secondary-color, 10%);
-      }
+    label {
+      font-weight: 500;
+      color: #333;
     }
 
-    .switch {
+    .promo-input {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 8px;
 
-      label {
-        font-size: 0.9rem;
+      input {
+        width: 80px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1em;
       }
+    }
 
-      input[type="checkbox"] {
-        appearance: none;
-        width: 40px;
-        height: 20px;
-        background-color: #ccc;
-        border-radius: 20px;
-        position: relative;
-        cursor: pointer;
-
-        &:checked {
-          background-color: $primary-color;
-        }
-
-        &::before {
-          content: '';
-          position: absolute;
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          top: 1px;
-          left: 1px;
-          background-color: white;
-          transition: transform 0.3s ease;
-        }
-
-        &:checked::before {
-          transform: translateX(20px);
-        }
-      }
+    .promo-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
     }
   }
 }
 
-// Modal styles
-app-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  @include flex-center;
+@media screen and (max-width: 1024px) {
+  .product-table {
+    font-size: 14px;
+  }
 
-  form {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 8px 16px $shadow-color;
+  .product-table td:first-child {
+    width: 200px;
+  }
 
-    button {
-      @include button-style;
-      background-color: $primary-color;
-      color: white;
-      width: 100%;
-      margin-top: 1rem;
-
-      &:hover {
-        background-color: darken($primary-color, 10%);
-      }
-    }
+  .product-image-container {
+    width: 200px;
+    height: 200px;
   }
 }
 
-// Media queries for larger screens
-@media (min-width: 768px) {
-  .product-list {
-    grid-template-columns: repeat(2, 1fr);
+@media screen and (max-width: 768px) {
+  .product-container {
+    width: 100%;
+    padding: 10px;
   }
 
-  .add-product-button button {
-    width: auto;
+  .product-table {
+    font-size: 12px;
   }
-}
 
-@media (min-width: 1024px) {
-  .product-list {
-    grid-template-columns: repeat(3, 1fr);
+  .product-table td:first-child {
+    width: 100px;
+  }
+
+  .product-image-container {
+    width: 100px;
+    height: 100px;
+  }
+
+  .btn {
+    padding: 6px 10px;
+    font-size: 12px;
   }
 }

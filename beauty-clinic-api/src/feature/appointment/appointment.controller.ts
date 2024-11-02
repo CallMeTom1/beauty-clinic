@@ -36,6 +36,7 @@ export class AppointmentController {
         return await this.appointmentService.createAppointment(createAppointmentPayload, userReq.idUser);
     }
 
+    /*
     @Roles(Role.ADMIN)
     @Post('admin-create-appointment')
     @ApiOperation({ summary: 'Create an appointment for a user that does not exist' })
@@ -44,6 +45,8 @@ export class AppointmentController {
     ): Promise<void> {
         return await this.appointmentService.createAppointmentAdminUserDoesNotExist(createAppointmentPayload);
     }
+
+     */
 
     @Roles(Role.ADMIN)
     @Put('update-note')

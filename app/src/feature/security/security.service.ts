@@ -3,14 +3,12 @@ import {ApiResponse, ApiService, ApiURI} from "@shared-api";
 import {Router} from "@angular/router";
 import {UserUtils} from "./utils";
 import {environment} from "@env";
-import {catchError, Observable, Subscription, tap, throwError} from "rxjs";
+import {catchError, map, Observable, Subscription, tap, throwError} from "rxjs";
 import {AppNode, AppRoutes} from "@shared-routes";
 import {User} from "./data/model/user";
 import {SignInPayload, SignupPayload} from "./data";
-import {Care} from "../care/data/model/care.business";
+import {Care} from "./data/model/care/care.business";
 import {CareUtils} from "./utils/care.utils";
-import {AddCarePayload} from "./data/payload/care/add-care.payload";
-import {EditCarePayload} from "../admin/data/edit-care.payload";
 import {DeleteCarePayload} from "./data/payload/care/delete-care.payload";
 import {BusinessHoursUtils} from "./utils/business-hours.utils";
 import {BusinessHours} from "../business-hours/data/model/business-hours.business";
@@ -30,7 +28,6 @@ import {
 import {UpdateAppointmentStatusPayload} from "./data/payload/appointment/update-appointment-status.payload";
 import {GetAvailableDaysPayload} from "./data/payload/appointment/get-available-days.payload";
 import {GetAvailableTimeSlotsPayload} from "./data/payload/appointment/get-available-time-slots.payload";
-import {response} from "express";
 import {Customer} from "../customer/data/model/customer.business";
 import {ResetPasswordPayload} from "./data/payload/user/reset-password.payload";
 import {ForgotPasswordPayload} from "./data/payload/user/forgot-password.payload";
@@ -42,12 +39,7 @@ import {Product} from "./data/model/product/product.business";
 import {ProductUtils} from "./utils/product.utils";
 import {UpdateCategoryProductPayload} from "./data/payload/category-product/update-category-product.payload";
 import {CreateCategoryProductPayload} from "./data/payload/category-product/create-category-product.payload";
-import {ProductImagePayload} from "./data/payload/category-product/upload-category-product-image.payload";
 import {RemoveCategoryProductPayload} from "./data/payload/category-product/remove-category-product.payload";
-import {
-  UpdateCategoryProductStatusPayload
-} from "./data/payload/category-product/update-category-product-status.payload";
-import {CreateProductPayload} from "./data/payload/product/create-product.payload";
 import {UpdateProductPayload} from "./data/payload/product/update-product.payload";
 import {RemoveProductPayload} from "./data/payload/product/remove-product.payload";
 import {UpdateProductStatusPayload} from "./data/payload/product/update-product-status.payload";
@@ -57,6 +49,58 @@ import {CartUtils} from "./utils/cart.utils";
 import {AddCartItemPayload} from "./data/payload/cart/add-cart-item.payload";
 import {RemoveCartItemPayload} from "./data/payload/cart/remove-cart-item.payload";
 import {UpdateCartItemPayload} from "./data/payload/cart/update-cart-item.payload";
+import {OrderUtils} from "./utils/order.utils";
+import {Order} from "./data/model/order/order.business";
+import {UpdateShippingAddressPayload} from "./data/payload/order/update-shipping-address.payload";
+import {CreateProductPayload} from "./data/payload/product/create-product.payload";
+import {PromotionalCode} from "./data/model/promotional-code/promotional-code.business";
+import {ShippingFee} from "./data/model/shipping-fee/shipping-fee.business";
+import {PromoCodeUtils} from "./utils/promo-code.utils";
+import {ShippingFeeUtils} from "./utils/shipping-fee.utils";
+import {CreatePromoCodePayload} from "./data/payload/promo-code/create-promo-code.payload";
+import {UpdatePromoCodePayload} from "./data/payload/promo-code/update-promo-code.payload";
+import {DeletePromoCodePayload} from "./data/payload/promo-code/delete-promo-code.payload";
+import {UpdateShippingFeePayload} from "./data/payload/shipping-fee/update-shipping-fee.payload";
+import {CareCategory} from "./data/model/care-category/care-category.business";
+import {CareCategoryUtils} from "./utils/care-category.utils";
+import {DeleteCareCategoryPayload} from "./data/payload/care-category/delete-care-category.payload";
+import {CreateCareCategoryPayload} from "./data/payload/care-category/create-care-category.payload";
+import {UpdateCareCategoryPayload} from "./data/payload/care-category/update-care-category.payload";
+import {CareSubCategory} from "./data/model/care-sub-category/care-sub-category.business";
+import {CareSubCategoryUtils} from "./utils/care-sub-category.utils";
+import {CreateCareSubCategoryPayload} from "./data/payload/care-sub-category/create-care-sub-category.payload";
+import {UpdateCareSubCategoryPayload} from "./data/payload/care-sub-category/update-care-sub-category.payload";
+import {DeleteCareSubCategoryPayload} from "./data/payload/care-sub-category/delete-care-sub-category.payload";
+import {BodyZoneUtils} from "./utils/body-zone.utils";
+import {BodyZone} from "./data/model/body-zone/body-zone.business";
+import {CreateBodyZonePayload} from "./data/payload/body-zone/create-body-zone.payload";
+import {UpdateBodyZonePayload} from "./data/payload/body-zone/update-body-zone.payload";
+import {DeleteBodyZonePayload} from "./data/payload/body-zone/delete-body-zone.payload";
+import {ApplyPromoCodePayload} from "./data/payload/cart/apply-promo-code-cart.payload";
+import {Wishlist} from "./data/model/wishlist/wishlist.business";
+import {WishlistUtils} from "./utils/wishlist.utils";
+import {CreateReviewPayload} from "./data/payload/review/create-review.payload";
+import {UpdateReviewPayload} from "./data/payload/review/update-review.payload";
+import {DeleteReviewPayload} from "./data/payload/review/delete-review.payload";
+import {AddToWishlistPayload} from "./data/payload/wishlist/add-to-wishlist.payload";
+import {RemoveFromWishlistPayload} from "./data/payload/wishlist/remowe-from-wishlist.payload";
+import {ClinicUtils} from "./utils/clinic.utils";
+import {Clinic} from "./data/model/clinic/clinic.business";
+import {UpdateClinicPayload} from "./data/payload/clinic/update-clinic.payload";
+import {response} from "express";
+import {CareMachineUtils} from "./utils/care-machine.utils";
+import {CareMachine} from "./data/model/machine/machine.business";
+import {UpdateCareMachinePayload} from "./data/payload/care-machine/update-care-machine.payload";
+import {CreateCareMachinePayload} from "./data/payload/care-machine/create-care-machine.payload";
+import {DeleteCareMachinePayload} from "./data/payload/care-machine/delete-care-machine.payload";
+import {CreateCarePayload} from "./data/payload/care/add-care.payload";
+import {UpdateCarePayload} from "./data/payload/care/edit-care.payload";
+import { UpdateCareBodyZonesPayload} from "./data/payload/care/update-care-body-zone.payload";
+import {UpdateCareCategoriesPayload} from "./data/payload/care/update-care-category.payload";
+import {UpdateCareMachinesPayload} from "./data/payload/care/update-care-machine.payload";
+import {UpdateCareSubCategoriesPayload} from "./data/payload/care/update-care-sub-category.payload";
+import {UpdateStatusOrderPayload} from "./data/payload/order/update-status-order.payload";
+import {UpdateOrderTrackingNumberPayload} from "./data/payload/order/update-order-tracking-number.payload";
 
 
 //todo réaliser tout les fetch dans ce service pour économiser les call api
@@ -73,6 +117,7 @@ export class SecurityService {
   public account$: WritableSignal<User> = signal(UserUtils.getEmpty());
   public isAuth$: WritableSignal<boolean> = signal(this.getInitialAuthState());
   public cares$: WritableSignal<Care[]> = signal(CareUtils.getEmpties());
+  public caresPublished$: WritableSignal<Care[]> = signal(CareUtils.getEmpties());
   public businessHours$: WritableSignal<BusinessHours[]> = signal(BusinessHoursUtils.getEmpties());
   public holidays$: WritableSignal<Holiday[]> = signal(HolidayUtils.getEmpties());
   public appointment$: WritableSignal<Appointment[]> = signal(AppointmentUtils.getEmpties());
@@ -90,7 +135,24 @@ export class SecurityService {
   public cart$: WritableSignal<Cart> = signal(CartUtils.getEmpty())
 
   public error$: WritableSignal<string | null> = signal(null);
+  public sucesMessage$: WritableSignal<string | null> = signal(null);
 
+  public order$: WritableSignal<Order> = signal(OrderUtils.getEmptyOrder());
+
+  public orders$: WritableSignal<Order[]> = signal(OrderUtils.getEmptyOrders())
+
+  public promoCodes$: WritableSignal<PromotionalCode[]> = signal(PromoCodeUtils.getEmpties());
+  public shippingFees$: WritableSignal<ShippingFee> = signal(ShippingFeeUtils.getEmpty());
+
+  public careCategories$: WritableSignal<CareCategory[]> = signal(CareCategoryUtils.getEmpties())
+  public careSubCategories$: WritableSignal<CareSubCategory[]> = signal(CareSubCategoryUtils.getEmpties())
+  public bodyZones$: WritableSignal<BodyZone[]> = signal(BodyZoneUtils.getEmpties());
+
+  public wishList$: WritableSignal<Wishlist> = signal(WishlistUtils.getEmpty())
+
+  public clinic$: WritableSignal<Clinic> = signal(ClinicUtils.getEmpty())
+
+  public careMachine$: WritableSignal<CareMachine[]> = signal(CareMachineUtils.getEmpties())
 
 
   private getInitialAuthState(): boolean {
@@ -133,13 +195,8 @@ export class SecurityService {
     return this.api.get(ApiURI.APPOINTMENT).pipe(
       tap((response: ApiResponse): void => {
         if(response.result){
-          this.appointment$.set(
-            response.data.map((appointment: any) => ({
-              ...appointment,
-              userDetail: appointment.user ? appointment.user : { firstname: 'N/A', lastname: 'N/A' },
-              careDetail: appointment.care ? appointment.care : { name: 'Unknown', price: 0 }
-            }))
-          );
+          // On utilise directement les objets Care et User de la réponse
+          this.appointment$.set(response.data);
         }
       }),
       catchError(error => {
@@ -147,7 +204,7 @@ export class SecurityService {
         return throwError(error);
       })
     )
-  };
+  }
 
   public createAppointment(payload: CreateAppointmentPayload): Observable<ApiResponse> {
     return this.api.post(ApiURI.APPOINTMENT, payload).pipe(
@@ -398,10 +455,26 @@ export class SecurityService {
     );
   }
 
+  public fetchPublicCares(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.CARE_PUBLISHED).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          console.log('API call successful, updating cares...');
+          this.caresPublished$.set(response.data);
+        } else {
+          console.warn('API call did not return a successful result:', response);
+        }
+      }),
+      catchError(error => {
+        console.error('Error during API call:', error);
+        return throwError(error);
+      })
+    );
+  }
 
-  public addCare(payload: AddCarePayload): Observable<ApiResponse> {
+  public addCare(payload: CreateCarePayload): Observable<ApiResponse> {
 
-    return this.api.post(ApiURI.ADD_CARE, payload)
+    return this.api.post(ApiURI.CARE, payload)
       .pipe(
         tap((response: ApiResponse): void => {
 
@@ -419,8 +492,7 @@ export class SecurityService {
       );
   }
 
-  public editCare(payload: EditCarePayload): Observable<ApiResponse> {
-    console.log('Payload sent to server for editing:', payload); // Log du payload envoyé au serveur
+  public editCare(payload: UpdateCarePayload): Observable<ApiResponse> {
 
     return this.api.put(ApiURI.CARE, payload)
       .pipe(
@@ -451,11 +523,41 @@ export class SecurityService {
       )
   }
 
+  public uploadCareImage(payload: FormData): Observable<ApiResponse> {
+    return this.api.post(ApiURI.CARE_UPLOAD_IMAGE, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+            // Rafraîchir la liste des soins pour avoir l'image mise à jour
+            this.fetchCares().subscribe();
+          }
+        }),
+        catchError(error => {
+          console.error('Error during care image upload:', error);
+          return throwError(error);
+        })
+      );
+  }
+
+  updateCareCategories(payload: UpdateCareCategoriesPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.CARE, payload)
+  }
+
+  updateCareSubCategories(payload: UpdateCareSubCategoriesPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.CARE, payload)
+  }
+
+  updateCareBodyZones(payload: UpdateCareBodyZonesPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.CARE, payload)
+  }
+
+  updateCareMachines(payload: UpdateCareMachinesPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.CARE, payload)
+  }
+
   navigate(link: string) {
     this.router.navigate([link]).then();
   }
-
-
 
   //ACCOUNT
   public modifyProfile(payload: ModifyProfilePayload): Observable<ApiResponse> {
@@ -556,7 +658,14 @@ export class SecurityService {
   }
 
   me(): Observable<ApiResponse> {
-    return this.api.get(ApiURI.ME);
+    return this.api.get(ApiURI.ME)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if(response.result){
+            this.account$.set(response.data.user)
+        }
+      })
+      )
   }
 
   resetPassword(payload: ResetPasswordPayload) {
@@ -588,8 +697,6 @@ export class SecurityService {
         })
       );
   }
-
-
 
   //CATEGORY PRODUCTS
   fetchCategoryProducts(): Observable<ApiResponse> {
@@ -624,22 +731,9 @@ export class SecurityService {
   }
 
   deleteCategoryProduct(payload: RemoveCategoryProductPayload): Observable<ApiResponse>{
+    console.log('payload envoyé', payload)
     return this.api.delete(ApiURI.PRODUCT_CATEGORIES, payload)
   }
-
-  publishCategoryProduct(payload: UpdateCategoryProductStatusPayload): Observable<ApiResponse> {
-    return this.api.put(ApiURI.PRODUCT_CATEGORIES_PUBLISH, payload)
-  }
-
-  unpublishCategoryProduct(payload: UpdateCategoryProductStatusPayload): Observable<ApiResponse> {
-    return this.api.put(ApiURI.PRODUCT_CATEGORIES_UNPUBLISH, payload)
-  }
-
-  uploadCategoryProductImage(payload: any): Observable<ApiResponse> {
-    return this.api.post(ApiURI.PRODUCT_CATEGORIES_UPLOAD_IMAGE, payload)
-  }
-
-
 
   //PRODUCTS
   fetchProducts(): Observable<ApiResponse> {
@@ -700,7 +794,7 @@ export class SecurityService {
 
   // Mettre à jour les catégories d'un produit
   updateProductCategories(payload: UpdateProductCategoryPayload): Observable<ApiResponse> {
-    return this.api.put(ApiURI.UPDATE_PRODUCT_CATEGORIES, payload) // Adapter l'URI
+    return this.api.put(ApiURI.PRODUCTS, payload) // Adapter l'URI
       .pipe(
         tap((response: ApiResponse): void => {
           if (response.result) {
@@ -753,23 +847,507 @@ export class SecurityService {
   }
 
   changeQuantity(payload: UpdateCartItemPayload): Observable<ApiResponse>{
-    return this.api.post(ApiURI.CART_UPDATE_QUANTITY, payload)
+    return this.api.put(ApiURI.CART_UPDATE_QUANTITY, payload)
       .pipe(
         tap((response: ApiResponse): void => {
           if (response.result) {
             this.cart$.set(response.data);
+            this.sucesMessage$.set('Panier modifier avec succès')
           } else {
+            this.error$.set('Erreur lors de la modification du panier, veuillez réessayer')
+
             console.log('Erreur lors de changeQuantity:', response.code);
           }
         })
       );
   }
 
+  //ORDER
+  fetchOrders() {
+    return this.api.get(ApiURI.ORDERS).pipe(
+      tap(response => console.log('Raw API response:', response)), // Log de la réponse brute
+      map((response: ApiResponse) => {
+        if (response.result) {
+          console.log('Orders received:', response.data); // Log des commandes reçues
+          this.orders$.set(response.data);
+        }
+      })
+    );
+  }
+
+  getLastOrder(): Observable<ApiResponse>{
+    return this.api.get(ApiURI.ORDERS_LAST)
+      .pipe(
+        tap((response: ApiResponse) => {
+          if (response.result) {
+            this.order$.set(response.data)
+          } else {
+            console.log('Erreur', response.code);
+          }
+        })
+      );
+  }
+
+  initiatePaymentIntent(): Observable<string> {
+    return this.api.post(ApiURI.ORDERS)
+      .pipe(
+        map((response: ApiResponse): string => {
+          if (response.result) {
+            console.log('response createorder', response.data)
+            return response.data.clientSecret; // Renvoyer le client_secret
+          } else {
+            console.log('Erreur', response.code);
+            throw new Error('Erreur lors de la création de la commande');
+          }
+        })
+      );
+  }
+
+  createOrder(paymentStatus: string, paymentIntentId: string): Observable<ApiResponse> {
+    return this.api.post(ApiURI.ORDERS_CREATE, {paymentStatus, paymentIntentId}).pipe(
+      tap((response: ApiResponse)=> {
+        if(response.result){
+          this.order$.set(response.data);
+          this.fetchCart().subscribe()
+          this.navigate('cart/order/my-order-summary')
+          console.log(response.data)
+        }
+      })
+    )
+  }
+  updateShippingAddress(payload: UpdateShippingAddressPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.ORDER_SHIPPING_ADDRESS, payload).pipe(
+      tap((response: ApiResponse) => {
+        if (response.result && response.data) {
+          const updatedOrder = response.data as Order;
+
+          // Mise à jour de orders$
+          this.orders$.update(orders =>
+            orders.map(order =>
+              order.idOrder === updatedOrder.idOrder ? updatedOrder : order
+            )
+          );
+
+          // Mise à jour de order$ si c'est la commande actuellement sélectionnée
+          if (this.order$().idOrder === updatedOrder.idOrder) {
+            this.order$.set(updatedOrder);
+          }
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la mise à jour de l\'adresse de livraison:', error);
+        this.error$.set('Erreur lors de la mise à jour de l\'adresse de livraison');
+        return throwError(() => new Error(error));
+      })
+    );
+  }
+
+  updateOrderStatus(payload: UpdateStatusOrderPayload) {
+    return this.api.put(ApiURI.ORDERS, payload)
+  }
+
+  updateOrderTrackingNumber(payload: UpdateOrderTrackingNumberPayload) {
+    return this.api.put(ApiURI.ORDER_TRACKING_NUMBER, payload)
+  }
+
+  // Méthodes pour les codes promo
+  public fetchPromoCodes(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.PROMO_CODES).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          console.log(response.data)
+          this.promoCodes$.set(PromoCodeUtils.fromDtos(response.data));
+        }
+      })
+    );
+  }
+
+  public createPromoCode(payload: CreatePromoCodePayload): Observable<ApiResponse> {
+    return this.api.post(ApiURI.PROMO_CODES_CREATE, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchPromoCodes().subscribe();
+        }
+      })
+    );
+  }
+
+  public updatePromoCode(payload: UpdatePromoCodePayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.PROMO_CODES_UPDATE, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchPromoCodes().subscribe();
+        }
+      })
+    );
+  }
+
+  public deletePromoCode(payload: DeletePromoCodePayload): Observable<ApiResponse> {
+    return this.api.delete(ApiURI.PROMO_CODES_DELETE, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchPromoCodes().subscribe();
+        }
+      })
+    );
+  }
+
+  // Méthodes pour le panier avec code promo
+  public applyPromoCodeToCart(payload: ApplyPromoCodePayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.CART_APPLY_PROMO, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.cart$.set(response.data);
+          this.sucesMessage$.set('Code promo appliqué avec succès');
+        } else {
+          this.error$.set('Erreur lors de l\'application du code promo');
+        }
+      })
+    );
+  }
+
+  public removePromoCodeFromCart(): Observable<ApiResponse> {
+    return this.api.delete(ApiURI.CART_REMOVE_PROMO).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.cart$.set(response.data);
+          this.sucesMessage$.set('Code promo retiré avec succès');
+        }
+      })
+    );
+  }
+
+  // Méthodes pour les frais de livraison
+  public fetchShippingFees(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.SHIPPING_FEES).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.shippingFees$.set(response.data);
+        }
+      })
+    );
+  }
+
+  public updateShippingFee(payload: UpdateShippingFeePayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.SHIPPING_FEES_UPDATE, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchShippingFees().subscribe();
+        }
+      })
+    );
+  }
+
+
+  //Care categories
+  // Fetch all care categories
+  public fetchCareCategories(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.CARE_CATEGORY).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.careCategories$.set(response.data);
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la récupération des catégories:', error);
+        this.error$.set('Erreur lors de la récupération des catégories');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Create a new care category
+  public createCareCategory(payload: CreateCareCategoryPayload): Observable<ApiResponse> {
+    return this.api.post(ApiURI.CARE_CATEGORY, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchCareCategories().subscribe();
+          this.sucesMessage$.set('Catégorie créée avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la création de la catégorie:', error);
+        this.error$.set('Erreur lors de la création de la catégorie');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Update a care category
+  public updateCareCategory(payload: UpdateCareCategoryPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.CARE_CATEGORY, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchCareCategories().subscribe();
+          this.sucesMessage$.set('Catégorie mise à jour avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la mise à jour de la catégorie:', error);
+        this.error$.set('Erreur lors de la mise à jour de la catégorie');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Delete a care category
+  public deleteCareCategory(payload: DeleteCareCategoryPayload): Observable<ApiResponse> {
+    return this.api.delete(ApiURI.CARE_CATEGORY, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchCareCategories().subscribe();
+          this.sucesMessage$.set('Catégorie supprimée avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la suppression de la catégorie:', error);
+        this.error$.set('Erreur lors de la suppression de la catégorie');
+        return throwError(() => error);
+      })
+    );
+  }
+
+  //Care Sub Categories
+  // Fetch all care categories
+  public fetchCareSubCategories(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.CARE_SUB_CATEGORY).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.careSubCategories$.set(response.data);
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la récupération des Sub catégories:', error);
+        this.error$.set('Erreur lors de la récupération des Sub catégories');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Create a new care category
+  public createCareSubCategory(payload: CreateCareSubCategoryPayload): Observable<ApiResponse> {
+    return this.api.post(ApiURI.CARE_SUB_CATEGORY, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchCareSubCategories().subscribe();
+          this.sucesMessage$.set('Sub Catégorie créée avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la création de la Sub catégorie:', error);
+        this.error$.set('Erreur lors de la création de la Sub catégorie');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Update a care category
+  public updateCareSubCategory(payload: UpdateCareSubCategoryPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.CARE_SUB_CATEGORY, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchCareSubCategories().subscribe();
+          this.sucesMessage$.set('Sub Catégorie mise à jour avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la mise à jour de la Sub catégorie:', error);
+        this.error$.set('Erreur lors de la mise à jour de la Sub catégorie');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Delete a care category
+  public deleteCareSubCategory(payload: DeleteCareSubCategoryPayload): Observable<ApiResponse> {
+    return this.api.delete(ApiURI.CARE_SUB_CATEGORY, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchCareSubCategories().subscribe();
+          this.sucesMessage$.set('Catégorie supprimée avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la suppression de la catégorie:', error);
+        this.error$.set('Erreur lors de la suppression de la catégorie');
+        return throwError(() => error);
+      })
+    );
+  }
+
+
+  //Care BodyZone
+  // Fetch all body zones
+  public fetchBodyZones(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.BODY_ZONE).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.bodyZones$.set(response.data);
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la récupération des zones du corps:', error);
+        this.error$.set('Erreur lors de la récupération des zones du corps');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Create a new body zone
+  public createBodyZone(payload: CreateBodyZonePayload): Observable<ApiResponse> {
+    return this.api.post(ApiURI.BODY_ZONE, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchBodyZones().subscribe();
+          this.sucesMessage$.set('Zone du corps créée avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la création de la zone du corps:', error);
+        this.error$.set('Erreur lors de la création de la zone du corps');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Update a body zone
+  public updateBodyZone(payload: UpdateBodyZonePayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.BODY_ZONE, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchBodyZones().subscribe();
+          this.sucesMessage$.set('Zone du corps mise à jour avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la mise à jour de la zone du corps:', error);
+        this.error$.set('Erreur lors de la mise à jour de la zone du corps');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Delete a body zone
+  public deleteBodyZone(payload: DeleteBodyZonePayload): Observable<ApiResponse> {
+    return this.api.delete(ApiURI.BODY_ZONE, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.fetchBodyZones().subscribe();
+          this.sucesMessage$.set('Zone du corps supprimée avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la suppression de la zone du corps:', error);
+        this.error$.set('Erreur lors de la suppression de la zone du corps');
+        return throwError(() => error);
+      })
+    );
+  }
+
+
+  //REVIEWS
+  public createReview(payload: CreateReviewPayload): Observable<ApiResponse>{
+    return this.api.post(ApiURI.REVIEWS, payload);
+  }
+
+  public updateReview(payload: UpdateReviewPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.REVIEWS, payload)
+  }
+
+  public deleteReview(payload: DeleteReviewPayload): Observable<ApiResponse> {
+    return this.api.delete(ApiURI.REVIEWS, payload)
+  }
+
+  //WISHLIST
+  public fetchWishlist(): Observable<ApiResponse>{
+    return this.api.get(ApiURI.WISHLIST)
+      .pipe(
+        tap((response: ApiResponse) => {
+          if(response.result){
+            this.wishList$.set(response.data)
+          }
+        })
+      )
+  }
+
+  public addToWishList(payload: AddToWishlistPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.WISHLIST_ADD, payload)
+  }
+
+  public removeFromWishList(payload: RemoveFromWishlistPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.WISHLIST_REMOVE, payload)
+  }
+
+
+  //CLINIC
+
+  public fetchClinic(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.CLINIC)
+      .pipe(tap((response: ApiResponse) => {
+        if (response.result) {
+          this.clinic$.set(response.data)
+        }
+      }))
+  }
+
+  public updateClinic(payload: UpdateClinicPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.CLINIC, payload)
+      .pipe(tap((response: ApiResponse) => {
+        if (response.result) {
+          this.clinic$.set(response.data)
+        }
+      }))
+  }
+
+  public uploadClinicLogo(formData: FormData): Observable<ApiResponse> {
+    return this.api.post(ApiURI.CLINIC_UPLOAD_LOGO, formData)
+      .pipe(tap((response: ApiResponse) => {
+        if (response.result) {
+          // Mettre à jour l'état si nécessaire
+          this.fetchClinic().subscribe();
+        }
+      }));
+  }
 
 
 
+  //CARE MACHINE
 
+  public fetchCareMachine(): Observable<ApiResponse> {
+    return this.api.get(ApiURI.MACHINE)
+      .pipe(tap((response: ApiResponse) => {
+        if (response.result) {
+          this.careMachine$.set(response.data);
+        }
+      }));
+  }
 
+  public addCareMachine(payload: CreateCareMachinePayload): Observable<ApiResponse> {
+    return this.api.post(ApiURI.MACHINE, payload)
+      .pipe(tap((response: ApiResponse) => {
+        if (response.result) {
+          this.fetchCareMachine().subscribe();
+        }
+      }))
+  }
+
+  public deleteCareMachine(payload: DeleteCareMachinePayload): Observable<ApiResponse> {
+    return this.api.delete(ApiURI.MACHINE, payload)
+      .pipe(tap((response: ApiResponse) => {
+        if (response.result) {
+          this.fetchCareMachine().subscribe();
+        }
+      }))
+  }
+
+  public updateCareMachine(payload: UpdateCareMachinePayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.MACHINE, payload)
+      .pipe(tap((response: ApiResponse) => {
+        if (response.result) {
+          this.fetchCareMachine().subscribe();
+        }
+      }))
+  }
 
 
 

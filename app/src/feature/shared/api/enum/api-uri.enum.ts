@@ -9,7 +9,10 @@ export enum ApiURI {
   VERIFY_EMAIL = 'account/verify-email',
   SIGN_OUT = 'account/signout',
 
-  CARE='care',
+  CARE='cares',
+  CARE_PUBLISHED='cares/published',
+  CARE_UPLOAD_IMAGE='cares/upload-image',
+
   ADD_CARE='care',
   BUSINESS_HOURS='business-hours',
   HOLIDAY = 'holiday',
@@ -32,7 +35,7 @@ export enum ApiURI {
   PRODUCT_UNPUBLISH = 'products/unpublish',
   PRODUCT_PUBLISHED = 'products/published',
   PRODUCT_ADD_CATEGORY = 'products/add-category',
-  PRODUCT_UPLOAD_IMAGE = 'products/upload-product-image',
+  PRODUCT_UPLOAD_IMAGE = 'products/upload-image',
   UPDATE_PRODUCT_CATEGORIES = 'products/update-categories',
 
 
@@ -45,12 +48,56 @@ export enum ApiURI {
   //CART
 
   CART = 'cart',
-  CART_UPDATE_QUANTITY = 'cart/update',
+  CART_UPDATE_QUANTITY = 'cart/quantity',
+  CART_APPLY_PROMO = 'cart/promo',
+  CART_REMOVE_PROMO = 'cart/promo',
+
 
   //ORDERS
   ORDERS = 'orders',
+  ORDERS_LAST = 'orders/last',
+  ORDERS_CREATE='orders/create',
+  ORDER_SHIPPING_ADDRESS ='orders/shipping-address',
+  ORDER_TRACKING_NUMBER ='orders/tracking-number',
 
   //PAYMENTS
   PAYMENTS = 'payments',
+
+  //PROMO CODES
+  PROMO_CODES = 'promo-codes',
+  PROMO_CODES_CREATE = 'promo-codes',
+  PROMO_CODES_UPDATE = 'promo-codes',
+  PROMO_CODES_DELETE = 'promo-codes',
+
+  //CARE CATEGORIES
+  CARE_CATEGORY = 'care-category',
+
+  //CARE CATEGORIES
+  CARE_SUB_CATEGORY = 'care-sub-category',
+
+  //BODY ZONES
+  BODY_ZONE = 'body-zone',
+
+  //SHIPPING
+  SHIPPING_FEES = 'shipping-fees',
+  SHIPPING_FEES_UPDATE = 'shipping-fees',
+
+  //REVIEWS
+  REVIEWS = 'reviews',
+
+
+  //WISHLIST
+
+  WISHLIST = 'wishlist',
+  WISHLIST_ADD = 'wishlist/add',
+  WISHLIST_REMOVE = 'wishlist/remove',
+
+  //CLINIC
+  CLINIC = 'clinic',
+  CLINIC_UPLOAD_LOGO = 'clinic/upload-logo',
+
+  //Machine
+  MACHINE = 'care-machine'
+
 
 }

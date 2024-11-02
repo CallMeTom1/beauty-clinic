@@ -9,8 +9,8 @@ export class ProductCategory {
     @Column('varchar', { nullable: false, unique: true })
     name: string;
 
-    @Column({ type: 'text', nullable: true }) // Utilisation de 'text' pour stocker la chaîne encodée en base64
-    product_category_image: string;
+    @Column('varchar', { nullable: true, unique: false })
+    description: string;
 
     @Column({ type: 'boolean', default: false })
     isPublished: boolean;

@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, Injector, OnInit, runInInjectionContext} from '@angular/core';
 import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {SecurityService} from "@feature-security";
 import {CartItem} from "../../../security/data/model/cart/cart-item.business";
@@ -15,24 +15,88 @@ import {CartItem} from "../../../security/data/model/cart/cart-item.business";
   styleUrl: './cart-navigation.component.scss'
 })
 export class CartNavigationComponent {
-
   protected readonly securityService: SecurityService = inject(SecurityService);
+  private readonly injector = inject(Injector);
 
   dropdownOpen: boolean = false;
   cartItems: CartItem[] = [];
+  productAddedDetected: boolean = false;
+  private closeTimeout: any;
+  private messageTimeout: any;
+  private previousTotalQuantity: number = 0;
+  private effectInitialized = false;
 
   constructor() {
-    this.securityService.fetchCart().subscribe()
-    effect(() => {
-      this.cartItems = this.securityService.cart$().items;
+    // Fetch initial cart data
+    if(this.securityService.account$().idUser != ''){
+        this.securityService.fetchCart().subscribe(() => {
+        // Initialiser l'effet après un court délai
+        setTimeout(() => {
+          this.initializeEffect();
+        }, 100);
+      });
+    }
+  }
+
+  private initializeEffect() {
+    if (this.effectInitialized) return;
+
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        const newItems = this.securityService.cart$().items;
+        const newTotalQuantity = this.calculateTotalQuantity(newItems);
+
+        if (this.effectInitialized && newTotalQuantity > this.previousTotalQuantity) {
+          this.showAddedToCartMessage();
+        }
+
+        this.effectInitialized = true;
+        this.previousTotalQuantity = newTotalQuantity;
+        this.cartItems = newItems;
+      });
     });
   }
 
-  toggleDropdown() {
-    this.dropdownOpen = !this.dropdownOpen;
+  private calculateTotalQuantity(items: CartItem[]): number {
+    return items.reduce((total, item) => total + item.quantity, 0);
+  }
+
+  private showAddedToCartMessage() {
+    if (this.messageTimeout) clearTimeout(this.messageTimeout);
+    if (this.closeTimeout) clearTimeout(this.closeTimeout);
+
+    this.dropdownOpen = true;
+    this.productAddedDetected = true;
+
+    this.messageTimeout = setTimeout(() => {
+      this.productAddedDetected = false;
+    }, 3000);
+
+    this.closeTimeout = setTimeout(() => {
+      this.dropdownOpen = false;
+    }, 5000);
+  }
+
+  onMouseEnter() {
+    if (this.closeTimeout) {
+      clearTimeout(this.closeTimeout);
+    }
+    this.dropdownOpen = true;
+  }
+
+  onMouseLeave() {
+    this.closeTimeout = setTimeout(() => {
+      this.dropdownOpen = false;
+    }, 300);
   }
 
   getTotalPrice(): number {
-    return this.cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+    return this.cartItems.reduce((total, item) => {
+      return total + ((item.product.is_promo ? item.product.price_discounted : item.product.initial_price) * item.quantity);
+    }, 0);
+  }
+
+  navigateCart() {
+    this.securityService.navigate('cart');
   }
 }

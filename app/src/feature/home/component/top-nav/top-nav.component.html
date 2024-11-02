@@ -1,0 +1,42 @@
+<nav class="top-nav">
+  <div class="top-tier">
+    <div class="left">
+      <a (click)="navigateHome()" class="logo-block">
+        <img src="assets/pictures/light-logo-beauty-clinic.png" alt="logo">
+        <span class="clinic-name">IZZY BEAUTY</span>
+      </a>
+    </div>
+    <div class="right">
+      <app-clinic-nav></app-clinic-nav>
+      <app-wishlist></app-wishlist>
+      <app-cart-navigation></app-cart-navigation>
+      <app-user-navigation></app-user-navigation>
+    </div>
+  </div>
+
+  <div class="bottom-tier">
+    <ul class="main-menu">
+      <li [class.active]="activeMenuItem === 'home'" (click)="selectMenuItem('')">Home</li>
+      <li [class.active]="activeMenuItem === 'soins'" (click)="selectMenuItem('soins')">Les soins</li>
+      <li [class.active]="activeMenuItem === 'produits'" (click)="selectMenuItem('produits')">Les produits</li>
+      <button class="peach">Prendre rendez-vous</button>
+    </ul>
+    <div class="mobile-menu-button">
+      <i (click)="menu()" class="fa-thin fa-bars"></i>
+    </div>
+  </div>
+
+  @if(isMenuOpen) {
+    <div class="mobile-menu">
+      <ul>
+        <li [class.active]="activeMenuItem === 'home'" (click)="selectMenuItem('home')">Home</li>
+        <li [class.active]="activeMenuItem === 'soins'" (click)="selectMenuItem('soins')">Les soins</li>
+        <li [class.active]="activeMenuItem === 'produits'" (click)="selectMenuItem('produits')">Acheter des produits de beauté</li>
+        <li [class.active]="activeMenuItem === 'rendez-vous'" (click)="selectMenuItem('rendez-vous')">Prendre rendez-vous</li>
+        <li>Se créer un compte</li>
+        <li>Se connecter</li>
+        <li (click)="closeMenu()">X</li>
+      </ul>
+    </div>
+  }
+</nav>

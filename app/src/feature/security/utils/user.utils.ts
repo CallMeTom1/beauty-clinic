@@ -1,4 +1,5 @@
 import {User, UserDto} from "../data/model/user";
+import {Address} from "../data/model/user/address.business";
 
 export class UserUtils {
 
@@ -7,16 +8,11 @@ export class UserUtils {
       idUser: dto.idUser,
       role: dto.role,
       token: dto.token,
-      username: dto.username,
-      phoneNumber: dto.phoneNumber,
       firstname: dto.firstname,
       lastname: dto.lastname,
-      isEmpty: false,
-      id: dto.idUser,
-      str: dto.username,
-      profileImage: dto.profileImage,
-      profileImageUrl: dto.profileImageUrl,
-      hasCustomProfileImage: dto.hasCustomProfileImage,
+      phoneNumber: dto.phoneNumber,
+      shippingAddress: dto.shippingAddress, // Laisse null jusqu'à l'intégration correcte
+      addresses: dto.addresses,
     };
   }
 
@@ -25,31 +21,17 @@ export class UserUtils {
       idUser: "",
       role: "",
       token: "",
-      username: "",
-      phoneNumber: "",
       firstname: "",
       lastname: "",
-      isEmpty: true,
-      id: "",
-      str: "",
-      profileImage: "",
-      profileImageUrl: "",
-      hasCustomProfileImage: false
+      phonenumber: null,
+      addresses: Utils
     };
   }
 
-  public static toDto(business: User): UserDto {
+  public static getEmptyAddress(): Address{
     return {
-      idUser: business.idUser,
-      role: business.role,
-      token: business.token,
-      username: business.username,
-      phoneNumber: business.phoneNumber,
-      firstname: business.firstname,
-      lastname: business.lastname,
-      profileImage: business.profileImage,
-      profileImageUrl: business.profileImageUrl,
-      hasCustomProfileImage: business.hasCustomProfileImage,
-    };
+
+    }
   }
+
 }

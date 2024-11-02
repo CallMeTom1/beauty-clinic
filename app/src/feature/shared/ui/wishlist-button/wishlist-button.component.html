@@ -1,0 +1,9 @@
+<div class="favorite-icon"
+     [class.in-product-card]="inProductCard"
+     (click)="handleWishlistClick($event)">
+  <i class="fa-heart"
+     [class.far]="!isInWishlist()"
+     [class.fas]="isInWishlist()"
+     [style.color]="isInWishlist() ? '#E8B4B8' : ''">
+  </i>
+</div>

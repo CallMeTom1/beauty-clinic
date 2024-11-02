@@ -1,0 +1,66 @@
+header {
+  width: 80vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+
+  .left {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 50px;
+      margin-right: 1rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
+      margin: 0;
+    }
+  }
+
+  .right {
+    // Styles spécifiques pour app-progress-steps peuvent être ajustés si nécessaire
+  }
+}
+
+.main-content{
+  background: rgba(204, 204, 204, 0.22);
+  height: 100vh;
+  width: 100vw;
+  padding: 0 5vw;
+}
+
+// Styles responsives
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    padding: 1rem;
+
+    .left {
+      margin-bottom: 1rem;
+    }
+
+    .right {
+      width: 100%;
+    }
+  }
+}
+
+// Styles globaux pour assurer que le router-outlet prend le reste de l'espace
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+router-outlet {
+  flex: 1;
+}

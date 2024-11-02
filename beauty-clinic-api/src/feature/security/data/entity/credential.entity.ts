@@ -1,40 +1,40 @@
-import {Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn} from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    OneToMany,
+    OneToOne,
+    PrimaryColumn,
+    UpdateDateColumn
+} from 'typeorm';
 import {Exclude} from "class-transformer";
 import { Role } from '../role.enum';
 import {User} from "@feature/user/model/entity/user.entity";
+import {ResetToken} from "@feature/security/data/entity/reset-token.entity";
 
-@Entity()
+@Entity('credential')
 export class Credential {
-
-    @PrimaryColumn('varchar', { length:26})
+    @PrimaryColumn('varchar', { length: 26 })
     credential_id: string;
 
     @Exclude({ toPlainOnly: true })
-    @Column({nullable: true})
+    @Column({ nullable: true })
     password: string;
 
-    @Column({nullable: false, unique: true})
+    @Column({ nullable: false, unique: true })
     mail: string;
 
     @Column({ nullable: true, unique: true })
     googleHash: string;
 
-    @Column({ nullable: true, unique: true })
-    facebookHash: string;
-
-    @Column({default: true})
+    @Column({ default: true })
     active: boolean;
 
     @Column({ default: false })
     is_validated: boolean;
 
-    @Column({ nullable: true })
-    emailVerificationToken: string;
-
-    @Column({ nullable: true, type: 'timestamp' })
-    emailVerificationExpiresAt: Date;
-
-    @Column({length: 25, nullable: false, default: Role.USER})
+    @Column({ length: 25, nullable: false, default: Role.USER })
     role: Role;
 
     @CreateDateColumn()
@@ -47,10 +47,8 @@ export class Credential {
     @JoinColumn({ name: 'userId' })
     user: User;
 
-    @Column({ nullable: true })
-    resetToken: string;
-
-    @Column({ nullable: true, type: 'timestamp' })
-    resetTokenExpiresAt: Date;
-
+    @OneToMany(() => ResetToken, (resetToken) => resetToken.credential, {
+        cascade: true
+    })
+    resetTokens: ResetToken[];
 }

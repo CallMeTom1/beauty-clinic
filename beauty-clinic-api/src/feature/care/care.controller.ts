@@ -1,52 +1,80 @@
-import {Body, Controller, Delete, Get, Post, Put, Query} from '@nestjs/common';
-import { CareService } from '@feature/care/care.service';
-import { ApiTags } from '@nestjs/swagger';
-import {Public, Roles} from '@common/config/metadata';
-import { Care, CreateCarePayload, DeleteCarePayload, ModifyCarePayload } from '@feature/care/data';
-import { Role } from '@feature/security/data';
-import { GetCaresByCategoryPayload } from '@feature/care/data/payload/get-care-by-category.payload';
-import {GetCaresPaginatedPayload} from "@feature/care/data/payload/get-cares-paginated.payload";
-import {CareCategory} from "@feature/care/enum";
+import {
+    Controller,
+    Get,
+    Post,
+    Put,
+    Delete,
+    Body,
+    UploadedFile,
+    UseInterceptors,
+    BadRequestException
+} from '@nestjs/common';
+import { CareService } from './care.service';
+import {
+    CreateCarePayload,
+    UpdateCarePayload,
+    DeleteCarePayload,
+} from './data/payload';
+import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Public, Roles } from "@common/config/metadata";
+import { Role } from "@feature/security/data";
+import {Care} from "@feature/care/data";
+import {UploadCareImagePayload} from "@feature/care/data/payload/upload-care-image.payload";
 
-@ApiTags('Care')
-@Controller('care')
+@ApiTags('cares')
+@Controller('cares')
 export class CareController {
     constructor(private readonly careService: CareService) {}
 
     @Public()
     @Get()
-    getAllCares(): Promise<Care[]> {
-        return this.careService.getAllCares();
+    @ApiOperation({ summary: 'Get all cares' })
+    async findAll(): Promise<Care[]> {
+        return this.careService.findAll();
     }
 
-    @Get('category')
-    getCaresByCategory(@Query('category') category: CareCategory): Promise<Care[]> {
-        return this.careService.getCaresByCategory({ category });
-    }
-
-
-    @Post()
     @Public()
-    //@Roles(Role.ADMIN)
-    createCare(@Body() payload: CreateCarePayload): Promise<Care> {
-        return this.careService.createCare(payload);
+    @Get('published')
+    @ApiOperation({ summary: 'Get all published cares' })
+    async getPublishedCares(): Promise<Care[]> {
+        return this.careService.findPublished();
     }
 
+    @Public()
+    @Roles(Role.ADMIN)
+    @Post()
+    @ApiOperation({ summary: 'Create a new care' })
+    async create(@Body() payload: CreateCarePayload): Promise<Care> {
+        return this.careService.create(payload);
+    }
+
+    @Public()
+    @Roles(Role.ADMIN)
     @Put()
-    @Roles(Role.ADMIN)
-    modifyCare(@Body() payload: ModifyCarePayload): Promise<Care> {
-        return this.careService.modifyCare(payload);
+    @ApiOperation({ summary: 'Update a care' })
+    async update(@Body() payload: UpdateCarePayload): Promise<Care> {
+        return this.careService.update(payload);
     }
 
+    @Public()
+    @Roles(Role.ADMIN)
     @Delete()
+    @ApiOperation({ summary: 'Delete a care' })
+    async remove(@Body() payload: DeleteCarePayload): Promise<void> {
+        return this.careService.remove(payload.care_id);
+    }
+
+    @Public()
     @Roles(Role.ADMIN)
-    deleteCare(@Body() payload: DeleteCarePayload): Promise<void> {
-        return this.careService.deleteCare(payload);
+    @Post('upload-image')
+    @UseInterceptors(FileInterceptor('careImage'))
+    @ApiConsumes('multipart/form-data')
+    async uploadImage(
+        @Body() payload: UploadCareImagePayload,
+        @UploadedFile() file: Express.Multer.File,
+    ): Promise<Care> {
+        if (!file) throw new BadRequestException('No file uploaded');
+        return this.careService.updateCareImage(payload.careId, file);
     }
-
-    @Get('paginated')
-    getCaresPaginated(@Query() query: GetCaresPaginatedPayload): Promise<{ data: Care[], total: number }> {
-        return this.careService.getCaresPaginated(query);
-    }
-
 }

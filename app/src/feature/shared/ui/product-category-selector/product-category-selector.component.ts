@@ -5,29 +5,33 @@ import {NgForOf} from "@angular/common";
 import {SecurityService} from "@feature-security";
 import {Product} from "../../../security/data/model/product/product.business";
 import {UpdateProductCategoryPayload} from "../../../security/data/payload/product/update-product-category.payload";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-product-category-selector',
   standalone: true,
   imports: [
     NgForOf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './product-category-selector.component.html',
   styleUrl: './product-category-selector.component.scss'
 })
 export class ProductCategorySelectorComponent implements OnInit {
-  @Input() productId!: string; // ID du produit à lier aux catégories
+  @Input() productId!: string;
   protected securityService: SecurityService = inject(SecurityService);
 
-  public selectedCategories: string[] = []; // Catégories sélectionnées pour le produit
+  public selectedCategories: string[] = [];
   public categoryFormGroup: FormGroup = new FormGroup({
     categories: new FormControl([], [Validators.required])
   });
 
+  public isDropdownOpen = false;
+
   ngOnInit() {
     this.securityService.fetchCategoryProducts().subscribe();
-    this.loadInitialCategories(); // Charger les catégories déjà liées au produit
+    this.loadInitialCategories();
   }
 
   loadInitialCategories() {
@@ -41,6 +45,10 @@ export class ProductCategorySelectorComponent implements OnInit {
       // Mettre à jour le formulaire avec les catégories sélectionnées
       this.categoryFormGroup.get('categories')!.setValue(this.selectedCategories);
     }
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
   onCategoryChange(event: Event, categoryId: string) {
@@ -59,8 +67,9 @@ export class ProductCategorySelectorComponent implements OnInit {
 
   }
 
+
+
   isCategorySelected(categoryId: string): boolean {
-    // Vérifier si une catégorie est déjà sélectionnée
     return this.selectedCategories.includes(categoryId);
   }
 
@@ -84,5 +93,16 @@ export class ProductCategorySelectorComponent implements OnInit {
         console.error('Erreur lors de la communication avec le serveur:', err);
       }
     });
+  }
+
+  getCategoryName(categoryId: string): string {
+    const category = this.securityService.CategoryProducts$().find(cat => cat.product_category_id === categoryId);
+    return category ? category.name : '';
+  }
+
+  removeCategory(categoryId: string) {
+    this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
+    this.categoryFormGroup.get('categories')!.setValue(this.selectedCategories);
+    this.updateCategoriesOnServer();
   }
 }

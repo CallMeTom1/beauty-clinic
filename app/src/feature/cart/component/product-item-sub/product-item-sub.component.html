@@ -1,26 +1,47 @@
 <div class="cartItem">
-  <div class="top">
+  <div class="left">
     <img [src]="getImage(cartItem)" alt="{{cartItem.product.name}}" class="product-image" />
-    <span class="product-name">{{ cartItem.product.name }}</span>
   </div>
-  <div class="separator-line"></div>
-  <div class="unit-price">
-    <span>Prix Unitaire</span>
-    <span>{{ cartItem.product.price | currency:'EUR' }}</span>
-  </div>
-  <div class="qty_and_bin">
-    <div class="quantity select">
-      <div class="plus-minus">
-        <button (click)="changeQuantity(cartItem, cartItem.quantity - 1)"
-                [disabled]="cartItem.quantity <= 1">-</button>
-        <span>{{ cartItem.quantity }}</span>
-        <button (click)="changeQuantity(cartItem, cartItem.quantity + 1)">+</button>
+  <div class="right">
+    <div class="top">
+      <span class="product-name">{{ cartItem.product.name }}</span>
+      <span class="product-description">{{ cartItem.product.description }}</span>
+    </div>
+    <div class="unit-price">
+      <span>Prix Unitaire</span>
+      <div class="price-container">
+        <ng-container *ngIf="cartItem.product.is_promo; else normalPrice">
+          <span class="original-price">{{ cartItem.product.initial_price | currency:'EUR' }}</span>
+          <span class="promo-price">{{ cartItem.product.price_discounted | currency:'EUR' }}</span>
+        </ng-container>
+        <ng-template #normalPrice>
+          <span class="regular-price">{{ cartItem.product.initial_price | currency:'EUR' }}</span>
+        </ng-template>
       </div>
     </div>
-    <i (click)="removeCartItem(cartItem)" class="fa-thin fa-trash-can"></i>
-  </div>
-  <div class="total">
-    <span>Total</span>
-    <span>{{ getTotal(cartItem) | currency:'EUR' }}</span>
+    <div class="bottom">
+      <div class="qty">
+        <div class="quantity select">
+          <div class="plus-minus">
+            <button
+              (click)="changeQuantity(cartItem, cartItem.quantity - 1)"
+              [disabled]="!canDecrease(cartItem)"
+              [title]="'Minimum : ' + cartItem.product.minQuantity">-</button>
+            <span>{{ cartItem.quantity }}</span>
+            <button
+              (click)="changeQuantity(cartItem, cartItem.quantity + 1)"
+              [disabled]="!canIncrease(cartItem)"
+              [title]="'Maximum : ' + cartItem.product.maxQuantity">+</button>
+          </div>
+          <small class="quantity-limits" *ngIf="cartItem.quantity === cartItem.product.maxQuantity || cartItem.quantity === cartItem.product.quantity_stored">
+            Quantité maximum atteinte
+          </small>
+        </div>
+      </div>
+      <span class="del-span" (click)="removeCartItem(cartItem)">Supprimer</span>
+      <div class="total">
+        <span>{{ getTotal(cartItem) | currency:'EUR' }}</span>
+      </div>
+    </div>
   </div>
 </div>

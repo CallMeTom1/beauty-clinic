@@ -1,49 +1,32 @@
 .category-selector {
+
   display: flex;
-  overflow-x: scroll;
-  gap: 10px;
-  padding: 10px 0;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 20px 64px;
+}
 
-  .cat-bubble {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 12px;
-    background-color: #f8f9fa;
-    border-radius: 20px;
-    border: 1px solid grey;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
+.cat-bubble {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
 
-    &.selected {
-      background-color: #000;
-      color: #fff;
-      border-color: #000;
-    }
-
-    span {
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .bubble-count {
-      background-color: #000;
-      color: #fff;
-      border-radius: 50%;
-      padding: 3px 6px;
-      margin-left: 8px;
-      font-size: 12px;
-      font-weight: 700;
-    }
+  &:hover {
+    border-color: #E8B4B8;
+    color: #E8B4B8;
   }
 
-  /* Scroll customization */
-  ::-webkit-scrollbar {
-    height: 5px;
+  &.selected {
+    background: #E8B4B8;
+    color: white;
+    border-color: #E8B4B8;
   }
-  ::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 10px;
+
+  span {
+    font-weight: 500;
   }
 }

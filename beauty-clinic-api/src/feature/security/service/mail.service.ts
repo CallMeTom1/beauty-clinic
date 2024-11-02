@@ -1,6 +1,6 @@
 import {Injectable} from "@nestjs/common";
 import nodemailer from 'nodemailer';
-import SMTPTransport from 'nodemailer/lib/smtp-transport'; // Importation du type SMTPTransport
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 
 @Injectable()
@@ -35,22 +35,4 @@ export class MailService {
         await this.transporter.sendMail(mailOptions);
     }
 
-
-    async sendEmailVerificationEmail(to: string, verificationLink: string) {
-        const mailOptions = {
-            from: 'Votre Nom <no-reply@votre-domaine.com>',
-            to: to,
-            subject: 'Vérification de votre adresse email',
-            html: `<p>Merci de vous être inscrit. Veuillez vérifier votre adresse email en cliquant sur le lien ci-dessous :</p>
-               <p><a href="${verificationLink}">Vérifier mon email</a></p>`
-        };
-
-        try{
-            await this.transporter.sendMail(mailOptions);
-
-        }
-        catch (e) {
-            console.error('Erreur lors de l\'envoi de l\'email :', e);
-        }
-    }
 }

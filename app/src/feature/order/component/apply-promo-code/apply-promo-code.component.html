@@ -1,0 +1,38 @@
+<div class="promo-code-section">
+  <h3>{{ 'promo_code.title' | translate }}</h3>
+
+  <form [formGroup]="promoCodeForm" (ngSubmit)="applyPromoCode()" class="promo-code-form">
+    <div class="input-group">
+      <input
+        type="text"
+        formControlName="code"
+        [placeholder]="'promo_code.placeholder' | translate"
+        class="promo-input"
+      >
+      <button
+        type="submit"
+        [disabled]="!promoCodeForm.valid || loading"
+        class="apply-button"
+      >
+        {{ 'promo_code.apply' | translate }}
+      </button>
+    </div>
+
+    @if(hasPromoCode) {
+      <div class="active-promo">
+            <span class="promo-badge">
+              -{{ currentDiscount }}%
+            </span>
+        <button
+          type="button"
+          class="remove-button"
+          (click)="removePromoCode()"
+        >
+          <i class="fa-light fa-xmark"></i>
+        </button>
+      </div>
+    }
+  </form>
+
+  <small class="promo-info">{{ 'promo_code.info' | translate }}</small>
+</div>

@@ -1,0 +1,83 @@
+<!-- manage-body-zone.component.html -->
+<div class="category-container">
+  <div class="category-header">
+    <h2>Gérer les zones du corps</h2>
+    <button class="primary" (click)="openCreateModal()">
+      {{ 'form.body_zone.add.label' | translate }}
+    </button>
+  </div>
+
+  <table class="category-table">
+    <thead>
+    <tr>
+      <th>{{ 'table.header.name' | translate }}</th>
+      <th>{{ 'table.header.actions' | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for(bodyZone of securityService.bodyZones$(); track bodyZone.body_zone_id) {
+        <tr>
+          <td>{{ bodyZone.name }}</td>
+          <td class="actions-cell">
+            <div class="actions-group">
+              <a (click)="openEditModal(bodyZone)" class="action-link edit">
+                {{ 'action.edit' | translate }}
+              </a>
+              <span class="action-separator">|</span>
+              <a (click)="openDeleteModal(bodyZone)" class="action-link delete">
+                {{ 'action.delete' | translate }}
+              </a>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if(showDeleteModal) {
+    <app-modal [title]="'form.body_zone.delete.confirm.title' | translate" (close)="handleClose()">
+      <div class="del-modal">
+        <h3>{{ 'form.body_zone.delete.confirm.message' | translate }} ?</h3>
+        <span>{{ currentBodyZone?.name }}</span>
+      </div>
+      <div class="modal-actions">
+        <button (click)="deleteBodyZone()" class="primary">
+          {{ 'form.body_zone.delete.confirm.button' | translate }}
+        </button>
+        <button (click)="handleClose()" class="primary">
+          {{ 'form.cancel.label' | translate }}
+        </button>
+      </div>
+    </app-modal>
+  }
+
+  @if(showEditModal) {
+    <app-modal [title]="modal_edit_title | translate" (close)="handleClose()">
+      <form [formGroup]="updateBodyZoneFormGroup" (ngSubmit)="onSubmitUpdateBodyZone()">
+        @for(input of updateBodyZoneFormControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!updateBodyZoneFormGroup.valid" type="submit" class="primary">
+            {{ 'form.body_zone.update.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+
+  @if(showCreateModal) {
+    <app-modal [title]="modal_create_title | translate" (close)="handleClose()">
+      <form [formGroup]="createBodyZoneFormGroup" (ngSubmit)="onSubmitCreateBodyZone()">
+        @for(input of createBodyZoneFormControlConfigs; track input.label) {
+          <app-floating-label-input-test [config]="input"></app-floating-label-input-test>
+        }
+        <div class="modal-actions">
+          <button [disabled]="!createBodyZoneFormGroup.valid" type="submit" class="primary">
+            {{ 'form.body_zone.add.label' | translate }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+</div>

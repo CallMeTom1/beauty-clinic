@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Payment } from './data/model/payment.entity';
 import Stripe from 'stripe';
 import {ConfigKey, configManager} from "@common/config";
+import {ulid} from "ulid";
+import {User} from "@feature/user/model";
 
 @Injectable()
 export class PaymentService {
@@ -12,6 +14,9 @@ export class PaymentService {
     constructor(
         @InjectRepository(Payment)
         private readonly paymentRepository: Repository<Payment>,
+
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
     ) {
         // Initialisation de Stripe avec la clé API récupérée des variables d'environnement
         const stripeApiKey = configManager.getValue(ConfigKey.STRIPE_SECRET_KEY);
@@ -21,24 +26,34 @@ export class PaymentService {
     }
 
     // Créer un PaymentIntent avec Stripe et sauvegarder le paiement en base de données
-    async createPaymentIntent(amount: number, currency: string, orderId: string): Promise<Payment> {
+    async createPayment(amount: number, currency: string, userId: string): Promise<{ clientSecret: string }> {
+        const user = await this.userRepository.findOne({ where: { idUser: userId } });
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
         const paymentIntent = await this.stripe.paymentIntents.create({
-            amount: amount * 100,  // Stripe traite les montants en centimes
+            amount: amount * 100,
             currency,
             payment_method_types: ['card'],
+            metadata: { userId },
         });
 
         const payment = this.paymentRepository.create({
-            idPayment: paymentIntent.id,  // Utiliser l'ID du PaymentIntent comme identifiant de paiement
+            idPayment: ulid(),
             stripePaymentIntentId: paymentIntent.id,
             amount,
             currency,
-            status: 'pending',  // Statut initial
+            status: 'pending',
             paymentDate: new Date(),
-            order: { idOrder: orderId },  // Associer l'ID de la commande
+            user,
         });
 
-        return this.paymentRepository.save(payment);
+        await this.paymentRepository.save(payment);
+
+        return {
+            clientSecret: paymentIntent.client_secret,
+        };
     }
 
     async findPaymentById(paymentId: string): Promise<Payment> {
@@ -62,45 +77,8 @@ export class PaymentService {
         return this.paymentRepository.save(payment);
     }
 
-    //test payment without client
-    // Créer et confirmer un Payment Intent pour tester les paiements
-    async createAndConfirmPayment(amount: number, currency: string, orderId: string): Promise<Payment> {
-        // Créer le Payment Intent
-        const paymentIntent = await this.stripe.paymentIntents.create({
-            amount: amount * 100,  // Stripe traite les montants en centimes
-            currency,
-            payment_method_types: ['card'],  // Type de paiement : carte
-        });
 
-        // Créer un Payment Method avec une carte de test
-        const paymentMethod = await this.stripe.paymentMethods.create({
-            type: 'card',
-            card: {
-                number: '4242424242424242',  // Numéro de carte de test Stripe
-                exp_month: 12,
-                exp_year: 2024,
-                cvc: '123',
-            },
-        });
 
-        // Confirmer le Payment Intent avec l'ID du Payment Method
-        await this.stripe.paymentIntents.confirm(paymentIntent.id, {
-            payment_method: paymentMethod.id,  // Utiliser l'ID du Payment Method
-        });
-
-        // Sauvegarder le paiement dans la base de données
-        const payment = this.paymentRepository.create({
-            idPayment: paymentIntent.id,
-            stripePaymentIntentId: paymentIntent.id,
-            amount,
-            currency,
-            status: 'succeeded',  // Le paiement a réussi
-            paymentDate: new Date(),
-            order: { idOrder: orderId },
-        });
-
-        return this.paymentRepository.save(payment);
-    }
 
     async getPaymentsForOrder(orderId: string): Promise<Payment[]> {
         return this.paymentRepository.find({ where: { order: { idOrder: orderId } } });

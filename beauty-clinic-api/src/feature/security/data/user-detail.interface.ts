@@ -1,22 +1,14 @@
-export interface AddressDetails {
-    road: string;
-    nb: string;
-    cp: string;
-    town: string;
-    country: string;
-    complement: string;
-}
+import {Address} from "@common/model/address.entity";
+
 
 export interface UserDetails {
     idUser: string;
     role: string;
     token: string;
-    profileImage: string | null;
+    mail: string;
     firstname: string;
     lastname: string;
-    phoneNumber: string;
-    profileImageUrl: string;
-    hasCustomImage: boolean;
-    shippingAddress: AddressDetails | null;
-    billingAddress: AddressDetails | null;
+    phonenumber: string;
+    addresses: Address[]
+
 }

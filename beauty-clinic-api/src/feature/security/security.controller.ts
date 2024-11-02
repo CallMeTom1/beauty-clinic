@@ -6,7 +6,6 @@ import {UserRequest} from "@common/config/metadata/user-req.interface";
 import {SignInPayload, SignupPayload, Token, UserDetails} from "@feature/security/data";
 import {Public, UserReq} from "@common/config/metadata";
 import {AUTH_COOKIE_NAME} from "@common/config";
-import {FacebookGuard} from "@feature/security/guard";
 import {SecurityService} from "@feature/security/service/security.service";
 import {ChangePasswordPayload} from "@feature/security/data/payload/change-password.payload";
 import {ForgotPasswordPayload} from "@feature/security/data/payload/forgot-password.payload";
@@ -122,7 +121,6 @@ export class SecurityController {
         return this.service.changePassword(payload, user.idUser)
     }
 
-    //todo: forgot password
     @Public()
     @Post('forgot-password')
     async forgotPassword(@Body() forgotPasswordPayload: ForgotPasswordPayload): Promise<void> {
@@ -135,11 +133,5 @@ export class SecurityController {
     async resetPassword(@Body() payload: ResetPasswordPayload): Promise<void> {
         return this.service.resetPassword(payload);
     }
-
-    @Get('verify-email')
-    async verifyEmail(@Query('token') token: string): Promise<any> {
-        return await this.service.verifyEmail(token);
-    }
-
 
 }

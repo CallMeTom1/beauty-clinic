@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty } from 'class-validator';
+import {IsString, IsNotEmpty, IsBoolean} from 'class-validator';
 
 export class UpdateProductCategoryPayload {
     @ApiProperty({
@@ -17,4 +17,20 @@ export class UpdateProductCategoryPayload {
     @IsString({ message: 'The name must be a string.' })
     @IsNotEmpty({ message: 'The name field cannot be empty.' })
     name: string;
+
+    @ApiProperty({
+        description: 'boolean to publish or unpublish the product.',
+        example: 'true'
+    })
+    @IsBoolean({ message: 'The isPublished must be a boolean.' })
+    @IsNotEmpty({ message: 'The isPublished field cannot be empty.' })
+    isPublished: boolean;
+
+    @ApiProperty({
+        description: 'Name of the product category.',
+        example: 'Skincare'
+    })
+    @IsString({ message: 'The description must be a string.' })
+    description: string;
+
 }
