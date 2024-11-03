@@ -2,7 +2,6 @@ import {User, UserDto} from "../data/model/user";
 import {Address} from "../data/model/user/address.business";
 
 export class UserUtils {
-
   public static fromDto(dto: UserDto): User {
     return {
       idUser: dto.idUser,
@@ -10,9 +9,10 @@ export class UserUtils {
       token: dto.token,
       firstname: dto.firstname,
       lastname: dto.lastname,
-      phoneNumber: dto.phoneNumber,
-      shippingAddress: dto.shippingAddress, // Laisse null jusqu'à l'intégration correcte
-      addresses: dto.addresses,
+      phonenumber: dto.phonenumber,
+      addresses: dto.addresses || [],
+      username: dto.username,
+      mail: dto.mail
     };
   }
 
@@ -24,14 +24,27 @@ export class UserUtils {
       firstname: "",
       lastname: "",
       phonenumber: null,
-      addresses: Utils
+      addresses: [],
+      username: "",
+      mail: ""
     };
   }
 
-  public static getEmptyAddress(): Address{
+  public static getEmptyAddress(): Address {
     return {
-
-    }
+      address_id: "",
+      firstname: "",
+      lastname: "",
+      road: "",
+      nb: "",
+      cp: "",
+      town: "",
+      country: "",
+      complement: "",
+      label: "",
+      isDefault: "false",
+      isShippingAddress: false,
+      isBillingAddress: false
+    };
   }
-
 }

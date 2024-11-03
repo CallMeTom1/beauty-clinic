@@ -18,4 +18,10 @@ export class CareCategoryEntity {
 
     @ManyToMany(() => Care, care => care.categories, { nullable: true })
     cares: Care[];
+
+    @Column({ type: 'text', nullable: true })
+    category_image: string;
+
+    @OneToMany(() => CareSubCategoryEntity, subCategory => subCategory.category, {nullable: true})
+    subCategories: CareSubCategoryEntity[];
 }

@@ -1,5 +1,5 @@
 import {Care} from "@feature/care/data";
-import {Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
 import {CareCategoryEntity} from "../../../care-category/data/entity/care-category.entity";
 
 @Entity()
@@ -16,6 +16,15 @@ export class CareSubCategoryEntity {
     @Column({ type: 'boolean', default: false })
     isPublished: boolean;
 
+
+    @Column({ type: 'text', nullable: true })
+    sub_category_image: string;
+
     @ManyToMany(() => Care, care => care.subCategories, { nullable: true })
     cares: Care[];
+
+    @ManyToOne(() => CareCategoryEntity, category => category.subCategories, {nullable: true})
+    @JoinColumn({ name: 'category_id' })
+    category: CareCategoryEntity;
+
 }

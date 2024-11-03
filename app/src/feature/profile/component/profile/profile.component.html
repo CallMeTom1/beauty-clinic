@@ -1,4 +1,72 @@
 <div class="profile-page">
-  <!-- Section de mise à jour du profil -->
+  @if(!securityService.account$().idUser) {
+    <div class="connect-card">
+      <i class="fa-light fa-user"></i>
+      <h2>Accédez à vos informations</h2>
+      <p>Connectez-vous pour consulter et modifier vos informations personnelles</p>
+      <button class="btn-primary" [routerLink]="['/auth/signin']">Me connecter</button>
+    </div>
+  } @else {
+    <h1 class="page-title">Mes informations personnelles</h1>
 
+    <div class="profile-content">
+      <!-- Section Informations personnelles -->
+      <section class="info-section">
+        <div class="section-header">
+          <h2>Mes informations générales</h2>
+          <p class="required-fields">* Champs obligatoires</p>
+        </div>
+
+        <div class="email-display">
+          <label>Adresse e-mail</label>
+          <p>{{userEmail}}</p>
+        </div>
+
+        <form [formGroup]="userInfoForm" (ngSubmit)="onSubmitUserInfo()" class="user-info-form">
+          @for(config of userInfoConfigs; track config.label) {
+            <app-floating-label-input-test [config]="config"></app-floating-label-input-test>
+          }
+
+          <div class="form-actions">
+            <button type="submit"
+                    class="btn-primary"
+                    [disabled]="!userInfoForm.valid || !hasChanges">
+              Enregistrer les modifications
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Section Mot de passe -->
+      <section class="password-section">
+        <div class="section-header">
+          <h2>Mon mot de passe</h2>
+        </div>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()" class="password-form">
+          @for(config of passwordConfigs; track config.label) {
+            <app-floating-label-input-test [config]="config"></app-floating-label-input-test>
+          }
+
+          <div class="password-requirements">
+            <p class="requirements-title">Votre mot de passe doit contenir :</p>
+            <ul>
+              <li>au moins 8 caractères</li>
+              <li>au moins une minuscule (ex : abcd...)</li>
+              <li>au moins une majuscule (ex : ABCDEF...)</li>
+              <li>au moins un chiffre (ex : 12345...)</li>
+            </ul>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit"
+                    class="btn-primary"
+                    [disabled]="!passwordForm.valid">
+              Enregistrer
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  }
 </div>

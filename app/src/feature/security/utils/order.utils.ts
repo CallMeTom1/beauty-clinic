@@ -2,18 +2,17 @@ import { Order } from "../data/model/order/order.business";
 import { OrderItem } from "../data/model/order/order-item.business";
 import { Payment } from "../data/model/order/payment.business";
 import { ProductUtils } from "./product.utils";
-import { Address } from "../data/model/user/address.business";
 import { OrderStatus } from "../data/model/order/order-status.enum";
-import {UserUtils} from "@feature-security";
+import { UserUtils } from "@feature-security";
 
 export class OrderUtils {
   public static getEmptyOrder(): Order {
     return {
       idOrder: '',
       totalPrice: 0,
-      status: OrderStatus.PENDING_PAYMENT, // Utilisation de l'enum comme valeur par défaut
+      status: OrderStatus.PENDING_PAYMENT,
       orderDate: new Date().toISOString(),
-      shippingAddress: OrderUtils.getEmptyAddress(),
+      shippingAddress: UserUtils.getEmptyAddress(), // Utilisation du getEmptyAddress de UserUtils
       shippingFee: 0,
       promoCodeId: undefined,
       trackingNumber: '',
@@ -25,17 +24,7 @@ export class OrderUtils {
     };
   }
 
-  private static getEmptyAddress(): Address {
-    return {
-      address_id: '',
-      road: '',
-      nb: '',
-      cp: '',
-      town: '',
-      country: '',
-      complement: '',
-    };
-  }
+  // Suppression de getEmptyAddress car on utilise celui de UserUtils
 
   public static getEmptyOrders(count: number = 1): Order[] {
     return Array(count).fill(null).map(() => this.getEmptyOrder());
@@ -62,7 +51,7 @@ export class OrderUtils {
       amount: 0,
       refundedAmount: 0,
       currency: '',
-      status: OrderStatus.PENDING_PAYMENT, // Utilisation de l'enum comme valeur par défaut
+      status: OrderStatus.PENDING_PAYMENT,
       paymentDate: new Date(),
       refundDate: undefined,
       orderId: '',
@@ -74,7 +63,6 @@ export class OrderUtils {
     return Array(count).fill(null).map(() => this.getEmptyPayment());
   }
 
-  // Nouvelles méthodes utilitaires pour la gestion des statuts
   public static isOrderPending(status: OrderStatus): boolean {
     return status === OrderStatus.PENDING_PAYMENT ||
       status === OrderStatus.PENDING_SHIPPING;
@@ -90,7 +78,6 @@ export class OrderUtils {
   }
 
   public static canUpdateStatus(currentStatus: OrderStatus, newStatus: OrderStatus): boolean {
-    // Logique de validation des transitions de statut
     switch (currentStatus) {
       case OrderStatus.PENDING_PAYMENT:
         return [OrderStatus.PAYMENT_FAILED, OrderStatus.PENDING_SHIPPING].includes(newStatus);
@@ -108,7 +95,6 @@ export class OrderUtils {
   }
 
   public static getNextPossibleStatuses(currentStatus: OrderStatus): OrderStatus[] {
-    // Retourne les statuts possibles suivants selon le statut actuel
     switch (currentStatus) {
       case OrderStatus.PENDING_PAYMENT:
         return [OrderStatus.PAYMENT_FAILED, OrderStatus.PENDING_SHIPPING];

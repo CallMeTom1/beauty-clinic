@@ -4,6 +4,7 @@ import {Wishlist} from "../../../security/data/model/wishlist/wishlist.business"
 import {SecurityService} from "@feature-security";
 import {Care} from "../../../security/data/model/care/care.business";
 import {Product} from "../../../security/data/model/product/product.business";
+import {ModalService} from "../modal.service";
 
 @Component({
   selector: 'app-wishlist',
@@ -18,29 +19,72 @@ import {Product} from "../../../security/data/model/product/product.business";
 })
 export class WishlistComponent {
   protected readonly securityService: SecurityService = inject(SecurityService);
+  private readonly modalService = inject(ModalService);
+
   dropdownOpen = signal(false);
   wishlist = signal<Wishlist | null>(null);
   private closeTimeout: any;
 
-  protected readonly validProducts = computed(() => {
-    return this.wishlist()?.products?.filter(p => p.product_id) || [];
-  });
+  // Signals dérivés
+  protected readonly validProducts = computed(() =>
+    this.wishlist()?.products?.filter(p => p.product_id) || []
+  );
 
-  protected readonly validCares = computed(() => {
-    return this.wishlist()?.cares?.filter(c => c.care_id) || [];
-  });
+  protected readonly validCares = computed(() =>
+    this.wishlist()?.cares?.filter(c => c.care_id) || []
+  );
 
-  protected readonly totalItems = computed(() => {
-    return this.validProducts().length + this.validCares().length;
-  });
+  protected readonly totalItems = computed(() =>
+    this.validProducts().length + this.validCares().length
+  );
+
+  protected readonly userId = computed(() =>
+    this.securityService.account$()?.idUser || ''
+  );
+
+  protected readonly isAuthenticated = computed(() =>
+    this.userId() !== ''
+  );
 
   constructor() {
-    if(this.securityService.account$().idUser != '') {
+    // Initialiser la wishlist si l'utilisateur est connecté
+    if (this.isAuthenticated()) {
       this.securityService.fetchWishlist().subscribe();
     }
+
+    // Observer les changements de la wishlist
     effect(() => {
       this.wishlist.set(this.securityService.wishList$());
     }, { allowSignalWrites: true });
+  }
+
+  onMouseEnter(): void {
+    // N'ouvrir le dropdown que si l'utilisateur est authentifié
+    if (!this.isAuthenticated()) {
+      return;
+    }
+
+    if (this.closeTimeout) {
+      clearTimeout(this.closeTimeout);
+    }
+    this.dropdownOpen.set(true);
+  }
+
+  onMouseLeave(): void {
+    this.closeTimeout = setTimeout(() => {
+      this.dropdownOpen.set(false);
+    }, 300);
+  }
+
+  navigateToWishlist(): void {
+    if (!this.isAuthenticated()) {
+      console.log('Opening auth modal from wishlist navigation');
+      this.modalService.openAuthModal();
+      this.dropdownOpen.set(false);
+      return;
+    }
+
+    this.securityService.navigate('wishlist');
   }
 
   formatDuration(minutes: number): string {
@@ -54,19 +98,7 @@ export class WishlistComponent {
     return `${minutes}min`;
   }
 
-  onMouseEnter() {
-    if (this.closeTimeout) {
-      clearTimeout(this.closeTimeout);
-    }
-    this.dropdownOpen.set(true);
-  }
-
-  onMouseLeave() {
-    this.closeTimeout = setTimeout(() => {
-      this.dropdownOpen.set(false);
-    }, 300);
-  }
-
+  // Méthodes utilitaires
   isWishlistEmpty(): boolean {
     return this.totalItems() === 0;
   }
@@ -89,9 +121,5 @@ export class WishlistComponent {
 
   getTotalItems(): number {
     return this.totalItems();
-  }
-
-  navigateToWishlist(): void {
-    this.securityService.navigate('wishlist');
   }
 }

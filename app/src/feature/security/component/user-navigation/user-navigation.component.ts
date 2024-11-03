@@ -1,17 +1,15 @@
-import {Component, effect, ElementRef, HostListener, inject, OnInit, signal, WritableSignal} from '@angular/core';
+import {Component, effect, ElementRef, inject} from '@angular/core';
 import {SecurityService, UserUtils} from "@feature-security";
 import {TranslateModule} from "@ngx-translate/core";
 import {AppRoutes} from "@shared-routes";
-import {UserAvatarComponent} from "../../../shared/ui/user-avatar/user-avatar.component";
+import {NgIf, AsyncPipe} from "@angular/common";
 import {User} from "../../data/model/user";
-import {AsyncPipe, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-user-navigation',
   standalone: true,
   imports: [
     TranslateModule,
-    UserAvatarComponent,
     NgIf,
     AsyncPipe
   ],
@@ -19,7 +17,6 @@ import {AsyncPipe, NgIf} from "@angular/common";
   styleUrl: './user-navigation.component.scss'
 })
 export class UserNavigationComponent {
-
   protected securityService: SecurityService = inject(SecurityService);
   private elementRef: ElementRef = inject(ElementRef);
   protected account: User = UserUtils.getEmpty();
@@ -63,7 +60,7 @@ export class UserNavigationComponent {
 
   onMouseEnter() {
     if (this.closeTimeout) {
-      clearTimeout(this.closeTimeout); // Annule le timeout si la souris revient sur le dropdown
+      clearTimeout(this.closeTimeout);
     }
     this.dropdownOpen = true;
   }
@@ -71,7 +68,6 @@ export class UserNavigationComponent {
   onMouseLeave() {
     this.closeTimeout = setTimeout(() => {
       this.dropdownOpen = false;
-    }, 300); // Délai de 300ms avant fermeture
+    }, 300);
   }
-
 }

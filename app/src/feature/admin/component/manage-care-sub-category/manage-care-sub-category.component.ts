@@ -7,6 +7,7 @@ import {FloatingLabelInputTestComponent} from "../../../shared/ui/form/component
 import {ModalComponent} from "../../../shared/ui/modal/modal/modal.component";
 import {NgClass} from "@angular/common";
 import {CareSubCategory} from "../../../security/data/model/care-sub-category/care-sub-category.business";
+import {lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-manage-care-sub-category',
@@ -204,5 +205,50 @@ export class ManageCareSubCategoryComponent implements OnInit {
         console.error('Erreur lors du changement de statut de la sous-catégorie', err);
       }
     });
+  }
+
+  protected SubCategoryImageForm: FormGroup = new FormGroup({
+    subCategoryImage: new FormControl(null, Validators.required)
+  });
+
+// Ajoutez la méthode pour gérer le changement d'image
+  onSubCategoryImageChange(event: any, subCategory: CareSubCategory): void {
+    const file: File | undefined = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.SubCategoryImageForm.patchValue({
+        subCategoryImage: file
+      });
+      this.uploadSubCategoryImage(subCategory).then();
+    }
+  }
+
+// Ajoutez la méthode pour uploader l'image
+  async uploadSubCategoryImage(subCategory: CareSubCategory): Promise<void> {
+    if (this.SubCategoryImageForm.valid) {
+      const formData: FormData = new FormData();
+      const subCategoryImage = this.SubCategoryImageForm.get('subCategoryImage')?.value;
+
+      if (subCategoryImage) {
+        // Correction du nom du champ pour correspondre au FileInterceptor
+        formData.append('categoryImage', subCategoryImage);
+        // Correction du nom du champ pour correspondre au DTO
+        formData.append('sub_category_id', subCategory.sub_category_id);
+
+        try {
+          await lastValueFrom(this.securityService.uploadCareSubCategoryImage(formData));
+        } catch (error) {
+          console.error('Erreur lors de la mise à jour de l\'image de la sous-catégorie', error);
+        }
+      }
+    }
+  }
+
+// Ajoutez la méthode pour obtenir l'image
+  getSubCategoryImage(subCategory: CareSubCategory): string {
+    if (subCategory.sub_category_image && typeof subCategory.sub_category_image === 'string') {
+      return subCategory.sub_category_image;
+    } else {
+      return './assets/default-category.png';
+    }
   }
 }

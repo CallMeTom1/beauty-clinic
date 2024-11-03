@@ -9,13 +9,22 @@ import {CreateCareSubCategoryPayload} from "./data/payload/create-care-sub-categ
 import {UpdateCareCategoryPayload} from "../care-category/data/payload/update-care-category.payload";
 import {DeleteCareCategoryPayload} from "../care-category/data/payload/delete-care-category.payload";
 import {UpdateCareSubCategoryPayload} from "./data/payload/update-care-sub-category.payload";
+import {readFileSync} from "fs";
+import {join} from "path";
+import {FileUploadException, InvalidFileTypeException} from "@feature/security/security.exception";
 
 @Injectable()
 export class CareSubCategoryService {
+    private readonly defaultSubCategoryImage: string;
+
     constructor(
         @InjectRepository(CareSubCategoryEntity)
         private careSubCategoryRepository: Repository<CareSubCategoryEntity>,
-    ) {}
+    ) {
+        const defaultImageBuffer = readFileSync(join(process.cwd(), 'src', 'feature', 'product', 'assets', 'default-product.png'));
+        this.defaultSubCategoryImage = `data:image/png;base64,${defaultImageBuffer.toString('base64')}`;
+
+    }
 
     async create(payload: CreateCareSubCategoryPayload): Promise<CareSubCategoryEntity> {
         try {
@@ -23,7 +32,9 @@ export class CareSubCategoryService {
                 sub_category_id: ulid(),
                 name: payload.name,
                 description: payload.description ?? '',
-                isPublished: payload.isPublished ?? false
+                isPublished: payload.isPublished ?? false,
+                sub_category_image: this.defaultSubCategoryImage // Ajouter l'image par défaut
+
             });
 
             return await this.careSubCategoryRepository.save(subCategory);
@@ -98,6 +109,34 @@ export class CareSubCategoryService {
                 throw error;
             }
             throw new Error(`Failed to delete category: ${error.message}`);
+        }
+    }
+
+    async updateSubCategoryImage(subCategoryId: string, file: Express.Multer.File): Promise<CareSubCategoryEntity> {
+        try {
+            console.log('File received in service:', file);
+            console.log('Category ID:', subCategoryId);
+
+            const sub_category = await this.findOne(subCategoryId);
+
+            if (!file) {
+                throw new FileUploadException();
+            }
+
+            // Vérification du type MIME
+            const allowedMimeTypes: string[] = ['image/jpeg', 'image/png'];
+            if (!allowedMimeTypes.includes(file.mimetype)) {
+                throw new InvalidFileTypeException();
+            }
+
+            // Encodage en base64
+            const base64Image = file.buffer.toString('base64');
+            sub_category.sub_category_image = `data:${file.mimetype};base64,${base64Image}`;
+
+            return await this.careSubCategoryRepository.save(sub_category);
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour de l\'image de la sous catégorie', error);
+            throw new Error('Failed to update category image');
         }
     }
 }

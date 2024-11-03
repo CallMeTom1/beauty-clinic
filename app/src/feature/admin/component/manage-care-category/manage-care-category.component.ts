@@ -8,6 +8,10 @@ import {FloatingLabelInputTestComponent} from "../../../shared/ui/form/component
 import {ModalComponent} from "../../../shared/ui/modal/modal/modal.component";
 import {NgClass} from "@angular/common";
 import {CareCategory} from "../../../security/data/model/care-category/care-category.business";
+import {
+  SubCareCateogrySelectorForCareCategoryComponent
+} from "../../../shared/ui/sub-care-cateogry-selector-for-care-category/sub-care-cateogry-selector-for-care-category.component";
+import {lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-manage-care-category',
@@ -19,7 +23,8 @@ import {CareCategory} from "../../../security/data/model/care-category/care-cate
     LabelWithParamComponent,
     LabelWithParamPipe,
     ModalComponent,
-    NgClass
+    NgClass,
+    SubCareCateogrySelectorForCareCategoryComponent
   ],
   templateUrl: './manage-care-category.component.html',
   styleUrls: ['./manage-care-category.component.scss']
@@ -205,5 +210,49 @@ export class ManageCareCategoryComponent implements OnInit {
         console.error('Erreur lors du changement de statut de la catégorie', err);
       }
     });
+  }
+
+  protected CareCategoryImageForm: FormGroup = new FormGroup({
+    careCategoryImage: new FormControl(null, Validators.required)
+  });
+
+// Ajoutez la méthode pour gérer le changement d'image
+  onCareCategoryImageChange(event: any, category: CareCategory): void {
+    const file: File | undefined = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.CareCategoryImageForm.patchValue({
+        careCategoryImage: file
+      });
+      this.uploadCareCategoryImage(category).then();
+    }
+  }
+
+// Ajoutez la méthode pour uploader l'image
+  async uploadCareCategoryImage(category: CareCategory): Promise<void> {
+    if (this.CareCategoryImageForm.valid) {
+      const formData: FormData = new FormData();
+      const careCategoryImage = this.CareCategoryImageForm.get('careCategoryImage')?.value;
+
+      if (careCategoryImage) {
+        // Changez 'category_image' en 'categoryImage' pour correspondre au FileInterceptor
+        formData.append('categoryImage', careCategoryImage);
+        formData.append('category_id', category.category_id);
+
+        try {
+          await lastValueFrom(this.securityService.uploadCareCategoryImage(formData));
+        } catch (error) {
+          console.error('Erreur lors de la mise à jour de l\'image de la catégorie', error);
+        }
+      }
+    }
+  }
+
+// Ajoutez la méthode pour obtenir l'image
+  getCareCategoryImage(category: CareCategory): string {
+    if (category.category_image && typeof category.category_image === 'string') {
+      return category.category_image;
+    } else {
+      return './assets/default-category.png';
+    }
   }
 }

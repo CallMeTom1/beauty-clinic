@@ -6,7 +6,8 @@ export class CareCategoryUtils {
       category_id: '',
       name: '',
       description: '',
-      isPublished: false
+      isPublished: false,
+      category_image: ''
     }]
   }
 }

@@ -1,0 +1,75 @@
+<div class="care-menu-section">
+  @if (selectedCategory) {
+    <div class="category-banner"
+         [style.background-image]="'url(' + getImageForCategory(selectedCategory) + ')'">
+      <div class="banner-content">
+        <h1>{{ selectedCategory.name }}</h1>
+        <p>{{ selectedCategory.description }}</p>
+      </div>
+    </div>
+  }
+
+  <div class="menu-content">
+    <div class="menu-navigation">
+      <nav class="categories-nav">
+        @for (category of securityService.careCategories$(); track category.category_id) {
+          @if (category.isPublished) {
+            <button
+              class="menu-item"
+              [class.active]="selectedCategory?.category_id === category.category_id"
+              (click)="selectCategory(category)"
+            >
+              {{ category.name }}
+              @if (hasSubCategories(category)) {
+                <span class="chevron">›</span>
+              }
+            </button>
+
+            @if (selectedCategory?.category_id === category.category_id && hasSubCategories(category)) {
+              <div class="submenu">
+                @for (subCategory of getSubCategoriesForCategory(category.category_id); track subCategory.sub_category_id) {
+                  @if (subCategory.isPublished) {
+                    <button
+                      class="submenu-item"
+                      [class.active]="selectedSubCategory?.sub_category_id === subCategory.sub_category_id"
+                      (click)="selectSubCategory(subCategory)"
+                    >
+                      {{ subCategory.name }}
+                    </button>
+                  }
+                }
+              </div>
+            }
+          }
+        }
+      </nav>
+    </div>
+
+    <div class="selected-content">
+      @if (selectedSubCategory) {
+        <div class="treatment-details">
+          <div class="treatment-image"
+               [style.background-image]="'url(' + getImageForSubCategory(selectedSubCategory) + ')'">
+          </div>
+          <div class="treatment-info">
+            <h2>{{ selectedSubCategory.name }}</h2>
+            <p>{{ selectedSubCategory.description }}</p>
+            <button class="book-button" (click)="navigateToBooking(selectedCategory!.name)">
+              Prendre rendez-vous
+            </button>
+          </div>
+        </div>
+      } @else if (selectedCategory && !hasSubCategories(selectedCategory)) {
+        <div class="treatment-details">
+          <div class="treatment-info">
+            <h2>{{ selectedCategory.name }}</h2>
+            <p>{{ selectedCategory.description }}</p>
+            <button class="book-button" (click)="navigateToBooking(selectedCategory.name)">
+              Prendre rendez-vous
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

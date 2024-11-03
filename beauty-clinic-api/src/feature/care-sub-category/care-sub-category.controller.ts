@@ -1,6 +1,17 @@
 import {CareSubCategoryEntity} from "./data/entity/care-sub-category.entity";
-import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {Body, Controller, Delete, Get, Param, Post, Put} from "@nestjs/common";
+import {ApiConsumes, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Put,
+    UploadedFile,
+    UseInterceptors
+} from "@nestjs/common";
 import {CareSubCategoryService} from "./care-sub-category.service";
 import {Public, Roles} from "@common/config/metadata";
 import {Role} from "@feature/security/data";
@@ -8,6 +19,9 @@ import {CareCategoryEntity} from "../care-category/data/entity/care-category.ent
 import {UpdateCareSubCategoryPayload} from "./data/payload/update-care-sub-category.payload";
 import {CreateCareSubCategoryPayload} from "./data/payload/create-care-sub-category.payload";
 import {DeleteCareSubCategoryPayload} from "./data/payload/delete-care-sub-category.payload";
+import {FileInterceptor} from "@nestjs/platform-express";
+import {UploadCareCategoryImagePayload} from "../care-category/data/payload/upload-care-category-image.payload";
+import {UploadCareSubCategoryImagePayload} from "./data/payload/upload-care-sub-category-image.payload";
 
 @ApiTags('CareSubCategory')
 @Controller('care-sub-category')
@@ -58,5 +72,20 @@ export class CareSubCategoryController {
     @ApiResponse({ status: 204, description: 'The category has been deleted' })
     async deleteCategory(@Body() payload: DeleteCareSubCategoryPayload): Promise<void> {
         return this.careSubCategoryService.remove(payload);
+    }
+
+    @Public()
+    @Post('upload-image')
+    @UseInterceptors(FileInterceptor('categoryImage'))
+    async uploadImage(
+        @Body() payload: UploadCareSubCategoryImagePayload,
+        @UploadedFile() file: Express.Multer.File,
+    ): Promise<CareSubCategoryEntity> {
+        console.log('Received payload:', payload);
+        console.log('Received file:', file);
+
+        if (!file) throw new BadRequestException('No file uploaded');
+
+        return this.careSubCategoryService.updateSubCategoryImage(payload.sub_category_id, file);
     }
 }

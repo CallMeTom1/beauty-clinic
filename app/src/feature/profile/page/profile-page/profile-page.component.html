@@ -1,10 +1,18 @@
-<section class="profile-cards">
-  <app-profile-card
-    *ngFor="let card of profileCards"
-    [title]="card.title"
-    [description]="card.description"
-    [icon]="card.icon"
-    [cardId]="card.id"
-    (cardClick)="onCardClick(card.id)">
-  </app-profile-card>
-</section>
+<div class="profile-page">
+  <h1 class="page-title">Mon beauty compte</h1>
+
+  <!-- Mes rendez-vous -->
+  <div class="profile-card">
+    <app-appointment-list></app-appointment-list>
+  </div>
+
+  <!-- Mes achats -->
+  <div class="profile-card">
+    <app-order-list></app-order-list>
+  </div>
+
+  <!-- Mes favoris -->
+  <div class="profile-card">
+    <app-wishlist-list></app-wishlist-list>
+  </div>
+</div>

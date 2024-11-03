@@ -1,5 +1,5 @@
 <div class="nav-account" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
-  @if(securityService.account$().idUser){
+  @if(securityService.account$().idUser) {
     <div class="nav-trigger">
       <i class="fa-thin fa-user icon"></i>
       <span>Mon compte</span>
@@ -12,86 +12,81 @@
   }
 
   <div class="dropdown-menu" *ngIf="dropdownOpen">
-    @if(!securityService.account$().idUser){
-      <!-- Menu invité -->
-      <div class="guest-header">
-        <h3>BONJOUR !</h3>
-        <p>Connectez-vous ou créez un compte pour bénéficier de tous les avantages</p>
-        <div class="btns">
-          <button class="primary" (click)="navigateToSignIn()">Me connecter</button>
-          <button class="primary" (click)="navigateToSignUp()">M'inscrire</button>
-        </div>
-    </div>
-    }
-
-    <div class="menu-content">
-      <div class="menu-column">
-        <a class="menu-item" (click)="navigateToProfile()">
-          <i class="fa-thin fa-user"></i>
-          <div class="item-content">
-            <h4>MON BEAUTY COMPTE</h4>
+    <div class="dropdown-container">
+      <!-- Colonne de gauche avec titre et boutons -->
+      <div class="left-column">
+        @if(!securityService.account$().idUser) {
+          <div class="guest-header">
+            <h3>BONJOUR !</h3>
+            <p>Connectez-vous ou créez un compte pour bénéficier de tous les avantages</p>
+            <div class="btns">
+              <button class="primary" (click)="navigateToSignIn()">Me connecter</button>
+              <button class="primary" (click)="navigateToSignUp()">M'inscrire</button>
+            </div>
           </div>
-        </a>
-
-        <a class="menu-item" (click)="navigateToOrders()">
-          <i class="fa-solid fa-bags-shopping"></i>
-          <div class="item-content">
-            <h4>MES ACHATS</h4>
+        } @else {
+          <div class="guest-header">
+            <h3>BONJOUR !</h3>
+            <span>{{securityService.account$().firstname}}</span>
+            <span>{{securityService.account$().lastname}}</span>
           </div>
-        </a>
-
-        <a class="menu-item">
-          <i class="fa-thin fa-calendar-circle-exclamation"></i>
-          <div class="item-content">
-            <h4>SUIVRE MA COMMANDE</h4>
-          </div>
-        </a>
-
-        <a class="menu-item">
-          <i class="fa-thin fa-gift"></i>
-          <div class="item-content">
-            <h4>MON PROGRAMME DE FIDÉLITÉ</h4>
-          </div>
-        </a>
+        }
       </div>
 
-      <div class="menu-column">
-        <a class="menu-item">
-          <i class="fa-thin fa-gift"></i>
-          <div class="item-content">
-            <h4>MES OFFRES</h4>
-          </div>
-        </a>
-
-        <a class="menu-item">
-          <i class="fa-thin fa-calendar-circle-exclamation"></i>
-          <div class="item-content">
-            <h4>PRENDRE UN RENDEZ-VOUS</h4>
-          </div>
-        </a>
-
-        <a class="menu-item">
-          <i class="fa-thin fa-gear"></i>
-          <div class="item-content">
-            <h4>MES INFORMATIONS PERSONNELLES</h4>
-          </div>
-        </a>
-
-        <a class="menu-item">
-          <i class="fa-thin fa-envelope"></i>
-          <div class="item-content">
-            <h4>MES COMMUNICATIONS</h4>
-          </div>
-        </a>
-
-        @if(securityService.account$().idUser){
-          <a class="menu-item" (click)="logout()">
-            <i class="fa-thin fa-arrow-right-from-bracket"></i>
+      <!-- Colonne de droite avec le menu -->
+      <div class="right-column">
+        <div class="menu-content">
+          <a class="menu-item" (click)="navigateToProfile()">
+            <i class="fa-thin fa-user"></i>
             <div class="item-content">
-              <h4>SE DÉCONNECTER</h4>
+              <h4>MON BEAUTY COMPTE</h4>
             </div>
           </a>
-        }
+
+          <a class="menu-item" (click)="navigateToOrders()">
+            <i class="fa-solid fa-bags-shopping"></i>
+            <div class="item-content">
+              <h4>MES RENDEZ-VOUS</h4>
+            </div>
+          </a>
+
+          <a class="menu-item" (click)="navigateToOrders()">
+            <i class="fa-solid fa-bags-shopping"></i>
+            <div class="item-content">
+              <h4>MES ACHATS</h4>
+            </div>
+          </a>
+
+          <a class="menu-item">
+            <i class="fa-thin fa-calendar-circle-exclamation"></i>
+            <div class="item-content">
+              <h4>SUIVRE MA COMMANDE</h4>
+            </div>
+          </a>
+
+          <a class="menu-item">
+            <i class="fa-thin fa-calendar-circle-exclamation"></i>
+            <div class="item-content">
+              <h4>PRENDRE UN RENDEZ-VOUS</h4>
+            </div>
+          </a>
+
+          <a class="menu-item">
+            <i class="fa-thin fa-gear"></i>
+            <div class="item-content">
+              <h4>MES INFORMATIONS PERSONNELLES</h4>
+            </div>
+          </a>
+
+          @if(securityService.account$().idUser) {
+            <a class="menu-item" (click)="logout()">
+              <i class="fa-thin fa-arrow-right-from-bracket"></i>
+              <div class="item-content">
+                <h4>SE DÉCONNECTER</h4>
+              </div>
+            </a>
+          }
+        </div>
       </div>
     </div>
   </div>

@@ -583,16 +583,7 @@ export class SecurityService {
     return false;
   }
 
-  uploadProfileImage(payload: any): Observable<ApiResponse> {
-    return this.api.post(ApiURI.UPLOAD_PROFILE_IMAGE, payload)
-      .pipe(
-        tap((response: ApiResponse): void => {
-          if (response.result) {
-            this.fetchProfile(this.isAuth$());
-          }
-        })
-      );
-  }
+
 
   SignIn(payload: SignInPayload): Observable<ApiResponse> {
     return this.api.post(ApiURI.SECURITY_SIGN_IN, payload)
@@ -1107,6 +1098,22 @@ export class SecurityService {
     );
   }
 
+  public uploadCareCategoryImage(payload: FormData): Observable<ApiResponse> {
+    return this.api.post(ApiURI.CARE_CATEGORY_IMAGE, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+            // Rafraîchir la liste des soins pour avoir l'image mise à jour
+            this.fetchCareCategories().subscribe();
+          }
+        }),
+        catchError(error => {
+          console.error('Error during care image upload:', error);
+          return throwError(error);
+        })
+      );
+  }
+
   //Care Sub Categories
   // Fetch all care categories
   public fetchCareSubCategories(): Observable<ApiResponse> {
@@ -1173,6 +1180,22 @@ export class SecurityService {
         return throwError(() => error);
       })
     );
+  }
+
+  public uploadCareSubCategoryImage(payload: FormData): Observable<ApiResponse> {
+    return this.api.post(ApiURI.CARE_SUB_CATEGORY_IMAGE, payload)
+      .pipe(
+        tap((response: ApiResponse): void => {
+          if (response.result) {
+            // Rafraîchir la liste des soins pour avoir l'image mise à jour
+            this.fetchCareSubCategories().subscribe();
+          }
+        }),
+        catchError(error => {
+          console.error('Error during care image upload:', error);
+          return throwError(error);
+        })
+      );
   }
 
 

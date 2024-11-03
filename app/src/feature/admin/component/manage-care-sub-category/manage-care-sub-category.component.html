@@ -10,6 +10,7 @@
   <table class="category-table">
     <thead>
     <tr>
+      <th>{{ 'table.header.image' | translate }}</th>
       <th>{{ 'table.header.name' | translate }}</th>
       <th>Description</th>
       <th>{{ 'table.header.actions' | translate }}</th>
@@ -18,6 +19,18 @@
     <tbody>
       @for(subCategory of securityService.careSubCategories$(); track subCategory.sub_category_id) {
         <tr>
+          <td>
+            <label for="editImage-{{ subCategory.sub_category_id }}" class="image-upload-label">
+              <img [src]="getSubCategoryImage(subCategory)"
+                   alt="{{ subCategory.name }}"
+                   class="subcategory-image" />
+              <input type="file"
+                     id="editImage-{{ subCategory.sub_category_id }}"
+                     (change)="onSubCategoryImageChange($event, subCategory)"
+                     accept="image/*"
+                     hidden />
+            </label>
+          </td>
           <td>{{ subCategory.name }}</td>
           <td>{{ subCategory.description }}</td>
           <td class="actions-cell">

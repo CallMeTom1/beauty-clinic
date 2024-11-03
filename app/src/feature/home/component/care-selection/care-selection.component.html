@@ -1,0 +1,18 @@
+<section class="care-selection">
+  <div class="care-selection__header">
+    <h2 class="care-selection__title">Notre sélection de soins</h2>
+    <a href="/soins" class="care-selection__link">Voir tous les soins</a>
+  </div>
+
+  <div class="care-selection__grid">
+    <div *ngFor="let care of selectedCares()" class="care-card">
+      <div class="care-card__image">
+        <img [src]="care.category_image" [alt]="care.name">
+      </div>
+      <div class="care-card__content">
+        <h3 class="care-card__title">{{care.name}}</h3>
+        <p class="care-card__description">{{care.description}}</p>
+      </div>
+    </div>
+  </div>
+</section>

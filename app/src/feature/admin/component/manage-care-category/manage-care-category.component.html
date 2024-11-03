@@ -9,16 +9,33 @@
   <table class="category-table">
     <thead>
     <tr>
+      <th>{{ 'table.header.image' | translate }}</th>
       <th>{{ 'table.header.name' | translate }}</th>
       <th>Description</th>
+      <th>Sous-catégories</th>
       <th>{{ 'table.header.actions' | translate }}</th>
     </tr>
     </thead>
     <tbody>
       @for(category of securityService.careCategories$(); track category.category_id) {
         <tr>
+          <td>
+            <label for="editImage-{{ category.category_id }}" class="image-upload-label">
+              <img [src]="getCareCategoryImage(category)"
+                   alt="{{ category.name }}"
+                   class="category-image" />
+              <input type="file"
+                     id="editImage-{{ category.category_id }}"
+                     (change)="onCareCategoryImageChange($event, category)"
+                     accept="image/*"
+                     hidden />
+            </label>
+          </td>
           <td>{{ category.name }}</td>
           <td>{{ category.description }}</td>
+          <td>
+            <app-sub-care-cateogry-selector-for-care-category [category]="category"></app-sub-care-cateogry-selector-for-care-category>
+          </td>
           <td class="actions-cell">
             <div class="actions-group">
               <a (click)="openEditModal(category)" class="action-link edit">

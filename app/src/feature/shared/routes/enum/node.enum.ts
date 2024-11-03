@@ -9,6 +9,10 @@ export enum AppNode {
     SIGNUP=`signup`,
     PROFILE=`profile`,
     EDIT_PROFILE=`edit-profile`,
+    EDIT_ADDRESS=`edit-address`,
+    TRACK_ORDERS=`track-orders`,
+
+
     MY_ORDERS=`my-orders`,
     CARE=`care`,
     DIAGNOSTIC=`diagnostique-gratuit`,

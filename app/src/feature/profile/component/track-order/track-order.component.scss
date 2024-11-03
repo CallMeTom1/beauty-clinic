@@ -1,0 +1,48 @@
+
+.orders-page {
+
+  .tracking-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+
+    i {
+      font-size: 1.25rem;
+      color: var(--primary-color);
+    }
+
+    span {
+      font-weight: 500;
+      color: #333;
+    }
+  }
+
+  .order-card {
+    // Modify existing styles
+    border-left: 4px solid var(--primary-color);
+  }
+
+  // Override some existing styles for a more focused view
+  .order-items {
+    max-height: none; // Remove any max-height limitations
+    overflow: visible; // Remove any overflow restrictions
+  }
+
+  .order-header {
+    align-items: flex-start; // Allow tracking info to align properly
+    flex-direction: column;
+  }
+}
+
+// Add responsive styles
+@media (min-width: 768px) {
+  .order-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, inject} from '@angular/core';
 import {
   FloatingLabelInputTestComponent
 } from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
@@ -8,6 +8,7 @@ import {FormcontrolSimpleConfig} from "@shared-ui";
 import {SecurityService} from "@feature-security";
 import {User} from "../../../security/data/model/user";
 import {ModifyProfilePayload} from "../../../security/data/payload/user/modify-profile.payload";
+import {Address} from "../../../security/data/model/user/address.business";
 
 @Component({
   selector: 'app-edit-profile-form',
@@ -22,7 +23,6 @@ import {ModifyProfilePayload} from "../../../security/data/payload/user/modify-p
   styleUrl: './edit-profile-form.component.scss'
 })
 export class EditProfileFormComponent {
-
   protected securityService: SecurityService = inject(SecurityService);
   protected translateService: TranslateService = inject(TranslateService);
 
@@ -37,17 +37,17 @@ export class EditProfileFormComponent {
       Validators.minLength(2),
       Validators.maxLength(20),
     ]),
-    phoneNumber: new FormControl('', [
+    phonenumber: new FormControl('', [
       Validators.required,
     ]),
-    address: new FormGroup({
-      road: new FormControl('', [Validators.maxLength(50)]),
-      nb: new FormControl('', [Validators.maxLength(10)]),
-      cp: new FormControl('', [Validators.maxLength(10)]),
-      town: new FormControl('', [Validators.maxLength(30)]),
-      country: new FormControl('', [Validators.maxLength(30)]),
-      complement: new FormControl(''),
-    }),
+    label: new FormControl(''),
+    isDefault: new FormControl('false'),
+    road: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    nb: new FormControl('', [Validators.required, Validators.maxLength(10)]),
+    cp: new FormControl('', [Validators.required, Validators.maxLength(10)]),
+    town: new FormControl('', [Validators.required, Validators.maxLength(30)]),
+    country: new FormControl('', [Validators.required, Validators.maxLength(30)]),
+    complement: new FormControl(''),
   });
 
   constructor() {
@@ -73,128 +73,96 @@ export class EditProfileFormComponent {
       placeholder: '',
     },
     {
-      label: this.translateService.instant('form.phoneNumber.label'),
-      formControl: this.profileFormGroup.get('phoneNumber') as FormControl,
+      label: this.translateService.instant('form.phonenumber.label'),
+      formControl: this.profileFormGroup.get('phonenumber') as FormControl,
       inputType: 'tel',
       placeholder: '',
     },
     {
+      label: this.translateService.instant('form.address.label.label'),
+      formControl: this.profileFormGroup.get('label') as FormControl,
+      inputType: 'text',
+      placeholder: '',
+    },
+    {
       label: this.translateService.instant('form.address.road.label'),
-      formControl: this.profileFormGroup.get('address.road') as FormControl,
+      formControl: this.profileFormGroup.get('road') as FormControl,
       inputType: 'text',
       placeholder: '',
     },
     {
       label: this.translateService.instant('form.address.nb.label'),
-      formControl: this.profileFormGroup.get('address.nb') as FormControl,
+      formControl: this.profileFormGroup.get('nb') as FormControl,
       inputType: 'text',
       placeholder: '',
     },
     {
       label: this.translateService.instant('form.address.cp.label'),
-      formControl: this.profileFormGroup.get('address.cp') as FormControl,
+      formControl: this.profileFormGroup.get('cp') as FormControl,
       inputType: 'text',
       placeholder: '',
     },
     {
       label: this.translateService.instant('form.address.town.label'),
-      formControl: this.profileFormGroup.get('address.town') as FormControl,
+      formControl: this.profileFormGroup.get('town') as FormControl,
       inputType: 'text',
       placeholder: '',
     },
     {
       label: this.translateService.instant('form.address.country.label'),
-      formControl: this.profileFormGroup.get('address.country') as FormControl,
+      formControl: this.profileFormGroup.get('country') as FormControl,
       inputType: 'text',
       placeholder: '',
     },
     {
       label: this.translateService.instant('form.address.complement.label'),
-      formControl: this.profileFormGroup.get('address.complement') as FormControl,
+      formControl: this.profileFormGroup.get('complement') as FormControl,
       inputType: 'text',
       placeholder: '',
     },
   ];
 
   private updateFormWithAccountData(account: User): void {
+    const shippingAddress = account.addresses.find(addr => addr.isShippingAddress);
+
     this.profileFormGroup.patchValue({
       firstname: account.firstname,
       lastname: account.lastname,
-      phoneNumber: account.phoneNumber,
-      address: account.shippingAddress ? account.shippingAddress : {}, // Remplacer avec l'adresse si existante
+      phonenumber: account.phonenumber,
+      label: shippingAddress?.label || '',
+      isDefault: shippingAddress?.isDefault || 'false',
+      road: shippingAddress?.road || '',
+      nb: shippingAddress?.nb || '',
+      cp: shippingAddress?.cp || '',
+      town: shippingAddress?.town || '',
+      country: shippingAddress?.country || '',
+      complement: shippingAddress?.complement || '',
     });
 
-    this.profileFormControlConfigs = [
-      {
-        label: this.translateService.instant('form.firstname.label'),
-        formControl: this.profileFormGroup.get('firstname') as FormControl,
-        inputType: 'text',
-        placeholder: account.firstname,
-      },
-      {
-        label: this.translateService.instant('form.lastname.label'),
-        formControl: this.profileFormGroup.get('lastname') as FormControl,
-        inputType: 'text',
-        placeholder: account.lastname,
-      },
-      {
-        label: this.translateService.instant('form.phoneNumber.label'),
-        formControl: this.profileFormGroup.get('phoneNumber') as FormControl,
-        inputType: 'tel',
-        placeholder: account.phoneNumber ? account.phoneNumber : '',
-      },
-      {
-        label: this.translateService.instant('form.address.road.label'),
-        formControl: this.profileFormGroup.get('address.road') as FormControl,
-        inputType: 'text',
-        placeholder: account.shippingAddress?.road ? account.shippingAddress.road : '',
-      },
-      {
-        label: this.translateService.instant('form.address.nb.label'),
-        formControl: this.profileFormGroup.get('address.nb') as FormControl,
-        inputType: 'text',
-        placeholder: account.shippingAddress?.nb ? account.shippingAddress.nb : '',
-      },
-      {
-        label: this.translateService.instant('form.address.cp.label'),
-        formControl: this.profileFormGroup.get('address.cp') as FormControl,
-        inputType: 'text',
-        placeholder: account.shippingAddress?.cp ? account.shippingAddress.cp : '',
-      },
-      {
-        label: this.translateService.instant('form.address.town.label'),
-        formControl: this.profileFormGroup.get('address.town') as FormControl,
-        inputType: 'text',
-        placeholder: account.shippingAddress?.town ? account.shippingAddress.town : '',
-      },
-      {
-        label: this.translateService.instant('form.address.country.label'),
-        formControl: this.profileFormGroup.get('address.country') as FormControl,
-        inputType: 'text',
-        placeholder: account.shippingAddress?.country ? account.shippingAddress.country : '',
-      },
-      {
-        label: this.translateService.instant('form.address.complement.label'),
-        formControl: this.profileFormGroup.get('address.complement') as FormControl,
-        inputType: 'text',
-        placeholder: account.shippingAddress?.complement ? account.shippingAddress.complement : '',
-      }
-    ];
+    this.profileFormControlConfigs = this.profileFormControlConfigs.map(config => ({
+      ...config,
+      placeholder: this.profileFormGroup.get(config.formControl.value)?.value || ''
+    }));
   }
 
   onSubmitProfile(): void {
     if (this.profileFormGroup.valid) {
+      const formValue = this.profileFormGroup.value;
+
       const payload: ModifyProfilePayload = {
-        firstname: this.profileFormGroup.get('firstname')?.value,
-        lastname: this.profileFormGroup.get('lastname')?.value,
-        phoneNumber: this.profileFormGroup.get('phoneNumber')?.value,
+        firstname: formValue.firstname,
+        lastname: formValue.lastname,
+        phonenumber: formValue.phonenumber,
+        addressType: 'shipping',
+        label: formValue.label,
+        isDefault: formValue.isDefault,
         Address: {
-          road: this.profileFormGroup.get('address.road')?.value,
-          nb: this.profileFormGroup.get('address.nb')?.value,
-          cp: this.profileFormGroup.get('address.cp')?.value,
-          town: this.profileFormGroup.get('address.town')?.value,
-          country: this.profileFormGroup.get('address.country')?.value,
-          complement: this.profileFormGroup.get('address.complement')?.value,
+          road: formValue.road,
+          nb: formValue.nb,
+          cp: formValue.cp,
+          town: formValue.town,
+          country: formValue.country,
+          complement: formValue.complement,
         }
       };
 

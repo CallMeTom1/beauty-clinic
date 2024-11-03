@@ -1,0 +1,85 @@
+<div class="appointments-page">
+  <h1 class="page-title">Mes rendez-vous</h1>
+
+  @if(!securityService.account$().idUser) {
+    <div class="connect-card">
+      <i class="fa-solid fa-calendar-check"></i>
+      <h2>Consultez vos rendez-vous</h2>
+      <p>Connectez-vous pour voir et gérer vos rendez-vous.</p>
+      <button class="primary" [routerLink]="['/auth/signin']">Me connecter</button>
+    </div>
+  } @else {
+    @if(!securityService.appointment$() || securityService.appointment$().length === 0) {
+      <div class="empty-state">
+        <i class="fa-solid fa-calendar"></i>
+        <h2>Aucun rendez-vous pour le moment</h2>
+        <p>Découvrez nos soins et prenez votre premier rendez-vous !</p>
+        <button class="primary" routerLink="/cares">Découvrir nos soins</button>
+      </div>
+    } @else {
+      <div class="appointments-list">
+        @for(appointment of securityService.appointment$(); track appointment.appointment_id) {
+          <div class="appointment-card">
+            <div class="appointment-header">
+              <div class="appointment-info">
+                <p class="appointment-date">{{ formatDateTime(appointment.start_time) }}</p>
+                <p class="appointment-duration">
+                  Durée : {{ appointment.care.duration }} minutes
+                </p>
+              </div>
+              <span class="status-badge" [ngClass]="getStatusClass(appointment.status)">
+                {{ statusLabels[appointment.status] }}
+              </span>
+            </div>
+
+            <div class="care-details">
+              @if(appointment.care?.care_image) {
+                <img [src]="appointment.care.care_image" [alt]="appointment.care.name" class="care-image">
+              }
+              <div class="care-info">
+                <h3 class="care-name">{{ appointment.care.name }}</h3>
+                <p class="care-description">{{ appointment.care.description }}</p>
+                <p class="care-price">
+                  @if(appointment.care.is_promo) {
+                    <span class="original-price">{{ appointment.care.initial_price }}€</span>
+                    <span class="discounted-price">{{ appointment.care.price_discounted }}€</span>
+                  } @else {
+                    {{ appointment.care.initial_price }}€
+                  }
+                </p>
+              </div>
+            </div>
+
+            @if(appointment.notes) {
+              <div class="appointment-notes">
+                <h4>Notes :</h4>
+                <p>{{ appointment.notes }}</p>
+              </div>
+            }
+
+            <div class="appointment-footer">
+              @if(appointment.status === AppointmentStatus.SCHEDULED || appointment.status === AppointmentStatus.CONFIRMED) {
+                <button class="btn-danger">
+                  <i class="fa-solid fa-times"></i>
+                  Annuler le rendez-vous
+                </button>
+              }
+
+              @if(appointment.status === AppointmentStatus.COMPLETED) {
+                <button class="primary" [routerLink]="['/reviews/new', appointment.care_id]">
+                  <i class="fa-solid fa-star"></i>
+                  Laisser un avis
+                </button>
+              }
+
+              <button class="btn-secondary" [routerLink]="['/appointments', appointment.appointment_id]">
+                <i class="fa-solid fa-eye"></i>
+                Voir les détails
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

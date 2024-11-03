@@ -1,0 +1,81 @@
+<div class="orders-page">
+  <h1 class="page-title">Mes achats</h1>
+
+  @if(!securityService.account$().idUser) {
+    <div class="connect-card">
+      <i class="fa-solid fa-bags-shopping"></i>
+      <h2>Consultez vos commandes</h2>
+      <p>Connectez-vous pour suivre vos colis, faire un retour et voir vos achats.</p>
+      <button class="btn-primary" [routerLink]="['/auth/signin']">Me connecter</button>
+    </div>
+  } @else {
+    @if(!securityService.orders$() || securityService.orders$().length === 0) {
+      <div class="empty-state">
+        <i class="fa-solid fa-basket-shopping"></i>
+        <h2>Aucune commande pour le moment</h2>
+        <p>Découvrez nos produits et commencez votre shopping !</p>
+        <button class="btn-primary" routerLink="/shop">Découvrir la boutique</button>
+      </div>
+    } @else {
+      <div class="orders-list">
+        @for(order of securityService.orders$(); track order.idOrder) {
+          <div class="order-card">
+            <div class="order-header">
+              <div class="order-info">
+                <p class="order-date">Commande du {{ order.orderDate | date:'dd/MM/yyyy' }}</p>
+                <p class="order-number">N° {{ order.idOrder }}</p>
+              </div>
+              <span class="status-badge" [ngClass]="getStatusClass(order.status)">
+                {{ statusLabels[order.status] }}
+              </span>
+            </div>
+
+            <div class="order-items">
+              @for(orderItem of order.items; track orderItem.id) {
+                <div class="order-item">
+                  @if(orderItem.product?.product_image) {
+                    <img [src]="orderItem.product.product_image" [alt]="orderItem.product.name" class="item-image">
+                  }
+                  <div class="item-details">
+                    <h3 class="item-name">{{ orderItem.product.name }}</h3>
+                    <p class="item-quantity">Quantité : {{ orderItem.quantity }}</p>
+                    <p class="item-price">{{ orderItem.price }}€</p>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="shipping-address">
+              <h4>Adresse de livraison :</h4>
+              <p>{{ formatAddress(order.shippingAddress) }}</p>
+            </div>
+
+            <div class="order-footer">
+              <div class="price-details">
+                <p class="shipping-fee">Frais de livraison : {{ order.shippingFee }}€</p>
+                @if(order.discountAmount) {
+                  <p class="discount">Réduction : -{{ order.discountAmount }}€</p>
+                }
+                <p class="total-price">Total : {{ order.totalPriceWithShipping }}€</p>
+              </div>
+
+              @if(order.trackingNumber) {
+                <div class="tracking-info">
+                  <i class="fa-solid fa-truck"></i>
+                  <span>Numéro de suivi : {{ order.trackingNumber }}</span>
+                </div>
+              }
+
+              @if(order.status === OrderStatus.DELIVERED) {
+                <button class="btn-secondary">
+                  <i class="fa-solid fa-rotate-left"></i>
+                  Faire un retour
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

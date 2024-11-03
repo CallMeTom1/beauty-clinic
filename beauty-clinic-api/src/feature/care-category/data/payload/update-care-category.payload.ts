@@ -1,5 +1,5 @@
-import {IsBoolean, IsNotEmpty, IsOptional, IsString} from "class-validator";
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
+import {IsBoolean, IsNotEmpty, IsOptional, IsString} from "class-validator";
 
 export class UpdateCareCategoryPayload {
     @ApiProperty({
@@ -33,4 +33,13 @@ export class UpdateCareCategoryPayload {
     @IsBoolean()
     @IsOptional()
     isPublished?: boolean;
+
+    @ApiPropertyOptional({
+        description: 'IDs of sub-categories to add',
+        example: ['sub_cat_123', 'sub_cat_456'],
+        type: [String]
+    })
+    @IsString({ each: true })
+    @IsOptional()
+    subCategoryIds?: string[];
 }

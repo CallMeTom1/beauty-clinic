@@ -1,5 +1,6 @@
 import {Routes} from "@angular/router";
 import {AppNode} from "@shared-routes";
+import {ProfileComponent} from "./component/profile";
 
 export const ProfileRoutes: Routes = [
   {
@@ -14,8 +15,18 @@ export const ProfileRoutes: Routes = [
       },
       {
         path: AppNode.EDIT_PROFILE,
-        loadComponent: () => import('./page/edit-profile/edit-profile.component')
-          .then(c => c.EditProfileComponent)
+        loadComponent: () => import('./component/profile/profile.component')
+          .then(c => c.ProfileComponent)
+      },
+      {
+        path: AppNode.EDIT_ADDRESS,
+        loadComponent: () => import('./component/address-book/address-book.component')
+          .then(c => c.AddressBookComponent),
+      },
+      {
+        path: AppNode.TRACK_ORDERS,
+        loadComponent: () => import('./component/track-order/track-order.component')
+          .then(c => c.TrackOrderComponent),
       },
       {
         path: AppNode.MY_ORDERS,

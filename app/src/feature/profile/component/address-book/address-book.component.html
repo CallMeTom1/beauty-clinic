@@ -1,0 +1,150 @@
+<div class="address-book">
+  @if(!securityService.account$().idUser) {
+    <div class="connect-card">
+      <i class="fa-light fa-address-book"></i>
+      <h2>Consultez votre carnet d'adresses</h2>
+      <p>Connectez-vous pour gérer vos adresses de livraison et de facturation.</p>
+      <button class="btn-primary" [routerLink]="['/auth/signin']">Me connecter</button>
+    </div>
+  } @else {
+    <h1 class="page-title">Mon carnet d'adresses</h1>
+
+    <!-- Adresses de livraison -->
+    <section class="address-section">
+      <div class="section-header">
+        <h2>Adresses de livraison</h2>
+        <button class="btn-primary" (click)="openAddressForm('shipping')">
+          <i class="fa-light fa-plus"></i>
+          Ajouter une adresse de livraison
+        </button>
+      </div>
+
+      <div class="address-grid">
+        @for(address of shippingAddresses; track address.address_id) {
+          <div class="address-card" [class.default]="address.isDefault === 'true'">
+            @if(address.isDefault === 'true') {
+              <span class="default-badge">
+                <i class="fa-light fa-star"></i>
+                Adresse par défaut
+              </span>
+            }
+
+            <div class="address-content">
+              <div class="address-info">
+                <p class="name">{{address.firstname}} {{address.lastname}}</p>
+                <p class="street">{{formatAddress(address)}}</p>
+                @if(address.complement) {
+                  <p class="complement">{{address.complement}}</p>
+                }
+                @if(address.label) {
+                  <p class="label">{{address.label}}</p>
+                }
+              </div>
+            </div>
+
+            <div class="address-actions">
+              <button class="btn-text" (click)="editAddress(address, 'shipping')">
+                <i class="fa-light fa-pen"></i>
+                Modifier
+              </button>
+              @if(address.isDefault !== 'true') {
+                <button class="btn-text" (click)="deleteAddress(address)">
+                  <i class="fa-light fa-trash"></i>
+                  Supprimer
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Adresses de facturation -->
+    <section class="address-section">
+      <div class="section-header">
+        <h2>Adresses de facturation</h2>
+        <button class="btn-primary" (click)="openAddressForm('billing')">
+          <i class="fa-light fa-plus"></i>
+          Ajouter une adresse de facturation
+        </button>
+      </div>
+
+      <div class="address-grid">
+        @for(address of billingAddresses; track address.address_id) {
+          <div class="address-card" [class.default]="address.isDefault === 'true'">
+            @if(address.isDefault === 'true') {
+              <span class="default-badge">
+                <i class="fa-light fa-star"></i>
+                Adresse par défaut
+              </span>
+            }
+
+            <div class="address-content">
+              <div class="address-info">
+                <p class="name">{{address.firstname}} {{address.lastname}}</p>
+                <p class="street">{{formatAddress(address)}}</p>
+                @if(address.complement) {
+                  <p class="complement">{{address.complement}}</p>
+                }
+                @if(address.label) {
+                  <p class="label">{{address.label}}</p>
+                }
+              </div>
+            </div>
+
+            <div class="address-actions">
+              <button class="btn-text" (click)="editAddress(address, 'billing')">
+                <i class="fa-light fa-pen"></i>
+                Modifier
+              </button>
+              @if(address.isDefault !== 'true') {
+                <button class="btn-text" (click)="deleteAddress(address)">
+                  <i class="fa-light fa-trash"></i>
+                  Supprimer
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    @if(showAddressForm) {
+      <div class="modal-overlay">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>
+              {{ editingAddress ? 'Modifier l\'adresse' : 'Ajouter une adresse' }}
+              {{ addressType === 'shipping' ? 'de livraison' : 'de facturation' }}
+            </h3>
+            <button class="btn-icon" (click)="showAddressForm = false">
+              <i class="fa-light fa-times"></i>
+            </button>
+          </div>
+
+          <form [formGroup]="addressForm" (ngSubmit)="onSubmitAddress()" class="address-form">
+            @for(config of addressFormConfigs; track config.label) {
+              <app-floating-label-input-test [config]="config"></app-floating-label-input-test>
+            }
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="isDefault">
+                Définir comme adresse {{ addressType === 'shipping' ? 'de livraison' : 'de facturation' }} par défaut
+              </label>
+            </div>
+
+            <div class="modal-actions">
+              <button type="button" class="btn-secondary" (click)="showAddressForm = false">
+                Annuler
+              </button>
+              <button type="submit" class="btn-primary" [disabled]="!addressForm.valid">
+                {{ editingAddress ? 'Modifier' : 'Ajouter' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+  }
+</div>

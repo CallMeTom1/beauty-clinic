@@ -1,7 +1,7 @@
 <div class="location-nav" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
   <div class="location-trigger">
     <i class="fas fa-location-dot"></i>
-    <span>LA CLINIQUE</span>
+    <span>{{ clinic()?.name || 'LA CLINIQUE' }}</span>
   </div>
 
   <div class="location-dropdown" [class.active]="isDropdownOpen">
@@ -11,15 +11,28 @@
         <h3>Trouver la clinique</h3>
         <div class="address-info">
           <i class="fas fa-map-marker-alt"></i>
-          <div class="address-details">
-            <p>123 Avenue des Soins</p>
-            <p>75000 Paris, France</p>
+          <div class="address-details" *ngIf="clinic()?.clinic_address">
+            <p>{{ clinic()?.clinic_address?.road }} {{ clinic()?.clinic_address?.nb }}</p>
+            <p>{{ clinic()?.clinic_address?.cp }} {{ clinic()?.clinic_address?.town }}, {{ clinic()?.clinic_address?.country }}</p>
+            <p *ngIf="clinic()?.clinic_address?.complement">{{ clinic()?.clinic_address?.complement }}</p>
           </div>
         </div>
         <a href="https://maps.google.com" target="_blank" class="map-link">
           <i class="fas fa-directions"></i>
           Voir sur Google Maps
         </a>
+        <div class="opening-hours">
+          <h4>Horaires d'ouverture :</h4>
+          <ng-container *ngFor="let hour of openHours()">
+            <p *ngIf="hour.is_open">
+              {{ getDayLabel(hour.day_of_week) }} :
+              {{ formatTime(hour.opening_time) }} - {{ formatTime(hour.closing_time) }}
+            </p>
+            <p *ngIf="!hour.is_open">
+              {{ getDayLabel(hour.day_of_week) }} : Fermé
+            </p>
+          </ng-container>
+        </div>
       </div>
 
       <!-- Colonne Contacter la clinique -->
@@ -27,22 +40,26 @@
         <h3>Contacter la clinique</h3>
 
         <div class="contact-info">
-          <div class="phone-info">
+          <div class="phone-info" *ngIf="clinic()?.phone_number">
             <i class="fas fa-phone"></i>
-            <a href="tel:+33123456789">01 23 45 67 89</a>
+            <a [href]="'tel:' + clinic()?.phone_number">{{ clinic()?.phone_number }}</a>
+          </div>
+
+          <div class="mail-info" *ngIf="clinic()?.mail">
+            <i class="fas fa-envelope"></i>
+            <a [href]="'mailto:' + clinic()?.mail">{{ clinic()?.mail }}</a>
           </div>
 
           <div class="social-links">
-            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
-          </div>
-
-          <div class="opening-hours">
-            <h4>Horaires d'ouverture :</h4>
-            <p>Lundi - Vendredi : 9h - 19h</p>
-            <p>Samedi : 10h - 17h</p>
-            <p>Dimanche : Fermé</p>
+            <a [href]="clinic()?.instagram_url" class="social-link" target="_blank" *ngIf="clinic()?.instagram_url">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a [href]="clinic()?.facebook_url" class="social-link" target="_blank" *ngIf="clinic()?.facebook_url">
+              <i class="fab fa-facebook"></i>
+            </a>
+            <a [href]="clinic()?.tiktok_url" class="social-link" target="_blank" *ngIf="clinic()?.tiktok_url">
+              <i class="fab fa-tiktok"></i>
+            </a>
           </div>
         </div>
       </div>

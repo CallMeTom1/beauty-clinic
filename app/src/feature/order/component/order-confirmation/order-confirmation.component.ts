@@ -2,9 +2,9 @@ import { Component, computed, inject, OnInit, Signal } from '@angular/core';
 import { SecurityService } from "@feature-security";
 import { CurrencyPipe, DatePipe } from "@angular/common";
 import { Product } from "../../../security/data/model/product/product.business";
-import { Order } from "../../../security/data/model/order/order.business"; // Correction de l'import
+import { Order } from "../../../security/data/model/order/order.business";
 import { OrderStatus, OrderStatusLabels } from "../../../security/data/model/order/order-status.enum";
-import {ApiResponse} from "@shared-api";
+import { ApiResponse } from "@shared-api";
 
 @Component({
   selector: 'app-order-confirmation',
@@ -19,6 +19,9 @@ import {ApiResponse} from "@shared-api";
 export class OrderConfirmationComponent implements OnInit {
   protected readonly securityService: SecurityService = inject(SecurityService);
   protected readonly products$: Signal<Product[]> = this.securityService.Products$;
+  protected readonly shippingAddress = computed(() =>
+    this.securityService.account$().addresses.find(addr => addr.isShippingAddress)
+  );
   protected order?: Order;
 
   ngOnInit() {
@@ -42,16 +45,13 @@ export class OrderConfirmationComponent implements OnInit {
   protected getOrderStatus(): string {
     const status = this.order?.status;
     if (!status) return 'Non défini';
-
     return OrderStatusLabels[status as OrderStatus] || 'Non défini';
   }
 
-  // Méthode utilitaire pour vérifier le statut
   protected isOrderStatus(status: OrderStatus): boolean {
     return this.order?.status === status;
   }
 
-  // Méthode pour obtenir la classe CSS en fonction du statut
   protected getStatusClass(): string {
     const status = this.order?.status as OrderStatus;
     switch(status) {

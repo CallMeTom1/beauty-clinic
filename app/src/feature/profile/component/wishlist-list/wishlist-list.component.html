@@ -1,0 +1,112 @@
+<div class="wishlist-page">
+  <h1 class="page-title">Ma liste d'envies</h1>
+
+  @if(!securityService.account$().idUser) {
+    <div class="connect-card">
+      <i class="fa-light fa-heart"></i>
+      <h2>Consultez votre liste d'envies</h2>
+      <p>Connectez-vous pour accéder à votre liste d'envies et enregistrer vos produits et soins préférés.</p>
+      <button class="btn-primary" [routerLink]="['/auth/signin']">Me connecter</button>
+    </div>
+  } @else {
+    @if(totalItems() === 0) {
+      <div class="empty-state">
+        <i class="fa-light fa-heart"></i>
+        <h2>Votre liste d'envies est vide</h2>
+        <p>Ajoutez des produits et des soins à votre liste pour les retrouver facilement !</p>
+        <div class="empty-actions">
+          <button class="btn-primary" routerLink="/shop">Découvrir nos produits</button>
+          <button class="btn-secondary" routerLink="/cares">Découvrir nos soins</button>
+        </div>
+      </div>
+    } @else {
+      @if(validProducts().length > 0) {
+        <div class="section">
+          <h2 class="section-title">Produits ({{validProducts().length}})</h2>
+          <div class="wishlist-grid">
+            @for(product of validProducts(); track product.product_id) {
+              <div class="wishlist-card">
+                <div class="card-header">
+                  @if(product.product_image) {
+                    <img [src]="product.product_image" [alt]="product.name" class="product-image">
+                  }
+                  <button class="remove-btn" (click)="removeFromWishlist('product', product.product_id)">
+                    <i class="fa-solid fa-times"></i>
+                  </button>
+                </div>
+
+                <div class="card-content">
+                  <h3 class="product-name">{{product.name}}</h3>
+                  <div class="price-info">
+                    @if(product.is_promo) {
+                      <span class="original-price">{{product.initial_price | currency:'EUR'}}</span>
+                      <span class="discounted-price">{{product.price_discounted | currency:'EUR'}}</span>
+                    } @else {
+                      <span class="price">{{product.initial_price | currency:'EUR'}}</span>
+                    }
+                  </div>
+                </div>
+
+                <div class="card-footer">
+                  <button class="btn-primary" (click)="addToCart('product', product.product_id)">
+                    <i class="fa-light fa-cart-shopping"></i>
+                    Ajouter au panier
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if(validCares().length > 0) {
+        <div class="section">
+          <h2 class="section-title">Soins ({{validCares().length}})</h2>
+          <div class="wishlist-grid">
+            @for(care of validCares(); track care.care_id) {
+              <div class="wishlist-card">
+                <div class="card-header">
+                  @if(care.care_image) {
+                    <img [src]="care.care_image" [alt]="care.name" class="care-image">
+                  } @else {
+                    <div class="care-placeholder">
+                      <i class="fa-light fa-spa"></i>
+                    </div>
+                  }
+                  <button class="remove-btn" (click)="removeFromWishlist('care', care.care_id)">
+                    <i class="fa-solid fa-times"></i>
+                  </button>
+                </div>
+
+                <div class="card-content">
+                  <h3 class="care-name">{{care.name}}</h3>
+                  <div class="care-details">
+                    <span class="duration">
+                      <i class="fa-regular fa-clock"></i>
+                      {{formatDuration(care.duration)}}
+                    </span>
+                    <div class="price-info">
+                      @if(care.is_promo) {
+                        <span class="original-price">{{care.initial_price | currency:'EUR'}}</span>
+                        <span class="discounted-price">{{care.price_discounted | currency:'EUR'}}</span>
+                      } @else {
+                        <span class="price">{{care.initial_price | currency:'EUR'}}</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-footer">
+                  <button class="btn-primary" (click)="addToCart('care', care.care_id)">
+                    <i class="fa-light fa-calendar"></i>
+                    Réserver
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  }
+</div>

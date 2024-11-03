@@ -1,0 +1,30 @@
+<div class="sub-category-selector">
+  <button (click)="toggleDropdown()" class="dropdown-toggle">
+    {{ 'category.subcategories.select' | translate }}
+    <span class="caret"></span>
+  </button>
+
+  @if (isDropdownOpen) {
+    <div class="dropdown-menu">
+      @for (subCategory of securityService.careSubCategories$(); track subCategory.sub_category_id) {
+        <div class="dropdown-item">
+          <label>
+            <input type="checkbox"
+                   [checked]="isSubCategorySelected(subCategory.sub_category_id)"
+                   (change)="onSubCategoryChange($event, subCategory.sub_category_id)">
+            {{ subCategory.name }}
+          </label>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="selected-subcategories">
+    @for (subCategoryId of selectedSubCategories; track subCategoryId) {
+      <span class="subcategory-tag">
+            {{ getSubCategoryName(subCategoryId) }}
+        <button (click)="removeSubCategory(subCategoryId)" class="remove-subcategory">&times;</button>
+          </span>
+    }
+  </div>
+</div>

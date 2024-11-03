@@ -53,7 +53,6 @@ export class SignUpPageComponent {
   protected title:string='security-feature-sign-up-page-title';
   protected redirect: string= 'security-feature-sign-up-page-redirect';
   private initialMail: string | null = this.mailService.mailHome$() || '';
-  private signUpPayload: SignupPayload = { password: '', mail:'' };
   protected or: string = 'security-feature-signup-or';
   protected googleBtn: string = 'security-feature-signup-googleBtn';
   protected already: string = 'security-feature-signup-already-account';
@@ -62,7 +61,30 @@ export class SignUpPageComponent {
   public signupSuccess: boolean = false;
   public successMessage: string = '';
 
+  private signUpPayload: SignupPayload = {
+    username: '',
+    firstname: '',
+    lastname: '',
+    mail: '',
+    password: ''
+  };
+
   public formGroup: FormGroup<SignupForm> = new FormGroup<SignupForm>({
+    username: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(20)
+    ]),
+    firstname: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(20)
+    ]),
+    lastname: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(20)
+    ]),
     mail: new FormControl(this.signUpPayload.mail || this.initialMail, [
       Validators.required,
       Validators.email,
@@ -73,48 +95,65 @@ export class SignUpPageComponent {
       Validators.required,
       Validators.minLength(10),
       Validators.maxLength(25)
-    ]),
+    ])
   });
 
   public formControlConfigs: FormcontrolSimpleConfig[] = [
     {
-      label: this.translateService.instant('form.mail.label'),
-      formControl: this.formGroup.get('mail') as FormControl,
-      inputType: 'email',
-      placeholder: this.translateService.instant('form.mail.placeholder')
+      label: this.translateService.instant('security-feature.form.username.label'),
+      formControl: this.formGroup.get('username') as FormControl,
+      inputType: 'text',
+      placeholder: this.translateService.instant('security-feature.form.username.placeholder')
     },
     {
-      label: this.translateService.instant('form.password.label'),
+      label: this.translateService.instant('security-feature.form.firstname.label'),
+      formControl: this.formGroup.get('firstname') as FormControl,
+      inputType: 'text',
+      placeholder: this.translateService.instant('security-feature.form.firstname.placeholder')
+    },
+    {
+      label: this.translateService.instant('security-feature.form.lastname.label'),
+      formControl: this.formGroup.get('lastname') as FormControl,
+      inputType: 'text',
+      placeholder: this.translateService.instant('security-feature.form.lastname.placeholder')
+    },
+    {
+      label: this.translateService.instant('security-feature.form.mail.label'),
+      formControl: this.formGroup.get('mail') as FormControl,
+      inputType: 'email',
+      placeholder: this.translateService.instant('security-feature.form.mail.placeholder')
+    },
+    {
+      label: this.translateService.instant('security-feature.form.password.label'),
       formControl: this.formGroup.get('password') as FormControl,
       inputType: 'password',
-      placeholder: this.translateService.instant('form.password.placeholder')
+      placeholder: this.translateService.instant('security-feature.form.password.placeholder')
     }
   ];
-
-
 
   onSubmit(): void {
     this.securityService.error$.set(null);
 
     if (this.formGroup.valid) {
-      const { password, mail } = this.formGroup.value;
+      const { username, firstname, lastname, password, mail } = this.formGroup.value;
 
       const signUpPayload: SignupPayload = {
+        username: username || '',
+        firstname: firstname || '',
+        lastname: lastname || '',
         password: password || '',
         mail: mail || ''
       };
+
       this.securityService.SignUp(signUpPayload).subscribe({
         next: () => {
           if(!this.securityService.error$()){
-            // Mettre à jour l'état pour indiquer le succès
             this.signupSuccess = true;
-            this.successMessage = 'Votre compte a été créé avec succès. Un email de validation vous a été envoyé.';
+            this.successMessage = 'Votre compte a été créé avec succès.';
 
-            // Ajouter un délai avant la redirection
             setTimeout(() => {
-              // Redirection après 5 secondes (5000 ms)
               this.securityService.navigate(AppNode.HOME);
-            }, 5000);
+            }, 2500);
           }
         }
       });

@@ -2,28 +2,32 @@
   <div class="shipping-address">
     <div class="top">
       <h2>Adresse de livraison</h2>
-      @if(isShippingAddressComplete()){
+      @if (isShippingAddressComplete()) {
         <button (click)="showShippingModifyForm()">Modifier l'adresse</button>
       } @else {
         <button (click)="showShippingAddForm()">Ajouter une adresse</button>
       }
     </div>
-    @if(isShippingAddressComplete()){
-      <div class="full-name">
-        <span>{{securityService.account$().firstname}} {{securityService.account$().lastname}}</span>
-      </div>
-      <div class="road-number">
-        <span>{{securityService.account$().shippingAddress?.road}}, {{securityService.account$().shippingAddress?.nb}}</span>
-      </div>
-      <div class="town-cp">
-        <span>{{securityService.account$().shippingAddress?.town}} {{securityService.account$().shippingAddress?.cp}}</span>
-      </div>
-      <span>{{securityService.account$().shippingAddress?.country}}</span>
-      <span>{{securityService.account$().phoneNumber}}</span>
+
+    @if (isShippingAddressComplete()) {
+      @if (shippingAddress(); as shipping) {
+        <div class="full-name">
+          <span>{{shipping.firstname}} {{shipping.lastname}}</span>
+        </div>
+        <div class="road-number">
+          <span>{{shipping.road}}, {{shipping.nb}}</span>
+        </div>
+        <div class="town-cp">
+          <span>{{shipping.town}} {{shipping.cp}}</span>
+        </div>
+        <span>{{shipping.country}}</span>
+        <span>{{securityService.account$().phonenumber}}</span>
+      }
     } @else {
       <p>Aucune adresse de livraison complète n'est enregistrée.</p>
     }
-    @if(displayShippingAddForm){
+
+    @if (displayShippingAddForm) {
       <app-modal
         (close)="closeShippingAddModal()"
         (initiateSubmit)="handleAddressSubmission($event)"
@@ -35,7 +39,8 @@
         </app-address-form>
       </app-modal>
     }
-    @if(displayShippingModifyForm){
+
+    @if (displayShippingModifyForm) {
       <app-modal
         (close)="closeShippingModifyModal()"
         (initiateSubmit)="handleAddressSubmission($event)"
@@ -48,48 +53,42 @@
       </app-modal>
     }
   </div>
+
   <div class="billing-address">
     <h2>Adresse de facturation</h2>
-    @if(isBillingAddressComplete()){
-      @if(isBillingSameAsShipping()){
-        <div class="billing-options">
-          <label>
-            <input type="checkbox"
-                   [checked]="isBillingSameAsShipping()"
-                   (change)="toggleBillingSameAsShipping()">
-            Identique à l'adresse de livraison
-          </label>
-        </div>
+    @if (isBillingAddressComplete()) {
+      @if (!isBillingSameAsShipping()) {
+        @if (billingAddress(); as billing) {
+          <div class="billing-details">
+            <div class="full-name">
+              <span>{{billing.firstname}} {{billing.lastname}}</span>
+            </div>
+            <div class="road-number">
+              <span>{{billing.road}}, {{billing.nb}}</span>
+            </div>
+            <div class="town-cp">
+              <span>{{billing.town}} {{billing.cp}}</span>
+            </div>
+            <span>{{billing.country}}</span>
+            <span>{{securityService.account$().phonenumber}}</span>
+            <button (click)="showBillingModifyForm()">Modifier</button>
+          </div>
+        }
       }
-      @if(!isBillingSameAsShipping()){
-        <div class="billing-details">
-          <div class="full-name">
-            <span>{{securityService.account$().firstname}} {{securityService.account$().lastname}}</span>
-          </div>
-          <div class="road-number">
-            <span>{{securityService.account$().billingAddress?.road}}, {{securityService.account$().billingAddress?.nb}}</span>
-          </div>
-          <div class="town-cp">
-            <span>{{securityService.account$().billingAddress?.town}} {{securityService.account$().billingAddress?.cp}}</span>
-          </div>
-          <span>{{securityService.account$().billingAddress?.country}}</span>
-          <span>{{securityService.account$().phoneNumber}}</span>
-          <button (click)="showBillingModifyForm()">Modifier</button>
-        </div>
-        <div class="billing-options">
-          <label>
-            <input type="checkbox"
-                   [checked]="isBillingSameAsShipping()"
-                   (change)="toggleBillingSameAsShipping()">
-            Identique à l'adresse de livraison
-          </label>
-        </div>
-      }
+      <div class="billing-options">
+        <label>
+          <input type="checkbox"
+                 [checked]="isBillingSameAsShipping()"
+                 (change)="toggleBillingSameAsShipping()">
+          Identique à l'adresse de livraison
+        </label>
+      </div>
     } @else {
       <p>Aucune adresse de facturation complète n'est enregistrée.</p>
       <button (click)="showBillingAddForm()">Ajouter une adresse de facturation</button>
     }
-    @if(displayBillingAddForm){
+
+    @if (displayBillingAddForm) {
       <app-modal
         (close)="closeBillingAddModal()"
         (initiateSubmit)="handleAddressSubmission($event)"
@@ -101,7 +100,8 @@
         </app-address-form>
       </app-modal>
     }
-    @if(displayBillingModifyForm){
+
+    @if (displayBillingModifyForm) {
       <app-modal
         (close)="closeBillingModifyModal()"
         (initiateSubmit)="handleAddressSubmission($event)"
@@ -114,6 +114,7 @@
       </app-modal>
     }
   </div>
+
   <div class="validation-section">
     <button
       [disabled]="!isAddressesValid"

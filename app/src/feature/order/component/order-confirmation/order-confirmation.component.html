@@ -1,5 +1,4 @@
 <div class="order-confirmation-container">
-  <!-- En-tête avec message de confirmation -->
   <div class="confirmation-header">
     <i class="fa-light fa-circle-check success-icon"></i>
     <h1>Merci pour votre commande !</h1>
@@ -10,7 +9,6 @@
   </div>
 
   <div class="main-content">
-    <!-- Colonne de gauche -->
     <div class="left-column">
       <div class="shipping-section">
         <h2>Adresse de Livraison</h2>
@@ -21,19 +19,19 @@
           </div>
           <div class="info-row">
             <i class="fa-light fa-phone"></i>
-            <span>{{ securityService.account$().phoneNumber }}</span>
+            <span>{{ securityService.account$().phonenumber }}</span>
           </div>
-          @if(securityService.account$().shippingAddress) {
+          @if(shippingAddress(); as shipping) {
             <div class="address-details">
               <div class="info-row">
                 <i class="fa-light fa-location-dot"></i>
                 <div class="address-lines">
-                  <span class="street">{{ securityService.account$().shippingAddress?.nb }} {{ securityService.account$().shippingAddress?.road }}</span>
-                  @if(securityService.account$().shippingAddress?.complement) {
-                    <span class="complement">{{ securityService.account$().shippingAddress?.complement }}</span>
+                  <span class="street">{{ shipping.nb }} {{ shipping.road }}</span>
+                  @if(shipping.complement) {
+                    <span class="complement">{{ shipping.complement }}</span>
                   }
-                  <span class="city">{{ securityService.account$().shippingAddress?.cp }} {{ securityService.account$().shippingAddress?.town }}</span>
-                  <span class="country">{{ securityService.account$().shippingAddress?.country }}</span>
+                  <span class="city">{{ shipping.cp }} {{ shipping.town }}</span>
+                  <span class="country">{{ shipping.country }}</span>
                 </div>
               </div>
             </div>
@@ -42,7 +40,6 @@
       </div>
     </div>
 
-    <!-- Colonne de droite -->
     @if(securityService.order$()) {
       <div class="right-column">
         <div class="order-summary">

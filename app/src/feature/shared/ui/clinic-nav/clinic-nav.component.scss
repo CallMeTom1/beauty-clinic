@@ -210,3 +210,26 @@
     }
   }
 }
+
+.mail-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  i {
+    color: #E8B4B8;
+    font-size: 18px;
+  }
+
+  a {
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #E8B4B8;
+    }
+  }
+}

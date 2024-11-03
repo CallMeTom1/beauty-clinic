@@ -19,7 +19,7 @@ export class CareSliderComponent {
       alt: 'quelque-chose'
     },
     {
-      src: './assets/pictures/epilation-laser.png',
+      src: './assets/pictures/epilation.png',
       title: 'home-care-card.title2',
       alt: 'quelque-chose'
 
@@ -45,7 +45,7 @@ export class CareSliderComponent {
       alt: 'quelque-chose'
     },
     {
-      src: './assets/pictures/anti-age.png',
+      src: './assets/pictures/rajeunissement.png',
       title: 'home-care-card.title7',
       alt: 'quelque-chose'
     },

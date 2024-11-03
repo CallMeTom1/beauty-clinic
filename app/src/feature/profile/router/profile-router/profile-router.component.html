@@ -1,2 +1,111 @@
-<app-profile-header-avatar></app-profile-header-avatar>
-<router-outlet></router-outlet>
+<div class="profile-layout">
+  <!-- Menu de navigation latéral -->
+  <aside class="profile-nav">
+    <div class="nav-header">
+      <h3>BONJOUR !</h3>
+      @if(securityService.account$()) {
+        <div class="user-info">
+          <span>{{securityService.account$().firstname}}</span>
+          <span>{{securityService.account$().lastname}}</span>
+        </div>
+      }
+    </div>
+
+    <!-- Menu Principal -->
+    <div class="menu-content">
+      <a [routerLink]="['/profile']"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}"
+         class="menu-item">
+        <i class="fa-thin fa-user"></i>
+        <div class="item-content">
+          <h4>MON BEAUTY COMPTE</h4>
+        </div>
+      </a>
+
+      <a [routerLink]="['/profile/mes-rendez-vous']"
+         routerLinkActive="active"
+         class="menu-item">
+        <i class="fa-solid fa-calendar-check"></i>
+        <div class="item-content">
+          <h4>MES RENDEZ-VOUS</h4>
+        </div>
+      </a>
+
+      <a [routerLink]="['/profile/mes-achats']"
+         routerLinkActive="active"
+         class="menu-item">
+        <i class="fa-solid fa-bags-shopping"></i>
+        <div class="item-content">
+          <h4>MES ACHATS</h4>
+        </div>
+      </a>
+
+      <a [routerLink]="['track-orders']"
+         routerLinkActive="active"
+         class="menu-item">
+        <i class="fa-thin fa-truck-fast"></i>
+        <div class="item-content">
+          <h4>SUIVRE MA COMMANDE</h4>
+        </div>
+      </a>
+
+      <a [routerLink]="['/profile/rendez-vous']"
+         routerLinkActive="active"
+         class="menu-item">
+        <i class="fa-thin fa-calendar-plus"></i>
+        <div class="item-content">
+          <h4>PRENDRE UN RENDEZ-VOUS</h4>
+        </div>
+      </a>
+
+      <div class="menu-item-group">
+        <div class="menu-item parent-item"
+             (click)="toggleSettings()"
+             [ngClass]="{'active': isSettingsOpen}">
+          <i class="fa-thin fa-gear"></i>
+          <div class="item-content">
+            <h4>PARAMÈTRES DU COMPTE</h4>
+          </div>
+          <i class="fa-thin" [ngClass]="isSettingsOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+        </div>
+
+        @if(isSettingsOpen) {
+          <div class="submenu">
+            <a [routerLink]="['/account/profile/edit-profile']"
+               routerLinkActive="active"
+               class="menu-item submenu-item">
+              <i class="fa-thin fa-user-pen"></i>
+              <div class="item-content">
+                <h4>MES INFORMATIONS PERSONNELLES</h4>
+              </div>
+            </a>
+
+            <a [routerLink]="['/account/profile/edit-address']"
+               routerLinkActive="active"
+               class="menu-item submenu-item">
+              <i class="fa-thin fa-address-book"></i>
+              <div class="item-content">
+                <h4>MON CARNET D'ADRESSES</h4>
+              </div>
+            </a>
+          </div>
+        }
+      </div>
+
+      @if(securityService.account$().idUser) {
+        <a class="menu-item logout-item" (click)="logout()">
+          <i class="fa-thin fa-arrow-right-from-bracket"></i>
+          <div class="item-content">
+            <h4>SE DÉCONNECTER</h4>
+          </div>
+        </a>
+      }
+    </div>
+  </aside>
+
+  <!-- Contenu principal -->
+  <main class="profile-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

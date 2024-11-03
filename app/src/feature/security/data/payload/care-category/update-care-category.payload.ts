@@ -3,4 +3,5 @@ export interface UpdateCareCategoryPayload {
   name?: string;
   description?: string;
   isPublished?: boolean;
+  subCategoryIds?: string[];
 }

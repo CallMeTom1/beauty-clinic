@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
   private title: string = 'Beauty Clinic By Françoise';
   protected securityService = inject(SecurityService);
   ngOnInit(): void {
+    this.securityService.fetchProfile(this.securityService.isAuth$())
     this.titleService.setTitle(this.title);
     this.translate.setDefaultLang(Language.FR);
     this.translate.use(Language.FR);

@@ -8,5 +8,6 @@ export interface UserDto {
   firstname: string;
   lastname: string;
   phonenumber: string | null;
+  username: string;
   addresses: Address[];
 }

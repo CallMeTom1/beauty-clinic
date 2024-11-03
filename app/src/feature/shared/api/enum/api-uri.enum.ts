@@ -71,9 +71,11 @@ export enum ApiURI {
 
   //CARE CATEGORIES
   CARE_CATEGORY = 'care-category',
+  CARE_CATEGORY_IMAGE = 'care-category/upload-image',
 
   //CARE CATEGORIES
   CARE_SUB_CATEGORY = 'care-sub-category',
+  CARE_SUB_CATEGORY_IMAGE = 'care-sub-category/upload-image',
 
   //BODY ZONES
   BODY_ZONE = 'body-zone',

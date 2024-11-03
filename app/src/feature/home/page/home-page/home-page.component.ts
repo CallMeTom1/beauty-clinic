@@ -23,6 +23,8 @@ import {
   ProductCategorySliderComponent
 } from "../../component/product-category-slider/product-category-slider.component";
 import {ProductSelectionComponent} from "../../component/product-selection/product-selection.component";
+import {CareSelectionComponent} from "../../component/care-selection/care-selection.component";
+import {ClinicPresentationComponent} from "../../component/clinic-presentation/clinic-presentation.component";
 
 @Component({
   selector: 'app-home-page',
@@ -44,6 +46,8 @@ import {ProductSelectionComponent} from "../../component/product-selection/produ
     SocialsAndThemeComponent,
     ProductCategorySliderComponent,
     ProductSelectionComponent,
+    CareSelectionComponent,
+    ClinicPresentationComponent,
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'

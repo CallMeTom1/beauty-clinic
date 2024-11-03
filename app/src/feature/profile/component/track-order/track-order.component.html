@@ -1,0 +1,57 @@
+<div class="orders-page">
+  <h1 class="page-title">Suivre mes commandes</h1>
+
+  @if(!securityService.account$().idUser) {
+    <div class="connect-card">
+      <i class="fa-solid fa-truck-fast"></i>
+      <h2>Suivez vos commandes</h2>
+      <p>Connectez-vous pour suivre l'état de vos commandes en cours de livraison.</p>
+      <button class="btn-primary" [routerLink]="['/auth/signin']">Me connecter</button>
+    </div>
+  } @else {
+    @if(shippedOrders().length === 0) {
+      <div class="empty-state">
+        <i class="fa-solid fa-truck"></i>
+        <h2>Aucune commande en cours de livraison</h2>
+        <p>Vos commandes en cours de livraison apparaîtront ici.</p>
+        <button class="btn-primary" routerLink="/profile/mes-achats">Voir toutes mes commandes</button>
+      </div>
+    } @else {
+      <div class="orders-list">
+        @for(order of shippedOrders(); track order.idOrder) {
+          <div class="order-card">
+            <div class="order-header">
+              <div class="order-info">
+                <p class="order-date">Commande du {{ order.orderDate | date:'dd/MM/yyyy' }}</p>
+                <p class="order-number">N° {{ order.idOrder }}</p>
+              </div>
+              <div class="tracking-info">
+                <i class="fa-solid fa-truck"></i>
+                <span>Numéro de suivi : {{ order.trackingNumber }}</span>
+              </div>
+            </div>
+
+            <div class="order-items">
+              @for(orderItem of order.items; track orderItem.id) {
+                <div class="order-item">
+                  @if(orderItem.product?.product_image) {
+                    <img [src]="orderItem.product.product_image" [alt]="orderItem.product.name" class="item-image">
+                  }
+                  <div class="item-details">
+                    <h3 class="item-name">{{ orderItem.product.name }}</h3>
+                    <p class="item-quantity">Quantité : {{ orderItem.quantity }}</p>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="shipping-address">
+              <h4>Adresse de livraison :</h4>
+              <p>{{ formatAddress(order.shippingAddress) }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
