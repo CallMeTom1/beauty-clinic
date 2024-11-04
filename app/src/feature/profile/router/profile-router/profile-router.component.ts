@@ -3,6 +3,7 @@ import {ProfileHeaderAvatarComponent} from "../../component/profile-header-avata
 import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {SecurityService} from "@feature-security";
 import {NgClass} from "@angular/common";
+import {AppNode, AppRoutes} from "@shared-routes";
 
 @Component({
   selector: 'app-profile-router',
@@ -32,4 +33,6 @@ export class ProfileRouterComponent implements OnInit{
     this.securityService.logout();
   }
 
+  protected readonly AppRoutes = AppRoutes;
+  protected readonly AppNode = AppNode;
 }

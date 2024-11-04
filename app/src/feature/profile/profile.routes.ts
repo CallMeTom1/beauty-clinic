@@ -1,8 +1,7 @@
 import {Routes} from "@angular/router";
-import {AppNode} from "@shared-routes";
-import {ProfileComponent} from "./component/profile";
+import {AppNode, AppRoutes} from "@shared-routes";
 
-export const ProfileRoutes: Routes = [
+export const profileRoutes: Routes = [
   {
     path: '',
     loadComponent: () => import('./router/profile-router/profile-router.component')
@@ -14,14 +13,29 @@ export const ProfileRoutes: Routes = [
           .then(c => c.ProfilePageComponent),
       },
       {
-        path: AppNode.EDIT_PROFILE,
+        path: AppNode.INFO,
         loadComponent: () => import('./component/profile/profile.component')
           .then(c => c.ProfileComponent)
       },
       {
-        path: AppNode.EDIT_ADDRESS,
+        path:  AppNode.ADDRESS_BOOK,
         loadComponent: () => import('./component/address-book/address-book.component')
           .then(c => c.AddressBookComponent),
+      },
+      {
+        path: AppNode.WISHLIST,
+        loadComponent: () => import('./component/wishlist-list/wishlist-list.component')
+          .then(c => c.WishlistListComponent),
+      },
+      {
+        path: AppNode.ORDER,
+        loadComponent: () => import('./component/order-list/order-list.component')
+          .then(c => c.OrderListComponent),
+      },
+      {
+        path: AppNode.MY_APPOINTMENT,
+        loadComponent: () => import('./component/appointment-list/appointment-list.component')
+          .then(c => c.AppointmentListComponent),
       },
       {
         path: AppNode.TRACK_ORDERS,

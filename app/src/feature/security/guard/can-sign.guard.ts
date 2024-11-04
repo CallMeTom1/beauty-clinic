@@ -8,7 +8,7 @@ export function CanSignGuard(): CanActivateFn {
     const securityService: SecurityService = inject(SecurityService);
     if(!securityService.isAuth$())
       return true
-    securityService.navigate(AppRoutes.PROFILE);
+    securityService.navigate(AppRoutes.MY_ACCOUNT);
     return false;
 
   }

@@ -3,14 +3,29 @@ export enum AppNode {
     PUBLIC = '',
     REDIRECT_TO_PUBLIC = AppNode.PUBLIC,
     REDIRECT_TO_AUTHENTICATED = AppNode.HOME,
-    ACCOUNT= 'account',
-    ADMIN= 'admin',
-    SIGNIN=`signin`,
-    SIGNUP=`signup`,
-    PROFILE=`profile`,
-    EDIT_PROFILE=`edit-profile`,
-    EDIT_ADDRESS=`edit-address`,
-    TRACK_ORDERS=`track-orders`,
+    CART = 'mon-panier',
+    CART_ORDER = 'ma-commande',
+    PROFILE = 'mon-profil',
+
+
+    APPOINTMENT ='rendez-vous',
+
+    //account
+    ACCOUNT= 'mon-compte',
+    ADMIN= 'administrateur',
+    SIGNIN=`connexion`,
+    SIGNUP=`inscription`,
+    RESET_PASSWORD=`reinitialiser-mot-de-passe`,
+    FORGOT_PASSWORD=`mot-de-passe-oublie`,
+
+    //profile
+    INFO = `mes-informations`,
+    ADDRESS_BOOK = `mes-adresses`,
+    WISHLIST = `mes-favoris`,
+    ORDER = `mes-achats`,
+    MY_APPOINTMENT = `mes-rendez-vous`,
+    TRACK_ORDERS = `suivre-mes-commandes`,
+    MY_ACCOUNT = `mon-compte`,
 
 
     MY_ORDERS=`my-orders`,
@@ -22,30 +37,19 @@ export enum AppNode {
     HOLIDAY= `holiday`,
     CATEGORY_PRODUCT=`product-category`,
     PRODUCT=`produits`,
-    APPOINTMENT= `appointment`,
 
     CUSTOMER= `customer`,
     FALL_BACK = '**',
-
-    CART= 'cart',
-    ORDER = 'order',
     CONFIRM_ORDER = 'cart/order/confirm-order',
 
-    CLINIC = 'clinic',
 
     //admin link
-    MANAGE_CARE=`admin/care`,
-    MANAGE_CARE_CATEGORY=`admin/care-category` ,
-    MANAGE_PRODUCT=`admin/produits`,
-    MANAGE_ORDER=`admin/order`,
-
-    MANAGE_PRODUCT_CATEGORY=`admin/product-category` ,
-    DASHBOARD= `admin`,
-    MANAGE_APPOINTMENT= `admin/appointment`,
-    MANAGE_CUSTOMER= `admin/customer`,
-    MANAGE_CLINIC = `admin/clinic`,
-    MANAGE_BUSINESS_HOURS= `admin/business-hours`,
-    MANAGE_HOLIDAY= `admin/holiday`,
-    MANAGE_CATEGORY_PRODUCT=`admin/category-product`
+    MANAGE_CARE=`gerer-les-soins`,
+    MANAGE_PRODUCT=`gerer-les-produits`,
+    MANAGE_ORDER=`gerer-les-commandes`,
+    DASHBOARD= `dashboard`,
+    MANAGE_APPOINTMENT= `gerer-les-rendez-vous`,
+    MANAGE_CUSTOMER= `gerer-les clients`,
+    MANAGE_CLINIC = `gerer-la-clinique`,
 
 }

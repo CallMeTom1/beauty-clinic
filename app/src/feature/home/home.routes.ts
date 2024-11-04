@@ -1,7 +1,5 @@
-import { Routes } from "@angular/router";
-import {AppNode} from "@shared-routes";
-import {AdminGuard} from "./admin-role.guard";
-import {productRoutes} from "../product/product.routes";
+import {Routes} from "@angular/router";
+import {AppNode, AppRoutes} from "@shared-routes";
 
 export const homeRoutes: Routes = [
   {
@@ -15,24 +13,18 @@ export const homeRoutes: Routes = [
           .then(c => c.HomePageComponent),
       },
       {
-        path: 'test',
-        loadComponent: () => import('./page/test-page/test-page.component')
-          .then(c => c.TestPageComponent),
+        path: AppRoutes.CARES,
+        loadComponent: () => import('../care/page/care-page/care-page.component')
+          .then(c => c.CarePageComponent),
       },
       {
-        path: AppNode.CARE,
-        loadChildren: () => import('../care/care.routes')
-          .then(m => m.careRoutes),
+        path: AppNode.PROFILE,
+        loadChildren: () => import('../profile/profile.routes').then(m => m.profileRoutes)
       },
       {
-        path: AppNode.PRODUCT,
+        path: AppRoutes.PRODUCTS,
         loadChildren: () => import('../product/product.routes')
           .then(m => m.productRoutes),
-      },
-      {
-        path: AppNode.CONTACT,
-        loadComponent: () => import('../contact/page/contact-page/contact-page.component')
-          .then(c => c.ContactPageComponent),
       },
       {
         path: AppNode.ACCOUNT,

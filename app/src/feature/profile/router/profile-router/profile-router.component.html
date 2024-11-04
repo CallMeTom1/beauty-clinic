@@ -13,7 +13,7 @@
 
     <!-- Menu Principal -->
     <div class="menu-content">
-      <a [routerLink]="['/profile']"
+      <a [routerLink]="[AppRoutes.MY_ACCOUNT]"
          routerLinkActive="active"
          [routerLinkActiveOptions]="{exact: true}"
          class="menu-item">
@@ -23,7 +23,7 @@
         </div>
       </a>
 
-      <a [routerLink]="['/profile/mes-rendez-vous']"
+      <a [routerLink]="[AppRoutes.MY_APPOINTMENTS]"
          routerLinkActive="active"
          class="menu-item">
         <i class="fa-solid fa-calendar-check"></i>
@@ -32,7 +32,7 @@
         </div>
       </a>
 
-      <a [routerLink]="['/profile/mes-achats']"
+      <a [routerLink]="[AppRoutes.MY_ORDERS]"
          routerLinkActive="active"
          class="menu-item">
         <i class="fa-solid fa-bags-shopping"></i>
@@ -41,7 +41,7 @@
         </div>
       </a>
 
-      <a [routerLink]="['track-orders']"
+      <a [routerLink]="[AppRoutes.TRACK_MY_ORDERS]"
          routerLinkActive="active"
          class="menu-item">
         <i class="fa-thin fa-truck-fast"></i>
@@ -50,12 +50,21 @@
         </div>
       </a>
 
-      <a [routerLink]="['/profile/rendez-vous']"
+      <a [routerLink]="[AppRoutes.APPOINTMENT]"
          routerLinkActive="active"
          class="menu-item">
         <i class="fa-thin fa-calendar-plus"></i>
         <div class="item-content">
           <h4>PRENDRE UN RENDEZ-VOUS</h4>
+        </div>
+      </a>
+
+      <a [routerLink]="[AppRoutes.MY_WISHLIST]"
+         routerLinkActive="active"
+         class="menu-item">
+        <i class="fa-thin fa-truck-fast"></i>
+        <div class="item-content">
+          <h4>MA LISTE DE SOUHAITS</h4>
         </div>
       </a>
 
@@ -72,7 +81,7 @@
 
         @if(isSettingsOpen) {
           <div class="submenu">
-            <a [routerLink]="['/account/profile/edit-profile']"
+            <a [routerLink]="[AppRoutes.MY_INFO]"
                routerLinkActive="active"
                class="menu-item submenu-item">
               <i class="fa-thin fa-user-pen"></i>
@@ -81,7 +90,7 @@
               </div>
             </a>
 
-            <a [routerLink]="['/account/profile/edit-address']"
+            <a [routerLink]="[AppRoutes.MY_ADDRESS_BOOK]"
                routerLinkActive="active"
                class="menu-item submenu-item">
               <i class="fa-thin fa-address-book"></i>

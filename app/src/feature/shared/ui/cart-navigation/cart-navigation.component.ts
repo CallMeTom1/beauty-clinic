@@ -2,6 +2,7 @@ import {Component, effect, inject, Injector, OnInit, runInInjectionContext} from
 import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {SecurityService} from "@feature-security";
 import {CartItem} from "../../../security/data/model/cart/cart-item.business";
+import {AppNode, AppRoutes} from "@shared-routes";
 
 @Component({
   selector: 'app-cart-navigation',
@@ -97,6 +98,6 @@ export class CartNavigationComponent {
   }
 
   navigateCart() {
-    this.securityService.navigate('cart');
+    this.securityService.navigate(AppNode.CART);
   }
 }

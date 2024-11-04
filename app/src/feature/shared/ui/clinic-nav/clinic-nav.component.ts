@@ -30,6 +30,26 @@ export class ClinicNavComponent {
     return this.securityService.clinic$();
   });
 
+  getGoogleMapsUrl(): string {
+    const clinic = this.clinic();
+    if (!clinic?.clinic_address) return 'https://maps.google.com';
+
+    const address = `${clinic.clinic_address.road} ${clinic.clinic_address.nb}, ${clinic.clinic_address.cp} ${clinic.clinic_address.town}, ${clinic.clinic_address.country}`;
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  }
+
+  getSocialUrl(url: string | undefined): string | null {
+    if (!url) return null;
+
+    // Si l'URL commence déjà par http:// ou https://, on la retourne telle quelle
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+
+    // Sinon, on ajoute https:// au début
+    return `https://${url}`;
+  }
+
   getDayLabel(day: DayOfWeekEnum): string {
     const days: { [key in DayOfWeekEnum]: string } = {
       [DayOfWeekEnum.MONDAY]: 'Lundi',
@@ -44,7 +64,7 @@ export class ClinicNavComponent {
   }
 
   formatTime(time: string): string {
-    return time.substring(0, 5); // Convertit "09:00:00" en "09:00"
+    return time.substring(0, 5);
   }
 
   onMouseEnter(): void {

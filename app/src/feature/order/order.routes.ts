@@ -1,14 +1,14 @@
 import {Routes} from "@angular/router";
-import * as path from "node:path";
+import {AppRoutes} from "@shared-routes";
 
 export const orderRoutes: Routes = [
   {
-    path: 'confirm-order',
+    path: AppRoutes.CART_ORDER_CONFIRM,
     loadComponent: () => import('./page/confirm-payment-page/confirm-payment-page.component')
       .then(c => c.ConfirmPaymentPageComponent)
   },
   {
-    path: 'my-order-summary',
+    path: AppRoutes.CART_ORDER_SUMMARY,
     loadComponent: () => import('./page/order-confirmation-page/order-confirmation-page.component')
       .then(c => c.OrderConfirmationPageComponent)
   }

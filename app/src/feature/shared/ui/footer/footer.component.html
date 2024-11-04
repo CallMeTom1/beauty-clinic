@@ -5,18 +5,19 @@
       <h3>L'Institut</h3>
       <div class="address-info">
         <i class="fas fa-map-marker-alt"></i>
-        <div class="address-details">
-          <p>123 Avenue des Soins</p>
-          <p>75000 Paris, France</p>
+        <div class="address-details" *ngIf="clinic()?.clinic_address">
+          <p>{{ clinic()?.clinic_address?.road }} {{ clinic()?.clinic_address?.nb }}</p>
+          <p>{{ clinic()?.clinic_address?.cp }} {{ clinic()?.clinic_address?.town }}, {{ clinic()?.clinic_address?.country }}</p>
+          <p *ngIf="clinic()?.clinic_address?.complement">{{ clinic()?.clinic_address?.complement }}</p>
         </div>
       </div>
-      <div class="contact-item">
+      <div class="contact-item" *ngIf="clinic()?.phone_number">
         <i class="fas fa-phone"></i>
-        <a href="tel:+33123456789">01 23 45 67 89</a>
+        <a [href]="'tel:' + clinic()?.phone_number">{{ clinic()?.phone_number }}</a>
       </div>
-      <div class="contact-item">
+      <div class="contact-item" *ngIf="clinic()?.mail">
         <i class="fas fa-envelope"></i>
-        <a href="mailto:contact@institut.fr">contact&#64;institut.fr</a>
+        <a [href]="'mailto:' + clinic()?.mail">{{ clinic()?.mail }}</a>
       </div>
     </div>
 
@@ -24,18 +25,13 @@
     <div class="footer-section">
       <h3>Nos Horaires</h3>
       <div class="schedule">
-        <div class="schedule-item">
-          <span>Lundi - Vendredi</span>
-          <span>9h - 19h</span>
-        </div>
-        <div class="schedule-item">
-          <span>Samedi</span>
-          <span>10h - 17h</span>
-        </div>
-        <div class="schedule-item">
-          <span>Dimanche</span>
-          <span>Fermé</span>
-        </div>
+        <ng-container *ngFor="let hour of openHours()">
+          <div class="schedule-item">
+            <span>{{ getDayLabel(hour.day_of_week) }}</span>
+            <span *ngIf="hour.is_open">{{ formatTime(hour.opening_time) }} - {{ formatTime(hour.closing_time) }}</span>
+            <span *ngIf="!hour.is_open">Fermé</span>
+          </div>
+        </ng-container>
       </div>
     </div>
 
@@ -54,13 +50,13 @@
     <div class="footer-section">
       <h3>Suivez-nous</h3>
       <div class="social-links">
-        <a href="#" class="social-link">
+        <a [href]="clinic()?.instagram_url" class="social-link" target="_blank" *ngIf="clinic()?.instagram_url">
           <i class="fab fa-instagram"></i>
         </a>
-        <a href="#" class="social-link">
+        <a [href]="clinic()?.facebook_url" class="social-link" target="_blank" *ngIf="clinic()?.facebook_url">
           <i class="fab fa-facebook"></i>
         </a>
-        <a href="#" class="social-link">
+        <a [href]="clinic()?.tiktok_url" class="social-link" target="_blank" *ngIf="clinic()?.tiktok_url">
           <i class="fab fa-tiktok"></i>
         </a>
       </div>
@@ -83,7 +79,7 @@
         <a routerLink="/conditions-generales">CGV</a>
         <a routerLink="/confidentialite">Politique de confidentialité</a>
       </div>
-      <p class="copyright">© 2024 L'Institut. Tous droits réservés</p>
+      <p class="copyright">© {{ currentYear }} {{ clinic()?.name || 'L\'Institut' }}. Tous droits réservés</p>
     </div>
   </div>
 </footer>

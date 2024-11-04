@@ -17,7 +17,7 @@
             <p *ngIf="clinic()?.clinic_address?.complement">{{ clinic()?.clinic_address?.complement }}</p>
           </div>
         </div>
-        <a href="https://maps.google.com" target="_blank" class="map-link">
+        <a [href]="getGoogleMapsUrl()" target="_blank" rel="noopener" class="map-link">
           <i class="fas fa-directions"></i>
           Voir sur Google Maps
         </a>
@@ -51,13 +51,13 @@
           </div>
 
           <div class="social-links">
-            <a [href]="clinic()?.instagram_url" class="social-link" target="_blank" *ngIf="clinic()?.instagram_url">
+            <a [href]="getSocialUrl(clinic()?.instagram_url)" class="social-link" target="_blank" rel="noopener" *ngIf="clinic()?.instagram_url">
               <i class="fab fa-instagram"></i>
             </a>
-            <a [href]="clinic()?.facebook_url" class="social-link" target="_blank" *ngIf="clinic()?.facebook_url">
+            <a [href]="getSocialUrl(clinic()?.facebook_url)" class="social-link" target="_blank" rel="noopener" *ngIf="clinic()?.facebook_url">
               <i class="fab fa-facebook"></i>
             </a>
-            <a [href]="clinic()?.tiktok_url" class="social-link" target="_blank" *ngIf="clinic()?.tiktok_url">
+            <a [href]="getSocialUrl(clinic()?.tiktok_url)" class="social-link" target="_blank" rel="noopener" *ngIf="clinic()?.tiktok_url">
               <i class="fab fa-tiktok"></i>
             </a>
           </div>

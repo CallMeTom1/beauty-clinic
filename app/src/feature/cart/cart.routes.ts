@@ -13,7 +13,7 @@ export const cartRoutes: Routes = [
           .then(c => c.CartPageComponent)
       },
       {
-        path: 'order',
+        path: AppNode.CART_ORDER,
         loadChildren: () => import('../order/order.routes')
           .then(r => r.orderRoutes)
       }

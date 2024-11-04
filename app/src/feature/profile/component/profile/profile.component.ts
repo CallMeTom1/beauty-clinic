@@ -25,6 +25,8 @@ export class ProfileComponent implements OnInit {
   protected readonly translateService = inject(TranslateService);
   protected hasChanges = false;
   protected userEmail = '';
+  protected userInfoConfigs: FormcontrolSimpleConfig[] = [];
+  protected passwordConfigs: FormcontrolSimpleConfig[] = [];
 
   protected userInfoForm: FormGroup = new FormGroup({
     username: new FormControl('', [
@@ -62,55 +64,27 @@ export class ProfileComponent implements OnInit {
     ])
   });
 
-  protected userInfoConfigs: FormcontrolSimpleConfig[] = [
-    {
-      label: this.translateService.instant('form.profile.username.label'),
-      formControl: this.userInfoForm.get('username') as FormControl,
-      inputType: 'text',
-      placeholder: this.translateService.instant('form.profile.username.placeholder')
-    },
-    {
-      label: this.translateService.instant('form.profile.firstname.label'),
-      formControl: this.userInfoForm.get('firstname') as FormControl,
-      inputType: 'text',
-      placeholder: this.translateService.instant('form.profile.firstname.placeholder')
-    },
-    {
-      label: this.translateService.instant('form.profile.lastname.label'),
-      formControl: this.userInfoForm.get('lastname') as FormControl,
-      inputType: 'text',
-      placeholder: this.translateService.instant('form.profile.lastname.placeholder')
-    },
-    {
-      label: this.translateService.instant('form.profile.phone.label'),
-      formControl: this.userInfoForm.get('phonenumber') as FormControl,
-      inputType: 'tel',
-      placeholder: this.translateService.instant('form.profile.phone.placeholder')
-    }
-  ];
-
-  protected passwordConfigs: FormcontrolSimpleConfig[] = [
-    {
-      label: this.translateService.instant('form.profile.currentPassword.label'),
-      formControl: this.passwordForm.get('oldPassword') as FormControl,
-      inputType: 'password',
-      placeholder: this.translateService.instant('form.profile.currentPassword.placeholder')
-    },
-    {
-      label: this.translateService.instant('form.profile.newPassword.label'),
-      formControl: this.passwordForm.get('newPassword') as FormControl,
-      inputType: 'password',
-      placeholder: this.translateService.instant('form.profile.newPassword.placeholder')
-    },
-    {
-      label: this.translateService.instant('form.profile.confirmPassword.label'),
-      formControl: this.passwordForm.get('confirmPassword') as FormControl,
-      inputType: 'password',
-      placeholder: this.translateService.instant('form.profile.confirmPassword.placeholder')
-    }
-  ];
-
   ngOnInit() {
+    // Initialiser les configs après que les traductions sont chargées
+    this.translateService.get([
+      'form.profile.username.label',
+      'form.profile.username.placeholder',
+      'form.profile.firstname.label',
+      'form.profile.firstname.placeholder',
+      'form.profile.lastname.label',
+      'form.profile.lastname.placeholder',
+      'form.profile.phone.label',
+      'form.profile.phone.placeholder',
+      'form.profile.currentPassword.label',
+      'form.profile.currentPassword.placeholder',
+      'form.profile.newPassword.label',
+      'form.profile.newPassword.placeholder',
+      'form.profile.confirmPassword.label',
+      'form.profile.confirmPassword.placeholder'
+    ]).subscribe(translations => {
+      this.initializeConfigs(translations);
+    });
+
     const user = this.securityService.account$();
     if (user) {
       this.userEmail = user.mail;
@@ -134,6 +108,56 @@ export class ProfileComponent implements OnInit {
     this.userInfoForm.valueChanges.subscribe(() => {
       this.hasChanges = this.userInfoForm.dirty;
     });
+  }
+
+  private initializeConfigs(translations: any) {
+    this.userInfoConfigs = [
+      {
+        label: translations['form.profile.username.label'],
+        formControl: this.userInfoForm.get('username') as FormControl,
+        inputType: 'text',
+        placeholder: translations['form.profile.username.placeholder']
+      },
+      {
+        label: translations['form.profile.firstname.label'],
+        formControl: this.userInfoForm.get('firstname') as FormControl,
+        inputType: 'text',
+        placeholder: translations['form.profile.firstname.placeholder']
+      },
+      {
+        label: translations['form.profile.lastname.label'],
+        formControl: this.userInfoForm.get('lastname') as FormControl,
+        inputType: 'text',
+        placeholder: translations['form.profile.lastname.placeholder']
+      },
+      {
+        label: translations['form.profile.phone.label'],
+        formControl: this.userInfoForm.get('phonenumber') as FormControl,
+        inputType: 'tel',
+        placeholder: translations['form.profile.phone.placeholder']
+      }
+    ];
+
+    this.passwordConfigs = [
+      {
+        label: translations['form.profile.currentPassword.label'],
+        formControl: this.passwordForm.get('oldPassword') as FormControl,
+        inputType: 'password',
+        placeholder: translations['form.profile.currentPassword.placeholder']
+      },
+      {
+        label: translations['form.profile.newPassword.label'],
+        formControl: this.passwordForm.get('newPassword') as FormControl,
+        inputType: 'password',
+        placeholder: translations['form.profile.newPassword.placeholder']
+      },
+      {
+        label: translations['form.profile.confirmPassword.label'],
+        formControl: this.passwordForm.get('confirmPassword') as FormControl,
+        inputType: 'password',
+        placeholder: translations['form.profile.confirmPassword.placeholder']
+      }
+    ];
   }
 
   onSubmitUserInfo() {

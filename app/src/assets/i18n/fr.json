@@ -728,6 +728,25 @@
   "form.mail.label" : "Adresse email",
   "form.mail.placeholder": "Entrez votre adresse email",
   "form.password.label" : "Mot de passe",
-  "form.password.placeholder" : "Entrez votre mot de passe"
+  "form.password.placeholder" : "Entrez votre mot de passe",
+  "NAV": {
+    "ACCOUNT": {
+      "MY_ACCOUNT": "Mon compte",
+      "LOGIN": "Se connecter",
+      "GREETING": "BONJOUR !",
+      "LOGIN_PROMPT": "Connectez-vous ou créez un compte pour bénéficier de tous les avantages",
+      "LOGIN_BTN": "Me connecter",
+      "REGISTER_BTN": "M'inscrire",
+      "MENU": {
+        "BEAUTY_ACCOUNT": "MON BEAUTY COMPTE",
+        "APPOINTMENTS": "MES RENDEZ-VOUS",
+        "PURCHASES": "MES ACHATS",
+        "TRACK_ORDER": "SUIVRE MA COMMANDE",
+        "BOOK_APPOINTMENT": "PRENDRE UN RENDEZ-VOUS",
+        "PERSONAL_INFO": "MES INFORMATIONS PERSONNELLES",
+        "LOGOUT": "SE DÉCONNECTER"
+      }
+    }
+  }
 
 }

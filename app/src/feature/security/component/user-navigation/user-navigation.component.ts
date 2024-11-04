@@ -18,7 +18,6 @@ import {User} from "../../data/model/user";
 })
 export class UserNavigationComponent {
   protected securityService: SecurityService = inject(SecurityService);
-  private elementRef: ElementRef = inject(ElementRef);
   protected account: User = UserUtils.getEmpty();
   protected dropdownOpen: boolean = false;
   private closeTimeout: any;
@@ -29,17 +28,33 @@ export class UserNavigationComponent {
     });
   }
 
-  toggleDrop(): void {
-    this.dropdownOpen = !this.dropdownOpen;
-  }
-
   navigateToProfile(): void {
-    this.securityService.navigate(AppRoutes.PROFILE);
+    this.securityService.navigate(AppRoutes.MY_ACCOUNT);
     this.dropdownOpen = false;
   }
 
   navigateToOrders(): void {
-    this.securityService.navigate('account/my-orders');
+    this.securityService.navigate(AppRoutes.MY_ORDERS);
+    this.dropdownOpen = false;
+  }
+
+  navigateToTrackOrders(): void {
+    this.securityService.navigate(AppRoutes.TRACK_MY_ORDERS);
+    this.dropdownOpen = false;
+  }
+
+  navigateToAppointmens(): void {
+    this.securityService.navigate(AppRoutes.MY_APPOINTMENTS);
+    this.dropdownOpen = false;
+  }
+
+  navigateToBookAppointment(): void {
+    this.securityService.navigate(AppRoutes.APPOINTMENT);
+    this.dropdownOpen = false;
+  }
+
+  navigateToMyInfo(): void {
+    this.securityService.navigate(AppRoutes.MY_INFO);
     this.dropdownOpen = false;
   }
 
@@ -49,6 +64,7 @@ export class UserNavigationComponent {
   }
 
   navigateToSignIn(): void {
+    console.log('ici test')
     this.securityService.navigate(AppRoutes.SIGNIN);
     this.dropdownOpen = false;
   }

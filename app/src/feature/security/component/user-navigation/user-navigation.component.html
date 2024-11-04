@@ -2,92 +2,94 @@
   @if(securityService.account$().idUser) {
     <div class="nav-trigger">
       <i class="fa-thin fa-user icon"></i>
-      <span>Mon compte</span>
+      <span>{{ 'NAV.ACCOUNT.MY_ACCOUNT' | translate }}</span>
     </div>
   } @else {
     <div class="nav-trigger">
       <i class="fa-thin fa-user icon"></i>
-      <span>Se connecter</span>
+      <span>{{ 'NAV.ACCOUNT.LOGIN' | translate }}</span>
     </div>
   }
 
-  <div class="dropdown-menu" *ngIf="dropdownOpen">
-    <div class="dropdown-container">
-      <!-- Colonne de gauche avec titre et boutons -->
-      <div class="left-column">
-        @if(!securityService.account$().idUser) {
-          <div class="guest-header">
-            <h3>BONJOUR !</h3>
-            <p>Connectez-vous ou créez un compte pour bénéficier de tous les avantages</p>
-            <div class="btns">
-              <button class="primary" (click)="navigateToSignIn()">Me connecter</button>
-              <button class="primary" (click)="navigateToSignUp()">M'inscrire</button>
+  @if(dropdownOpen){
+    <div class="dropdown-menu">
+      <div class="dropdown-container">
+        <!-- Colonne de gauche avec titre et boutons -->
+        <div class="left-column">
+          @if(!securityService.account$().idUser) {
+            <div class="guest-header">
+              <h3>{{ 'NAV.ACCOUNT.GREETING' | translate }}</h3>
+              <p>{{ 'NAV.ACCOUNT.LOGIN_PROMPT' | translate }}</p>
+              <div class="btns">
+                <button class="primary" (click)="navigateToSignIn()">{{ 'NAV.ACCOUNT.LOGIN_BTN' | translate }}</button>
+                <button class="primary" (click)="navigateToSignUp()">{{ 'NAV.ACCOUNT.REGISTER_BTN' | translate }}</button>
+              </div>
             </div>
-          </div>
-        } @else {
-          <div class="guest-header">
-            <h3>BONJOUR !</h3>
-            <span>{{securityService.account$().firstname}}</span>
-            <span>{{securityService.account$().lastname}}</span>
-          </div>
-        }
-      </div>
-
-      <!-- Colonne de droite avec le menu -->
-      <div class="right-column">
-        <div class="menu-content">
-          <a class="menu-item" (click)="navigateToProfile()">
-            <i class="fa-thin fa-user"></i>
-            <div class="item-content">
-              <h4>MON BEAUTY COMPTE</h4>
+          } @else {
+            <div class="guest-header">
+              <h3>{{ 'NAV.ACCOUNT.GREETING' | translate }}</h3>
+              <span>{{securityService.account$().firstname}}</span>
+              <span>{{securityService.account$().lastname}}</span>
             </div>
-          </a>
+          }
+        </div>
 
-          <a class="menu-item" (click)="navigateToOrders()">
-            <i class="fa-solid fa-bags-shopping"></i>
-            <div class="item-content">
-              <h4>MES RENDEZ-VOUS</h4>
-            </div>
-          </a>
-
-          <a class="menu-item" (click)="navigateToOrders()">
-            <i class="fa-solid fa-bags-shopping"></i>
-            <div class="item-content">
-              <h4>MES ACHATS</h4>
-            </div>
-          </a>
-
-          <a class="menu-item">
-            <i class="fa-thin fa-calendar-circle-exclamation"></i>
-            <div class="item-content">
-              <h4>SUIVRE MA COMMANDE</h4>
-            </div>
-          </a>
-
-          <a class="menu-item">
-            <i class="fa-thin fa-calendar-circle-exclamation"></i>
-            <div class="item-content">
-              <h4>PRENDRE UN RENDEZ-VOUS</h4>
-            </div>
-          </a>
-
-          <a class="menu-item">
-            <i class="fa-thin fa-gear"></i>
-            <div class="item-content">
-              <h4>MES INFORMATIONS PERSONNELLES</h4>
-            </div>
-          </a>
-
-          @if(securityService.account$().idUser) {
-            <a class="menu-item" (click)="logout()">
-              <i class="fa-thin fa-arrow-right-from-bracket"></i>
+        <!-- Colonne de droite avec le menu -->
+        <div class="right-column">
+          <div class="menu-content">
+            <a class="menu-item" (click)="navigateToProfile()">
+              <i class="fa-thin fa-user"></i>
               <div class="item-content">
-                <h4>SE DÉCONNECTER</h4>
+                <h4>{{ 'NAV.ACCOUNT.MENU.BEAUTY_ACCOUNT' | translate }}</h4>
               </div>
             </a>
-          }
+
+            <a class="menu-item" (click)="navigateToAppointmens()">
+              <i class="fa-thin fa-calendar-days"></i>
+              <div class="item-content">
+                <h4>{{ 'NAV.ACCOUNT.MENU.APPOINTMENTS' | translate }}</h4>
+              </div>
+            </a>
+
+            <a class="menu-item" (click)="navigateToOrders()">
+              <i class="fa-solid fa-bags-shopping"></i>
+              <div class="item-content">
+                <h4>{{ 'NAV.ACCOUNT.MENU.PURCHASES' | translate }}</h4>
+              </div>
+            </a>
+
+            <a class="menu-item" (click)="navigateToTrackOrders()">
+              <i class="fa-thin fa-truck-fast"></i>
+              <div class="item-content">
+                <h4>{{ 'NAV.ACCOUNT.MENU.TRACK_ORDER' | translate }}</h4>
+              </div>
+            </a>
+
+            <a class="menu-item" (click)="navigateToBookAppointment()">
+              <i class="fa-thin fa-calendar-circle-exclamation"></i>
+              <div class="item-content">
+                <h4>{{ 'NAV.ACCOUNT.MENU.BOOK_APPOINTMENT' | translate }}</h4>
+              </div>
+            </a>
+
+            <a class="menu-item" (click)="navigateToMyInfo()">
+              <i class="fa-thin fa-gear"></i>
+              <div class="item-content">
+                <h4>{{ 'NAV.ACCOUNT.MENU.PERSONAL_INFO' | translate }}</h4>
+              </div>
+            </a>
+
+            @if(securityService.account$().idUser) {
+              <a class="menu-item" (click)="logout()">
+                <i class="fa-thin fa-arrow-right-from-bracket"></i>
+                <div class="item-content">
+                  <h4>{{ 'NAV.ACCOUNT.MENU.LOGOUT' | translate }}</h4>
+                </div>
+              </a>
+            }
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  }
 </div>

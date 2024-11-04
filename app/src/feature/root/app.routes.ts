@@ -9,11 +9,11 @@ export const routes: Routes = [
     loadChildren: () => import ('../admin/admin.routes').then(m => m.adminRoutes)
   },
   {
-    path: 'cart',
+    path: AppNode.CART,
     loadChildren: () => import('../cart/cart.routes').then(m => m.cartRoutes)
   },
   {
-    path: '',
+    path: AppNode.HOME,
     loadChildren: () => import('../home/home.routes').then(m => m.homeRoutes)
   },
 ]
