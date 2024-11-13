@@ -6,7 +6,5 @@ export class RemoveCartItemPayload {
         description: 'The unique identifier of the product to remove from the cart.',
         example: '01F8MECHZX3TBDSZ7XRADM79XE'
     })
-    @IsString({ message: 'The productId must be a string.' })
-    @IsNotEmpty({ message: 'The productId cannot be empty.' })
     cartItemId: string;
 }

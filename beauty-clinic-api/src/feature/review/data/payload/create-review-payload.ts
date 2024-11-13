@@ -31,7 +31,7 @@ export class CreateReviewPayload {
     })
     @IsOptional()
     @IsString()
-    productId?: string;
+    product_id?: string;
 
     @ApiProperty({
         description: 'ID du soin concerné par la review (optionnel si review pour un produit)',
@@ -40,5 +40,5 @@ export class CreateReviewPayload {
     })
     @IsOptional()
     @IsString()
-    careId?: string;
+    care_id?: string;
 }

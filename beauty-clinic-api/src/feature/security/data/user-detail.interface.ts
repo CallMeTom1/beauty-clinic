@@ -8,6 +8,7 @@ export interface UserDetails {
     mail: string;
     firstname: string;
     lastname: string;
+    username: string;
     phonenumber: string;
     addresses: Address[]
 

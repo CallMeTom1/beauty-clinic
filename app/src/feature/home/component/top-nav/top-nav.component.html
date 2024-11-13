@@ -1,7 +1,7 @@
 <nav class="top-nav">
   <div class="top-tier">
     <div class="left">
-      <a (click)="navigateHome()" class="logo-block">
+      <a [routerLink]="['/']" class="logo-block">
         <img src="assets/pictures/light-logo-beauty-clinic.png" alt="logo">
         <span class="clinic-name">IZZY BEAUTY</span>
       </a>
@@ -16,9 +16,13 @@
 
   <div class="bottom-tier">
     <ul class="main-menu">
-      <li [class.active]="activeMenuItem === 'home'" (click)="selectMenuItem('')">Home</li>
-      <li [class.active]="activeMenuItem === 'soins'" (click)="selectMenuItem('care')">Les soins</li>
-      <li [class.active]="activeMenuItem === 'produits'" (click)="selectMenuItem('produits')">Les produits</li>
+      <li routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}">Home</li>
+      <li routerLink="/soins"
+          routerLinkActive="active">Les soins</li>
+      <li routerLink="/produits"
+          routerLinkActive="active">Les produits</li>
       <button class="peach">Prendre rendez-vous</button>
     </ul>
     <div class="mobile-menu-button">
@@ -29,10 +33,15 @@
   @if(isMenuOpen) {
     <div class="mobile-menu">
       <ul>
-        <li [class.active]="activeMenuItem === 'home'" (click)="selectMenuItem('home')">Home</li>
-        <li [class.active]="activeMenuItem === 'soins'" (click)="selectMenuItem('soins')">Les soins</li>
-        <li [class.active]="activeMenuItem === 'produits'" (click)="selectMenuItem('produits')">Acheter des produits de beauté</li>
-        <li [class.active]="activeMenuItem === 'rendez-vous'" (click)="selectMenuItem('rendez-vous')">Prendre rendez-vous</li>
+        <li routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: true}">Home</li>
+        <li routerLink="/soins"
+            routerLinkActive="active">Les soins</li>
+        <li routerLink="/produits"
+            routerLinkActive="active">Les produits</li>
+        <li routerLink="/rendez-vous"
+            routerLinkActive="active">Prendre rendez-vous</li>
         <li>Se créer un compte</li>
         <li>Se connecter</li>
         <li (click)="closeMenu()">X</li>

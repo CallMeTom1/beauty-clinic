@@ -13,6 +13,7 @@ import {Cart} from "../cart/data/model/cart.entity";
 import {Address} from "@common/model/address.entity";
 import {ModifyAddressPayload} from "@feature/user/model/payload/modify-address.payload";
 import {AddAddressPayload} from "@feature/user/model/payload/add-address.payload";
+import {Wishlist} from "../wish-list/data/model/wishlist.entity";
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,7 @@ export class UserService {
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Cart) private readonly cartRepository: Repository<Cart>,
         @InjectRepository(Address) private readonly addressRepository: Repository<Address>,
+        @InjectRepository(Wishlist) private readonly wishlistRepository: Repository<Wishlist>,
     ) {}
 
     async createUser(payload: CreateUserInterface): Promise<User> {
@@ -49,8 +51,24 @@ export class UserService {
             );
             this.logger.log('Cart created successfully for user with ID:', idUser);
 
+            // Create and save wishlist
+            const wishlist: Wishlist = await this.wishlistRepository.save(
+                this.wishlistRepository.create({
+                    wishlist_id: ulid(),
+                    user: user,
+                    products: [],
+                    cares: []
+                })
+            );
+            this.logger.log('Wishlist created successfully for user with ID:', idUser);
+
+
             user.cart = cart;
+            user.wishlist = wishlist
             return await this.userRepository.save(user);
+
+
+
         } catch (error) {
             this.logger.error('Error occurred while creating user:', error);
             throw error instanceof UserCreationException ? error : new BadRequestException('An error occurred while creating the user.');
@@ -60,7 +78,7 @@ export class UserService {
     async findUserById(idUser: string): Promise<User> {
         const user = await this.userRepository.findOne({
             where: { idUser },
-            relations: ['addresses', 'cart', 'orders'],
+            relations: ['addresses', 'cart', 'orders', 'wishlist'],
         });
 
         if (!user) {
@@ -70,12 +88,13 @@ export class UserService {
     }
 
     async modifyUser(userId: string, payload: ModifyUserPayload): Promise<User> {
-        const user = await this.findUserById(userId);
+        const user: User = await this.findUserById(userId);
 
         if (payload.firstname) user.firstname = payload.firstname;
         if (payload.lastname) user.lastname = payload.lastname;
-        if (payload.phoneNumber) user.phoneNumber = payload.phoneNumber;
-
+        if (payload.phonenumber) user.phoneNumber = payload.phonenumber;
+        if (payload.username) user.username = payload.username;
+        console.log(user)
         return this.userRepository.save(user);
     }
 

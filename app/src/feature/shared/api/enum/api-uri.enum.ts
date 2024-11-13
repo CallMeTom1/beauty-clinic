@@ -5,9 +5,12 @@ export enum ApiURI {
   REFRESH_TOKEN = 'account/refresh',
   SIGN_GOOGLE_URL= 'https://localhost:2023/api/account/google/login',
   UPLOAD_PROFILE_IMAGE= 'users/upload-profile-image',
-  USER = 'users',
+  USER = 'user',
+  USER_PROFILE = 'user/profile',
   VERIFY_EMAIL = 'account/verify-email',
   SIGN_OUT = 'account/signout',
+  USER_ADDRESS = 'user/addresses',
+  USER_ADDRESS_DEL = 'user/test',
 
   CARE='cares',
   CARE_PUBLISHED='cares/published',
@@ -51,6 +54,7 @@ export enum ApiURI {
   CART_UPDATE_QUANTITY = 'cart/quantity',
   CART_APPLY_PROMO = 'cart/promo',
   CART_REMOVE_PROMO = 'cart/promo',
+  CART_DELETE = 'cart/delete',
 
 
   //ORDERS
@@ -86,6 +90,7 @@ export enum ApiURI {
 
   //REVIEWS
   REVIEWS = 'reviews',
+  REVIEWS_DEL = 'reviews/user',
 
 
   //WISHLIST

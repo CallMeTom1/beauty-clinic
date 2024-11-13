@@ -1,4 +1,4 @@
-import {Component, effect, inject, signal} from '@angular/core';
+import {Component, computed, effect, inject, signal} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ProductService} from "../../product.service";
 import {SecurityService} from "@feature-security";
@@ -10,6 +10,7 @@ import {ProductReviewsComponent} from "../../component/product-reviews/product-r
 import {HomeProductSliderComponent} from "../../../home/component/home-product-slider/home-product-slider.component";
 import {ProductSelectionComponent} from "../../../home/component/product-selection/product-selection.component";
 import {WishlistButtonComponent} from "../../../shared/ui/wishlist-button/wishlist-button.component";
+import {ModalService} from "../../../shared/ui/modal.service";
 
 @Component({
   selector: 'app-product-detail-page',
@@ -28,24 +29,28 @@ export class ProductDetailPageComponent {
   private route = inject(ActivatedRoute);
   private productService = inject(ProductService);
   private securityService = inject(SecurityService);
+  private modalService = inject(ModalService);
 
   quantity = signal(1);
   product = signal<Product | null>(null);
 
+  protected readonly isAuthenticated = computed(() =>
+    this.securityService.account$().idUser !== ''
+  );
+
   constructor() {
-    // Ajout de l'option allowSignalWrites
     effect(() => {
       const productName = this.route.snapshot.params['productName'];
       const product = this.productService.products$()
         .find(p => this.formatProductName(p.name) === productName);
       this.product.set(product || null);
-    }, { allowSignalWrites: true }); // Ajout de cette option
+    }, { allowSignalWrites: true });
   }
 
   private formatProductName(name: string): string {
     return name.toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // Enlève les accents
+      .replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
   }
@@ -63,6 +68,14 @@ export class ProductDetailPageComponent {
   }
 
   addToCart() {
+    if (!this.isAuthenticated()) {
+      this.modalService.openAuthModal({
+        title: 'Connexion requise',
+        message: 'Pour ajouter des produits à votre panier, veuillez vous connecter ou créer un compte.'
+      });
+      return;
+    }
+
     const product = this.product();
     if (product) {
       this.securityService.addProductToCart({

@@ -14,7 +14,7 @@
         <i class="fa-solid fa-truck"></i>
         <h2>Aucune commande en cours de livraison</h2>
         <p>Vos commandes en cours de livraison apparaîtront ici.</p>
-        <button class="btn-primary" routerLink="/profile/mes-achats">Voir toutes mes commandes</button>
+        <button class="btn-primary" [routerLink]=[AppRoutes.MY_ORDERS]>Voir toutes mes commandes</button>
       </div>
     } @else {
       <div class="orders-list">

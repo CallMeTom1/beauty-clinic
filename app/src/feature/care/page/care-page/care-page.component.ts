@@ -28,10 +28,16 @@ export class CarePageComponent implements OnInit {
   ngOnInit() {
     // Charger les données au démarrage
     this.securityService.fetchCareCategories().subscribe(() => {
-      // Sélectionner la première catégorie par défaut
       const categories = this.securityService.careCategories$();
-      if (categories.length > 0) {
-        this.selectCategory(categories[0]);
+      // Filtrer pour exclure "Diagnostique gratuit" et ne garder que les catégories publiées
+      const availableCategories = categories.filter(category =>
+        category.isPublished &&
+        category.name.toLowerCase() !== 'diagnostique gratuit'
+      );
+
+      // Sélectionner la première catégorie disponible par défaut
+      if (availableCategories.length > 0) {
+        this.selectCategory(availableCategories[0]);
       }
     });
     this.securityService.fetchCareSubCategories().subscribe();

@@ -1,7 +1,7 @@
 import {Component, effect, inject, Input} from '@angular/core';
 import {CurrencyPipe, DatePipe, NgIf} from "@angular/common";
 import {CartItem} from "../../../security/data/model/cart/cart-item.business";
-import {AppNode} from "@shared-routes";
+import {AppNode, AppRoutes} from "@shared-routes";
 import {SecurityService} from "@feature-security";
 import {ShippingFee} from "../../../security/data/model/shipping-fee/shipping-fee.business";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -118,7 +118,7 @@ export class SummaryCartComponent {
   }
 
   protected confirmCart(): void {
-    this.securityService.navigate(AppNode.CONFIRM_ORDER);
+    this.securityService.navigate(AppRoutes.CART_ORDER_CONFIRM);
   }
 
   protected applyPromoCode(): void {

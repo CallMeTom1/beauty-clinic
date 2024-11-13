@@ -8,6 +8,7 @@ import {AddCartItemPayload} from "./data/payload/add-cart-item.payload";
 import {UpdateCartItemPayload} from "./data/payload/update-cart-item.payload";
 import {RemoveCartItemPayload} from "./data/payload/remove-cart-item.payload";
 import {ApplyPromoCodeCartPayload} from "./data/payload/apply-promo-code-cart.payload";
+import {TokenGenerationException, UserNotFoundException} from "@feature/security/security.exception";
 
 @ApiTags('cart')
 @Controller('cart')
@@ -16,6 +17,9 @@ export class CartController {
 
     @Get()
     async getCart(@UserReq() userReq: UserRequest): Promise<Cart> {
+        if(!userReq){
+            throw new UserNotFoundException();
+        }
         return this.cartService.getCart(userReq.idUser);
     }
 
@@ -35,11 +39,12 @@ export class CartController {
         return this.cartService.updateCartItem(userReq.idUser, payload);
     }
 
-    @Delete()
+    @Put('delete')
     async removeFromCart(
         @Body() payload: RemoveCartItemPayload,
         @UserReq() userReq: UserRequest
     ): Promise<Cart> {
+        console.log('payload', payload)
         return this.cartService.removeFromCart(userReq.idUser, payload);
     }
 

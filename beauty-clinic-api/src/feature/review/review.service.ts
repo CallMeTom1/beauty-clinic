@@ -23,160 +23,188 @@ export class ReviewService {
     ) {}
 
     async create(userId: string, payload: CreateReviewPayload): Promise<Review> {
-        try {
-            const user = await this.userRepository.findOne({
-                where: { idUser: userId }
-            });
-            if (!user) {
-                throw new NotFoundException('User not found');
-            }
+        const user = await this.userRepository.findOne({
+            where: { idUser: userId }
+        });
 
-            // Vérifier si un produit ou un soin est spécifié
-            let product = null;
-            let care = null;
-
-            if (payload.productId) {
-                product = await this.productRepository.findOne({
-                    where: { product_id: payload.productId }
-                });
-                if (!product) {
-                    throw new NotFoundException('Product not found');
-                }
-
-                // Vérifier si l'utilisateur a déjà laissé un avis sur ce produit
-                const existingReview = await this.reviewRepository.findOne({
-                    where: {
-                        user: { idUser: userId },
-                        product: { product_id: payload.productId }
-                    }
-                });
-
-                if (existingReview) {
-                    throw new ConflictException('User has already reviewed this product');
-                }
-            }
-
-            if (payload.careId) {
-                care = await this.careRepository.findOne({
-                    where: { care_id: payload.careId }
-                });
-                if (!care) {
-                    throw new NotFoundException('Care not found');
-                }
-
-                // Vérifier si l'utilisateur a déjà laissé un avis sur ce soin
-                const existingReview = await this.reviewRepository.findOne({
-                    where: {
-                        user: { idUser: userId },
-                        care: { care_id: payload.careId }
-                    }
-                });
-
-                if (existingReview) {
-                    throw new ConflictException('User has already reviewed this care');
-                }
-            }
-
-            const review = this.reviewRepository.create({
-                review_id: ulid(),
-                rating: payload.rating,
-                comment: payload.comment,
-                user,
-                product,
-                care
-            });
-
-            return await this.reviewRepository.save(review);
-        } catch (error) {
-            throw error;
+        if (!user) {
+            throw new NotFoundException('User not found');
         }
+
+        let product = null;
+        let care = null;
+
+        if (payload.product_id) {
+            product = await this.productRepository.findOne({
+                where: { product_id: payload.product_id }
+            });
+
+            if (!product) {
+                throw new NotFoundException('Product not found');
+            }
+
+            const existingReview = await this.reviewRepository.findOne({
+                where: {
+                    user: { idUser: userId },
+                    product: { product_id: payload.product_id }
+                }
+            });
+
+            if (existingReview) {
+                throw new ConflictException('User has already reviewed this product');
+            }
+        }
+
+        if (payload.care_id) {
+            care = await this.careRepository.findOne({
+                where: { care_id: payload.care_id }
+            });
+
+            if (!care) {
+                throw new NotFoundException('Care not found');
+            }
+
+            const existingReview = await this.reviewRepository.findOne({
+                where: {
+                    user: { idUser: userId },
+                    care: { care_id: payload.care_id }
+                }
+            });
+
+            if (existingReview) {
+                throw new ConflictException('User has already reviewed this care');
+            }
+        }
+
+        const review = this.reviewRepository.create({
+            review_id: ulid(),
+            rating: payload.rating,
+            comment: payload.comment,
+            user,
+            product,
+            care
+        });
+
+        await this.reviewRepository.save(review);
+
+        return this.reviewRepository.findOne({
+            where: { review_id: review.review_id },
+            relations: ['user', 'product', 'care']
+        });
     }
 
     async update(userId: string, payload: UpdateReviewPayload): Promise<Review> {
-        try {
-            const review = await this.reviewRepository.findOne({
-                where: {
-                    review_id: payload.review_id,
-                    user: { idUser: userId } // On filtre directement sur l'userId
-                },
-                relations: ['user', 'product', 'care']
-            });
+        const review = await this.reviewRepository.findOne({
+            where: { review_id: payload.review_id },
+            relations: ['user', 'product', 'care']
+        });
 
-            if (!review) {
-                throw new NotFoundException('Review not found or you are not authorized to modify this review');
-            }
-
-            if (payload.rating !== undefined) review.rating = payload.rating;
-            if (payload.comment !== undefined) review.comment = payload.comment;
-
-            return await this.reviewRepository.save(review);
-        } catch (error) {
-            throw error;
+        if (!review) {
+            throw new NotFoundException('Review not found');
         }
+
+        if (review.user.idUser !== userId) {
+            throw new ForbiddenException('You can only update your own reviews');
+        }
+
+        review.rating = payload.rating ?? review.rating;
+        review.comment = payload.comment ?? review.comment;
+
+        await this.reviewRepository.save(review);
+
+        return this.reviewRepository.findOne({
+            where: { review_id: review.review_id },
+            relations: ['user', 'product', 'care']
+        });
     }
 
     async deleteUserReview(userId: string, reviewId: string): Promise<void> {
-        try {
-            const review = await this.reviewRepository.findOne({
-                where: { review_id: reviewId },
-                relations: ['user']
-            });
+        const review = await this.reviewRepository.findOne({
+            where: { review_id: reviewId },
+            relations: ['user']
+        });
 
-            if (!review) {
-                throw new NotFoundException('Review not found');
-            }
-
-            // Vérifier que l'utilisateur est le propriétaire de la review
-            if (review.user.idUser !== userId) {
-                throw new ForbiddenException('You can only delete your own reviews');
-            }
-
-            await this.reviewRepository.remove(review);
-        } catch (error) {
-            throw error;
+        if (!review) {
+            throw new NotFoundException('Review not found');
         }
+
+        if (review.user.idUser !== userId) {
+            throw new ForbiddenException('You can only delete your own reviews');
+        }
+
+        await this.reviewRepository.remove(review);
     }
 
     async deleteReviewAdmin(reviewId: string): Promise<void> {
-        try {
-            const review = await this.reviewRepository.findOne({
-                where: { review_id: reviewId }
-            });
+        const review = await this.reviewRepository.findOne({
+            where: { review_id: reviewId }
+        });
 
-            if (!review) {
-                throw new NotFoundException('Review not found');
-            }
-
-            await this.reviewRepository.remove(review);
-        } catch (error) {
-            throw error;
+        if (!review) {
+            throw new NotFoundException('Review not found');
         }
+
+        await this.reviewRepository.remove(review);
     }
 
     async findAll(): Promise<Review[]> {
-        return await this.reviewRepository.find({
-            relations: ['user', 'product', 'care']
+        return this.reviewRepository.find({
+            relations: ['user', 'product', 'care'],
+            order: {
+                createdAt: 'DESC'
+            }
         });
     }
 
     async findByUser(userId: string): Promise<Review[]> {
-        return await this.reviewRepository.find({
+        const reviews = await this.reviewRepository.find({
             where: { user: { idUser: userId } },
-            relations: ['user', 'product', 'care']
+            relations: ['user', 'product', 'care'],
+            order: {
+                createdAt: 'DESC'
+            }
         });
+
+        if (!reviews.length) {
+            throw new NotFoundException(`No reviews found for user with ID ${userId}`);
+        }
+
+        return reviews;
     }
 
     async findByProduct(productId: string): Promise<Review[]> {
-        return await this.reviewRepository.find({
+        const product = await this.productRepository.findOne({
+            where: { product_id: productId }
+        });
+
+        if (!product) {
+            throw new NotFoundException('Product not found');
+        }
+
+        return this.reviewRepository.find({
             where: { product: { product_id: productId } },
-            relations: ['user', 'product']
+            relations: ['user', 'product'],
+            order: {
+                createdAt: 'DESC'
+            }
         });
     }
 
     async findByCare(careId: string): Promise<Review[]> {
-        return await this.reviewRepository.find({
+        const care = await this.careRepository.findOne({
+            where: { care_id: careId }
+        });
+
+        if (!care) {
+            throw new NotFoundException('Care not found');
+        }
+
+        return this.reviewRepository.find({
             where: { care: { care_id: careId } },
-            relations: ['user', 'care']
+            relations: ['user', 'care'],
+            order: {
+                createdAt: 'DESC'
+            }
         });
     }
 }

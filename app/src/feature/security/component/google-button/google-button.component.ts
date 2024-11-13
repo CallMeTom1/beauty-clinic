@@ -4,6 +4,9 @@ import {
   inject,
 } from '@angular/core';
 import { environment } from "@env";
+import {SecurityService} from "@feature-security";
+import {ApiResponse} from "@shared-api";
+import {AppNode} from "@shared-routes";
 
 declare var google: any;
 
@@ -14,6 +17,8 @@ declare var google: any;
   styleUrls: ['./google-button.component.scss']
 })
 export class GoogleButtonComponent implements AfterViewInit {
+
+  protected readonly securityService: SecurityService = inject(SecurityService);
 
   constructor() {
     effect(() => this.ngAfterViewInit());
@@ -47,29 +52,48 @@ export class GoogleButtonComponent implements AfterViewInit {
     );
   }
 
-  handleCredentialResponse(response: any) {
-    console.log('Credential response received:', response);
+  async handleCredentialResponse(response: any) {
+    try {
+      console.log('Credential response received:', response);
 
-    // Envoyer le jeton JWT au serveur
-    fetch('https://localhost:2024/api/account/google-signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ credential: response.credential })
-    })
-      .then(async res => {
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(text);
-        }
-        return res.json();
-      })
-      .then(data => {
-        console.log('Server response:', data);
-      })
-      .catch(error => {
-        console.error('Error sending credential to server:', error);
+      const serverResponse = await fetch('https://localhost:2024/api/account/google-signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ credential: response.credential }),
+        credentials: 'include' // Important pour inclure les cookies
       });
+
+      if (!serverResponse.ok) {
+        const errorText = await serverResponse.text();
+        throw new Error(errorText);
+      }
+
+      const data: ApiResponse = await serverResponse.json();
+      console.log('Server response:', data);
+
+      if (data.result) {
+        // Mettre à jour l'état d'authentification
+        this.securityService.setAuthState(true);
+
+        // Récupérer les informations de l'utilisateur
+        this.securityService.me().subscribe({
+          next: (response: ApiResponse) => {
+            if (response.result) {
+              // Rediriger vers la page appropriée après la connexion réussie
+              this.securityService.navigate(AppNode.REDIRECT_TO_AUTHENTICATED);
+            }
+          },
+          error: (error) => {
+            console.error('Error fetching user data:', error);
+            this.securityService.error$.set('Erreur lors de la récupération des données utilisateur');
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error during Google authentication:', error);
+      this.securityService.error$.set('Erreur lors de l\'authentification Google');
+    }
   }
 }

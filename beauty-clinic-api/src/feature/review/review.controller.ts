@@ -22,6 +22,7 @@ export class ReviewController {
         @UserReq() userReq: UserRequest
     ): Promise<Review> {
         // On utilise l'ID de l'utilisateur connecté plutôt que celui du payload
+        console.log('payload', payload)
         return this.reviewService.create(userReq.idUser, payload);
     }
 
@@ -34,7 +35,7 @@ export class ReviewController {
     }
 
     @Public()
-    @Delete('user')
+    @Put('user')
     @ApiOperation({ summary: 'Delete user own review' })
     @ApiResponse({ status: 200, description: 'Review deleted successfully' })
     async deleteUserReview(

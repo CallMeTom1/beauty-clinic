@@ -1,7 +1,7 @@
 <div class="input" [ngClass]="{'checkbox-container': config.inputType === 'checkbox'}">
   @if (config.inputType !== 'checkbox') {
     <label class="floating-label"
-           [class.fixed-label]="inputFocus || config.formControl.value.length > 0">
+           [class.fixed-label]="inputFocus || (config.formControl?.value?.length > 0)">
       {{ config.label }}
     </label>
     <input class="floating-input"

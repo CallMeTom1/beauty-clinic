@@ -145,11 +145,12 @@
   "care.category.epilation": "Épilation",
   "care.category.relaxation": "Relaxation",
   "care.category.skincare": "Soins de la peau",
-
+  "category.subcategories.select" : "Sélectionner une sous catégorie",
   "care.zone.facial": "Visage",
   "care.zone.fullbody": "Corps entier",
   "care.zone.legs": "Jambes",
   "care.zone.none": "Aucune",
+  "calendar.time": "Heure",
 
   "business_hours.form.opening_time": "Heure d'ouverture",
   "business_hours.form.closing_time": "Heure de fermeture",
@@ -729,24 +730,72 @@
   "form.mail.placeholder": "Entrez votre adresse email",
   "form.password.label" : "Mot de passe",
   "form.password.placeholder" : "Entrez votre mot de passe",
-  "NAV": {
-    "ACCOUNT": {
-      "MY_ACCOUNT": "Mon compte",
-      "LOGIN": "Se connecter",
-      "GREETING": "BONJOUR !",
-      "LOGIN_PROMPT": "Connectez-vous ou créez un compte pour bénéficier de tous les avantages",
-      "LOGIN_BTN": "Me connecter",
-      "REGISTER_BTN": "M'inscrire",
-      "MENU": {
-        "BEAUTY_ACCOUNT": "MON BEAUTY COMPTE",
-        "APPOINTMENTS": "MES RENDEZ-VOUS",
-        "PURCHASES": "MES ACHATS",
-        "TRACK_ORDER": "SUIVRE MA COMMANDE",
-        "BOOK_APPOINTMENT": "PRENDRE UN RENDEZ-VOUS",
-        "PERSONAL_INFO": "MES INFORMATIONS PERSONNELLES",
-        "LOGOUT": "SE DÉCONNECTER"
-      }
-    }
-  }
+  "form.profile.username.label": "Nom d'utilisateur",
+  "form.profile.username.placeholder": "Entrez votre nom d'utilisateur",
+  "form.profile.firstname.label": "Prénom",
+  "form.profile.firstname.placeholder": "Entrez votre prénom",
+  "form.profile.lastname.label": "Nom",
+  "form.profile.lastname.placeholder": "Entrez votre nom",
+  "form.profile.phone.label": "Téléphone",
+  "form.profile.phone.placeholder": "Entrez votre numéro de téléphone",
+  "form.profile.currentPassword.label": "Mot de passe actuel",
+  "form.profile.currentPassword.placeholder": "Entrez votre mot de passe actuel",
+  "form.profile.newPassword.label": "Nouveau mot de passe",
+  "form.profile.newPassword.placeholder": "Entrez votre nouveau mot de passe",
+  "form.profile.confirmPassword.label": "Confirmer le mot de passe",
+  "form.profile.confirmPassword.placeholder": "Confirmez votre nouveau mot de passe",
+
+
+  "NAV.ACCOUNT.MY_ACCOUNT": "Mon compte",
+  "NAV.ACCOUNT.LOGIN": "Se connecter",
+  "NAV.ACCOUNT.GREETING": "BONJOUR !",
+  "NAV.ACCOUNT.LOGIN_PROMPT": "Connectez-vous ou créez un compte pour bénéficier de tous les avantages",
+  "NAV.ACCOUNT.LOGIN_BTN": "Me connecter",
+  "NAV.ACCOUNT.REGISTER_BTN": "M'inscrire",
+  "NAV.ACCOUNT.MENU.BEAUTY_ACCOUNT": "MON BEAUTY COMPTE",
+  "NAV.ACCOUNT.MENU.APPOINTMENTS": "MES RENDEZ-VOUS",
+  "NAV.ACCOUNT.MENU.PURCHASES": "MES ACHATS",
+  "NAV.ACCOUNT.MENU.TRACK_ORDER": "SUIVRE MA COMMANDE",
+  "NAV.ACCOUNT.MENU.BOOK_APPOINTMENT": "PRENDRE UN RENDEZ-VOUS",
+  "NAV.ACCOUNT.MENU.PERSONAL_INFO": "MES INFORMATIONS PERSONNELLES",
+  "NAV.ACCOUNT.MENU.LOGOUT": "SE DÉCONNECTER",
+
+
+  "form.address.firstname.label": "Prénom",
+  "form.address.firstname.placeholder": "Entrez votre prénom",
+  "form.address.lastname.label": "Nom",
+  "form.address.lastname.placeholder": "Entrez votre nom",
+  "form.address.label.label": "Nom de l'adresse",
+  "form.address.label.placeholder": "Ex: Domicile, Bureau... (optionnel)",
+
+  "addressBook.title": "Mon carnet d'adresses",
+  "addressBook.connect.title": "Consultez votre carnet d'adresses",
+  "addressBook.connect.description": "Connectez-vous pour gérer vos adresses de livraison et de facturation.",
+  "addressBook.connect.button": "Me connecter",
+  "addressBook.shipping.title": "Adresses de livraison",
+  "addressBook.shipping.addButton": "Ajouter une adresse de livraison",
+  "addressBook.shipping.defaultLabel": "Adresse de livraison par défaut",
+  "addressBook.billing.title": "Adresses de facturation",
+  "addressBook.billing.addButton": "Ajouter une adresse de facturation",
+  "addressBook.billing.defaultLabel": "Adresse de facturation par défaut",
+  "addressBook.form.addTitle": "Ajouter une adresse",
+  "addressBook.form.editTitle": "Modifier l'adresse",
+  "addressBook.form.shipping": "de livraison",
+  "addressBook.form.billing": "de facturation",
+  "addressBook.form.defaultCheckbox": "Définir comme adresse {type} par défaut",
+  "addressBook.form.cancel": "Annuler",
+  "addressBook.form.add": "Ajouter l'adresse",
+  "addressBook.form.edit": "Modifier l'adresse",
+  "addressBook.card.defaultBadge": "Adresse par défaut",
+  "addressBook.card.editButton": "Modifier",
+  "addressBook.card.deleteButton": "Supprimer",
+  "addressBook.delete.title": "Confirmation de suppression",
+  "addressBook.delete.message": "Êtes-vous sûr de vouloir supprimer cette adresse de {type} ?",
+  "addressBook.delete.confirm": "Supprimer",
+  "addressBook.delete.cancel": "Annuler",
+  "addressBook.errors.deleteError": "Erreur lors de la suppression de l'adresse",
+  "addressBook.errors.saveError": "Erreur lors de la sauvegarde de l'adresse"
+
+
 
 }

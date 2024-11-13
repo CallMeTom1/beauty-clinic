@@ -3,10 +3,11 @@
   <router-outlet></router-outlet>
   <app-modal
     *ngIf="modalService.isOpen()"
-    [title]="'Connexion requise'"
+    [title]="modalService.getConfig().title!"
+    [message]="modalService.getConfig().message!"
     (close)="closeAuthModal()">
     <div class="auth-modal-content">
-      <p>Pour ajouter des articles à votre liste de souhaits, veuillez vous connecter ou créer un compte.</p>
+      <p>{{ modalService.getConfig().message }}</p>
       <div class="button-container">
         <button
           class="login-btn"

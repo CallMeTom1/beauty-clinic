@@ -50,7 +50,11 @@ export class OrderService {
             return total + (price * item.quantity);
         }, 0).toFixed(2));
 
-        const discountAmount = Number((user.cart.discountAmount || 0).toFixed(2));
+        // Handle decimal type from database properly
+        const discountAmount = user.cart.discountAmount ?
+            Number(user.cart.discountAmount) :
+            0;
+
         const priceAfterDiscount = Number((subtotal - discountAmount).toFixed(2));
         const shippingFee = await this.shippingFeeService.calculateShippingFee(priceAfterDiscount);
 
@@ -100,9 +104,10 @@ export class OrderService {
         }
 
         const orderItems: OrderItem[] = user.cart.items.map((cartItem) => {
-            const price = cartItem.product.is_promo ?
+            // Convert decimal price to number before using toFixed
+            const price = Number(cartItem.product.is_promo ?
                 cartItem.product.price_discounted :
-                cartItem.product.initial_price;
+                cartItem.product.initial_price);
 
             return this.orderItemRepository.create({
                 id: ulid(),
@@ -117,7 +122,11 @@ export class OrderService {
             0
         ).toFixed(2));
 
-        const discountAmount = Number((user.cart.discountAmount || 0).toFixed(2));
+        // Handle decimal type from database properly
+        const discountAmount = user.cart.discountAmount ?
+            Number(user.cart.discountAmount) :
+            0;
+
         const priceAfterDiscount = Number((subtotal - discountAmount).toFixed(2));
         const shippingFee = await this.shippingFeeService.calculateShippingFee(priceAfterDiscount);
 
@@ -131,7 +140,7 @@ export class OrderService {
             orderDate: new Date(),
             user,
             items: orderItems,
-            shippingAddress, // Utilisation de l'adresse trouvée
+            shippingAddress,
             promoCode: user.cart.promoCode
         });
 
@@ -231,9 +240,7 @@ export class OrderService {
             throw new NotFoundException(`Order with id ${payload.idOrder} not found`);
         }
 
-        if (order.status !== OrderStatus.PROCESSING && order.status !== OrderStatus.PENDING_SHIPPING) {
-            throw new Error('Cannot add tracking number in current order status');
-        }
+
 
         order.trackingNumber = payload.trackingNumber;
         order.status = OrderStatus.SHIPPED;

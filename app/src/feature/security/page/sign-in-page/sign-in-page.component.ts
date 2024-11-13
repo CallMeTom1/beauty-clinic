@@ -1,10 +1,12 @@
-import {Component, effect, inject, signal, WritableSignal} from "@angular/core";
-import {CommonModule, NgOptimizedImage} from "@angular/common";
+import {Component, effect, inject, OnInit, signal, WritableSignal} from "@angular/core";
+import {CommonModule, NgOptimizedImage, ViewportScroller} from "@angular/common";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import { FormcontrolSimpleConfig} from "@shared-ui";
 import {
-  FloatingLabelInputComponent, FormError, handleFormError,
+  FloatingLabelInputComponent,
+  FormError,
+  handleFormError,
   LabelWithParamComponent,
   LabelWithParamDirective,
   LabelWithParamPipe
@@ -19,10 +21,9 @@ import {
   FloatingLabelInputTestComponent
 } from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
 
-
 @Component({
-    selector: 'app-sign-in-page',
-    standalone: true,
+  selector: 'app-sign-in-page',
+  standalone: true,
   imports: [
     CommonModule,
     FloatingLabelInputComponent,
@@ -37,12 +38,13 @@ import {
     RouterLink,
     FloatingLabelInputTestComponent,
   ],
-    templateUrl: './sign-in-page.component.html',
-    styleUrls: ['./sign-in-page.component.scss']
+  templateUrl: './sign-in-page.component.html',
+  styleUrls: ['./sign-in-page.component.scss']
 })
-export class SignInPageComponent {
+export class SignInPageComponent implements OnInit {
   protected readonly securityService: SecurityService = inject(SecurityService);
   protected readonly translateService: TranslateService = inject(TranslateService);
+  private readonly viewportScroller: ViewportScroller = inject(ViewportScroller);
 
   protected logoSrc: string = './assets/icon/logo-beauty-clinic.svg';
   protected alt: string = 'brand logo';
@@ -72,7 +74,6 @@ export class SignInPageComponent {
     ]),
   });
 
-
   public formControlConfigs = [
     {
       label: this.translateService.instant('form.mail.label'),
@@ -87,6 +88,11 @@ export class SignInPageComponent {
       placeholder: this.translateService.instant('form.password.placeholder')
     }
   ];
+
+  ngOnInit(): void {
+    // Faire défiler la page vers le haut
+    this.viewportScroller.scrollToPosition([0, 0]);
+  }
 
   onSubmit(): void {
     this.securityService.error$.set(null);
@@ -106,4 +112,6 @@ export class SignInPageComponent {
   googleSign(): void {
     this.securityService.initiateGoogleLogin();
   }
+
+  protected readonly AppRoutes = AppRoutes;
 }

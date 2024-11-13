@@ -46,12 +46,12 @@ export class HomeRouterComponent {
 
   navigateToLogin(): void {
     this.closeAuthModal();
-    this.securityService.navigate('/account/signin');
+    this.securityService.navigate(AppRoutes.SIGNIN);
   }
 
   navigateToRegister(): void {
     this.closeAuthModal();
-    this.securityService.navigate('/account/signup');
+    this.securityService.navigate(AppRoutes.SIGNUP);
   }
 
 }

@@ -148,6 +148,9 @@ export class ClinicService {
 
     async updateClinicLogo(clinicId: string, file: Express.Multer.File): Promise<Clinic> {
         try {
+            console.log('File received in service:', file);
+            console.log('Clinic ID:', clinicId);
+
             const clinic = await this.clinicRepository.findOne({
                 where: { clinic_id: clinicId },
                 relations: ['clinic_address']
@@ -171,10 +174,12 @@ export class ClinicService {
 
             return await this.clinicRepository.save(clinic);
         } catch (error) {
+            console.error('Error updating clinic logo:', error);
             if (error instanceof NotFoundException) {
                 throw error;
             }
             throw new Error('Failed to update clinic logo');
         }
     }
+
 }

@@ -24,8 +24,8 @@ export class Order {
     @Column('timestamp') // Changement pour inclure l'heure
     orderDate: Date;
 
-    @OneToOne(() => Address)
-    @JoinColumn({ name: 'shippingAddressId' }) // Nom explicite de la colonne de jointure
+    @ManyToOne(() => Address)
+    @JoinColumn({ name: 'shippingAddressId' })
     shippingAddress: Address;
 
     @Column('decimal', { precision: 10, scale: 2 })

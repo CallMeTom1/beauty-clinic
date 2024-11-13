@@ -4,13 +4,13 @@ import { TranslateModule, TranslateService } from "@ngx-translate/core";
 import { Order } from "../../../security/data/model/order/order.business";
 import { OrderStatus, OrderStatusLabels } from "../../../security/data/model/order/order-status.enum";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { FormcontrolSimpleConfig } from "@shared-ui";
 import { ModalComponent } from "../../../shared/ui/modal/modal/modal.component";
-import { FloatingLabelInputTestComponent } from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
 import { NgClass, NgForOf, NgIf } from "@angular/common";
 import { UpdateStatusOrderPayload } from "../../../security/data/payload/order/update-status-order.payload";
 import { UpdateOrderTrackingNumberPayload } from "../../../security/data/payload/order/update-order-tracking-number.payload";
 import { tap } from 'rxjs/operators';
+import { FloatingLabelInputTestComponent } from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
+import { FormcontrolSimpleConfig } from "@shared-ui";
 
 @Component({
   selector: 'app-manage-order',
@@ -18,11 +18,11 @@ import { tap } from 'rxjs/operators';
   imports: [
     TranslateModule,
     ModalComponent,
-    FloatingLabelInputTestComponent,
     ReactiveFormsModule,
     NgClass,
     NgForOf,
-    NgIf
+    NgIf,
+    FloatingLabelInputTestComponent
   ],
   templateUrl: './manage-order.component.html',
   styleUrl: './manage-order.component.scss'
@@ -41,7 +41,7 @@ export class ManageOrderComponent implements OnInit {
 
   // Formulaires
   protected statusForm = new FormGroup({
-    status: new FormControl<OrderStatus>(OrderStatus.PENDING_PAYMENT, [Validators.required])
+    status: new FormControl<OrderStatus | null>(null, [Validators.required])
   });
 
   protected trackingForm = new FormGroup({
@@ -51,18 +51,6 @@ export class ManageOrderComponent implements OnInit {
       Validators.maxLength(50)
     ])
   });
-
-  // Configuration du formulaire de statut
-  protected statusFormConfig: FormcontrolSimpleConfig = {
-    label: this.translateService.instant('form.order.status.label'),
-    formControl: this.statusForm.get('status') as FormControl,
-    inputType: 'select',
-    placeholder: this.translateService.instant('form.order.status.placeholder'),
-    options: Object.values(OrderStatus).map(status => ({
-      value: status,
-      label: OrderStatusLabels[status]
-    }))
-  };
 
   // Configuration du formulaire de numéro de suivi
   protected trackingFormConfig: FormcontrolSimpleConfig = {
@@ -77,10 +65,8 @@ export class ManageOrderComponent implements OnInit {
   }
 
   protected loadOrders() {
-    // On suppose que fetchOrders déclenche un signal ou un observable dans le service
     this.securityService.fetchOrders().subscribe({
       complete: () => {
-        // Une fois que fetchOrders est terminé, on peut accéder aux commandes via le signal ou le store
         this.orders = this.securityService.orders$();
       },
       error: (error) => {
@@ -123,6 +109,10 @@ export class ManageOrderComponent implements OnInit {
       case OrderStatus.DELIVERED:
       case OrderStatus.SHIPPED:
         return 'status-success';
+      case OrderStatus.PROCESSING:
+        return 'status-processing';
+      case OrderStatus.REFUNDED:
+        return 'status-refunded';
       default:
         return 'status-default';
     }
@@ -130,13 +120,17 @@ export class ManageOrderComponent implements OnInit {
 
   protected openStatusModal(order: Order) {
     this.currentOrder = order;
-    this.statusForm.patchValue({ status: order.status as OrderStatus });
+    this.statusForm.patchValue({
+      status: order.status as OrderStatus
+    });
     this.showStatusModal = true;
   }
 
   protected openTrackingModal(order: Order) {
     this.currentOrder = order;
-    this.trackingForm.patchValue({ trackingNumber: order.trackingNumber || '' });
+    this.trackingForm.patchValue({
+      trackingNumber: order.trackingNumber || ''
+    });
     this.showTrackingModal = true;
   }
 
@@ -158,15 +152,18 @@ export class ManageOrderComponent implements OnInit {
         status: status
       };
 
-      this.securityService.updateOrderStatus(payload).subscribe({
-        complete: () => {
-          this.handleClose();
-          this.loadOrders();
-        },
-        error: (error) => {
-          console.error('Erreur lors de la mise à jour du statut', error);
-        }
-      });
+      this.securityService.updateOrderStatus(payload)
+        .pipe(
+          tap(() => {
+            this.handleClose();
+            this.loadOrders();
+          })
+        )
+        .subscribe({
+          error: (error) => {
+            console.error('Erreur lors de la mise à jour du statut', error);
+          }
+        });
     }
   }
 
@@ -180,15 +177,18 @@ export class ManageOrderComponent implements OnInit {
         trackingNumber: trackingNumber
       };
 
-      this.securityService.updateOrderTrackingNumber(payload).subscribe({
-        complete: () => {
-          this.handleClose();
-          this.loadOrders();
-        },
-        error: (error) => {
-          console.error('Erreur lors de la mise à jour du numéro de suivi', error);
-        }
-      });
+      this.securityService.updateOrderTrackingNumber(payload)
+        .pipe(
+          tap(() => {
+            this.handleClose();
+            this.loadOrders();
+          })
+        )
+        .subscribe({
+          error: (error) => {
+            console.error('Erreur lors de la mise à jour du numéro de suivi', error);
+          }
+        });
     }
   }
 

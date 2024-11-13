@@ -14,7 +14,7 @@
         <i class="fa-solid fa-basket-shopping"></i>
         <h2>Aucune commande pour le moment</h2>
         <p>Découvrez nos produits et commencez votre shopping !</p>
-        <button class="btn-primary" routerLink="/shop">Découvrir la boutique</button>
+        <button class="btn-primary" (click)="navigateToProducts()">Découvrir la boutique</button>
       </div>
     } @else {
       <div class="orders-list">

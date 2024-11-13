@@ -6,7 +6,7 @@
       <i class="fa-solid fa-calendar-check"></i>
       <h2>Consultez vos rendez-vous</h2>
       <p>Connectez-vous pour voir et gérer vos rendez-vous.</p>
-      <button class="primary" [routerLink]="['/auth/signin']">Me connecter</button>
+      <button class="primary" [routerLink]="[AppRoutes.SIGNIN]">Me connecter</button>
     </div>
   } @else {
     @if(!securityService.appointment$() || securityService.appointment$().length === 0) {
@@ -14,7 +14,7 @@
         <i class="fa-solid fa-calendar"></i>
         <h2>Aucun rendez-vous pour le moment</h2>
         <p>Découvrez nos soins et prenez votre premier rendez-vous !</p>
-        <button class="primary" routerLink="/cares">Découvrir nos soins</button>
+        <button class="primary" (click)="navigateToCares()">Découvrir nos soins</button>
       </div>
     } @else {
       <div class="appointments-list">

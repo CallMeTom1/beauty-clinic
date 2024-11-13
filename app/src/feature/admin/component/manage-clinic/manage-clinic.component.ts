@@ -9,6 +9,7 @@ import {
   FloatingLabelInputTestComponent
 } from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
 import {ApiResponse} from "@shared-api";
+import {lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-manage-clinic',
@@ -220,17 +221,29 @@ export class ManageClinicComponent implements OnInit {
     }
   }
 
-  onClinicLogoChange(event: any): void {
-    const file: File | undefined = (event.target as HTMLInputElement).files?.[0];
+  async onClinicLogoChange(event: Event): Promise<void> {
+    const element = event.target as HTMLInputElement;
+    const file = element.files?.[0];
+
     if (file) {
+      // Vérifier le type de fichier
+      const allowedTypes = ['image/jpeg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        console.error('Type de fichier non supporté');
+        return;
+      }
+
+      // Mettre à jour le formulaire
       this.clinicLogoForm.patchValue({
         clinicLogo: file
       });
-      this.uploadClinicLogo();
+
+      // Uploader l'image
+      await this.uploadClinicLogo();
     }
   }
 
-  uploadClinicLogo(): void {
+  async uploadClinicLogo(): Promise<void> {
     if (this.clinicLogoForm.valid && this.clinic) {
       const formData = new FormData();
       const clinicLogo = this.clinicLogoForm.get('clinicLogo')?.value;
@@ -239,21 +252,19 @@ export class ManageClinicComponent implements OnInit {
         formData.append('clinicLogo', clinicLogo);
         formData.append('clinicId', this.clinic.clinic_id);
 
-        this.securityService.uploadClinicLogo(formData).subscribe({
-          next: (response: ApiResponse) => {
-            if (response.result) {
-              this.securityService.fetchClinic().subscribe();
-            }
-          },
-          error: (error: any) => {
-            console.error('Erreur lors de la mise à jour du logo', error);
-          }
-        });
+        try {
+          await lastValueFrom(this.securityService.uploadClinicLogo(formData));
+          // Rafraîchir les données après upload réussi
+          await lastValueFrom(this.securityService.fetchClinic());
+        } catch (error) {
+          console.error('Erreur lors de la mise à jour du logo', error);
+        }
       }
     }
   }
 
   getClinicLogo(): string {
+    console.log('logo?', this.clinic?.clinic_logo)
     if (this.clinic?.clinic_logo) {
       return this.clinic.clinic_logo;
     }

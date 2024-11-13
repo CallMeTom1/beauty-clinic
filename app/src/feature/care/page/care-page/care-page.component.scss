@@ -1,9 +1,19 @@
+// Variables (uniformisées avec le reste de l'application)
+$primary-color: #E8B4B8;
+$primary-dark: #d49da1;
+$text-dark: #2d3748;
+$text-light: #4a5568;
+$background-light: #fff9f9;
+$card-shadow: 0 4px 15px rgba(232, 180, 184, 0.15);
+$card-shadow-hover: 0 8px 25px rgba(232, 180, 184, 0.25);
+$border-radius: 16px;
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
 .care-menu-section {
   min-height: 100vh;
   background-color: white;
 }
 
-// Styles de la bannière (gardés de la version précédente)
 .category-banner {
   width: 100%;
   height: 400px;
@@ -18,12 +28,15 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+    background: linear-gradient(to bottom,
+      rgba($primary-color, 0.2),
+      rgba($text-dark, 0.6)
+    );
   }
 
   .banner-content {
     position: relative;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 40px;
     height: 100%;
@@ -36,36 +49,35 @@
       position: absolute;
       top: 40px;
       right: 40px;
-      font-size: 32px; // Taille de l'icône
-      color: white;    // Couleur de l'icône
-      background: rgba(255, 255, 255, 0.2); // Fond semi-transparent
+      font-size: 32px;
+      color: white;
+      background: rgba($primary-color, 0.2);
       padding: 20px;
       border-radius: 12px;
-      backdrop-filter: blur(4px); // Effet de flou derrière l'icône
+      backdrop-filter: blur(4px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     h1 {
       font-size: 48px;
-      font-weight: bold;
+      font-weight: 700;
       margin-bottom: 16px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      letter-spacing: -0.5px;
     }
 
     p {
       font-size: 18px;
       max-width: 600px;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      line-height: 1.6;
+      opacity: 0.9;
     }
-
   }
 }
 
-// Nouveau style pour le menu et le contenu
 .menu-content {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 40px;
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 40px;
@@ -73,34 +85,40 @@
 
 .menu-navigation {
   .categories-nav {
+    background: white;
+    border-radius: $border-radius;
+    box-shadow: $card-shadow;
+    overflow: hidden;
+
     .menu-item {
       width: 100%;
       text-align: left;
-      padding: 16px 20px;
+      padding: 16px 24px;
       background: none;
       border: none;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid rgba($primary-color, 0.1);
       font-size: 16px;
-      color: #333;
+      color: $text-dark;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: all 0.3s ease;
+      transition: $transition;
+      font-weight: 500;
 
       &:hover {
-        background-color: #f8f9fa;
+        background-color: rgba($primary-color, 0.05);
       }
 
       &.active {
-        color: #B4C6A6;
-        font-weight: 500;
+        color: $primary-color;
+        background-color: rgba($primary-color, 0.1);
       }
 
       .chevron {
-        color: #B4C6A6;
+        color: $primary-color;
         font-size: 20px;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       &.active .chevron {
@@ -109,7 +127,7 @@
     }
 
     .submenu {
-      background-color: #f8f9fa;
+      background-color: rgba($primary-color, 0.03);
       padding: 8px 0;
 
       .submenu-item {
@@ -118,18 +136,19 @@
         padding: 12px 32px;
         background: none;
         border: none;
-        font-size: 14px;
-        color: #666;
+        font-size: 15px;
+        color: $text-light;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: $transition;
 
         &:hover {
-          background-color: #eee;
+          background-color: rgba($primary-color, 0.08);
         }
 
         &.active {
-          color: #B4C6A6;
+          color: $primary-color;
           font-weight: 500;
+          background-color: rgba($primary-color, 0.1);
         }
       }
     }
@@ -138,76 +157,110 @@
 
 .treatment-details {
   background-color: white;
-  border-radius: 12px;
+  border-radius: $border-radius;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: $card-shadow;
+  border: 1px solid rgba($primary-color, 0.1);
+  transition: $transition;
+
+  &:hover {
+    box-shadow: $card-shadow-hover;
+    transform: translateY(-4px);
+  }
 
   .treatment-image {
     width: 100%;
     height: 300px;
     background-size: cover;
     background-position: center;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg,
+        rgba($primary-color, 0) 0%,
+        rgba($primary-color, 0.1) 100%
+      );
+      opacity: 0;
+      transition: $transition;
+    }
+
+    &:hover::after {
+      opacity: 1;
+    }
   }
 
   .treatment-info {
-    padding: 30px;
+    padding: 32px;
+    background: linear-gradient(to bottom, white, $background-light);
 
     h2 {
       font-size: 24px;
-      color: #333;
+      color: $text-dark;
       margin-bottom: 16px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
     }
 
     p {
-      color: #666;
-      line-height: 1.6;
+      color: $text-light;
+      line-height: 1.7;
       margin-bottom: 24px;
+      font-size: 15px;
     }
   }
 }
 
 .book-button {
-  background-color: #B4C6A6;
+  background-color: $primary-color;
   color: white;
   border: none;
   padding: 14px 32px;
   border-radius: 8px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: $transition;
 
   &:hover {
-    background-color: darken(#B4C6A6, 10%);
+    background-color: $primary-dark;
+    transform: translateY(-2px);
   }
 }
 
 // Media Queries
 @media (max-width: 992px) {
-  .banner-content {
-    .category-icon {
-      font-size: 24px;
-      padding: 15px;
-    }
-  }
-
   .menu-content {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
+    padding: 24px;
   }
 
   .menu-navigation {
     .categories-nav {
       display: flex;
       overflow-x: auto;
-      gap: 10px;
-      padding-bottom: 10px;
+      gap: 12px;
+      padding: 12px;
+      background: none;
+      box-shadow: none;
 
       .menu-item {
         flex: 0 0 auto;
-        border: 1px solid #eee;
+        border: 1px solid rgba($primary-color, 0.2);
         border-radius: 8px;
         padding: 12px 20px;
+        background: white;
+        box-shadow: $card-shadow;
+
+        &.active {
+          background: rgba($primary-color, 0.1);
+        }
       }
 
       .submenu {
@@ -216,26 +269,21 @@
         right: 0;
         top: 100%;
         z-index: 10;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        background: white;
+        box-shadow: $card-shadow;
+        border-radius: $border-radius;
+        margin-top: 8px;
       }
     }
   }
 }
 
 @media (max-width: 576px) {
-
-  .banner-content {
-    .category-icon {
-      font-size: 20px;
-      padding: 12px;
-    }
-  }
-
   .category-banner {
     height: 300px;
 
     .banner-content {
-      padding: 20px;
+      padding: 24px;
 
       h1 {
         font-size: 32px;
@@ -244,11 +292,16 @@
       p {
         font-size: 16px;
       }
+
+      .category-icon {
+        font-size: 20px;
+        padding: 12px;
+      }
     }
   }
 
   .menu-content {
-    padding: 20px;
+    padding: 16px;
   }
 
   .treatment-details {
@@ -257,11 +310,16 @@
     }
 
     .treatment-info {
-      padding: 20px;
+      padding: 24px;
 
       h2 {
         font-size: 20px;
       }
     }
+  }
+
+  .book-button {
+    width: 100%;
+    padding: 12px 24px;
   }
 }

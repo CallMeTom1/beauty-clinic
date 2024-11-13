@@ -4,6 +4,8 @@ import {RouterLink} from "@angular/router";
 import {CurrencyPipe} from "@angular/common";
 import {RemoveFromWishlistPayload} from "../../../security/data/payload/wishlist/remowe-from-wishlist.payload";
 import {AddCartItemPayload} from "../../../security/data/payload/cart/add-cart-item.payload";
+import {AppRoutes} from "@shared-routes";
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-wishlist-list',
@@ -48,12 +50,16 @@ export class WishlistListComponent implements OnInit {
   }
 
   removeFromWishlist(type: 'product' | 'care', id: string) {
-    console.log('je marche pas sa mere')
     const payload: RemoveFromWishlistPayload = type === 'product'
       ? { productId: id }
       : { careId: id };
 
-    this.securityService.removeFromWishList(payload).subscribe();
+    // Utiliser switchMap pour enchaîner les appels et mettre à jour la wishlist
+    this.securityService.removeFromWishList(payload)
+      .pipe(
+        switchMap(() => this.securityService.fetchWishlist())
+      )
+      .subscribe();
   }
 
   addToCart(type: 'product' | 'care', id: string) {
@@ -66,5 +72,13 @@ export class WishlistListComponent implements OnInit {
     } else {
       this.securityService.navigate(`cares/${id}/booking`);
     }
+  }
+
+  navigateToProduct(): void {
+    return this.securityService.navigate(AppRoutes.PRODUCTS)
+  }
+
+  navigateToCare(): void {
+    return this.securityService.navigate(AppRoutes.CARES)
   }
 }

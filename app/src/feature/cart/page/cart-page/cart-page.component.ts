@@ -35,9 +35,6 @@ export class CartPageComponent {
   protected readonly shippingFees: number = 10;
   protected isCartEmpty: boolean = true;
 
-
-
-
   constructor() {
     this.securityService.fetchCart().subscribe()
     console.log('cart', this.securityService.cart$())

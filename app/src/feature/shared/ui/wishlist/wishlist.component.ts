@@ -5,6 +5,7 @@ import {SecurityService} from "@feature-security";
 import {Care} from "../../../security/data/model/care/care.business";
 import {Product} from "../../../security/data/model/product/product.business";
 import {ModalService} from "../modal.service";
+import {AppRoutes} from "@shared-routes";
 
 @Component({
   selector: 'app-wishlist',
@@ -79,12 +80,12 @@ export class WishlistComponent {
   navigateToWishlist(): void {
     if (!this.isAuthenticated()) {
       console.log('Opening auth modal from wishlist navigation');
-      this.modalService.openAuthModal();
+      this.modalService.openAuthModal(); // Utilisera le message par défaut pour la wishlist
       this.dropdownOpen.set(false);
       return;
     }
 
-    this.securityService.navigate('wishlist');
+    this.securityService.navigate(AppRoutes.MY_WISHLIST);
   }
 
   formatDuration(minutes: number): string {

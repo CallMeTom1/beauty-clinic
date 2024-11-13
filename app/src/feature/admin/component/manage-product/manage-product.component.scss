@@ -12,7 +12,7 @@
   align-items: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
-  h2{
+  h2 {
     font-size: 36px;
     font-weight: bold;
   }
@@ -22,188 +22,196 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-}
 
-// Style pour le formulaire
-.two-column-form {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.form-fields {
-  display: flex;
-  gap: 24px;
-  flex-grow: 1;
-  overflow-y: auto;
-}
-
-.form-column {
-  flex: 1;
-  min-width: 0; // Pour éviter le débordement
-}
-
-.form-actions {
-  margin-top: 24px;
-  padding: 16px 0;
-  border-top: 1px solid var(--theme-border);
-  background: var(--theme-bg-primary);
-  display: flex;
-  justify-content: flex-start;
-  gap: 16px;
-}
-
-// Media query pour le responsive
-@media (max-width: 768px) {
-  .form-fields {
-    flex-direction: column;
+  th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
   }
 
-  .modal-content {
-    height: 90vh;
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 }
-.product-table th,
-.product-table td {
-  padding: 12px;
-  border: 1px solid #ddd;
-  text-align: center;
-  vertical-align: middle;
-}
 
-.product-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.product-table td:first-child {
-  width: 200px;
-}
-
-.product-image-container {
-  width: 200px;
-  height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  border-radius: 4px;
-}
-
-.product-image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
+// Styles pour l'image du produit
 .image-upload-label {
   cursor: pointer;
   display: inline-block;
-  transition: opacity 0.3s ease;
 }
 
-.image-upload-label:hover {
-  opacity: 0.8;
-}
-
-.switch {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn {
-  padding: 8px 15px;
-  margin: 5px;
-  border: none;
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
   border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
-.btn-primary {
-  background-color: #007bff;
-  color: white;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  color: white;
-}
-
-.btn:hover {
-  opacity: 0.9;
-}
-
-// Styles pour les prix
+// Styles pour les prix et promotions
 .price-column {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
+
+  .original-price {
+    text-decoration: line-through;
+    color: #94a3b8;
+    font-size: 14px;
+  }
+
+  .discounted-price {
+    color: #ef4444;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .promo-badge {
+    background-color: #ef4444;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+  }
 }
 
-.original-price {
-  text-decoration: line-through;
-  color: #999;
-  font-size: 0.9em;
+// Styles pour le conteneur de promotion
+.promo-container {
+  position: relative;
+  display: inline-block;
 }
 
-.discounted-price {
-  color: #e74c3c;
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
-.promo-badge {
-  background-color: #e74c3c;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.8em;
-  font-weight: bold;
-}
-
-// Styles pour le bouton et popover de promo
 .action-button {
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #e2e8f0;
   border-radius: 4px;
-  background: white;
+  background-color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.3s ease;
+  font-size: 14px;
+  color: #1a202c;
+  transition: all 0.2s ease;
+
+  i {
+    color: #ed8936;
+  }
 
   &:hover {
-    background: #f5f5f5;
+    background-color: #f8fafc;
+    border-color: #cbd5e0;
   }
 
   &.promo-active {
-    background: #e74c3c;
-    color: white;
-    border-color: #e74c3c;
+    background-color: #fed7aa;
+    border-color: #ed8936;
 
     &:hover {
-      background: darken(#e74c3c, 10%);
+      background-color: #fdedde;
     }
-  }
-
-  i {
-    font-size: 1.1em;
   }
 }
 
-// Conteneur des actions
+.promo-popover {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+  z-index: 1000;
+  min-width: 250px;
+}
+
+.promo-content {
+  padding: 16px;
+
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a202c;
+    margin-bottom: 8px;
+  }
+
+  .promo-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+      }
+    }
+
+    span {
+      font-size: 14px;
+      color: #4a5568;
+    }
+  }
+
+  .promo-buttons {
+    display: flex;
+    gap: 8px;
+
+    button {
+      flex: 1;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &.primary {
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+
+        &:hover {
+          background-color: #2563eb;
+        }
+      }
+
+      &.secondary {
+        background-color: white;
+        color: #ef4444;
+        border: 1px solid #ef4444;
+
+        &:hover {
+          background-color: #fef2f2;
+        }
+      }
+    }
+  }
+}
+
+// Styles pour les actions
 .actions-cell {
   white-space: nowrap;
   padding: 12px 20px;
@@ -219,31 +227,27 @@
 .action-separator {
   color: #ccc;
   font-weight: 300;
-  user-select: none;
 }
 
-// Styles de base pour les liens d'action
 .action-link {
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 14px;
   position: relative;
-  padding: 4px 0;
-  font-weight: 500;
+  padding-bottom: 2px;
 
-  // Animation de soulignement
   &::after {
     content: '';
     position: absolute;
     width: 100%;
-    height: 2px;
+    height: 1px;
     bottom: 0;
     left: 0;
     background-color: currentColor;
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
   }
 
   &:hover::after {
@@ -251,218 +255,91 @@
     transform-origin: left;
   }
 
-  // Style pour éditer
   &.edit {
     color: #2196F3;
-
-    &:hover {
-      color: darken(#2196F3, 15%);
-    }
-
-    &:active {
-      color: darken(#2196F3, 25%);
-    }
+    &:hover { color: darken(#2196F3, 15%); }
   }
 
-  // Style pour supprimer
   &.delete {
     color: #F44336;
-
-    &:hover {
-      color: darken(#F44336, 15%);
-    }
-
-    &:active {
-      color: darken(#F44336, 25%);
-    }
+    &:hover { color: darken(#F44336, 15%); }
   }
 
-  // Style pour publier
   &.publish {
     color: #4CAF50;
-
-    &:hover {
-      color: darken(#4CAF50, 15%);
-    }
-
-    &:active {
-      color: darken(#4CAF50, 25%);
-    }
+    &:hover { color: darken(#4CAF50, 15%); }
   }
 
-  // Style pour dépublier
   &.unpublish {
     color: #FF9800;
-
-    &:hover {
-      color: darken(#FF9800, 15%);
-    }
-
-    &:active {
-      color: darken(#FF9800, 25%);
-    }
-  }
-
-  // État désactivé
-  &.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
+    &:hover { color: darken(#FF9800, 15%); }
   }
 }
 
-// Style des boutons de modal
+// Styles pour les modales
 .modal-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   gap: 16px;
-  margin-top: 24px;
-
-  button {
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 100px;
-    border: none;
-
-    &.primary {
-      background-color: #2196F3;
-      color: white;
-
-      &:hover {
-        background-color: darken(#2196F3, 10%);
-      }
-
-      &:active {
-        background-color: darken(#2196F3, 15%);
-      }
-
-      &:disabled {
-        background-color: lighten(#2196F3, 20%);
-        cursor: not-allowed;
-      }
-    }
-
-    &.secondary {
-      background-color: #6c757d;
-      color: white;
-
-      &:hover {
-        background-color: darken(#6c757d, 10%);
-      }
-
-      &:active {
-        background-color: darken(#6c757d, 15%);
-      }
-
-      &:disabled {
-        background-color: lighten(#6c757d, 20%);
-        cursor: not-allowed;
-      }
-    }
-  }
+  margin-top: 20px;
 }
 
-// Modal de confirmation de suppression
 .del-modal {
-  text-align: center;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
 
   h3 {
-    color: #333;
-    margin-bottom: 12px;
-    font-size: 18px;
-  }
-
-  span {
-    color: #666;
-    font-size: 16px;
-    display: block;
-    margin-bottom: 24px;
+    margin-bottom: 10px;
   }
 }
 
-.promo-popover {
-  position: absolute;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  padding: 16px;
-  z-index: 1000;
-  min-width: 250px;
-
-  .promo-content {
+// Styles pour le formulaire à deux colonnes
+.two-column-form {
+  .form-fields {
     display: flex;
-    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-column {
+    flex: 1;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
     gap: 12px;
-
-    label {
-      font-weight: 500;
-      color: #333;
-    }
-
-    .promo-input {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      input {
-        width: 80px;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1em;
-      }
-    }
-
-    .promo-buttons {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
   }
 }
 
-@media screen and (max-width: 1024px) {
-  .product-table {
-    font-size: 14px;
-  }
-
-  .product-table td:first-child {
-    width: 200px;
-  }
-
-  .product-image-container {
-    width: 200px;
-    height: 200px;
-  }
-}
-
+// Media queries pour la responsivité
 @media screen and (max-width: 768px) {
   .product-container {
-    width: 100%;
+    width: 95vw;
     padding: 10px;
   }
 
-  .product-table {
-    font-size: 12px;
+  .actions-group {
+    flex-direction: column;
+    gap: 8px;
   }
 
-  .product-table td:first-child {
-    width: 100px;
+  .action-separator {
+    display: none;
   }
 
-  .product-image-container {
-    width: 100px;
-    height: 100px;
+  .action-link {
+    font-size: 13px;
+    padding: 5px 0;
   }
 
-  .btn {
-    padding: 6px 10px;
-    font-size: 12px;
+  .two-column-form {
+    .form-fields {
+      flex-direction: column;
+    }
   }
 }

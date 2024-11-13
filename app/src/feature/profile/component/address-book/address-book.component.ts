@@ -4,11 +4,17 @@ import {SecurityService} from "@feature-security";
 import {TranslateService} from "@ngx-translate/core";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {FormcontrolSimpleConfig} from "@shared-ui";
-import {AddressPayload} from "../../../security/data/payload/user/modify-profile.payload";
 import {
   FloatingLabelInputTestComponent
 } from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
 import {RouterLink} from "@angular/router";
+import {ModalService} from "../../../shared/ui/modal.service";
+import {
+  AddAddressPayload,
+  DeleteAddressPayload,
+  ModifyAddressPayload
+} from "../../../security/data/payload/address/address.payload";
+import {AddressPayload} from "../../../security/data/payload/user/modify-profile.payload";
 
 @Component({
   selector: 'app-address-book',
@@ -24,6 +30,8 @@ import {RouterLink} from "@angular/router";
 export class AddressBookComponent implements OnInit {
   protected readonly securityService = inject(SecurityService);
   protected readonly translateService = inject(TranslateService);
+  protected readonly modalService = inject(ModalService);
+
   protected showAddressForm = false;
   protected editingAddress: Address | null = null;
   protected addressType: 'shipping' | 'billing' = 'shipping';
@@ -141,11 +149,21 @@ export class AddressBookComponent implements OnInit {
 
   deleteAddress(address: Address) {
     if (address.address_id) {
-      this.securityService.modifyProfile({
-        addressType: address.isShippingAddress ? 'shipping' : 'billing',
-        Address: { address_id: address.address_id }
-      }).subscribe({
-        next: () => this.loadAddresses(),
+      const payload: DeleteAddressPayload = { addressId: address.address_id };
+
+      this.securityService.deleteAddress(address.address_id!).subscribe({
+        next: () => {
+          // Mise à jour locale des adresses
+          if (address.isShippingAddress) {
+            this.shippingAddresses = this.shippingAddresses.filter(addr => addr.address_id !== address.address_id);
+          }
+          if (address.isBillingAddress) {
+            this.billingAddresses = this.billingAddresses.filter(addr => addr.address_id !== address.address_id);
+          }
+
+          // Mise à jour du state global après
+          this.securityService.me().subscribe();
+        },
         error: (error) => console.error('Erreur lors de la suppression de l\'adresse', error)
       });
     }
@@ -153,24 +171,66 @@ export class AddressBookComponent implements OnInit {
 
   onSubmitAddress() {
     if (this.addressForm.valid) {
-      const payload: AddressPayload = {
-        ...this.addressForm.value,
-        address_id: this.editingAddress?.address_id,
-        isShippingAddress: this.addressType === 'shipping',
-        isBillingAddress: this.addressType === 'billing'
-      };
+      const formValues = this.addressForm.value;
 
-      this.securityService.modifyProfile({
-        addressType: this.addressType,
-        Address: payload
-      }).subscribe({
-        next: () => {
-          this.loadAddresses();
-          this.showAddressForm = false;
-          this.addressForm.reset();
-        },
-        error: (error) => console.error('Erreur lors de la sauvegarde de l\'adresse', error)
-      });
+      if (this.editingAddress) {
+        // Modification d'une adresse existante
+        const modifyPayload: ModifyAddressPayload = {
+          addressId: this.editingAddress.address_id!,
+          ...formValues,
+          isShippingAddress: this.addressType === 'shipping',
+          isBillingAddress: this.addressType === 'billing'
+        };
+
+        this.securityService.modifyAddress(modifyPayload).subscribe({
+          next: (response) => {
+            // Mise à jour locale des adresses
+            const updatedAddress = response.data;
+            if (this.addressType === 'shipping') {
+              this.shippingAddresses = this.shippingAddresses.map(addr =>
+                addr.address_id === updatedAddress.address_id ? updatedAddress : addr
+              );
+            } else {
+              this.billingAddresses = this.billingAddresses.map(addr =>
+                addr.address_id === updatedAddress.address_id ? updatedAddress : addr
+              );
+            }
+
+            this.showAddressForm = false;
+            this.addressForm.reset();
+
+            // Mise à jour du state global après
+            this.securityService.me().subscribe();
+          },
+          error: (error) => console.error('Erreur lors de la modification de l\'adresse', error)
+        });
+      } else {
+        // Création d'une nouvelle adresse
+        const addPayload: AddAddressPayload = {
+          ...formValues,
+          isShippingAddress: this.addressType === 'shipping',
+          isBillingAddress: this.addressType === 'billing'
+        };
+
+        this.securityService.addAddress(addPayload).subscribe({
+          next: (response) => {
+            // Mise à jour locale des adresses
+            const newAddress = response.data;
+            if (this.addressType === 'shipping') {
+              this.shippingAddresses = [...this.shippingAddresses, newAddress];
+            } else {
+              this.billingAddresses = [...this.billingAddresses, newAddress];
+            }
+
+            this.showAddressForm = false;
+            this.addressForm.reset();
+
+            // Mise à jour du state global après
+            this.securityService.me().subscribe();
+          },
+          error: (error) => console.error('Erreur lors de l\'ajout de l\'adresse', error)
+        });
+      }
     }
   }
 

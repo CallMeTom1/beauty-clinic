@@ -1,67 +1,84 @@
 // Variables
-$primary-color: #007bff;
-$primary-dark: #0056b3;
-$text-dark: #333;
-$text-light: #666;
-$card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-$card-shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.15);
-$border-radius: 1rem;
-$transition: all 0.3s ease;
+$primary-color: #E8B4B8;
+$primary-dark: #d49da1;
+$text-dark: #2d3748;
+$text-light: #4a5568;
+$background-light: #fff9f9;
+$card-shadow: 0 4px 15px rgba(232, 180, 184, 0.15);
+$card-shadow-hover: 0 8px 25px rgba(232, 180, 184, 0.25);
+$border-radius: 16px;
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
 .care-selection {
-  padding: 4rem 2rem;
-  max-width: 1200px;
+  padding: 5rem 2.5rem;
+  max-width: 1280px;
   margin: 0 auto;
-  background-color: #fff;
+  background-color: $background-light;
 
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
     padding: 0 1rem;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1rem;
+      left: 1rem;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(to right, $primary-color, $primary-dark);
+      border-radius: 2px;
+    }
 
     @media (max-width: 576px) {
       flex-direction: column;
       align-items: flex-start;
-      gap: 1rem;
+      gap: 1.5rem;
     }
   }
 
   &__title {
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 2.25rem;
+    font-weight: 700;
     color: $text-dark;
     margin: 0;
+    letter-spacing: -0.5px;
   }
 
   &__link {
     color: $primary-color;
     text-decoration: none;
-    font-weight: 500;
-    border-bottom: 2px solid $primary-color;
-    padding-bottom: 0.25rem;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
     transition: $transition;
+    background: rgba($primary-color, 0.1);
 
     &:hover {
-      color: $primary-dark;
-      border-bottom-color: $primary-dark;
+      background: rgba($primary-color, 0.2);
+      transform: translateY(-2px);
     }
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    gap: 2.5rem;
     padding: 0 1rem;
 
     @media (max-width: 992px) {
       grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
     }
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
-      gap: 1.5rem;
+      max-width: 500px;
+      margin: 0 auto;
     }
   }
 }
@@ -75,60 +92,86 @@ $transition: all 0.3s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba($primary-color, 0.1);
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
     box-shadow: $card-shadow-hover;
 
-    .care-card__image img {
-      transform: scale(1.05);
+    .care-card__image {
+      &::after {
+        opacity: 0.3;
+      }
+
+      img {
+        transform: scale(1.08);
+      }
+    }
+
+    .care-card__title {
+      color: $primary-color;
     }
   }
 
   &__image {
     width: 100%;
-    height: 250px;
+    height: 280px;
     overflow: hidden;
     position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba($primary-color, 0) 0%, rgba($primary-color, 0.1) 100%);
+      opacity: 0;
+      transition: $transition;
+    }
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.5s ease;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
 
   &__content {
-    padding: 1.5rem;
+    padding: 2rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
+    background: linear-gradient(to bottom, white, $background-light);
   }
 
   &__title {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.375rem;
+    font-weight: 700;
     color: $text-dark;
     margin: 0;
     line-height: 1.4;
+    transition: $transition;
+    letter-spacing: -0.3px;
   }
 
   &__description {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: $text-light;
-    line-height: 1.6;
+    line-height: 1.7;
     margin: 0;
     flex-grow: 1;
   }
 }
 
-// Animation d'apparition
+// Animation d'apparition améliorée
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -137,11 +180,25 @@ $transition: all 0.3s ease;
 }
 
 .care-card {
-  animation: fadeIn 0.5s ease-out forwards;
+  opacity: 0;
+  animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 
   @for $i from 1 through 3 {
     &:nth-child(#{$i}) {
-      animation-delay: #{$i * 0.1}s;
+      animation-delay: #{0.15 + ($i * 0.1)}s;
     }
+  }
+}
+
+// Ajout d'un effet de hover sur les images
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
   }
 }

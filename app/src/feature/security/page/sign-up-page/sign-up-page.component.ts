@@ -1,8 +1,11 @@
 import {SecurityFormComponent, SecurityService, SignupPayload} from "@feature-security";
-import {Component, effect, EffectRef, inject, signal, WritableSignal} from "@angular/core";
-import {CommonModule, NgOptimizedImage} from "@angular/common";
+import {Component, effect, EffectRef, inject, OnInit, signal, WritableSignal} from "@angular/core";
+import {CommonModule, NgOptimizedImage, ViewportScroller} from "@angular/common";
 import {
-  FloatingLabelInputComponent, FormcontrolSimpleConfig, FormError, handleFormError,
+  FloatingLabelInputComponent,
+  FormcontrolSimpleConfig,
+  FormError,
+  handleFormError,
   LabelWithParamComponent,
   LabelWithParamDirective,
   LabelWithParamPipe
@@ -39,11 +42,11 @@ import {RouterLink} from "@angular/router";
   templateUrl: './sign-up-page.component.html',
   styleUrls: ['./sign-up-page.component.scss']
 })
-export class SignUpPageComponent {
-
+export class SignUpPageComponent implements OnInit {
   protected readonly securityService: SecurityService = inject(SecurityService);
   private readonly mailService: MailService = inject(MailService);
   protected readonly translateService: TranslateService = inject(TranslateService);
+  private readonly viewportScroller: ViewportScroller = inject(ViewportScroller);
 
   protected logoSrc: string = './assets/icon/logo-beauty-clinic.svg';
   protected alt: string = 'brand logo';
@@ -131,6 +134,11 @@ export class SignUpPageComponent {
     }
   ];
 
+  ngOnInit(): void {
+    // Faire défiler la page vers le haut
+    this.viewportScroller.scrollToPosition([0, 0]);
+  }
+
   onSubmit(): void {
     this.securityService.error$.set(null);
 
@@ -168,4 +176,5 @@ export class SignUpPageComponent {
     this.securityService.initiateGoogleLogin();
   }
 
+  protected readonly AppRoutes = AppRoutes;
 }

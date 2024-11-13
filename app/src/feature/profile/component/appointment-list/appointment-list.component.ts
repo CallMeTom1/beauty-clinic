@@ -3,6 +3,7 @@ import {SecurityService} from "@feature-security";
 import {AppointmentStatus} from "../../../appointment/appointment-status.enum";
 import {RouterLink} from "@angular/router";
 import {NgClass} from "@angular/common";
+import {AppRoutes} from "@shared-routes";
 
 @Component({
   selector: 'app-appointment-list',
@@ -42,6 +43,10 @@ export class AppointmentListComponent implements OnInit {
     return statusClasses[status] || '';
   }
 
+  navigateToCares(): void {
+    this.securityService.navigate(AppRoutes.CARES)
+  }
+
   formatDateTime(dateTime: string): string {
     const date = new Date(dateTime);
     return date.toLocaleString('fr-FR', {
@@ -59,4 +64,6 @@ export class AppointmentListComponent implements OnInit {
     const endDate = new Date(end);
     return Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60)); // Duration in minutes
   }
+
+  protected readonly AppRoutes = AppRoutes;
 }

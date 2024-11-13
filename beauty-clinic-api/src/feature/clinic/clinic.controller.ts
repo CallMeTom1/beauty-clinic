@@ -38,7 +38,6 @@ export class ClinicController {
     @Post('upload-logo')
     @UseInterceptors(FileInterceptor('clinicLogo'))
     @ApiConsumes('multipart/form-data')
-    @ApiOperation({ summary: 'Update clinic logo' })
     async uploadLogo(
         @Body() payload: UploadClinicLogoPayload,
         @UploadedFile() file: Express.Multer.File,

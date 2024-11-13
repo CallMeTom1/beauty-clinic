@@ -7,6 +7,7 @@ import { FormcontrolSimpleConfig } from "@shared-ui";
 import { ModifyPasswordPayload } from "../../../security/data/payload/user/modify-password.payload";
 import { ModifyProfilePayload } from "../../../security/data/payload/user/modify-profile.payload";
 import {RouterLink} from "@angular/router";
+import {User} from "../../../security/data/model/user";
 
 @Component({
   selector: 'app-profile',
@@ -45,7 +46,7 @@ export class ProfileComponent implements OnInit {
       Validators.maxLength(50)
     ]),
     phonenumber: new FormControl('', [
-      Validators.pattern(/^(\+33|0)[1-9](\d{8})$/)
+      Validators.pattern(/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/)
     ])
   });
 
@@ -57,7 +58,6 @@ export class ProfileComponent implements OnInit {
     newPassword: new FormControl('', [
       Validators.required,
       Validators.minLength(8),
-      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
     ]),
     confirmPassword: new FormControl('', [
       Validators.required
@@ -85,8 +85,10 @@ export class ProfileComponent implements OnInit {
       this.initializeConfigs(translations);
     });
 
-    const user = this.securityService.account$();
+    this.securityService.me().subscribe()
+    const user: User = this.securityService.account$();
     if (user) {
+      console.log(user)
       this.userEmail = user.mail;
       this.userInfoForm.patchValue({
         username: user.username,

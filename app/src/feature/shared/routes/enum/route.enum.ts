@@ -18,12 +18,13 @@ export enum AppRoutes {
 
   //cart
   CART_ORDER = `/${AppNode.CART}/${AppNode.ORDER}`,
-  CART_ORDER_CONFIRM = `/${AppNode.CART}/${AppNode.ORDER}/confirmation`,
-  CART_ORDER_SUMMARY = `/${AppNode.CART}/${AppNode.ORDER}/recapitulatif`,
+  CART_ORDER_CONFIRM = `/${AppNode.CART}/${AppNode.CART_ORDER}/confirmation`,
+  CART_ORDER_SUMMARY = `${AppNode.CART}/${AppNode.CART_ORDER}/recapitulatif`,
 
   //home
   CARES = `soins`,
   PRODUCTS = `produits`,
+
 
   APPOINTMENT = `/${AppNode.HOME}/rendez-vous`,
 

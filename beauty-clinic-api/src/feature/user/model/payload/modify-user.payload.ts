@@ -2,6 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ModifyUserPayload {
     @ApiProperty({
+        description: "nom d'utilisateur",
+        example: "John",
+        required: false
+    })
+    username?: string;
+
+    @ApiProperty({
         description: "Prénom de l'utilisateur",
         example: "John",
         required: false
@@ -20,6 +27,6 @@ export class ModifyUserPayload {
         example: "+33123456789",
         required: false
     })
-    phoneNumber?: string;
+    phonenumber?: string;
 
 }

@@ -1,8 +1,9 @@
-import {Component, effect, inject, Injector, OnInit, runInInjectionContext} from '@angular/core';
+import {Component, computed, effect, inject, Injector, OnInit, runInInjectionContext} from '@angular/core';
 import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {SecurityService} from "@feature-security";
 import {CartItem} from "../../../security/data/model/cart/cart-item.business";
 import {AppNode, AppRoutes} from "@shared-routes";
+import {ModalService} from "../modal.service";
 
 @Component({
   selector: 'app-cart-navigation',
@@ -17,6 +18,7 @@ import {AppNode, AppRoutes} from "@shared-routes";
 })
 export class CartNavigationComponent {
   protected readonly securityService: SecurityService = inject(SecurityService);
+  private readonly modalService = inject(ModalService);
   private readonly injector = inject(Injector);
 
   dropdownOpen: boolean = false;
@@ -27,11 +29,15 @@ export class CartNavigationComponent {
   private previousTotalQuantity: number = 0;
   private effectInitialized = false;
 
+  // Computed property for authentication status
+  protected readonly isAuthenticated = computed(() =>
+    this.securityService.account$().idUser !== ''
+  );
+
   constructor() {
-    // Fetch initial cart data
-    if(this.securityService.account$().idUser != ''){
-        this.securityService.fetchCart().subscribe(() => {
-        // Initialiser l'effet après un court délai
+    // Fetch initial cart data only if user is authenticated
+    if (this.isAuthenticated()) {
+      this.securityService.fetchCart().subscribe(() => {
         setTimeout(() => {
           this.initializeEffect();
         }, 100);
@@ -79,6 +85,11 @@ export class CartNavigationComponent {
   }
 
   onMouseEnter() {
+    // Only open dropdown if user is authenticated
+    if (!this.isAuthenticated()) {
+      return;
+    }
+
     if (this.closeTimeout) {
       clearTimeout(this.closeTimeout);
     }
@@ -98,6 +109,16 @@ export class CartNavigationComponent {
   }
 
   navigateCart() {
+    if (!this.isAuthenticated()) {
+      console.log('Opening auth modal from cart navigation');
+      this.modalService.openAuthModal({
+        title: 'Connexion requise',
+        message: 'Pour accéder à votre panier, veuillez vous connecter ou créer un compte.'
+      });
+      this.dropdownOpen = false;
+      return;
+    }
+
     this.securityService.navigate(AppNode.CART);
   }
 }

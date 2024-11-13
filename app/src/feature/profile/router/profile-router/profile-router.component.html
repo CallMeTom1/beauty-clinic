@@ -25,6 +25,7 @@
 
       <a [routerLink]="[AppRoutes.MY_APPOINTMENTS]"
          routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}"
          class="menu-item">
         <i class="fa-solid fa-calendar-check"></i>
         <div class="item-content">
@@ -34,6 +35,7 @@
 
       <a [routerLink]="[AppRoutes.MY_ORDERS]"
          routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}"
          class="menu-item">
         <i class="fa-solid fa-bags-shopping"></i>
         <div class="item-content">
@@ -43,6 +45,7 @@
 
       <a [routerLink]="[AppRoutes.TRACK_MY_ORDERS]"
          routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}"
          class="menu-item">
         <i class="fa-thin fa-truck-fast"></i>
         <div class="item-content">
@@ -50,8 +53,9 @@
         </div>
       </a>
 
-      <a [routerLink]="[AppRoutes.APPOINTMENT]"
+      <a [routerLink]="['']"
          routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}"
          class="menu-item">
         <i class="fa-thin fa-calendar-plus"></i>
         <div class="item-content">
@@ -61,8 +65,9 @@
 
       <a [routerLink]="[AppRoutes.MY_WISHLIST]"
          routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}"
          class="menu-item">
-        <i class="fa-thin fa-truck-fast"></i>
+        <i class="fa-thin fa-heart"></i>
         <div class="item-content">
           <h4>MA LISTE DE SOUHAITS</h4>
         </div>
@@ -71,7 +76,7 @@
       <div class="menu-item-group">
         <div class="menu-item parent-item"
              (click)="toggleSettings()"
-             [ngClass]="{'active': isSettingsOpen}">
+             [ngClass]="{'active': isSettingsRoute()}">
           <i class="fa-thin fa-gear"></i>
           <div class="item-content">
             <h4>PARAMÈTRES DU COMPTE</h4>
@@ -83,6 +88,7 @@
           <div class="submenu">
             <a [routerLink]="[AppRoutes.MY_INFO]"
                routerLinkActive="active"
+               [routerLinkActiveOptions]="{exact: true}"
                class="menu-item submenu-item">
               <i class="fa-thin fa-user-pen"></i>
               <div class="item-content">
@@ -92,6 +98,7 @@
 
             <a [routerLink]="[AppRoutes.MY_ADDRESS_BOOK]"
                routerLinkActive="active"
+               [routerLinkActiveOptions]="{exact: true}"
                class="menu-item submenu-item">
               <i class="fa-thin fa-address-book"></i>
               <div class="item-content">

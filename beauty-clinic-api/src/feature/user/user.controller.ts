@@ -43,7 +43,7 @@ export class UserController {
         return await this.userService.modifyAddress(request.idUser, payload);
     }
 
-    @Delete('addresses')
+    @Put('test')
     @ApiOperation({ summary: 'Supprimer une adresse' })
     async deleteAddress(
         @Body() payload: DeleteAddressPayload,

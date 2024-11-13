@@ -16,16 +16,17 @@ import {TranslateModule} from "@ngx-translate/core";
   styleUrl: './modal.component.scss'
 })
 export class ModalComponent {
-  @Input() title?: string = '';  // Titre pour le modal
-  @Output() close: EventEmitter<void> = new EventEmitter<void>();  // Événement pour fermer le modal
-  @Output() initiateSubmit: EventEmitter<void> = new EventEmitter<void>();  // Événement pour initier la soumission
+  @Input() title: string = 'Connexion requise';
+  @Input() message: string = 'Pour ajouter des articles à votre liste de souhaits, veuillez vous connecter ou créer un compte.';
+  @Output() close: EventEmitter<void> = new EventEmitter<void>();
+  @Output() initiateSubmit: EventEmitter<void> = new EventEmitter<void>();
 
   onClose(): void {
     this.close.emit();
   }
 
   onSubmit(): void {
-    this.initiateSubmit.emit();  // Émet pour soumettre le formulaire
+    this.initiateSubmit.emit();
   }
 
 }

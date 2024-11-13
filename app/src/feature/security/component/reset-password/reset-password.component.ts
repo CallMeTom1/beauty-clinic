@@ -14,6 +14,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ResetPasswordPayload } from "../../data/payload/user/reset-password.payload";
 import { FloatingLabelInputTestComponent } from "../../../shared/ui/form/component/floating-label-input-test/floating-label-input-test.component";
+import {AppRoutes} from "@shared-routes";
 
 @Component({
   selector: 'app-reset-password',
@@ -100,7 +101,7 @@ export class ResetPasswordComponent {
           // En cas de succès, afficher un message de succès et rediriger après un court délai
           this.successMessage = 'Votre mot de passe a été réinitialisé avec succès. Vous allez être redirigé vers la page de connexion.';
           setTimeout(() => {
-            this.router.navigate(['/account/signin']);
+            this.router.navigate([AppRoutes.SIGNIN]);
           }, 3000);
         },
         error: (err) => {

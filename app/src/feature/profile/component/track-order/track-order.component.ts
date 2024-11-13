@@ -4,6 +4,7 @@ import {OrderStatus, OrderStatusLabels} from "../../../security/data/model/order
 import {Order} from "../../../security/data/model/order/order.business";
 import {RouterLink} from "@angular/router";
 import {DatePipe} from "@angular/common";
+import {AppRoutes} from "@shared-routes";
 
 @Component({
   selector: 'app-track-order',
@@ -40,4 +41,6 @@ export class TrackOrderComponent implements OnInit {
   getStatusClass(status: OrderStatus): string {
     return 'status-shipped';
   }
+
+    protected readonly AppRoutes = AppRoutes;
 }

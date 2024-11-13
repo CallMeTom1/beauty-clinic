@@ -13,19 +13,16 @@ import {RemoveProductCategoryPayload} from "./data/payload/remove-product-catego
 export class ProductCategoryController {
     constructor(private readonly productCategoryService: ProductCategoryService) {}
 
-    @Roles(Role.ADMIN)
     @Get()
     async findAll(): Promise<ProductCategory[]>{
         return this.productCategoryService.findAll();
     }
 
-    @Roles(Role.ADMIN)
     @Post()
     async create(@Body() payload: CreateProductCategoryPayload): Promise<ProductCategory> {
         return this.productCategoryService.create(payload);
     }
 
-    @Roles(Role.ADMIN)
     @Put()
     async update(
         @Body() payload: UpdateProductCategoryPayload,
@@ -33,7 +30,6 @@ export class ProductCategoryController {
         return this.productCategoryService.update(payload);
     }
 
-    @Roles(Role.ADMIN)
     @Delete()
     async remove(@Body() payload: RemoveProductCategoryPayload): Promise<ProductCategory[]> {
         console.log('payload ', payload)

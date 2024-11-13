@@ -71,6 +71,7 @@ export class SecurityService {
                 mail: credentials.mail,
                 firstname: user.firstname || '',
                 lastname: user.lastname || '',
+                username: user.username || '',
                 phonenumber: user.phoneNumber || '',
                 addresses: user.addresses || []
             }
@@ -126,6 +127,7 @@ export class SecurityService {
 
     async googleSignIn(idToken: string): Promise<Token> {
         try {
+            console.log('token', idToken)
             const ticket = await this.googleClient.verifyIdToken({
                 idToken: idToken,
                 audience: process.env.GOOGLE_ID_CLIENT,
@@ -275,7 +277,7 @@ export class SecurityService {
             // Créer un nouveau token de réinitialisation
             const plainToken: string = await this.resetTokenService.createToken(credential);
 
-            const resetLink = `https://localhost:4200/account/reset-password?token=${encodeURIComponent(plainToken)}`;
+            const resetLink = `https://localhost:4200/mon-compte/reinitialiser-mot-de-passe?token=${encodeURIComponent(plainToken)}`;
             await this.mailService.sendPasswordResetEmail(credential.mail, resetLink);
         } catch (error) {
             console.error('Error in forgotPassword:', error);

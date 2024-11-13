@@ -1,48 +1,302 @@
+// Variables
+$primary-color: #E8B4B8;
+$primary-dark: #d49da1;
+$text-dark: #2d3748;
+$text-light: #4a5568;
+$background-light: #fff9f9;
+$card-shadow: 0 4px 15px rgba(232, 180, 184, 0.15);
+$card-shadow-hover: 0 8px 25px rgba(232, 180, 184, 0.25);
+$border-radius: 16px;
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
 .orders-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin-bottom: 2rem;
+    letter-spacing: -0.5px;
+  }
+}
+
+.connect-card, .empty-state {
+  background: white;
+  border-radius: $border-radius;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: $card-shadow;
+  border: 1px solid rgba($primary-color, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+
+  i {
+    font-size: 3rem;
+    color: $primary-color;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: $text-dark;
+    font-weight: 600;
+  }
+
+  p {
+    color: $text-light;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-card {
+  background: white;
+  border-radius: $border-radius;
+  padding: 2rem;
+  box-shadow: $card-shadow;
+  border: 1px solid rgba($primary-color, 0.1);
+  transition: $transition;
+
+  &:hover {
+    box-shadow: $card-shadow-hover;
+    transform: translateY(-4px);
+  }
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba($primary-color, 0.1);
+
+  .order-info {
+    .order-date {
+      font-size: 0.9rem;
+      color: $text-light;
+      margin-bottom: 0.25rem;
+    }
+
+    .order-number {
+      font-weight: 600;
+      color: $text-dark;
+    }
+  }
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  &.status-pending {
+    background-color: rgba($primary-color, 0.1);
+    color: $primary-color;
+  }
+
+  &.status-failed {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  &.status-processing {
+    background-color: rgba($primary-color, 0.15);
+    color: $primary-dark;
+  }
+
+  &.status-shipped {
+    background-color: rgba($primary-color, 0.2);
+    color: $primary-color;
+  }
+
+  &.status-delivered {
+    background-color: $primary-color;
+    color: white;
+  }
+
+  &.status-cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  &.status-refunded {
+    background-color: #e2e3e5;
+    color: #383d41;
+  }
+}
+
+.order-items {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba($primary-color, 0.1);
+}
+
+.order-item {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: rgba($primary-color, 0.03);
+  border-radius: 12px;
+  transition: $transition;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  &:hover {
+    background: rgba($primary-color, 0.08);
+  }
+
+  .item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .item-details {
+    flex: 1;
+
+    .item-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: $text-dark;
+      margin-bottom: 0.5rem;
+    }
+
+    .item-quantity, .item-price {
+      font-size: 0.9rem;
+      color: $text-light;
+    }
+  }
+}
+
+.shipping-address {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba($primary-color, 0.1);
+
+  h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $text-dark;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $text-light;
+    line-height: 1.5;
+  }
+}
+
+.order-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 1.5rem;
+
+  .price-details {
+    p {
+      font-size: 0.9rem;
+      color: $text-light;
+      margin-bottom: 0.25rem;
+
+      &.total-price {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: $text-dark;
+      }
+    }
+  }
 
   .tracking-info {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: $text-light;
 
     i {
-      font-size: 1.25rem;
-      color: var(--primary-color);
+      color: $primary-color;
     }
-
-    span {
-      font-weight: 500;
-      color: #333;
-    }
-  }
-
-  .order-card {
-    // Modify existing styles
-    border-left: 4px solid var(--primary-color);
-  }
-
-  // Override some existing styles for a more focused view
-  .order-items {
-    max-height: none; // Remove any max-height limitations
-    overflow: visible; // Remove any overflow restrictions
-  }
-
-  .order-header {
-    align-items: flex-start; // Allow tracking info to align properly
-    flex-direction: column;
   }
 }
 
-// Add responsive styles
-@media (min-width: 768px) {
+.btn-primary {
+  background: $primary-color;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover {
+    background: $primary-dark;
+    transform: translateY(-2px);
+  }
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba($primary-color, 0.1);
+  color: $text-dark;
+  border: 1px solid rgba($primary-color, 0.2);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: $transition;
+
+  i {
+    color: $primary-color;
+  }
+
+  &:hover {
+    background: rgba($primary-color, 0.15);
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 768px) {
+  .orders-page {
+    padding: 1rem;
+  }
+
   .order-header {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .order-footer {
+    flex-direction: column;
+    align-items: stretch;
+
+    .price-details, .tracking-info {
+      width: 100%;
+    }
+  }
+
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
   }
 }

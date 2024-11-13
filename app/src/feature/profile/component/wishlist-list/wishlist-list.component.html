@@ -15,8 +15,8 @@
         <h2>Votre liste d'envies est vide</h2>
         <p>Ajoutez des produits et des soins à votre liste pour les retrouver facilement !</p>
         <div class="empty-actions">
-          <button class="btn-primary" routerLink="/shop">Découvrir nos produits</button>
-          <button class="btn-secondary" routerLink="/cares">Découvrir nos soins</button>
+          <button class="btn-primary" (click)="navigateToProduct()">Découvrir nos produits</button>
+          <button class="btn-secondary" (click)="navigateToCare()">Découvrir nos soins</button>
         </div>
       </div>
     } @else {

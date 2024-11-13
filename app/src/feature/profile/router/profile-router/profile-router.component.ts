@@ -18,11 +18,20 @@ import {AppNode, AppRoutes} from "@shared-routes";
   templateUrl: './profile-router.component.html',
   styleUrl: './profile-router.component.scss'
 })
-export class ProfileRouterComponent implements OnInit{
+export class ProfileRouterComponent implements OnInit {
   protected securityService: SecurityService = inject(SecurityService);
   protected isSettingsOpen = false;
 
+  // Ajouter la vérification pour les routes de paramètres
+  protected isSettingsRoute(): boolean {
+    const currentUrl = window.location.pathname;
+    return currentUrl.includes(AppRoutes.MY_INFO) ||
+      currentUrl.includes(AppRoutes.MY_ADDRESS_BOOK);
+  }
+
   ngOnInit() {
+    // Initialiser isSettingsOpen en fonction de la route actuelle
+    this.isSettingsOpen = this.isSettingsRoute();
   }
 
   toggleSettings() {

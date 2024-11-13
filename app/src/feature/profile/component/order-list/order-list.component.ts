@@ -4,6 +4,7 @@ import {OrderStatus, OrderStatusLabels} from "../../../security/data/model/order
 import {RouterLink} from "@angular/router";
 import {DatePipe, NgClass} from "@angular/common";
 import {Order} from "../../../security/data/model/order/order.business";
+import {AppRoutes} from "@shared-routes";
 
 @Component({
   selector: 'app-order-list',
@@ -21,10 +22,14 @@ export class OrderListComponent implements OnInit {
   protected readonly OrderStatus = OrderStatus;
   protected readonly statusLabels = OrderStatusLabels;
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.securityService.account$().idUser) {
       this.securityService.fetchOrders().subscribe();
     }
+  }
+
+  navigateToProducts(): void {
+    this.securityService.navigate(AppRoutes.PRODUCTS)
   }
 
   getStatusClass(status: OrderStatus): string {
@@ -46,4 +51,5 @@ export class OrderListComponent implements OnInit {
     return `${address.road} ${address.nb}, ${address.cp} ${address.town}, ${address.country}`;
   }
 
+  protected readonly AppRoutes = AppRoutes;
 }

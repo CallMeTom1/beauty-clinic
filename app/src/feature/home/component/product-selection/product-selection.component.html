@@ -1,7 +1,7 @@
 <section class="care-selection">
-  <div class="head">
-    <h3>Notre sélection de produits incontournables</h3>
-    <a>Voir tous les produits</a>
+  <div class="care-selection__header"> <!-- Changed from 'head' to 'care-selection__header' -->
+    <h2 class="care-selection__title">Notre sélection de produits incontournables</h2> <!-- Changed from h3 to h2 -->
+    <a (click)="navigateToProducts()" class="care-selection__link">Voir tous les produits</a>
   </div>
   <div class="slider-container">
     <button class="nav-button prev" (click)="navigate(-1)">&#10094;</button>

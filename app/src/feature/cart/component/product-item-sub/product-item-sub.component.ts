@@ -31,6 +31,7 @@ export class ProductItemSubComponent {
     const payload: RemoveCartItemPayload = {
       cartItemId: cartItem.idCartItem
     };
+    console.log()
     this.securityService.removeCartItem(payload).subscribe(() => {
       console.log('Article supprimé du panier');
     });

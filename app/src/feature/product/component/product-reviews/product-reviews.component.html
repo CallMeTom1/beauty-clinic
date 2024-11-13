@@ -7,24 +7,23 @@
       </div>
       <div class="stars">
         @for(star of [1,2,3,4,5]; track star) {
-          <i class="fas fa-star" [class.filled]="star <= averageRating()"></i>
+          <i [class.filled]="star <= averageRating()"></i>
         }
       </div>
-      <span class="review-count">({{ reviews.length }} avis)</span>
+      <span class="review-count">({{ reviews().length || 0 }} avis)</span>
     </div>
   </div>
 
   @if(isUserLoggedIn()) {
-    @if(!hasUserReviewed()) {
+    @if(!hasUserReviewed() || isEditing) {
       <div class="add-review-section">
-        <h3>Donnez votre avis</h3>
+        <h3>{{ isEditing ? 'Modifier votre avis' : 'Donnez votre avis' }}</h3>
         <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
           <div class="rating-input">
             <span class="rating-label">Note :</span>
             <div class="stars-input">
               @for(star of [1,2,3,4,5]; track star) {
-                <i class="fas fa-star"
-                   [class.filled]="star <= (hoverRating() || currentRating())"
+                <i [class.filled]="star <= (hoverRating() || currentRating())"
                    (mouseenter)="hoverRating.set(star)"
                    (mouseleave)="hoverRating.set(0)"
                    (click)="setRating(star)"></i>
@@ -33,20 +32,33 @@
           </div>
 
           <div class="comment-input">
-                <textarea
-                  formControlName="comment"
-                  placeholder="Partagez votre expérience avec ce produit..."
-                  rows="4"></textarea>
+            <textarea
+              formControlName="comment"
+              placeholder="Partagez votre expérience avec ce produit..."
+              rows="4"></textarea>
             @if(reviewForm.get('comment')?.errors?.['required'] && reviewForm.get('comment')?.touched) {
               <span class="error-message">Le commentaire est requis</span>
             }
+            @if(reviewForm.get('comment')?.errors?.['minlength'] && reviewForm.get('comment')?.touched) {
+              <span class="error-message">Le commentaire doit contenir au moins 10 caractères</span>
+            }
+            @if(reviewForm.get('comment')?.errors?.['maxlength']) {
+              <span class="error-message">Le commentaire ne peut pas dépasser 1000 caractères</span>
+            }
           </div>
 
-          <button type="submit"
-                  [disabled]="reviewForm.invalid || !currentRating()"
-                  class="submit-review">
-            Publier mon avis
-          </button>
+          <div class="form-actions">
+            @if(isEditing) {
+              <button type="button" class="cancel-button" (click)="cancelEdit()">
+                Annuler
+              </button>
+            }
+            <button type="submit"
+                    [disabled]="reviewForm.invalid || !currentRating()"
+                    class="submit-review">
+              {{ isEditing ? 'Modifier' : 'Publier' }} mon avis
+            </button>
+          </div>
         </form>
       </div>
     }
@@ -59,7 +71,7 @@
               <span class="reviewer-name">{{ review.user.firstname }}</span>
               <div class="stars">
                 @for(star of [1,2,3,4,5]; track star) {
-                  <i class="fas fa-star" [class.filled]="star <= review.rating"></i>
+                  <i [class.filled]="star <= review.rating"></i>
                 }
               </div>
             </div>
@@ -67,6 +79,13 @@
           </div>
 
           <p class="review-comment">{{ review.comment }}</p>
+
+          @if(review.user.idUser === securityService.account$()?.idUser) {
+            <div class="review-actions">
+              <button class="edit-button" (click)="editReview(review)">Modifier</button>
+              <button class="delete-button" (click)="deleteReview(review)">Supprimer</button>
+            </div>
+          }
         </div>
       }
     </div>

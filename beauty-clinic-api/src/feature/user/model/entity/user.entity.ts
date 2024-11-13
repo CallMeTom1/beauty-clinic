@@ -13,14 +13,15 @@ import {Address} from "@common/model/address.entity";
 import {Cart} from "../../../cart/data/model/cart.entity";
 import { Order } from "../../../order/data/model/order.entity";
 import {Payment} from "../../../payment/data/model/payment.entity";
-import {Review} from "../../../review/data/model/review.entity";  // Assure-toi d'importer l'entité order
+import {Review} from "../../../review/data/model/review.entity";
+import {Wishlist} from "../../../wish-list/data/model/wishlist.entity";  // Assure-toi d'importer l'entité order
 
 @Entity()
 export class User extends BaseEntity {
     @PrimaryColumn('varchar', {length:26})
     idUser: string;
 
-    @Column({nullable: true, unique: true})
+    @Column({nullable: true, unique: false})
     phoneNumber: string;
 
     @Column({nullable: true, unique: false})
@@ -57,6 +58,9 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Order, (order) => order.user)  // Relation One-to-Many avec order
     orders: Order[];
+
+    @OneToOne(() => Wishlist, wishlist => wishlist.user)
+    wishlist: Wishlist;
 
     @OneToMany(() => Payment, payment => payment.user)
     payments: Payment[];

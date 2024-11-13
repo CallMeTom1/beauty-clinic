@@ -29,6 +29,7 @@
             <div class="guest-header">
               <h3>{{ 'NAV.ACCOUNT.GREETING' | translate }}</h3>
               <span>{{securityService.account$().firstname}}</span>
+              <br>
               <span>{{securityService.account$().lastname}}</span>
             </div>
           }
@@ -62,6 +63,13 @@
               <i class="fa-thin fa-truck-fast"></i>
               <div class="item-content">
                 <h4>{{ 'NAV.ACCOUNT.MENU.TRACK_ORDER' | translate }}</h4>
+              </div>
+            </a>
+
+            <a class="menu-item" (click)="navigateToWishList()">
+              <i class="fa-thin fa-heart"></i>
+              <div class="item-content">
+                <h4>Mes favoris</h4>
               </div>
             </a>
 

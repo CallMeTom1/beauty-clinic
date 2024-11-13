@@ -1,41 +1,37 @@
-import { Injectable, signal } from '@angular/core';
-import { computed } from '@angular/core';
+import {Injectable, signal} from '@angular/core';
 
-interface ModalState {
-  isOpen: boolean;
-  type: string;
+export interface ModalConfig {
+  title?: string;
+  message?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService {
-  private modalState = signal<ModalState>({
-    isOpen: false,
-    type: ''
-  });
+  private isModalOpen = signal(false);
+  private modalConfig = signal<ModalConfig>({});
 
-  readonly isOpen = computed(() => this.modalState().isOpen);
-  readonly type = computed(() => this.modalState().type);
+  isOpen() {
+    return this.isModalOpen();
+  }
 
-  openAuthModal() {
-    console.log('Opening auth modal');
-    this.modalState.set({
-      isOpen: true,
-      type: 'auth'
-    });
+  getConfig() {
+    return this.modalConfig();
+  }
+
+  openAuthModal(config: ModalConfig = {}) {
+    const defaultConfig = {
+      title: 'Connexion requise',
+      message: 'Pour ajouter des articles à votre liste de souhaits, veuillez vous connecter ou créer un compte.'
+    };
+
+    this.modalConfig.set({ ...defaultConfig, ...config });
+    this.isModalOpen.set(true);
   }
 
   closeModal() {
-    console.log('Closing modal');
-    this.modalState.set({
-      isOpen: false,
-      type: ''
-    });
-  }
-
-  // Debug method
-  getState() {
-    return this.modalState();
+    this.isModalOpen.set(false);
+    this.modalConfig.set({});
   }
 }

@@ -123,23 +123,28 @@
           </div>
 
           <form [formGroup]="addressForm" (ngSubmit)="onSubmitAddress()" class="address-form">
+            <!-- Champs du formulaire -->
             @for(config of addressFormConfigs; track config.label) {
               <app-floating-label-input-test [config]="config"></app-floating-label-input-test>
             }
 
-            <div class="form-group">
+            <div class="form-group checkbox-group">
               <label class="checkbox-label">
                 <input type="checkbox" formControlName="isDefault">
-                Définir comme adresse {{ addressType === 'shipping' ? 'de livraison' : 'de facturation' }} par défaut
+                <span>Définir comme adresse {{ addressType === 'shipping' ? 'de livraison' : 'de facturation' }} par défaut</span>
               </label>
             </div>
 
-            <div class="modal-actions">
+            <div class="form-actions">
               <button type="button" class="btn-secondary" (click)="showAddressForm = false">
                 Annuler
               </button>
-              <button type="submit" class="btn-primary" [disabled]="!addressForm.valid">
-                {{ editingAddress ? 'Modifier' : 'Ajouter' }}
+              <button
+                type="submit"
+                class="btn-primary"
+                [disabled]="addressForm.invalid"
+                [class.active]="addressForm.valid">
+                {{ editingAddress ? 'Modifier' : 'Ajouter' }} l'adresse
               </button>
             </div>
           </form>

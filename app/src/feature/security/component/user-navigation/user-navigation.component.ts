@@ -43,6 +43,11 @@ export class UserNavigationComponent {
     this.dropdownOpen = false;
   }
 
+  navigateToWishList(): void {
+    this.securityService.navigate(AppRoutes.MY_WISHLIST);
+    this.dropdownOpen = false;
+  }
+
   navigateToAppointmens(): void {
     this.securityService.navigate(AppRoutes.MY_APPOINTMENTS);
     this.dropdownOpen = false;

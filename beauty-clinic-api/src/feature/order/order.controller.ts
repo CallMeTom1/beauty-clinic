@@ -1,7 +1,7 @@
 import {Controller, Post, Get, Patch, Param, Body, Put} from '@nestjs/common';
 import { OrderService } from './order.service';
 import {User} from "@feature/user/model";
-import {Roles, UserReq, UserRequest} from "@common/config/metadata";
+import {Public, Roles, UserReq, UserRequest} from "@common/config/metadata";
 import {Payment} from "../payment/data/model/payment.entity";
 import {CreateOrderPayload} from "./data/payload/create-order.payload";
 import {Order} from "./data/model/order.entity";
@@ -43,8 +43,8 @@ export class OrderController {
         return this.orderService.getOrders(userReq.idUser);
     }
 
+    @Public()
     @Put('tracking-number')
-    @Roles(Role.ADMIN)
     @ApiOperation({ summary: 'Update order tracking number' })
     async updateTrackingNumber(
         @Body() payload: UpdateTrackingNumberPayload
@@ -52,11 +52,12 @@ export class OrderController {
         return this.orderService.updateTrackingNumber(payload);
     }
 
-    @Roles(Role.ADMIN)
+    @Public()
     @Put()
     async updateOrderStatus(
         @Body() payload: UpdateOrderStatusPayload,
     ): Promise<Order> {
+        console.log('payload order status',payload)
         return this.orderService.updateOrderStatus(payload);
     }
 

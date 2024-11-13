@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   private translate: TranslateService = inject(TranslateService);
   private titleService: Title = inject(Title);
   private themeService: ThemeService = inject(ThemeService);
-  private title: string = 'Beauty Clinic By Françoise';
+  private title: string = 'Izzy Beauty';
   protected securityService = inject(SecurityService);
   ngOnInit(): void {
     this.securityService.fetchProfile(this.securityService.isAuth$())
@@ -27,5 +27,9 @@ export class AppComponent implements OnInit {
     this.translate.setDefaultLang(Language.FR);
     this.translate.use(Language.FR);
     this.themeService.loadTheme();
+    if(this.securityService.account$().idUser.length > 0){
+      this.securityService.fetchCart().subscribe();
+      this.securityService.fetchWishlist().subscribe();
+    }
   }
 }

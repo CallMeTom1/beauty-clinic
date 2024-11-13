@@ -101,6 +101,7 @@ import {UpdateCareMachinesPayload} from "./data/payload/care/update-care-machine
 import {UpdateCareSubCategoriesPayload} from "./data/payload/care/update-care-sub-category.payload";
 import {UpdateStatusOrderPayload} from "./data/payload/order/update-status-order.payload";
 import {UpdateOrderTrackingNumberPayload} from "./data/payload/order/update-order-tracking-number.payload";
+import {AddAddressPayload, DeleteAddressPayload, ModifyAddressPayload} from "./data/payload/address/address.payload";
 
 
 //todo réaliser tout les fetch dans ce service pour économiser les call api
@@ -189,6 +190,59 @@ export class SecurityService {
     )
   }
 
+  public addAddress(payload: AddAddressPayload): Observable<ApiResponse> {
+    return this.api.post(ApiURI.USER_ADDRESS, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          // Mettre à jour le profil utilisateur pour avoir les adresses à jour
+          this.me().subscribe();
+          this.sucesMessage$.set('Adresse ajoutée avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de l\'ajout de l\'adresse:', error);
+        this.error$.set('Erreur lors de l\'ajout de l\'adresse');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Modifier une adresse existante
+  public modifyAddress(payload: ModifyAddressPayload): Observable<ApiResponse> {
+    return this.api.put(ApiURI.USER_ADDRESS, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          // Mettre à jour le profil utilisateur pour avoir les adresses à jour
+          this.me().subscribe();
+          this.sucesMessage$.set('Adresse modifiée avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la modification de l\'adresse:', error);
+        this.error$.set('Erreur lors de la modification de l\'adresse');
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Supprimer une adresse
+  public deleteAddress(id: string): Observable<ApiResponse> {
+    const payload: DeleteAddressPayload = { addressId: id };
+
+    return this.api.put(ApiURI.USER_ADDRESS_DEL, payload).pipe(
+      tap((response: ApiResponse): void => {
+        if (response.result) {
+          this.me().subscribe();
+          this.sucesMessage$.set('Adresse supprimée avec succès');
+        }
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la suppression de l\'adresse:', error);
+        this.error$.set('Erreur lors de la suppression de l\'adresse');
+        return throwError(() => error);
+      })
+    );
+  }
 
   //Appointment
   public fetchAppointments(): Observable<ApiResponse> {
@@ -561,8 +615,10 @@ export class SecurityService {
 
   //ACCOUNT
   public modifyProfile(payload: ModifyProfilePayload): Observable<ApiResponse> {
-    return this.api.put(ApiURI.USER, payload).pipe(
+    return this.api.put(ApiURI.USER_PROFILE, payload).pipe(
       tap((response: ApiResponse): void => {
+        console.log(payload)
+        console.log('response', response)
         this.me().subscribe()
       })
     )
@@ -652,6 +708,7 @@ export class SecurityService {
     return this.api.get(ApiURI.ME)
       .pipe(
         tap((response: ApiResponse): void => {
+          console.log(response)
           if(response.result){
             this.account$.set(response.data.user)
         }
@@ -664,7 +721,6 @@ export class SecurityService {
       .pipe(
         tap((response: ApiResponse): void => {
           if (response.result) {
-            this.router.navigate([AppNode.SIGNIN]).then();
           }
         })
       );
@@ -825,7 +881,7 @@ export class SecurityService {
   }
 
   removeCartItem(payload: RemoveCartItemPayload): Observable<ApiResponse> {
-    return this.api.delete(ApiURI.CART, payload)
+    return this.api.put(ApiURI.CART_DELETE, payload)
       .pipe(
         tap((response: ApiResponse): void => {
           if (response.result) {
@@ -900,12 +956,13 @@ export class SecurityService {
         if(response.result){
           this.order$.set(response.data);
           this.fetchCart().subscribe()
-          this.navigate('cart/order/my-order-summary')
+          this.navigate(AppRoutes.CART_ORDER_SUMMARY)
           console.log(response.data)
         }
       })
     )
   }
+
   updateShippingAddress(payload: UpdateShippingAddressPayload): Observable<ApiResponse> {
     return this.api.put(ApiURI.ORDER_SHIPPING_ADDRESS, payload).pipe(
       tap((response: ApiResponse) => {
@@ -934,6 +991,7 @@ export class SecurityService {
   }
 
   updateOrderStatus(payload: UpdateStatusOrderPayload) {
+    console.log('payload update status', payload)
     return this.api.put(ApiURI.ORDERS, payload)
   }
 
@@ -1278,7 +1336,7 @@ export class SecurityService {
   }
 
   public deleteReview(payload: DeleteReviewPayload): Observable<ApiResponse> {
-    return this.api.delete(ApiURI.REVIEWS, payload)
+    return this.api.put(ApiURI.REVIEWS_DEL, payload)
   }
 
   //WISHLIST
@@ -1308,6 +1366,7 @@ export class SecurityService {
     return this.api.get(ApiURI.CLINIC)
       .pipe(tap((response: ApiResponse) => {
         if (response.result) {
+          console.log(response.data)
           this.clinic$.set(response.data)
         }
       }))
@@ -1323,6 +1382,7 @@ export class SecurityService {
   }
 
   public uploadClinicLogo(formData: FormData): Observable<ApiResponse> {
+    console.log(formData)
     return this.api.post(ApiURI.CLINIC_UPLOAD_LOGO, formData)
       .pipe(tap((response: ApiResponse) => {
         if (response.result) {

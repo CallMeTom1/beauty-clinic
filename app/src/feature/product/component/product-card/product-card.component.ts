@@ -7,6 +7,8 @@ import {AddCartItemPayload} from "../../../security/data/payload/cart/add-cart-i
 import {RemoveFromWishlistPayload} from "../../../security/data/payload/wishlist/remowe-from-wishlist.payload";
 import {AddToWishlistPayload} from "../../../security/data/payload/wishlist/add-to-wishlist.payload";
 import {WishlistButtonComponent} from "../../../shared/ui/wishlist-button/wishlist-button.component";
+import {AppRoutes} from "@shared-routes";
+import {ModalService} from "../../../shared/ui/modal.service";
 
 @Component({
   selector: 'app-product-card',
@@ -24,6 +26,11 @@ import {WishlistButtonComponent} from "../../../shared/ui/wishlist-button/wishli
 export class ProductCardComponent {
   @Input() product!: Product;
   protected readonly securityService: SecurityService = inject(SecurityService);
+  private readonly modalService = inject(ModalService);
+
+  protected readonly isAuthenticated = computed(() =>
+    this.securityService.account$().idUser !== ''
+  );
 
   getAverageRating(): number {
     if (!this.product.reviews || this.product.reviews.length === 0) return 0;
@@ -37,18 +44,25 @@ export class ProductCardComponent {
   }
 
   addProductToCart(product: Product): void {
-    const payload: AddCartItemPayload = {
-      productId: product.product_id!,
-      quantity: 1
-    };
-    this.securityService.addProductToCart(payload).subscribe({
-      next: () => {
-        console.log('Produit ajouté au panier avec succès');
-      },
-      error: (err) => {
-        console.error('Erreur lors de l\'ajout du produit au panier:', err);
-      }
-    });
+    if (this.isAuthenticated()) {
+      const payload: AddCartItemPayload = {
+        productId: product.product_id!,
+        quantity: 1
+      };
+      this.securityService.addProductToCart(payload).subscribe({
+        next: () => {
+          console.log('Produit ajouté au panier avec succès');
+        },
+        error: (err) => {
+          console.error('Erreur lors de l\'ajout du produit au panier:', err);
+        }
+      });
+    } else {
+      this.modalService.openAuthModal({
+        title: 'Connexion requise',
+        message: 'Pour ajouter des produits à votre panier, veuillez vous connecter ou créer un compte.'
+      });
+    }
   }
 
   getProductImage(product: Product): string {
@@ -70,5 +84,4 @@ export class ProductCardComponent {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
   }
-
 }

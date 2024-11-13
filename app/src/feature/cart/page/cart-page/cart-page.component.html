@@ -1,21 +1,27 @@
 <div class="cart-page">
   @if(!isCartEmpty){
-    <div class="left">
-      <h1>Panier</h1>
-      <div class="cartItems">
-        @for(item of cartItems; track trackByCartItemId($index, item)){
-          <app-product-item-sub [cartItem]="item"></app-product-item-sub>
-        }
+    <div class="top">
+      <div class="left">
+        <h1>Panier</h1>
+        <div class="cartItems">
+          @for(item of cartItems; track trackByCartItemId($index, item)){
+            <app-product-item-sub [cartItem]="item"></app-product-item-sub>
+          }
+        </div>
+      </div>
+      <div class="right">
+        <app-summary-cart></app-summary-cart>
       </div>
     </div>
-    <div class="right">
-      <app-summary-cart></app-summary-cart>
+    <div class="bottom">
+      <app-product-selection></app-product-selection>
     </div>
   } @else {
     <div class="empty-cart">
       <i class="fa-regular fa-cart-circle-xmark"></i>
       <h2>Oups ! Votre panier est vide</h2>
       <p>Commencez votre shopping et ajoutez des produits à votre panier</p>
+      <app-product-selection></app-product-selection>
 
     </div>
   }
